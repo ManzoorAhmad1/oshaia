@@ -89,28 +89,35 @@ const EventsSection = () => {
     : events.filter(event => event.category === activeCategory)
 
   return (
-    <section className=" py-12 lg:py-20">
-      <div className="section-container">
+    <section className="">
+      <div className="">
         {/* Section Title */}
-        <h2 className="section-title mb-8">ALL EVENT</h2>
+        <h2 className="section-title text-black">ALL EVENT</h2>
 
         {/* Category Tabs */}
-        <div className="flex flex-wrap justify-center gap-4 sm:gap-8 mb-12 pb-8 border-b border-gray-200">
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => setActiveCategory(category)}
-              className={`px-6 py-3 text-sm font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer relative ${
-                activeCategory === category ? 'text-accent-orange' : 'text-gray-600 hover:text-accent-orange'
-              }`}
-            >
-              {category}
-            </button>
+        <div className="w-full flex justify-center items-center gap-0 mb-12 border-b border-gray-200 bg-[#07114A]">
+          {categories.map((category, idx) => (
+            <React.Fragment key={category}>
+              <button
+                onClick={() => setActiveCategory(category)}
+                className={`px-8 py-4 text-lg font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer relative 
+                  ${activeCategory === category 
+                    ? 'text-accent-orange italic' 
+                    : 'text-white hover:text-accent-orange'}
+                `}
+                style={{ fontFamily: 'inherit' }}
+              >
+                {category}
+              </button>
+              {idx < categories.length - 1 && (
+                <span className="h-8 w-[2px] bg-gray-400 mx-2 inline-block opacity-40"></span>
+              )}
+            </React.Fragment>
           ))}
         </div>
 
         {/* Event Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mx-20">
           {filteredEvents.map((event) => (
             <div key={event.id} className="event-card group">
               {/* Event Image */}

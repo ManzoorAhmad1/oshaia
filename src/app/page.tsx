@@ -5,14 +5,17 @@ import HeroCarousel from '@/components/home/HeroCarousel'
 import EventsSection from '@/components/home/EventsSection'
 import PartnersSection from '@/components/home/PartnersSection'
 import Footer from '@/components/home/Footer'
+import BestOfSessassonSlider from '@/components/home/BestOfSessassonSlider'
 
 const HomePage = () => {
   return (
     <div className="min-h-screen">
       <main>
         <HeroCarousel />
+        <BestOfSessassonSlider />
         <EventsSection />
         <PartnersSection />
+        
       </main>
       <Footer />
     </div>
