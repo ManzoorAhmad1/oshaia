@@ -6,6 +6,7 @@ import EventsSection from '@/components/home/EventsSection'
 import PartnersSection from '@/components/home/PartnersSection'
 import Footer from '@/components/home/Footer'
 import BestOfSessassonSlider from '@/components/home/BestOfSessassonSlider'
+import Platinumlist from '@/components/home/platinumlist'
 
 const HomePage = () => {
   return (
@@ -15,7 +16,7 @@ const HomePage = () => {
         <BestOfSessassonSlider />
         <EventsSection />
         <PartnersSection />
-        
+        <Platinumlist />
       </main>
       <Footer />
     </div>
