@@ -16,22 +16,22 @@ const Header = () => {
   ]
 
   return (
-    <header className="sticky top-0 z-50  backdrop-blur-sm border-b border-border-gray">
-      <div className="section-container py-4">
-        <div className="flex items-center justify-between">
+    <header className="sticky top-0 z-50 backdrop-blur-sm border-b border-border-gray">
+      <div className="section-container py-2 sm:py-4">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-0">
           {/* Logo */}
-          <Link href="/" className="flex items-center">
+          <Link href="/" className="flex items-center mb-2 sm:mb-0">
             <Image 
               src="/images/white-01.png" 
               alt="Oshaia" 
-              width={150} 
-              height={50}
-              className="h-10 w-auto"
+              width={120} 
+              height={40}
+              className="h-8 sm:h-10 w-auto"
             />
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8">
+          <nav className="hidden lg:flex items-center space-x-4 sm:space-x-8">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
@@ -44,7 +44,7 @@ const Header = () => {
           </nav>
 
           {/* Right Side Actions */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 sm:space-x-4">
             {/* Search Icon */}
             <button 
               className="p-2 hover:bg-white/10 rounded-lg transition-colors"
@@ -54,7 +54,7 @@ const Header = () => {
             </button>
 
             {/* Register Button */}
-            <button className="hidden sm:block btn-primary text-sm">
+            <button className="hidden sm:block btn-primary text-xs sm:text-sm px-3 sm:px-5 py-1 sm:py-2">
               Register
             </button>
 

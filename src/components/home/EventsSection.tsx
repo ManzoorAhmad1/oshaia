@@ -98,17 +98,17 @@ const EventsSection = () => {
         <div className="w-full flex justify-center items-center gap-0 mb-12 border-b border-gray-200 bg-[#07114A]">
           {categories.map((category, idx) => (
             <React.Fragment key={category}>
-              <button
-                onClick={() => setActiveCategory(category)}
-                className={`px-8 py-4 text-lg font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer relative 
-                  ${activeCategory === category 
-                    ? 'text-accent-orange italic' 
-                    : 'text-white hover:text-accent-orange'}
-                `}
-                style={{ fontFamily: 'inherit' }}
-              >
-                {category}
-              </button>
+                  <button
+                    onClick={() => setActiveCategory(category)}
+                    className={`px-8 py-4 text-lg font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer relative 
+                      ${activeCategory === category 
+                        ? 'text-accent-orange italic' 
+                        : 'text-white hover:text-accent-orange'}
+                    `}
+                    style={{ fontFamily: 'inherit' }}
+                  >
+                    {category}
+                  </button>
               {idx < categories.length - 1 && (
                 <span className="h-8 w-[2px] bg-gray-400 mx-2 inline-block opacity-40"></span>
               )}

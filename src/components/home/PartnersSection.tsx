@@ -15,21 +15,21 @@ const PartnersSection = () => {
   ]
 
   return (
-    <section className=" py-12 lg:py-16">
+    <section className="py-6 sm:py-12 lg:py-16">
       <div className="section-container">
         {/* Section Title */}
-        <h2 className="text-2xl sm:text-3xl font-bold text-center text-accent-orange mb-10 uppercase tracking-wider">
+        <h2 className="text-base sm:text-2xl md:text-3xl font-bold text-center text-accent-orange mb-6 sm:mb-10 uppercase tracking-wider">
           OUR PARTNERS
         </h2>
 
         {/* Partners Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-8 items-center">
           {partners.map((partner) => (
             <div
               key={partner.id}
-              className="flex items-center justify-center p-6 bg-white border border-gray-200 rounded-xl hover:border-accent-orange hover:shadow-md transition-all cursor-pointer"
+              className="flex items-center justify-center p-3 sm:p-6 bg-white border border-gray-200 rounded-xl hover:border-accent-orange hover:shadow-md transition-all cursor-pointer"
             >
-              <div className="relative w-24 h-24 grayscale hover:grayscale-0 transition-all">
+              <div className="relative w-16 h-16 sm:w-24 sm:h-24 grayscale hover:grayscale-0 transition-all">
                 <Image
                   src={partner.logo}
                   alt={partner.name}
