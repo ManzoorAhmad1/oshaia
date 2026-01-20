@@ -215,11 +215,11 @@ const BestOfSessassonSlider = () => {
                         onClick={nextSlide}
                         className="absolute right-1 sm:right-2 md:right-4 lg:right-6 top-[40%] p-1 sm:p-2 z-10"
                     >
-                        <img
-                            src='/images/double-chevron.png'
-                            alt='slider button images'
-                            className="w-[24px] h-[16px] sm:w-[30px] sm:h-[20px] lg:w-[36.5px] lg:h-[24.8px] object-cover"
-                        />
+                         <img
+                                src='/images/left-chevron.png'
+                                alt='slider button images'
+                                className="w-[24px] h-[16px] sm:w-[30px] sm:h-[20px] lg:w-[36.5px] lg:h-[24.8px] object-cover rotate-180"
+                            />
                     </button>
 
                     {/* Mute Button */}
