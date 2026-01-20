@@ -12,7 +12,7 @@ const EventsSection = () => {
   const events = [
     {
       id: 1,
-      image: '/images/1762553038_1080.jpg',
+      image: '/images/BANNER - SAMPLE/fire-horse-grid-1 1090x1080.jpg',
       title: 'Night Concert Live',
       category: 'CONCERT',
       date: '25 JAN 2026',
@@ -24,7 +24,7 @@ const EventsSection = () => {
     },
     {
       id: 2,
-      image: '/images/eventposter.jpg',
+      image: '/images/BANNER - SAMPLE/Home Page Carousel.jpg',
       title: 'The First Ever',
       category: 'FESTIVAL',
       date: '15 FEB 2026',
@@ -36,7 +36,7 @@ const EventsSection = () => {
     },
     {
       id: 3,
-      image: '/images/1762553038_BIGG SEAT.jpg',
+      image: '/images/BANNER - SAMPLE/Video For Carousel and Main Event(Where Choose Tickets Or Seats)1.jpg',
       title: 'Antalay Championship',
       category: 'SPORT',
       date: '10 MAR 2026',
@@ -48,7 +48,7 @@ const EventsSection = () => {
     },
     {
       id: 4,
-      image: '/images/1762553038_1080.jpg',
+      image: '/images/BANNER - SAMPLE/Video For Carousel and Main Event(Where Choose Tickets Or Seats)2.jpg',
       title: 'Summer Music Fest',
       category: 'CONCERT',
       date: '20 APR 2026',
@@ -60,7 +60,7 @@ const EventsSection = () => {
     },
     {
       id: 5,
-      image: '/images/eventposter.jpg',
+      image: '/images/BANNER - SAMPLE/fire-horse-grid-1 1090x1080.jpg',
       title: 'Tech Conference 2026',
       category: 'CONFERENCES',
       date: '05 MAY 2026',
@@ -72,7 +72,7 @@ const EventsSection = () => {
     },
     {
       id: 6,
-      image: '/images/1762553038_BIGG SEAT.jpg',
+      image: '/images/BANNER - SAMPLE/Home Page Carousel.jpg',
       title: 'Comedy Night Show',
       category: 'SHOW',
       date: '18 MAY 2026',
@@ -132,6 +132,8 @@ const EventsSection = () => {
                     alt={event.title}
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    priority={event.id <= 3}
                   />
                 </div>
 
@@ -151,8 +153,8 @@ const EventsSection = () => {
           ))}
         </div>
         {/* View All Button */}
-        <div className="w-full flex items-center justify-center mt-12">
-          <button className=" w-[365.4px] h-[76.3px] btn-primary px-12 py-4 text-[21.8px] uppercase tracking-wider">
+        <div className="w-full flex items-center justify-center mt-8 sm:mt-10 md:mt-12">
+          <button className="w-full max-w-[365.4px] h-[60px] sm:h-[70px] md:h-[76.3px] btn-primary px-8 sm:px-10 md:px-12 py-3 sm:py-3.5 md:py-4 text-base sm:text-lg md:text-[21.8px] uppercase tracking-wider">
             VIEW ALL EVENT
           </button>
         </div>
