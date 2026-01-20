@@ -7,6 +7,7 @@ import PartnersSection from '@/components/home/PartnersSection'
 import Footer from '@/components/home/Footer'
 import BestOfSessassonSlider from '@/components/home/BestOfSessassonSlider'
 import Platinumlist from '@/components/home/platinumlist'
+import Top_seller from '@/components/home/top_seller'
 
 const HomePage = () => {
   return (
@@ -15,6 +16,7 @@ const HomePage = () => {
         <HeroCarousel />
         <BestOfSessassonSlider />
         <EventsSection />
+        <Top_seller/>
         <PartnersSection />
         <Platinumlist />
       </main>

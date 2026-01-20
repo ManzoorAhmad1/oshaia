@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 import "./globals.css";
 
-
+const quicksans = localFont({
+  src: "../../public/images/Font/Quicksans Accurate ICG Fill.ttf",
+  variable: "--font-quicksans",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "DMCA Master - Professional Copyright Protection Service",
@@ -15,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
+      <body className={quicksans.className}>
         {children}
       </body>
     </html>

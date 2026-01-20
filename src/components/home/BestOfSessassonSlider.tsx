@@ -1,37 +1,242 @@
 "use client"
 
-import React from "react"
+import React, { useState, useEffect, useRef } from "react"
+
+// Mock data array with images and videos
+const slides = [
+    {
+        id: 1,
+        type: "image",
+        url: "/images/BANNER - SAMPLE/fire-horse-grid-1 1090x1080.jpg",
+        alt: "Festival Crowd",
+        duration: 5,
+    },
+    {
+        id: 2,
+        type: "image",
+        url: "/images/BANNER - SAMPLE/Home Page Carousel.jpg",
+        alt: "Concert Performance",
+        duration: 5,
+    },
+    {
+        id: 3,
+        type: "video",
+        url: "/images/BANNER - SAMPLE/Video For Carousel and Main Event(Where Choose Tickets Or Seats).mp4",
+        alt: "Music Festival",
+        duration: 15,
+    },
+    {
+        id: 4,
+        type: "image",
+        url: "/images/BANNER - SAMPLE/Video For Carousel and Main Event(Where Choose Tickets Or Seats)1.jpg",
+        alt: "DJ Performance",
+        duration: 0,
+    },
+    {
+        id: 5,
+        type: "image",
+        url: "/images/BANNER - SAMPLE/Video For Carousel and Main Event(Where Choose Tickets Or Seats)2.jpg",
+        alt: "Dance Performance",
+        duration: 5,
+    }
+]
 
 const BestOfSessassonSlider = () => {
+    const [currentSlide, setCurrentSlide] = useState(0)
+    const [timeLeft, setTimeLeft] = useState(slides[0].duration)
+    const [isMuted, setIsMuted] = useState(true)
+    const [isPlaying, setIsPlaying] = useState(true)
+    const videoRef = useRef<HTMLVideoElement>(null)
+    const intervalRef = useRef<NodeJS.Timeout | null>(null)
+    const progressIntervalRef = useRef<NodeJS.Timeout | null>(null)
+
+    // Auto-slide functionality
+    useEffect(() => {
+        if (isPlaying) {
+            startAutoSlide()
+        } else {
+            clearAutoSlide()
+        }
+
+        return () => {
+            clearAutoSlide()
+            clearProgressTimer()
+        }
+    }, [currentSlide, isPlaying])
+
+    const startAutoSlide = () => {
+        clearAutoSlide()
+        const currentDuration = slides[currentSlide].duration
+
+        // Reset timer for current slide
+        setTimeLeft(currentDuration)
+
+        // Progress timer (countdown)
+        progressIntervalRef.current = setInterval(() => {
+            setTimeLeft(prev => {
+                if (prev <= 1) {
+                    clearProgressTimer()
+                    return 0
+                }
+                return prev - 1
+            })
+        }, 1000)
+
+        // Slide transition timer
+        intervalRef.current = setTimeout(() => {
+            nextSlide()
+        }, currentDuration * 1000)
+    }
+
+    const clearAutoSlide = () => {
+        if (intervalRef.current) {
+            clearTimeout(intervalRef.current)
+            intervalRef.current = null
+        }
+    }
+
+    const clearProgressTimer = () => {
+        if (progressIntervalRef.current) {
+            clearInterval(progressIntervalRef.current)
+            progressIntervalRef.current = null
+        }
+    }
+
+    const nextSlide = () => {
+        setCurrentSlide((prev) => (prev + 1) % slides.length)
+    }
+
+    const prevSlide = () => {
+        setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)
+    }
+
+    const goToSlide = (index: number) => {
+        setCurrentSlide(index)
+    }
+
+    const toggleMute = () => {
+        if (videoRef.current) {
+            videoRef.current.muted = !videoRef.current.muted
+            setIsMuted(videoRef.current.muted)
+        }
+        setIsMuted(!isMuted)
+    }
+
+    const togglePlayPause = () => {
+        setIsPlaying(!isPlaying)
+        if (videoRef.current) {
+            if (isPlaying) {
+                videoRef.current.pause()
+            } else {
+                videoRef.current.play()
+            }
+        }
+    }
+
+    const currentSlideData = slides[currentSlide]
+
     return (
-        <div className="max-w-full sm:max-w-[1400px] mx-auto mb-4 px-2 sm:px-4">
-            <h2 className="text-base sm:text-xl md:text-2xl font-extrabold text-gray-900 mb-2 sm:mb-4 tracking-wide uppercase" style={{letterSpacing: '0.01em'}}>Best of Sessasson</h2>
-            <div className="relative rounded-xl sm:rounded-3xl overflow-hidden shadow-lg bg-white">
-                {/* Video Slide Image */}
-                <img
-                    src="/images/image-1768494567713.png"
-                    alt="Best of Sessasson"
-                    className="w-full h-[160px] sm:h-[220px] md:h-[320px] lg:h-[400px] object-cover"
-                />
-                {/* Left Arrow */}
-                <button className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-700 rounded-full p-1 sm:p-2 shadow transition-colors z-10">
-                    <span className="text-xl sm:text-3xl">&#x276E;</span>
-                </button>
-                {/* Right Arrow */}
-                <button className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-700 rounded-full p-1 sm:p-2 shadow transition-colors z-10">
-                    <span className="text-xl sm:text-3xl">&#x276F;</span>
-                </button>
-                {/* Mute Icon */}
-                <button className="absolute right-2 sm:right-6 bottom-2 sm:bottom-6 bg-white/80 hover:bg-white text-gray-700 rounded-full p-1 sm:p-2 shadow transition-colors z-10">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 sm:w-6 sm:h-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 9v6h4l5 5V4l-5 5H9z" />
-                    </svg>
-                </button>
-                {/* Slider Dots */}
-                <div className="absolute left-1/2 -translate-x-1/2 bottom-2 sm:bottom-6 flex gap-1 sm:gap-2 z-10">
-                    <span className="w-6 h-1 sm:w-10 sm:h-2 rounded bg-gray-300 inline-block" />
-                    <span className="w-6 h-1 sm:w-10 sm:h-2 rounded bg-gray-400 inline-block" />
-                    <span className="w-6 h-1 sm:w-10 sm:h-2 rounded bg-gray-300 inline-block" />
+        <div className="max-w-full sm:max-w-[1076.7px] h-[357.5px] mx-auto mb-4 px-2 sm:px-4">
+            <h2 className="text-base sm:text-xl md:text-2xl font-extrabold text-gray-900 mb-2 sm:mb-4 tracking-wide uppercase" style={{ letterSpacing: '0.01em' }}>
+                Best of Sessasson
+            </h2>
+
+            <div className="relative rounded-xl sm:rounded-3xl overflow-hidden shadow-lg bg-white sm:max-w-[1076.7px] h-[357.5px]">
+                {/* Slide Container */}
+                <div className="relative w-full h-[160px] sm:h-[220px] md:h-[320px] lg:h-[400px] overflow-hidden">
+                    {/* Progress Loader */}
+                    <div className="absolute top-3 right-3 z-20">
+                        <div className="relative w-12 h-12">
+                            <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 36 36">
+                                <path
+                                    d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    fill="none"
+                                    stroke="rgba(255,255,255,0.2)"
+                                    strokeWidth="3"
+                                />
+                                <path
+                                    d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    fill="none"
+                                    stroke="white"
+                                    strokeWidth="3"
+                                    strokeLinecap="round"
+                                    strokeDasharray={`${(timeLeft / currentSlideData.duration) * 100}, 100`}
+                                />
+                            </svg>
+                        </div>
+                    </div>
+
+                    {/* Slide Content */}
+                    {currentSlideData.type === "video" ? (
+                        <div className="relative w-full h-full">
+                            <video
+                                ref={videoRef}
+                                src={currentSlideData.url}
+                                className="w-full h-full object-cover"
+                                autoPlay
+                                muted={isMuted}
+                                loop
+                                playsInline
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                        </div>
+                    ) : (
+                        <div className="relative w-full h-full">
+                            <img
+                                src={currentSlideData.url}
+                                alt={currentSlideData.alt}
+                                className="w-full h-full object-cover"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
+                        </div>
+                    )}
+
+
+                    {/* Left Arrow */}
+                    <button
+                        onClick={prevSlide}
+                        className="absolute left-2 sm:left-6 top-[40%] p-2 sm:p-3  z-10"
+                    >
+                        <span className="">
+                            <img
+                                src='/images/left-chevron.png'
+                                alt='slider button images'
+                                className="w-[36.5px] h-[24.8px] object-cover"
+                            />
+                        </span>
+                    </button>
+
+                    {/* Right Arrow */}
+                    <button
+                        onClick={nextSlide}
+                        className="absolute right-2 sm:right-6 top-[40%] p-2 sm:p-3  z-10"
+                    >
+                        <img
+                            src='/images/double-chevron.png'
+                            alt='slider button images'
+                            className="w-[36.5px] h-[24.8px] object-cover"
+                        />
+                    </button>
+
+                    {/* Mute Button */}
+                    <button
+                        onClick={toggleMute}
+                        className="absolute right-3 bottom-3 bg-white/80 hover:bg-white text-gray-700 rounded-full p-2 shadow transition-colors z-10"
+                    >
+                        {isMuted ? (
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 sm:w-5 sm:h-5">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6l4.72-4.72a.75.75 0 011.28.531V19.189a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.506-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.395C2.806 8.757 3.63 8.25 4.51 8.25H6.75z" />
+                            </svg>
+                        ) : (
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 sm:w-5 sm:h-5">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.531v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.506-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.395C2.806 8.757 3.63 8.25 4.51 8.25H6.75z" />
+                            </svg>
+                        )}
+                    </button>
                 </div>
             </div>
         </div>
@@ -39,3 +244,4 @@ const BestOfSessassonSlider = () => {
 }
 
 export default BestOfSessassonSlider
+

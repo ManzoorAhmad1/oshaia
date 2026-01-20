@@ -84,12 +84,12 @@ const EventsSection = () => {
     }
   ]
 
-  const filteredEvents = activeCategory === 'ALL' 
-    ? events 
+  const filteredEvents = activeCategory === 'ALL'
+    ? events
     : events.filter(event => event.category === activeCategory)
 
   return (
-    <section className="">
+    <section className="mt-16">
       <div className="">
         {/* Section Title */}
         <h2 className="section-title text-black">ALL EVENT</h2>
@@ -98,17 +98,17 @@ const EventsSection = () => {
         <div className="w-full flex justify-center items-center gap-0 mb-12 border-b border-gray-200 bg-[#07114A]">
           {categories.map((category, idx) => (
             <React.Fragment key={category}>
-                  <button
-                    onClick={() => setActiveCategory(category)}
-                    className={`px-8 py-4 text-lg font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer relative 
-                      ${activeCategory === category 
-                        ? 'text-accent-orange italic' 
-                        : 'text-white hover:text-accent-orange'}
+              <button
+                onClick={() => setActiveCategory(category)}
+                className={`px-8 py-4 text-lg font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer relative 
+                      ${activeCategory === category
+                    ? 'text-accent-orange'
+                    : 'text-white hover:text-accent-orange'}
                     `}
-                    style={{ fontFamily: 'inherit' }}
-                  >
-                    {category}
-                  </button>
+                style={{ fontFamily: 'inherit' }}
+              >
+                {category}
+              </button>
               {idx < categories.length - 1 && (
                 <span className="h-8 w-[2px] bg-gray-400 mx-2 inline-block opacity-40"></span>
               )}
@@ -117,60 +117,40 @@ const EventsSection = () => {
         </div>
 
         {/* Event Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mx-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 w-full max-w-full mx-auto justify-items-center">
           {filteredEvents.map((event) => (
-            <div key={event.id} className="event-card group">
-              {/* Event Image */}
-              <div className="relative h-64 sm:h-72 overflow-hidden rounded-t-xl">
-                <Image
-                  src={event.image}
-                  alt={event.title}
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                {/* Badge */}
-                {event.badge && (
-                  <div className={`absolute top-4 left-4 ${event.badgeColor} px-3 py-1 rounded-md text-white text-xs font-bold uppercase`}>
-                    {event.badge}
-                  </div>
-                )}
-              </div>
+            <div key={event.id} className="w-[324.1px] h-auto event-card group relative rounded-xl overflow-hidden">
 
-              {/* Event Info */}
-              <div className="p-5 bg-white border border-gray-200 rounded-b-xl">
-                <h3 className="text-lg font-bold text-gray-900 mb-3">
-                  {event.title}
-                </h3>
-                
-                <div className="space-y-2 mb-4">
-                  <div className="flex items-center text-sm text-gray-600">
-                    <Calendar className="w-4 h-4 mr-2 text-accent-orange" />
-                    <span>{event.date}</span>
-                    <Clock className="w-4 h-4 ml-4 mr-2 text-accent-orange" />
-                    <span>{event.time}</span>
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <MapPin className="w-4 h-4 mr-2 text-accent-orange" />
-                    <span>{event.location}</span>
-                  </div>
+              {/* Main Content */}
+              <div className="relative z-10">
+                {/* Event Image */}
+                <div className="relative w-[324.1px] h-[324.1px] overflow-hidden">
+                  <Image
+                    src={event.image}
+                    alt={event.title}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
                 </div>
 
-                <div className="flex items-center justify-between pt-4">
-                  <div className="text-accent-orange font-bold text-base">
-                    From {event.price}
+                {/* Event Info */}
+                <div className="w-[324.1px] bg-white border border-gray-200 rounded-b-xl flex items-center justify-between">
+                  <div className='flex flex-col gap-1 pl-4'>
+                    <p className="text-sm font-bold whitespace-nowrap">{event.title}</p>
+                    <p className="text-xs text-gray-600">{event.location}</p>
                   </div>
-                  <button className="px-5 py-2 bg-secondary-purple hover:bg-secondary-purple/80 rounded-lg text-white text-sm font-medium transition-colors">
-                    Book Now
-                  </button>
+                  <div className='flex items-center py-3 px-6 bg-purple-950 text-white border border-b-2 rounded-bl-full'>
+                    <p className="mr-2 text-[9.9px]">As From</p>
+                    <p className="text-[15.9px]">{event.price}</p>
+                  </div>
                 </div>
               </div>
             </div>
           ))}
         </div>
-
         {/* View All Button */}
-        <div className="flex justify-center mt-12">
-          <button className="btn-primary px-12 py-4 text-lg uppercase tracking-wider">
+        <div className="w-full flex items-center justify-center mt-12">
+          <button className=" w-[365.4px] h-[76.3px] btn-primary px-12 py-4 text-[21.8px] uppercase tracking-wider">
             VIEW ALL EVENT
           </button>
         </div>
