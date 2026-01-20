@@ -62,11 +62,11 @@ const HeroCarousel = () => {
     }
 
     return (
-        <div className="bg-white min-h-[60vh] sm:min-h-[80vh]">
+        <div className="bg-white min-h-[75vh] sm:min-h-[70vh] pb-8 sm:pb-12 lg:pb-16">
 
             {/* HERO CARD */}
-            <div className="relative max-w-full sm:max-w-[1134.1px] h-[354.6px] mx-auto px-2 sm:px-4 lg:px-8 xl:px-12 2xl:px-16 mt-6">
-                <div className="relative sm:max-w-[1134.1px] h-[354.6px] rounded-xl sm:rounded-2xl overflow-hidden shadow-xl sm:shadow-2xl">
+            <div className="relative max-w-full sm:max-w-[1134.1px] h-[240px] sm:h-[300px] md:h-[340px] lg:h-[354.6px] mx-auto px-3 sm:px-4 lg:px-8 xl:px-12 2xl:px-16 pt-4 sm:pt-6">
+                <div className="relative w-full h-full rounded-xl sm:rounded-xl lg:rounded-2xl overflow-hidden shadow-lg sm:shadow-xl lg:shadow-2xl">
                     <Image
                         src="/images/BG photo/Copy of Copy of HOME.png"
                         alt="Oshaia - Beyond your Journey"
@@ -76,8 +76,8 @@ const HeroCarousel = () => {
                     />
 
                     {/* Center Text Container with Logo */}
-                    <div className="absolute inset-0 flex items-center justify-center z-10">
-                        <div className="relative w-[594.4px] h-[140.7px] aspect-video">
+                    <div className="absolute inset-0 flex items-center justify-center z-10 px-4">
+                        <div className="relative w-[240px] h-[57px] xs:w-[280px] xs:h-[66px] sm:w-[400px] sm:h-[95px] md:w-[500px] md:h-[118px] lg:w-[594.4px] lg:h-[140.7px]">
                             <Image
                                 src="/images/Logo/white-01.png"
                                 alt="Oshaia Logo"
@@ -90,9 +90,9 @@ const HeroCarousel = () => {
                 </div>
 
                 {/* FLOATING NAV */}
-                <div className="relative -mt-2 sm:-mt-4 md:-mt-4 lg:-mt-4 xl:-mt-24 2xl:-mt-24 max-w-full sm:max-w-[903.2px] h-[68.6px] mx-auto flex justify-center px-1 sm:px-4 z-10">
-                    <div className="bg-[#0d2147] text-white w-full rounded-lg sm:rounded-2xl sm:max-w-[903.2px] h-[68.6px]  px-2 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-5 md:py-5 lg:py-6 shadow-xl sm:shadow-2xl">
-                        <div className="flex items-center justify-center gap-3 sm:gap-5 md:gap-8 lg:gap-10 xl:gap-12">
+                <div className="relative -mt-6 sm:-mt-10 md:-mt-14 lg:-mt-4 xl:-mt-24 2xl:-mt-24 max-w-full sm:max-w-[903.2px] h-auto sm:h-[56px] lg:h-[68.6px] mx-auto flex justify-center px-3 sm:px-4 z-10 mb-4 sm:mb-0">
+                    <div className="bg-[#0d2147] text-white w-full rounded-xl sm:rounded-xl lg:rounded-2xl px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-3 lg:py-5 shadow-lg sm:shadow-xl lg:shadow-2xl">
+                        <div className="flex items-center justify-center gap-2 sm:gap-4 md:gap-6 lg:gap-10 xl:gap-12">
                             <NavItem
                                 label="HOME"
                                 active
@@ -114,30 +114,30 @@ const HeroCarousel = () => {
                     </div>
                 </div>
                 {/* SEARCH BAR SECTION */}
-                <div className="relative -mt-2 sm:-mt-6 md:-mt-8 max-w-full sm:max-w-[1007.7px] h-auto sm:h-[173px] mx-auto px-1 sm:px-4">
-                    <div className="bg-white rounded-lg sm:rounded-2xl sm:max-w-[1007.7px] min-h-[173px] shadow-md sm:shadow-lg border border-gray-100 px-2 sm:px-4 md:px-6 lg:px-8 xl:px-10 py-4 sm:py-6 flex flex-col lg:flex-row items-center justify-between gap-4 sm:gap-6">
+                <div className="relative mt-4 sm:-mt-6 md:-mt-8 max-w-full sm:max-w-[1007.7px] h-[173px] mx-auto px-3 sm:px-4">
+                    <div className="bg-white rounded-xl sm:rounded-xl lg:rounded-2xl h-[173px] w-full shadow-md sm:shadow-lg border border-gray-100 px-4 sm:px-4 md:px-6 lg:px-8 xl:px-10 py-4 sm:py-4 lg:py-6 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 sm:gap-4 lg:gap-6">
 
                         {/* Search */}
-                        <div className={`flex items-center gap-1 sm:gap-3 border-2 ${searchFocused ? 'border-orange-400' : 'border-gray-200'} rounded-full px-2 sm:px-4 md:px-5 lg:px-6 py-1 sm:py-2.5 lg:py-3 w-full lg:w-[436px] h-[44.8px] transition-colors flex-shrink-0`}>
-                            <Search className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-orange-500 flex-shrink-0" />
+                        <div className={`flex items-center gap-2 sm:gap-2 lg:gap-3 border-2 ${searchFocused ? 'border-orange-400' : 'border-gray-200'} rounded-full px-3 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-2 lg:py-3 w-full lg:w-[436px] h-[42px] sm:h-[44px] lg:h-[44.8px] transition-colors flex-shrink-0`}>
+                            <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-orange-500 flex-shrink-0" />
                             <input
                                 ref={searchRef}
                                 type="text"
                                 placeholder="Search event or category"
-                                className="w-full outline-none text-xs sm:text-sm lg:text-base text-gray-700 placeholder:text-gray-400"
+                                className="w-full outline-none text-[11px] sm:text-xs lg:text-sm text-gray-700 placeholder:text-gray-400"
                                 onFocus={() => setSearchFocused(true)}
                                 onBlur={() => setSearchFocused(false)}
                             />
-                            <Calendar className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-orange-500 flex-shrink-0" />
+                            <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-orange-500 flex-shrink-0" />
                         </div>
 
                         {/* Right Actions */}
-                        <div className="flex items-center justify-center lg:justify-end gap-1 sm:gap-2 lg:gap-3 flex-shrink-0 flex-nowrap">
+                        <div className="flex items-center justify-between lg:justify-end gap-2 sm:gap-2 lg:gap-3 flex-shrink-0 flex-wrap sm:flex-nowrap w-full lg:w-auto">
                             {/* My Account Dropdown */}
                             <div className="relative" ref={profileRef}>
                                 <button
                                     onClick={handleProfileMenuClick}
-                                    className="flex items-center gap-1 sm:gap-1.5 text-xs sm:text-sm lg:text-base text-gray-700 hover:text-orange-500 transition-colors px-2 py-1.5 sm:px-2.5 sm:py-2 h-[44.8px] whitespace-nowrap"
+                                    className="flex items-center gap-1 text-xs sm:text-xs lg:text-sm text-gray-700 hover:text-orange-500 transition-colors px-2 sm:px-2 py-1.5 sm:py-1.5 h-[42px] sm:h-[44px] lg:h-[44.8px] whitespace-nowrap"
                                 >
                                     <User className="w-4 h-4 sm:w-5 sm:h-5" />
                                     <span className="hidden xl:inline">My Account</span>
@@ -193,16 +193,16 @@ const HeroCarousel = () => {
                                 )}
                             </div>
 
-                            <button className="bg-orange-500 hover:bg-orange-600 text-white px-3 sm:px-4 lg:px-5 rounded-lg text-xs sm:text-sm lg:text-base font-medium transition-colors shadow-md whitespace-nowrap h-[44.8px]">
+                            <button className="bg-orange-500 hover:bg-orange-600 text-white px-3 sm:px-3 lg:px-5 rounded-lg text-xs sm:text-xs lg:text-sm font-medium transition-colors shadow-md whitespace-nowrap h-[42px] sm:h-[44px] lg:h-[44.8px]">
                                 Sign Up
                             </button>
 
-                            <button className="hover:bg-gray-100 rounded-lg transition-colors w-[40px] sm:w-[44.8px] h-[44.8px] flex items-center justify-center">
-                                <Menu className="w-4 h-4 sm:w-5 sm:h-5" />
+                            <button className="hover:bg-gray-100 rounded-lg transition-colors w-[38px] sm:w-[40px] lg:w-[44.8px] h-[42px] sm:h-[44px] lg:h-[44.8px] flex items-center justify-center">
+                                <Menu className="w-4 h-4 sm:w-4 sm:h-4 lg:w-5 lg:h-5" />
                             </button>
 
-                            <button className="relative hover:bg-gray-100 rounded-lg transition-colors w-[40px] sm:w-[44.8px] h-[44.8px] flex items-center justify-center">
-                                <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
+                            <button className="relative hover:bg-gray-100 rounded-lg transition-colors w-[38px] sm:w-[40px] lg:w-[44.8px] h-[42px] sm:h-[44px] lg:h-[44.8px] flex items-center justify-center">
+                                <ShoppingCart className="w-4 h-4 sm:w-4 sm:h-4 lg:w-5 lg:h-5" />
                                 <span className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 bg-red-500 text-white text-[9px] sm:text-[10px] w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center rounded-full font-bold">
                                     0
                                 </span>
@@ -212,7 +212,7 @@ const HeroCarousel = () => {
                             <div className="relative" ref={languageRef}>
                                 <button
                                     onClick={handleLanguageMenuClick}
-                                    className="flex items-center gap-1 text-xs sm:text-sm lg:text-base text-gray-700 hover:bg-gray-100 px-2 sm:px-2.5 rounded-lg transition-colors h-[44.8px] whitespace-nowrap"
+                                    className="flex items-center gap-1 text-xs sm:text-xs lg:text-sm text-gray-700 hover:bg-gray-100 px-2 sm:px-2 rounded-lg transition-colors h-[42px] sm:h-[44px] lg:h-[44.8px] whitespace-nowrap"
                                 >
                                     <span className="text-sm sm:text-base">🇬🇧</span>
                                     <span className="font-medium">EN</span>
@@ -254,10 +254,10 @@ export default HeroCarousel
 const NavItem = ({ label, active = false, icon }: any) => (
     <Link
         href="#"
-        className={`font-bold text-[10px] sm:text-sm md:text-lg lg:text-2xl xl:text-xl uppercase tracking-wide flex items-center gap-1 sm:gap-2 hover:text-orange-400 transition-colors whitespace-nowrap ${active ? "text-orange-400" : "text-white"
+        className={`font-bold text-[8px] xs:text-[9px] sm:text-xs md:text-sm lg:text-base xl:text-lg uppercase tracking-wide flex items-center gap-0.5 sm:gap-1 md:gap-2 hover:text-orange-400 transition-colors whitespace-nowrap ${active ? "text-orange-400" : "text-white"
             }`}
     >
-        {icon && <span className="hidden sm:inline"><FaHome /> </span>}
+        {icon && <span className="hidden md:inline text-sm lg:text-base"><FaHome /> </span>}
         {label}
     </Link>
 )

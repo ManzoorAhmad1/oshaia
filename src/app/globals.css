@@ -34,6 +34,13 @@
     font-family: 'Quicksans', sans-serif;
     @apply antialiased bg-white text-gray-900;
     transition: background-color 0.3s ease, color 0.3s ease;
+    overflow-x: hidden;
+  }
+
+  /* Prevent horizontal scroll */
+  html, body {
+    max-width: 100%;
+    overflow-x: hidden;
   }
   
   /* Professional Scrollbar */

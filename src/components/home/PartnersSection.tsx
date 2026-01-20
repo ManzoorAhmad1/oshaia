@@ -70,16 +70,16 @@ const PartnersSection = () => {
 
   return (
     <section 
-      className="py-6 sm:py-12 lg:py-16 mt-16"
+      className="py-6 sm:py-10 md:py-12 lg:py-16 mt-8 sm:mt-12 md:mt-14 lg:mt-16"
       onMouseEnter={() => setIsAutoPlaying(false)}
       onMouseLeave={() => setIsAutoPlaying(true)}
     >
-      <div className="section-container">
-        <h2 className="text-base sm:text-2xl md:text-3xl font-bold text-center text-accent-orange mb-6 sm:mb-10 uppercase tracking-wider">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+        <h2 className="text-sm sm:text-xl md:text-2xl lg:text-3xl font-bold text-center text-accent-orange mb-4 sm:mb-6 md:mb-8 lg:mb-10 uppercase tracking-wider">
           OUR PARTNERS
         </h2>
 
-        <div className="relative px-4 sm:px-8 md:px-12">
+        <div className="relative px-2 sm:px-4 md:px-8 lg:px-12">
           {/* Slider Container */}
           <div className="overflow-hidden">
             <motion.div
@@ -93,8 +93,8 @@ const PartnersSection = () => {
                   className="flex-shrink-0"
                   style={{ width: `calc(${100 / slidesToShow}% - ${(4 * (slidesToShow - 1)) / slidesToShow}rem)` }}
                 >
-                  <div className="flex items-center justify-center p-3 sm:p-4 md:p-6 bg-white border border-gray-200 rounded-xl hover:border-accent-orange hover:shadow-md transition-all duration-300 cursor-pointer h-full">
-                    <div className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24">
+                  <div className="flex items-center justify-center p-2 sm:p-3 md:p-4 lg:p-6 bg-white border border-gray-200 rounded-lg sm:rounded-xl hover:border-accent-orange hover:shadow-md transition-all duration-300 cursor-pointer h-full">
+                    <div className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24">
                       <Image
                         src={partner.logo}
                         alt={partner.name}
@@ -112,20 +112,20 @@ const PartnersSection = () => {
           {/* Navigation Buttons */}
           <button
             onClick={prevSlide}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 md:-translate-x-1/2 bg-white/90 hover:bg-white p-2 md:p-1 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 z-10"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/90 hover:bg-white p-1 sm:p-1.5 md:p-2 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 z-10"
             aria-label="Previous partners"
           >
-            <svg className="w-[36.5px] h-[36.5px] text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
 
           <button
             onClick={nextSlide}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 md:translate-x-1/2 bg-white/90 hover:bg-white p-2 md:p-1 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 z-10"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 bg-white/90 hover:bg-white p-1 sm:p-1.5 md:p-2 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 z-10"
             aria-label="Next partners"
           >
-            <svg className="w-[36.5px] h-[36.5px] text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </button>

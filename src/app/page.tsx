@@ -11,8 +11,8 @@ import Top_seller from '@/components/home/top_seller'
 
 const HomePage = () => {
   return (
-    <div className="min-h-screen">
-      <main>
+    <div className="min-h-screen overflow-x-hidden">
+      <main className="w-full">
         <HeroCarousel />
         <BestOfSessassonSlider />
         <EventsSection />

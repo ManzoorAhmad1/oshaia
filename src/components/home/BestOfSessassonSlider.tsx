@@ -136,18 +136,18 @@ const BestOfSessassonSlider = () => {
     const currentSlideData = slides[currentSlide]
 
     return (
-        <div className="max-w-full sm:max-w-[1076.7px] h-[357.5px] mx-auto mb-4 px-2 sm:px-4">
-            <h2 className="text-base sm:text-xl md:text-2xl font-extrabold text-gray-900 mb-2 sm:mb-4 tracking-wide uppercase" style={{ letterSpacing: '0.01em' }}>
+        <div className="max-w-full sm:max-w-[1076.7px] h-auto mx-auto mb-4 px-2 sm:px-4">
+            <h2 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 mb-2 sm:mb-3 lg:mb-4 tracking-wide uppercase" style={{ letterSpacing: '0.01em' }}>
                 Best of Sessasson
             </h2>
 
-            <div className="relative rounded-xl sm:rounded-3xl overflow-hidden shadow-lg bg-white sm:max-w-[1076.7px] h-[357.5px]">
+            <div className="relative rounded-lg sm:rounded-xl lg:rounded-3xl overflow-hidden shadow-md sm:shadow-lg bg-white w-full h-auto">
                 {/* Slide Container */}
-                <div className="relative w-full h-[160px] sm:h-[220px] md:h-[320px] lg:h-[400px] overflow-hidden">
+                <div className="relative w-full h-[200px] sm:h-[280px] md:h-[320px] lg:h-[357.5px] overflow-hidden">
                     {/* Progress Loader */}
-                    <div className="absolute top-3 right-3 z-20">
-                        <div className="relative w-12 h-12">
-                            <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 36 36">
+                    <div className="absolute top-2 right-2 sm:top-3 sm:right-3 z-20">
+                        <div className="relative w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12">
+                            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
                                 <path
                                     d="M18 2.0845
                     a 15.9155 15.9155 0 0 1 0 31.831
@@ -199,13 +199,13 @@ const BestOfSessassonSlider = () => {
                     {/* Left Arrow */}
                     <button
                         onClick={prevSlide}
-                        className="absolute left-2 sm:left-6 top-[40%] p-2 sm:p-3  z-10"
+                        className="absolute left-1 sm:left-2 md:left-4 lg:left-6 top-[40%] p-1 sm:p-2 z-10"
                     >
                         <span className="">
                             <img
                                 src='/images/left-chevron.png'
                                 alt='slider button images'
-                                className="w-[36.5px] h-[24.8px] object-cover"
+                                className="w-[24px] h-[16px] sm:w-[30px] sm:h-[20px] lg:w-[36.5px] lg:h-[24.8px] object-cover"
                             />
                         </span>
                     </button>
@@ -213,26 +213,26 @@ const BestOfSessassonSlider = () => {
                     {/* Right Arrow */}
                     <button
                         onClick={nextSlide}
-                        className="absolute right-2 sm:right-6 top-[40%] p-2 sm:p-3  z-10"
+                        className="absolute right-1 sm:right-2 md:right-4 lg:right-6 top-[40%] p-1 sm:p-2 z-10"
                     >
                         <img
                             src='/images/double-chevron.png'
                             alt='slider button images'
-                            className="w-[36.5px] h-[24.8px] object-cover"
+                            className="w-[24px] h-[16px] sm:w-[30px] sm:h-[20px] lg:w-[36.5px] lg:h-[24.8px] object-cover"
                         />
                     </button>
 
                     {/* Mute Button */}
                     <button
                         onClick={toggleMute}
-                        className="absolute right-3 bottom-3 bg-white/80 hover:bg-white text-gray-700 rounded-full p-2 shadow transition-colors z-10"
+                        className="absolute right-2 bottom-2 sm:right-3 sm:bottom-3 bg-white/80 hover:bg-white text-gray-700 rounded-full p-1.5 sm:p-2 shadow transition-colors z-10"
                     >
                         {isMuted ? (
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 sm:w-5 sm:h-5">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6l4.72-4.72a.75.75 0 011.28.531V19.189a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.506-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.395C2.806 8.757 3.63 8.25 4.51 8.25H6.75z" />
                             </svg>
                         ) : (
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 sm:w-5 sm:h-5">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.531v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.506-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.395C2.806 8.757 3.63 8.25 4.51 8.25H6.75z" />
                             </svg>
                         )}

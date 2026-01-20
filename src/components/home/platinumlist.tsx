@@ -3,35 +3,35 @@ import { CreditCard, Apple, MessageCircle, Shield, Zap, Ticket, Clock, ChevronRi
 
 const Platinumlist = () => {
   return (
-    <section className="bg-gradient-to-br from-gray-50 to-white py-16 px-4 sm:px-8 rounded-2xl mt-12 shadow-lg">
+    <section className="bg-gradient-to-br from-gray-50 to-white py-8 sm:py-12 md:py-16 px-3 sm:px-4 md:px-8 rounded-xl sm:rounded-2xl mt-8 sm:mt-10 md:mt-12 shadow-lg">
 
       <div className="max-w-6xl mx-auto">
         {/* Why buy with Platinumlist */}
-        <p className='text-lg font-semibold mb-6'>
+        <p className='text-base sm:text-lg font-semibold mb-4 sm:mb-5 md:mb-6'>
           Why buy with Platinumlist?
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-10 md:mb-12">
           {[
             {
-              icon: <Shield className="w-8 h-8" />,
+              icon: <Shield className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />,
               title: "Secure Checkout",
               desc: "Fast & Secured Payment",
               color: "text-blue-600"
             },
             {
-              icon: <Zap className="w-8 h-8" />,
+              icon: <Zap className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />,
               title: "Instant Confirmation",
               desc: "Refund guarantee options",
               color: "text-green-600"
             },
             {
-              icon: <Ticket className="w-8 h-8" />,
+              icon: <Ticket className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />,
               title: "Official Ticket Seller",
               desc: "Used by 10m+ people",
               color: "text-purple-600"
             },
             {
-              icon: <Clock className="w-8 h-8" />,
+              icon: <Clock className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />,
               title: "24/7 Customer Service",
               desc: "Reliable after sales support",
               color: "text-orange-600"
@@ -41,13 +41,13 @@ const Platinumlist = () => {
               key={index}
               className="cursor-pointer"
             >
-              <div className={`mb-4 ${feature.color}  transition-transform duration-300`}>
+              <div className={`mb-3 sm:mb-4 ${feature.color}  transition-transform duration-300`}>
                 {feature.icon}
               </div>
-              <div className="font-bold text-lg mb-2 text-gray-800  transition-colors">
+              <div className="font-bold text-base sm:text-lg mb-1 sm:mb-2 text-gray-800  transition-colors">
                 {feature.title}
               </div>
-              <div className="text-sm text-gray-500  transition-colors">
+              <div className="text-xs sm:text-sm text-gray-500  transition-colors">
                 {feature.desc}
               </div>
             </div>
@@ -57,32 +57,32 @@ const Platinumlist = () => {
         {/* Payment Methods */}
         <div className=" ">
           <div className="flex flex-col">
-            <div className="font-bold text-xl mb-4 sm:mb-0 text-gray-800">You choose how to pay</div>
-            <div className="flex gap-6">
+            <div className="font-bold text-lg sm:text-xl mb-3 sm:mb-4 text-gray-800">You choose how to pay</div>
+            <div className="flex gap-3 sm:gap-4 md:gap-6 flex-wrap">
               {[...Array(3)].map((_, i) => (
                 <div
                   key={`credit-${i}`}
-                  className="p-3 bg-gray-50 rounded-lg hover:bg-blue-50 hover:text-blue-600 hover:scale-105 transition-all duration-300 group cursor-pointer"
+                  className="p-2 sm:p-3 bg-gray-50 rounded-lg hover:bg-blue-50 hover:text-blue-600 hover:scale-105 transition-all duration-300 group cursor-pointer"
                 >
-                  <CreditCard className="w-8 h-8 text-gray-600 group-hover:text-blue-600 transition-colors" />
+                  <CreditCard className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-gray-600 group-hover:text-blue-600 transition-colors" />
                 </div>
               ))}
-              <div className="p-3 bg-gray-50 rounded-lg hover:bg-black hover:text-white hover:scale-105 transition-all duration-300 group cursor-pointer">
-                <Apple className="w-8 h-8 text-gray-600 group-hover:text-white transition-colors" />
+              <div className="p-2 sm:p-3 bg-gray-50 rounded-lg hover:bg-black hover:text-white hover:scale-105 transition-all duration-300 group cursor-pointer">
+                <Apple className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-gray-600 group-hover:text-white transition-colors" />
               </div>
             </div>
           </div>
         </div>
 
         {/* Main Content */}
-        <div className="mb-12">
-          <div className="flex items-center mb-4">
-            <div className="w-2 h-8 bg-gradient-to-b from-blue-600 to-purple-600 rounded-full mr-3"></div>
-            <h2 className="text-3xl font-bold text-gray-900">Dubai Events Tickets</h2>
+        <div className="mb-8 sm:mb-10 md:mb-12">
+          <div className="flex items-center mb-3 sm:mb-4">
+            <div className="w-1.5 sm:w-2 h-6 sm:h-7 md:h-8 bg-gradient-to-b from-blue-600 to-purple-600 rounded-full mr-2 sm:mr-3"></div>
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">Dubai Events Tickets</h2>
           </div>
 
-          <div className="space-y-4">
-            <p className="text-gray-700 leading-relaxed">
+          <div className="space-y-3 sm:space-y-4">
+            <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
               <span className="font-medium text-gray-900">Dubai</span> is a vibrant city where entertainment and events are abundant. With so many options available, it's easy to feel overwhelmed. How do you determine which entertainment venues in Dubai are worth your visit?
             </p>
             <p className="text-gray-700 leading-relaxed">
@@ -98,15 +98,15 @@ const Platinumlist = () => {
         </div>
 
         {/* Footer-like Info */}
-        <div className="border-t border-gray-200 pt-8">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+        <div className="border-t border-gray-200 pt-6 sm:pt-7 md:pt-8">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 sm:gap-6 md:gap-8">
             {/* Brand */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-6">
-              <div className="flex flex-col gap-3">
-                <div className="bg-black text-white rounded-xl p-3 text-xl w-32">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5 md:gap-6">
+              <div className="flex flex-col gap-2 sm:gap-3">
+                <div className="bg-black text-white rounded-lg sm:rounded-xl p-2 sm:p-3 text-base sm:text-lg md:text-xl w-28 sm:w-32">
                   Platinumlist
                 </div>
-                <p className="text-gray-600 max-w-md leading-relaxed">
+                <p className="text-gray-600 max-w-md leading-relaxed text-xs sm:text-sm md:text-base">
                   entertainment discovery and monetization platform
                 </p>
               </div>
@@ -115,23 +115,23 @@ const Platinumlist = () => {
 
             {/* Contact */}
             <div className="">
-              <div className="font-semibold text-gray-800 mb-2">Due you have any question?</div>
-              <p className="text-gray-600 text-sm mb-4">Please ontact us</p>
-              <div className="group flex items-center justify-center gap-3 px-6 py-3">
-                <MessageCircle className="w-8 h-8 p-1  bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg font-medium hover:from-green-600 hover:to-emerald-700 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5" />
-                <span className='border border-black p-1 rounded-lg'>Chat Online</span>
+              <div className="font-semibold text-gray-800 mb-1 sm:mb-2 text-sm sm:text-base">Due you have any question?</div>
+              <p className="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4">Please ontact us</p>
+              <div className="group flex items-center justify-start sm:justify-center gap-2 sm:gap-3 px-4 sm:px-6 py-2 sm:py-3">
+                <MessageCircle className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 p-1  bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg font-medium hover:from-green-600 hover:to-emerald-700 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5" />
+                <span className='border border-black p-1 rounded-lg text-xs sm:text-sm md:text-base'>Chat Online</span>
               </div>
             </div>
 
             {/* Payment Methods */}
-            <div className="bg-white p-6">
-              <div className="font-semibold text-gray-800 mb-4">We accepted</div>
-              <div className="flex gap-4">
+            <div className="bg-white p-4 sm:p-5 md:p-6">
+              <div className="font-semibold text-gray-800 mb-3 sm:mb-4 text-sm sm:text-base">We accepted</div>
+              <div className="flex gap-3 sm:gap-4">
                 <div className="">
-                  <CreditCard className="w-8 h-8 text-gray-700" />
+                  <CreditCard className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-gray-700" />
                 </div>
                 <div className="">
-                  <Apple className="w-8 h-8 text-gray-700 group-hover:text-white" />
+                  <Apple className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-gray-700 group-hover:text-white" />
                 </div>
               </div>
             </div>
