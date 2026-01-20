@@ -106,7 +106,6 @@ const EventsSection = () => {
                       ? 'text-accent-orange'
                       : 'text-white hover:text-accent-orange'}
                       `}
-                  style={{ fontFamily: 'inherit' }}
                 >
                   {category}
                 </button>

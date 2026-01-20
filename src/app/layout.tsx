@@ -19,8 +19,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={quicksans.className}>
+    <html lang="en" suppressHydrationWarning className={quicksans.variable}>
+      <body className={quicksans.className} style={{ fontFamily: 'var(--font-quicksans), Quicksans, sans-serif' }}>
         {children}
       </body>
     </html>

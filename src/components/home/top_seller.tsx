@@ -71,7 +71,7 @@ export default function EventCard() {
         <div className="max-w-full sm:max-w-[914px] h-auto mx-auto mb-4 px-2 sm:px-4 flex gap-2 flex-col gap:8 mt-8 sm:mt-12 lg:mt-16">
             <div className="flex w-full flex-col">
                 <div className="py-2">
-                    <p className="text-sm sm:text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 mb-2 sm:mb-4 tracking-wide uppercase" style={{ letterSpacing: '0.01em' }}>
+                    <p className="text-sm sm:text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 mb-2 sm:mb-4 tracking-tight uppercase">
                         top seller
                     </p>
                 </div>
