@@ -65,7 +65,7 @@ const HeroCarousel = () => {
         <div className="bg-white min-h-[75vh] sm:min-h-[70vh] pb-8 sm:pb-12 lg:pb-16">
 
             {/* HERO CARD */}
-            <div className="relative max-w-full sm:max-w-[1134.1px] h-[240px] sm:h-[300px] md:h-[340px] lg:h-[354.6px] mx-auto px-3 sm:px-4 lg:px-8 xl:px-12 2xl:px-16 pt-4 sm:pt-6">
+            <div className="relative max-w-full sm:max-w-[1434.1px] h-[240px] sm:h-[300px] md:h-[340px] lg:h-[354.6px] mx-auto px-3 sm:px-4 lg:px-8 xl:px-12 2xl:px-16 pt-4 sm:pt-6">
                 <div className="relative w-full h-full rounded-xl sm:rounded-xl lg:rounded-2xl overflow-hidden shadow-lg sm:shadow-xl lg:shadow-2xl">
                     <Image
                         src="/images/BG photo/Copy of Copy of HOME.png"
@@ -90,7 +90,7 @@ const HeroCarousel = () => {
                 </div>
 
                 {/* FLOATING NAV */}
-                <div className="relative -mt-6 sm:-mt-10 md:-mt-14 lg:-mt-4 xl:-mt-24 2xl:-mt-24 max-w-full sm:max-w-[903.2px] h-auto sm:h-[56px] lg:h-[68.6px] mx-auto flex justify-center px-3 sm:px-4 z-10 mb-4 sm:mb-0">
+                <div className="relative -mt-6 sm:-mt-10 md:-mt-14 lg:-mt-4 xl:-mt-24 2xl:-mt-24 max-w-full sm:max-w-[1140.2px] h-auto sm:h-[56px] lg:h-[68.6px] mx-auto flex justify-center px-3 sm:px-4 z-10 mb-4 sm:mb-0">
                     <div className="bg-[#0d2147] text-white w-full rounded-xl sm:rounded-xl lg:rounded-2xl px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-3 lg:py-5 shadow-lg sm:shadow-xl lg:shadow-2xl">
                         <div className="flex items-center justify-center gap-2 sm:gap-4 md:gap-6 lg:gap-10 xl:gap-12">
                             <NavItem
@@ -114,21 +114,21 @@ const HeroCarousel = () => {
                     </div>
                 </div>
                 {/* SEARCH BAR SECTION */}
-                <div className="relative mt-4 sm:-mt-6 md:-mt-8 max-w-full sm:max-w-[1007.7px] h-[173px] mx-auto px-3 sm:px-4">
+                <div className="relative mt-4 sm:-mt-6 md:-mt-8 box-border max-w-full sm:max-w-[1230.7px] h-[173px] mx-auto px-3 sm:px-4">
                     <div className="bg-white rounded-xl sm:rounded-xl lg:rounded-2xl h-[173px] w-full shadow-md sm:shadow-lg border border-gray-100 px-4 sm:px-4 md:px-6 lg:px-8 xl:px-10 py-4 sm:py-4 lg:py-6 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 sm:gap-4 lg:gap-6">
 
                         {/* Search */}
-                        <div className={`flex items-center gap-2 sm:gap-2 lg:gap-3 border-2 ${searchFocused ? 'border-orange-400' : 'border-gray-200'} rounded-full px-3 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-2 lg:py-3 w-full lg:w-[436px] h-[42px] sm:h-[44px] lg:h-[44.8px] transition-colors flex-shrink-0`}>
-                            <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-orange-500 flex-shrink-0" />
+                        <div className={`flex items-center gap-2 sm:gap-2 lg:gap-3 border ${searchFocused ? 'border-orange-500' : 'border-orange-500'} rounded-full px-3 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-2 lg:py-3 w-full lg:w-[436px] h-[42px] sm:h-[44px] lg:h-[44.8px] transition-colors flex-shrink-0`}>
+                            <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-[#e9631e] flex-shrink-0" />
                             <input
                                 ref={searchRef}
                                 type="text"
                                 placeholder="Search event or category"
-                                className="w-full outline-none text-[11px] sm:text-xs lg:text-sm text-gray-700 placeholder:text-gray-400"
+                                className="w-full outline-none text-[11px] sm:text-xs lg:text-sm  text-gray-700 placeholder:text-gray-400"
                                 onFocus={() => setSearchFocused(true)}
                                 onBlur={() => setSearchFocused(false)}
                             />
-                            <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-orange-500 flex-shrink-0" />
+                            <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-[#e9631e] flex-shrink-0" />
                         </div>
 
                         {/* Right Actions */}
@@ -137,7 +137,7 @@ const HeroCarousel = () => {
                             <div className="relative" ref={profileRef}>
                                 <button
                                     onClick={handleProfileMenuClick}
-                                    className="flex items-center gap-1 text-xs sm:text-xs lg:text-sm text-gray-700 hover:text-orange-500 transition-colors px-2 sm:px-2 py-1.5 sm:py-1.5 h-[42px] sm:h-[44px] lg:h-[44.8px] whitespace-nowrap"
+                                    className="flex items-center gap-1 text-xs sm:text-xs lg:text-sm text-gray-700 hover:text-[#e9631e] transition-colors px-2 sm:px-2 py-1.5 sm:py-1.5 h-[42px] sm:h-[44px] lg:h-[44.8px] whitespace-nowrap"
                                 >
                                     <User className="w-4 h-4 sm:w-5 sm:h-5" />
                                     <span className="hidden xl:inline">My Account</span>
@@ -148,7 +148,7 @@ const HeroCarousel = () => {
                                     <div className="absolute top-full left-0 mt-2 w-48 sm:w-56 bg-white rounded-lg shadow-xl border border-gray-200 z-50 py-2">
                                         <Link
                                             href="/my-profile"
-                                            className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 hover:text-orange-500 transition-colors"
+                                            className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 hover:text-[#e9631e] transition-colors"
                                             onClick={() => setProfileDropdownOpen(false)}
                                         >
                                             <User className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -156,7 +156,7 @@ const HeroCarousel = () => {
                                         </Link>
                                         <Link
                                             href="/my-tickets"
-                                            className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 hover:text-orange-500 transition-colors"
+                                            className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 hover:text-[#e9631e] transition-colors"
                                             onClick={() => setProfileDropdownOpen(false)}
                                         >
                                             <Ticket className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -164,7 +164,7 @@ const HeroCarousel = () => {
                                         </Link>
                                         <Link
                                             href="/wishlist"
-                                            className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 hover:text-orange-500 transition-colors"
+                                            className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 hover:text-[#e9631e] transition-colors"
                                             onClick={() => setProfileDropdownOpen(false)}
                                         >
                                             <Heart className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -172,7 +172,7 @@ const HeroCarousel = () => {
                                         </Link>
                                         <Link
                                             href="/settings"
-                                            className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 hover:text-orange-500 transition-colors"
+                                            className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 hover:text-[#e9631e] transition-colors"
                                             onClick={() => setProfileDropdownOpen(false)}
                                         >
                                             <Settings className="w-4 h-4 sm:w-5 sm:h-5" />

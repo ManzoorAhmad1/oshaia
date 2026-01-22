@@ -24,22 +24,22 @@ const Footer = () => {
             <h3 className="text-black font-bold text-base sm:text-lg mb-4 sm:mb-5 md:mb-6 uppercase tracking-wider">Categories</h3>
             <ul className="space-y-3 sm:space-y-4">
               <li>
-                <Link href="/concerts" className="text-blue-500 hover:text-orange-500 transition-colors text-xs sm:text-sm">
+                <Link href="/concerts" className="text-blue-500 hover:text-[#e9631e] transition-colors text-xs sm:text-sm">
                   Concerts
                 </Link>
               </li>
               <li>
-                <Link href="/festivals" className="text-blue-500 hover:text-orange-500 transition-colors text-xs sm:text-sm">
+                <Link href="/festivals" className="text-blue-500 hover:text-[#e9631e] transition-colors text-xs sm:text-sm">
                   Festivals
                 </Link>
               </li>
               <li>
-                <Link href="/clubbing" className="text-blue-500 hover:text-orange-500 transition-colors text-xs sm:text-sm">
+                <Link href="/clubbing" className="text-blue-500 hover:text-[#e9631e] transition-colors text-xs sm:text-sm">
                   Clubbing
                 </Link>
               </li>
               <li>
-                <Link href="/theatre" className="text-blue-500 hover:text-orange-500 transition-colors text-xs sm:text-sm">
+                <Link href="/theatre" className="text-blue-500 hover:text-[#e9631e] transition-colors text-xs sm:text-sm">
                   Theatre
                 </Link>
               </li>
@@ -51,22 +51,22 @@ const Footer = () => {
             <h3 className="text-black font-bold text-lg mb-6 uppercase tracking-wider">For Organisers</h3>
             <ul className="space-y-4">
               <li>
-                <Link href="/event-management" className="text-blue-500 hover:text-orange-500 transition-colors text-sm">
+                <Link href="/event-management" className="text-blue-500 hover:text-[#e9631e] transition-colors text-sm">
                   Event Management
                 </Link>
               </li>
               <li>
-                <Link href="/ticketing-services" className="text-blue-500 hover:text-orange-500 transition-colors text-sm">
+                <Link href="/ticketing-services" className="text-blue-500 hover:text-[#e9631e] transition-colors text-sm">
                   Ticketing Services
                 </Link>
               </li>
               <li>
-                <Link href="/marketing" className="text-blue-500 hover:text-orange-500 transition-colors text-sm">
+                <Link href="/marketing" className="text-blue-500 hover:text-[#e9631e] transition-colors text-sm">
                   Marketing
                 </Link>
               </li>
               <li>
-                <Link href="/add-event" className="text-blue-500 hover:text-orange-500 transition-colors text-sm">
+                <Link href="/add-event" className="text-blue-500 hover:text-[#e9631e] transition-colors text-sm">
                   Add Event
                 </Link>
               </li>
@@ -78,17 +78,17 @@ const Footer = () => {
             <h3 className="text-black font-bold text-lg mb-6 uppercase tracking-wider">Services</h3>
             <ul className="space-y-4">
               <li>
-                <Link href="/customer-support" className="text-blue-500 hover:text-orange-500 transition-colors text-sm">
+                <Link href="/customer-support" className="text-blue-500 hover:text-[#e9631e] transition-colors text-sm">
                   Customer Support
                 </Link>
               </li>
               <li>
-                <Link href="/payment-methods" className="text-blue-500 hover:text-orange-500 transition-colors text-sm">
+                <Link href="/payment-methods" className="text-blue-500 hover:text-[#e9631e] transition-colors text-sm">
                   Payment Methods
                 </Link>
               </li>
               <li>
-                <Link href="/venue-ticketing" className="text-blue-500 hover:text-orange-500 transition-colors text-sm">
+                <Link href="/venue-ticketing" className="text-blue-500 hover:text-[#e9631e] transition-colors text-sm">
                   Venue Ticketing
                 </Link>
               </li>
@@ -229,8 +229,8 @@ const Footer = () => {
         <div className="mt-6 sm:mt-7 md:mt-8 pt-4 sm:pt-5 md:pt-6 border-t border-gray-300 text-center">
           <div className="text-gray-500 text-[10px] sm:text-xs md:text-sm">
             © {new Date().getFullYear()} Platinumlist. All rights reserved. | 
-            <Link href="/terms" className="ml-1 sm:ml-2 hover:text-orange-500 transition-colors">Terms & Conditions</Link> | 
-            <Link href="/privacy" className="ml-1 sm:ml-2 hover:text-orange-500 transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="ml-1 sm:ml-2 hover:text-[#e9631e] transition-colors">Terms & Conditions</Link> | 
+            <Link href="/privacy" className="ml-1 sm:ml-2 hover:text-[#e9631e] transition-colors">Privacy Policy</Link>
           </div>
         </div>
       </div>

@@ -8,6 +8,7 @@ import Footer from '@/components/home/Footer'
 import BestOfSessassonSlider from '@/components/home/BestOfSessassonSlider'
 import Platinumlist from '@/components/home/platinumlist'
 import Top_seller from '@/components/home/top_seller'
+import NewsletterSection from '@/components/home/NewsletterSection'
 
 const HomePage = () => {
   return (
@@ -18,6 +19,7 @@ const HomePage = () => {
         <EventsSection />
         <Top_seller/>
         <PartnersSection />
+        <NewsletterSection />
         <Platinumlist />
       </main>
       <Footer />

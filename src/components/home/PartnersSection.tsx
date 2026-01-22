@@ -70,7 +70,7 @@ const PartnersSection = () => {
 
   return (
     <section 
-      className="py-6 sm:py-10 md:py-12 lg:py-16 mt-8 sm:mt-12 md:mt-14 lg:mt-16"
+      className="py-6 sm:py-10 mt-8 sm:mt-12"
       onMouseEnter={() => setIsAutoPlaying(false)}
       onMouseLeave={() => setIsAutoPlaying(true)}
     >

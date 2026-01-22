@@ -89,7 +89,7 @@ const EventsSection = () => {
     : events.filter(event => event.category === activeCategory)
 
   return (
-    <section className="mt-16">
+    <section className="mt-16 ">
       <div className="">
         {/* Section Title */}
         <h2 className="section-title text-black">ALL EVENT</h2>
@@ -103,14 +103,14 @@ const EventsSection = () => {
                   onClick={() => setActiveCategory(category)}
                   className={`px-3 sm:px-6 md:px-8 py-2 sm:py-3 md:py-4 text-xs sm:text-base md:text-lg font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer relative whitespace-nowrap
                         ${activeCategory === category
-                      ? 'text-accent-orange'
+                      ? 'text-[#e9631e]'
                       : 'text-white hover:text-accent-orange'}
                       `}
                 >
                   {category}
                 </button>
                 {idx < categories.length - 1 && (
-                  <span className="h-6 sm:h-8 w-[2px] bg-gray-400 mx-1 sm:mx-2 inline-block opacity-40"></span>
+                  <span className="h-6 sm:h-8 w-[2px] bg-[#e9631e] mx-1 sm:mx-2 inline-block opacity-40"></span>
                 )}
               </React.Fragment>
             ))}
@@ -118,12 +118,12 @@ const EventsSection = () => {
         </div>
 
         {/* Event Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 w-full max-w-full mx-auto justify-items-center px-2 sm:px-0">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 w-full max-w-full mx-auto justify-items-center px-8 sm:px-12">
           {filteredEvents.map((event) => (
             <div key={event.id} className="w-full max-w-[324.1px] h-auto event-card group relative rounded-xl overflow-hidden">
 
               {/* Main Content */}
-              <div className="relative z-10">
+              <div className="relative z-10 ">
                 {/* Event Image */}
                 <div className="relative w-full aspect-square overflow-hidden">
                   <Image
@@ -137,12 +137,12 @@ const EventsSection = () => {
                 </div>
 
                 {/* Event Info */}
-                <div className="w-full bg-white border border-gray-200 rounded-b-xl flex items-center justify-between">
-                  <div className='flex flex-col gap-1 pl-3 sm:pl-4 py-2'>
+                <div className="w-full bg-white flex items-center justify-between border-b border-x rounded-bl-lg rounded-br-lg">
+                  <div className='flex flex-col pl-3 sm:pl-4 '>
                     <p className="text-xs sm:text-sm font-bold whitespace-nowrap">{event.title}</p>
                     <p className="text-[10px] sm:text-xs text-gray-600">{event.location}</p>
                   </div>
-                  <div className='flex items-center py-2 sm:py-3 px-4 sm:px-6 bg-purple-950 text-white border border-b-2 rounded-bl-full'>
+                  <div className='flex items-center py-2 sm:py-3 px-4 sm:px-6 bg-[#010f3e] text-white rouded-bl-lg'>
                     <p className="mr-1 sm:mr-2 text-[8px] sm:text-[9.9px]">As From</p>
                     <p className="text-xs sm:text-[15.9px]">{event.price}</p>
                   </div>
@@ -153,7 +153,7 @@ const EventsSection = () => {
         </div>
         {/* View All Button */}
         <div className="w-full flex items-center justify-center mt-8 sm:mt-10 md:mt-12">
-          <button className="w-full max-w-[365.4px] h-[60px] sm:h-[70px] md:h-[76.3px] btn-primary px-8 sm:px-10 md:px-12 py-3 sm:py-3.5 md:py-4 text-base sm:text-lg md:text-[21.8px] uppercase tracking-wider">
+          <button className="w-full max-w-[365.4px] h-[60px] sm:h-[70px] md:h-[76.3px] bg-[#010f3e] text-white px-8 sm:px-10 md:px-12 py-3 sm:py-3.5 md:py-4 text-base sm:text-lg md:text-[21.8px] uppercase tracking-wider">
             VIEW ALL EVENT
           </button>
         </div>

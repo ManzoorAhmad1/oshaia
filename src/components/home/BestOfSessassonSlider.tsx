@@ -30,7 +30,7 @@ const slides = [
         type: "image",
         url: "/images/BANNER - SAMPLE/Video For Carousel and Main Event(Where Choose Tickets Or Seats)1.jpg",
         alt: "DJ Performance",
-        duration: 0,
+        duration: 5,
     },
     {
         id: 5,
@@ -119,7 +119,6 @@ const BestOfSessassonSlider = () => {
             videoRef.current.muted = !videoRef.current.muted
             setIsMuted(videoRef.current.muted)
         }
-        setIsMuted(!isMuted)
     }
 
     const togglePlayPause = () => {
@@ -136,7 +135,7 @@ const BestOfSessassonSlider = () => {
     const currentSlideData = slides[currentSlide]
 
     return (
-        <div className="max-w-full sm:max-w-[1076.7px] h-auto mx-auto mb-4 px-2 sm:px-4">
+        <div className="max-w-full sm:max-w-[1276.7px] h-auto mx-auto mb-4 px-2 sm:px-4">
             <h2 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 mb-2 sm:mb-3 lg:mb-4 tracking-tight uppercase">
                 Best of Sessasson
             </h2>
@@ -183,6 +182,22 @@ const BestOfSessassonSlider = () => {
                                 playsInline
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                            
+                            {/* Mute Button - Only for videos */}
+                            <button
+                                onClick={toggleMute}
+                                className="absolute right-2 bottom-2 sm:right-3 sm:bottom-3 bg-white/80 hover:bg-white text-gray-700 rounded-full p-1.5 sm:p-2 shadow transition-colors z-10"
+                            >
+                                {isMuted ? (
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6l4.72-4.72a.75.75 0 011.28.531V19.189a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.506-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.395C2.806 8.757 3.63 8.25 4.51 8.25H6.75z" />
+                                    </svg>
+                                ) : (
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.531v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.506-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.395C2.806 8.757 3.63 8.25 4.51 8.25H6.75z" />
+                                    </svg>
+                                )}
+                            </button>
                         </div>
                     ) : (
                         <div className="relative w-full h-full">
@@ -194,7 +209,6 @@ const BestOfSessassonSlider = () => {
                             <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
                         </div>
                     )}
-
 
                     {/* Left Arrow */}
                     <button
@@ -222,21 +236,21 @@ const BestOfSessassonSlider = () => {
                             />
                     </button>
 
-                    {/* Mute Button */}
-                    <button
-                        onClick={toggleMute}
-                        className="absolute right-2 bottom-2 sm:right-3 sm:bottom-3 bg-white/80 hover:bg-white text-gray-700 rounded-full p-1.5 sm:p-2 shadow transition-colors z-10"
-                    >
-                        {isMuted ? (
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6l4.72-4.72a.75.75 0 011.28.531V19.189a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.506-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.395C2.806 8.757 3.63 8.25 4.51 8.25H6.75z" />
-                            </svg>
-                        ) : (
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.531v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.506-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.395C2.806 8.757 3.63 8.25 4.51 8.25H6.75z" />
-                            </svg>
-                        )}
-                    </button>
+                    {/* Dotted Navigation - Bottom Center */}
+                    <div className="absolute bottom-2 sm:bottom-3 md:bottom-4 left-1/2 transform -translate-x-1/2 flex items-center space-x-1 sm:space-x-2 z-10">
+                        {slides.map((_, index) => (
+                            <button
+                                key={index}
+                                onClick={() => goToSlide(index)}
+                                className={`transition-all duration-300 ${
+                                    currentSlide === index 
+                                        ? 'w-6 sm:w-8 h-1.5 sm:h-2 bg-white rounded-full' 
+                                        : 'w-2 sm:w-3 h-1.5 sm:h-2 bg-white/60 rounded-full hover:bg-white/80'
+                                }`}
+                                aria-label={`Go to slide ${index + 1}`}
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
@@ -244,4 +258,3 @@ const BestOfSessassonSlider = () => {
 }
 
 export default BestOfSessassonSlider
-
