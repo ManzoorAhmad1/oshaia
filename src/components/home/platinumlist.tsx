@@ -3,7 +3,7 @@ import { CreditCard, Apple, MessageCircle, Shield, Zap, Ticket, Clock, ChevronRi
 
 const Platinumlist = () => {
   return (
-    <section className="bg-gradient-to-br from-gray-50 to-white py-8 sm:py-12 md:py-16 px-3 sm:px-4 md:px-8 rounded-xl sm:rounded-2xl mt-8 sm:mt-10 md:mt-12 shadow-lg">
+    <section className="w-full bg-gradient-to-br from-gray-50 to-white py-8 sm:py-12 md:py-16 px-3 sm:px-4 md:px-8 rounded-xl sm:rounded-2xl mt-8 sm:mt-10 md:mt-12 shadow-lg">
 
       <div className="max-w-6xl mx-auto">
         {/* Why buy with Platinumlist */}
@@ -59,16 +59,25 @@ const Platinumlist = () => {
           <div className="flex flex-col">
             <div className="font-bold text-lg sm:text-xl mb-3 sm:mb-4 text-gray-800">You choose how to pay</div>
             <div className="flex gap-3 sm:gap-4 md:gap-6 flex-wrap">
-              {[...Array(3)].map((_, i) => (
-                <div
-                  key={`credit-${i}`}
-                  className="p-2 sm:p-3 bg-gray-50 rounded-lg hover:bg-blue-50 hover:text-blue-600 hover:scale-105 transition-all duration-300 group cursor-pointer"
-                >
-                  <CreditCard className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-gray-600 group-hover:text-blue-600 transition-colors" />
-                </div>
-              ))}
-              <div className="p-2 sm:p-3 bg-gray-50 rounded-lg hover:bg-black hover:text-white hover:scale-105 transition-all duration-300 group cursor-pointer">
-                <Apple className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-gray-600 group-hover:text-white transition-colors" />
+              <div
+                className="flex p-2 sm:p-3 gap-4 cursor-pointer"
+              >
+                <img
+                  src='/images/3) - Visa-Logo-2014.png'
+                  alt="Event"
+                  className="w-full h-32 sm:h-[40px] md:h-[40px] object-cover transition-all duration-500 rounded-lg"
+                />
+                <img
+                  src='/images/4) - Mastercard-logo.png'
+                  alt="Event"
+                  className="w-full h-32 sm:h-[40px] md:h-[40px] object-cover transition-all duration-500 rounded-lg"
+
+                />
+                <img
+                  src='/images/6) - My.t Money .png'
+                  alt="Event"
+                  className="w-full h-32 sm:h-[40px] md:h-[40px] object-cover transition-all duration-500 rounded-lg"
+                />
               </div>
             </div>
           </div>
@@ -126,13 +135,25 @@ const Platinumlist = () => {
             {/* Payment Methods */}
             <div className="bg-white p-4 sm:p-5 md:p-6">
               <div className="font-semibold text-gray-800 mb-3 sm:mb-4 text-sm sm:text-base">We accepted</div>
-              <div className="flex gap-3 sm:gap-4">
-                <div className="">
-                  <CreditCard className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-gray-700" />
-                </div>
-                <div className="">
-                  <Apple className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-gray-700 group-hover:text-white" />
-                </div>
+              <div
+                className="flex p-2 sm:p-3 gap-4 cursor-pointer"
+              >
+                <img
+                  src='/images/3) - Visa-Logo-2014.png'
+                  alt="Event"
+                  className="w-full h-32 sm:h-[40px] md:h-[40px] object-cover transition-all duration-500 rounded-lg"
+                />
+                <img
+                  src='/images/4) - Mastercard-logo.png'
+                  alt="Event"
+                  className="w-full h-32 sm:h-[40px] md:h-[40px] object-cover transition-all duration-500 rounded-lg"
+
+                />
+                <img
+                  src='/images/6) - My.t Money .png'
+                  alt="Event"
+                  className="w-full h-32 sm:h-[40px] md:h-[40px] object-cover transition-all duration-500 rounded-lg"
+                />
               </div>
             </div>
           </div>
