@@ -118,12 +118,21 @@ const EventsSection = () => {
         </div>
 
         {/* Event Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 w-full max-w-full mx-auto justify-items-center px-8 sm:px-12">
-          {filteredEvents.map((event) => (
-            <div key={event.id} className="w-full max-w-[324.1px] h-auto event-card group relative rounded-xl overflow-hidden">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 lg:gap-12 w-full max-w-full mx-auto justify-items-center px-12 sm:px-16 py-12 overflow-visible">
+          {filteredEvents.map((event,index) => (
+            <div key={event.id} className="w-full max-w-[324.1px] h-auto event-card group relative overflow-visible">
+
+              {/* Badge Image at Top Left - Outside the card */}
+              <div className="absolute -top-[32px] -left-[52px] z-30">
+                <img
+                  src={`/images/LOGO TAG/${index + 1}.png`}
+                  alt="Badge"
+                  className="w-[300px] h-auto object-contain"
+                />
+              </div>
 
               {/* Main Content */}
-              <div className="relative z-10 ">
+              <div className="relative z-10 overflow-hidden rounded-xl shadow-lg bg-white">
                 {/* Event Image */}
                 <div className="relative w-full aspect-square overflow-hidden">
                   <Image

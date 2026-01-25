@@ -137,7 +137,8 @@ const AllEvents = () => {
     return (
         <div className="max-w-full sm:max-w-[1276.7px] h-auto mx-auto mb-4 px-2 sm:px-4">
             <h2 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 mb-2 sm:mb-3 lg:mb-4 tracking-tight uppercase">
-                All Event            </h2>
+                All Event
+            </h2>
 
             <div className="relative rounded-lg sm:rounded-xl lg:rounded-3xl overflow-hidden shadow-md sm:shadow-lg bg-white w-full h-auto">
                 {/* Slide Container */}
@@ -242,8 +243,8 @@ const AllEvents = () => {
                                 key={index}
                                 onClick={() => goToSlide(index)}
                                 className={`transition-all duration-300 ${currentSlide === index
-                                        ? 'w-6 sm:w-8 h-1.5 sm:h-2 bg-white rounded-full'
-                                        : 'w-2 sm:w-3 h-1.5 sm:h-2 bg-white/60 rounded-full hover:bg-white/80'
+                                    ? 'w-6 sm:w-8 h-1.5 sm:h-2 bg-white rounded-full'
+                                    : 'w-2 sm:w-3 h-1.5 sm:h-2 bg-white/60 rounded-full hover:bg-white/80'
                                     }`}
                                 aria-label={`Go to slide ${index + 1}`}
                             />
