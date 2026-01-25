@@ -5,9 +5,12 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Menu, X, Search, User } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import AuthModal from '@/components/AuthModal'
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
+  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login')
   const router=useRouter()
   const navLinks = [
     { name: 'HOME', href: '/', active: true },
@@ -55,13 +58,23 @@ const Header = () => {
             </button>
 
             {/* Register Button */}
-            <button className="hidden sm:block btn-primary text-xs sm:text-sm px-3 sm:px-5 py-1 sm:py-2">
+            <button 
+              className="hidden sm:block btn-primary text-xs sm:text-sm px-3 sm:px-5 py-1 sm:py-2"
+              onClick={() => {
+                setAuthMode('signup')
+                setIsAuthModalOpen(true)
+              }}
+            >
               Register
             </button>
 
             {/* Login Button */}
-            <button className="hidden sm:flex items-center space-x-2 px-4 py-2 border border-white/20 rounded-lg hover:bg-white/10 transition-colors text-sm"
-            onClick={()=>router.push('/login')}
+            <button 
+              className="hidden sm:flex items-center space-x-2 px-4 py-2 border border-white/20 rounded-lg hover:bg-white/10 transition-colors text-sm"
+              onClick={() => {
+                setAuthMode('login')
+                setIsAuthModalOpen(true)
+              }}
             >
               <User className="w-4 h-4" />
               <span>Login</span>
@@ -99,8 +112,24 @@ const Header = () => {
                 </Link>
               ))}
               <div className="flex flex-col space-y-2 pt-4 border-t border-border-gray">
-                <button className="btn-primary w-full">Register</button>
-                <button className="px-4 py-3 border border-white/20 rounded-lg hover:bg-white/10 transition-colors">
+                <button 
+                  className="btn-primary w-full"
+                  onClick={() => {
+                    setAuthMode('signup')
+                    setIsAuthModalOpen(true)
+                    setIsMobileMenuOpen(false)
+                  }}
+                >
+                  Register
+                </button>
+                <button 
+                  className="px-4 py-3 border border-white/20 rounded-lg hover:bg-white/10 transition-colors"
+                  onClick={() => {
+                    setAuthMode('login')
+                    setIsAuthModalOpen(true)
+                    setIsMobileMenuOpen(false)
+                  }}
+                >
                   Login
                 </button>
               </div>
@@ -108,6 +137,12 @@ const Header = () => {
           </div>
         )}
       </div>
+      
+      <AuthModal 
+        isOpen={isAuthModalOpen} 
+        onClose={() => setIsAuthModalOpen(false)}
+        initialMode={authMode}
+      />
     </header>
   )
 }

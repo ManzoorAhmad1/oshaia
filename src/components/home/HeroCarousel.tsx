@@ -6,6 +6,7 @@ import Link from "next/link"
 import { Search, User, Menu, ShoppingCart, Calendar, ChevronDown, LogOut, Settings, Ticket, Heart } from "lucide-react"
 import { FaHome } from "react-icons/fa"
 import { useRouter } from "next/navigation"
+import AuthModal from '@/components/AuthModal'
 
 const HeroCarousel = () => {
     const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false)
@@ -13,6 +14,8 @@ const HeroCarousel = () => {
     const [searchFocused, setSearchFocused] = useState(false)
     const [showDatePicker, setShowDatePicker] = useState(false)
     const [selectedDate, setSelectedDate] = useState("")
+    const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
+    const [authMode, setAuthMode] = useState<'login' | 'signup'>('login')
 
     const languageRef = useRef<HTMLDivElement>(null)
     const profileRef = useRef<HTMLDivElement>(null)
@@ -79,6 +82,7 @@ const HeroCarousel = () => {
     }
 
     return (
+        <>
         <div className="bg-white min-h-[75vh] sm:min-h-[70vh] pb-8 sm:pb-12 lg:pb-16">
 
             {/* HERO CARD */}
@@ -270,8 +274,12 @@ const HeroCarousel = () => {
                                 )}
                             </div>
 
-                            <button className="bg-[#e9631e] hover:bg-orange-600 text-white px-3 sm:px-3 lg:px-5 rounded-lg text-xs sm:text-xs lg:text-sm font-medium transition-colors shadow-md whitespace-nowrap h-[42px] sm:h-[44px] lg:h-[44.8px]"
-                                onClick={() => router.push('signup')}
+                            <button 
+                                className="bg-[#e9631e] hover:bg-orange-600 text-white px-3 sm:px-3 lg:px-5 rounded-lg text-xs sm:text-xs lg:text-sm font-medium transition-colors shadow-md whitespace-nowrap h-[42px] sm:h-[44px] lg:h-[44.8px]"
+                                onClick={() => {
+                                    setAuthMode('signup')
+                                    setIsAuthModalOpen(true)
+                                }}
                             >
                                 Sign Up
                             </button>
@@ -338,6 +346,13 @@ const HeroCarousel = () => {
             </div>
 
         </div>
+        
+        <AuthModal 
+            isOpen={isAuthModalOpen} 
+            onClose={() => setIsAuthModalOpen(false)}
+            initialMode={authMode}
+        />
+        </>
     )
 }
 

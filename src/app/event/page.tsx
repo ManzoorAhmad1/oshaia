@@ -1,10 +1,14 @@
+import AllEvents from '@/components/event/allEvent';
+import EventCard from '@/components/event/eventCard';
+import EventsGrid from '@/components/event/EventsGrid';
 import { HeroCarousel } from '@/components/home';
-import { memo } from 'react';
 
 const Event = () => {
   return (
     <div>
-        <HeroCarousel />
+      <HeroCarousel />
+      <AllEvents />
+      <EventsGrid />
     </div>
   );
 };
