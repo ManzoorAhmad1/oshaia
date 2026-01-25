@@ -59,6 +59,7 @@ const nextConfig = {
         port: '3000',
         pathname: '/**',
       },
+      
     ],
     // Hostinger پر image optimization کے مسائل سے بچنے کے لیے
     unoptimized: false,

@@ -41,7 +41,7 @@ const Platinumlist = () => {
               key={index}
               className="cursor-pointer"
             >
-              <div className={`mb-3 sm:mb-4 ${feature.color}  transition-transform duration-300`}>
+              <div className={`mb-3 sm:mb-4 ${feature.color} text-center transition-transform duration-300`}>
                 {feature.icon}
               </div>
               <div className="font-bold text-base sm:text-lg mb-1 sm:mb-2 text-gray-800  transition-colors">

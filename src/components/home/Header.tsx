@@ -4,10 +4,11 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Menu, X, Search, User } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-
+  const router=useRouter()
   const navLinks = [
     { name: 'HOME', href: '/', active: true },
     { name: 'EVENTS', href: '/events', active: false },
@@ -59,7 +60,9 @@ const Header = () => {
             </button>
 
             {/* Login Button */}
-            <button className="hidden sm:flex items-center space-x-2 px-4 py-2 border border-white/20 rounded-lg hover:bg-white/10 transition-colors text-sm">
+            <button className="hidden sm:flex items-center space-x-2 px-4 py-2 border border-white/20 rounded-lg hover:bg-white/10 transition-colors text-sm"
+            onClick={()=>router.push('/login')}
+            >
               <User className="w-4 h-4" />
               <span>Login</span>
             </button>

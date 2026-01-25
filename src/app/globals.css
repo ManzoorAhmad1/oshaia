@@ -22,6 +22,11 @@
   --border-gray: #E5E7EB;
   --card-bg: #FFFFFF;
   --hover-overlay: rgba(108, 59, 175, 0.1);
+  --purple: #662D91;
+  --orange: #E49E00;
+  --nav-dark: #0F172A;
+  --accent: #F59E0B;
+  --white: #fff;
 }
 
 /* Base Styles */
@@ -30,7 +35,7 @@
     @apply border-border-gray;
     font-family: 'Quicksans', sans-serif !important;
   }
-  
+
   body {
     font-family: 'Quicksans', sans-serif !important;
     @apply antialiased bg-white text-gray-900;
@@ -39,38 +44,53 @@
   }
 
   /* Prevent horizontal scroll */
-  html, body {
+  html,
+  body {
     max-width: 100%;
     overflow-x: hidden;
   }
 
   /* Apply font to all text elements */
-  h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span,
+  a,
+  button,
+  input,
+  textarea,
+  select,
+  label,
+  div {
     font-family: 'Quicksans', sans-serif !important;
   }
-  
+
   /* Professional Scrollbar */
   ::-webkit-scrollbar {
     width: 8px;
   }
-  
+
   ::-webkit-scrollbar-track {
     @apply bg-primary-navy;
   }
-  
+
   ::-webkit-scrollbar-thumb {
     @apply bg-secondary-purple rounded-full;
   }
-  
+
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-accent-orange;
   }
-  
+
   /* Selection Color */
   ::selection {
     @apply bg-secondary-purple text-white;
   }
-  
+
   /* Focus Styles */
   :focus-visible {
     @apply outline-none ring-2 ring-accent-orange ring-offset-2 ring-offset-primary-dark;
@@ -79,68 +99,58 @@
 
 /* Custom Components */
 @layer components {
+
   /* Event Card */
   .event-card {
-    @apply bg-transparent rounded-xl overflow-hidden
-           transition-all duration-300 hover:shadow-xl hover:shadow-secondary-purple/10
-           hover:-translate-y-1 cursor-pointer;
+    @apply bg-transparent rounded-xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-secondary-purple/10 hover:-translate-y-1 cursor-pointer;
   }
-  
+
   /* Button Styles */
   .btn-primary {
-    @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 
-           bg-accent-orange text-white hover:bg-opacity-90
-           focus:outline-none focus:ring-2 focus:ring-accent-orange focus:ring-offset-2 focus:ring-offset-primary-dark;
+    @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 bg-accent-orange text-white hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-accent-orange focus:ring-offset-2 focus:ring-offset-primary-dark;
   }
-  
+
   .btn-secondary {
-    @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 
-           bg-secondary-purple text-white hover:bg-opacity-90
-           focus:outline-none focus:ring-2 focus:ring-secondary-purple focus:ring-offset-2 focus:ring-offset-primary-dark;
+    @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 bg-secondary-purple text-white hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-secondary-purple focus:ring-offset-2 focus:ring-offset-primary-dark;
   }
-  
+
   .btn-outline {
-    @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 
-           border-2 border-accent-orange text-accent-orange
-           hover:bg-accent-orange hover:text-white;
+    @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 border-2 border-accent-orange text-accent-orange hover:bg-accent-orange hover:text-white;
   }
-  
+
   /* Category Tab */
   .category-tab {
-    @apply px-6 py-3 text-sm font-bold uppercase tracking-wider
-           text-white transition-all duration-300 cursor-pointer
-           hover:text-accent-orange relative;
+    @apply px-6 py-3 text-sm font-bold uppercase tracking-wider text-white transition-all duration-300 cursor-pointer hover:text-accent-orange relative;
   }
-  
+
   .category-tab.active {
     @apply text-accent-orange;
   }
-  
+
   .category-tab.active::after {
     content: '';
     @apply absolute bottom-0 left-0 right-0 h-0.5 bg-accent-orange;
   }
-  
+
   /* Section Styles */
   .section-container {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16;
   }
-  
+
   /* Navigation Styles */
   .nav-link {
-    @apply relative px-4 py-2 text-white hover:text-accent-orange 
-           transition-colors duration-200 uppercase text-sm font-medium tracking-wide;
+    @apply relative px-4 py-2 text-white hover:text-accent-orange transition-colors duration-200 uppercase text-sm font-medium tracking-wide;
   }
-  
+
   .nav-link.active {
     @apply text-accent-orange;
   }
-  
+
   /* Typography */
   .section-title {
     @apply text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-6 text-center uppercase tracking-wider;
   }
-  
+
   .section-subtitle {
     @apply text-base sm:text-lg text-text-gray leading-relaxed;
   }
@@ -148,11 +158,12 @@
 
 /* Animations */
 @layer utilities {
+
   /* Popup Effect */
   .group:hover .icon-popup {
     animation: popup-effect 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
   }
-  
+
   /* Gradient Border */
   .animated-border-wrapper {
     position: relative;
@@ -162,72 +173,182 @@
     padding: 2px;
     border-radius: 0.75rem;
   }
-  
+
   /* Keyframes */
   @keyframes popup-effect {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-    100% { transform: scale(1); }
+    0% {
+      transform: scale(1);
+    }
+
+    50% {
+      transform: scale(1.2);
+    }
+
+    100% {
+      transform: scale(1);
+    }
   }
-  
+
   @keyframes marqueeUp {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-50%); }
+    0% {
+      transform: translateY(0);
+    }
+
+    100% {
+      transform: translateY(-50%);
+    }
   }
-  
+
   @keyframes marqueeDown {
-    0% { transform: translateY(-50%); }
-    100% { transform: translateY(0); }
+    0% {
+      transform: translateY(-50%);
+    }
+
+    100% {
+      transform: translateY(0);
+    }
   }
-  
+
   @keyframes marqueeHorizontal {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
+    0% {
+      transform: translateX(0);
+    }
+
+    100% {
+      transform: translateX(-50%);
+    }
   }
-  
+
   @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-10px);
+    }
   }
-  
+
   @keyframes floatSlow {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-15px);
+    }
   }
-  
+
   @keyframes gradient {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    0% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+
+    100% {
+      background-position: 0% 50%;
+    }
   }
-  
+
   @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.5;
+    }
   }
-  
+
   /* Responsive utilities */
   .mobile-only {
     @apply block sm:hidden;
   }
-  
+
   .tablet-only {
     @apply hidden sm:block lg:hidden;
   }
-  
+
   .desktop-only {
     @apply hidden lg:block;
   }
-  
+
   .mobile-tablet-only {
     @apply block lg:hidden;
   }
 }
- .scrollbar-hide {
-   -ms-overflow-style: none;
-   scrollbar-width: none;
- }
- .scrollbar-hide::-webkit-scrollbar {
-   display: none;
- }
- 
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes slideReveal {
+  0% {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+    transform: translateX(-20px) scale(1.4);
+  }
+
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+    transform: translateX(0) scale(1.4);
+  }
+}
+
+/* WhatsApp Button */
+.whatsapp-btn {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+/* Add these styles for Help Center page */
+
+/* Chat bot scrollbar */
+#chatBox::-webkit-scrollbar {
+  width: 6px;
+}
+
+#chatBox::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+#chatBox::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+#chatBox::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+/* Animation for sponsor carousel */
+@keyframes scrollSponsors {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Smooth transitions */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}

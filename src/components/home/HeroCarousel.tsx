@@ -5,6 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Search, User, Menu, ShoppingCart, Calendar, ChevronDown, LogOut, Settings, Ticket, Heart } from "lucide-react"
 import { FaHome } from "react-icons/fa"
+import { useRouter } from "next/navigation"
 
 const HeroCarousel = () => {
     const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false)
@@ -17,7 +18,7 @@ const HeroCarousel = () => {
     const profileRef = useRef<HTMLDivElement>(null)
     const searchRef = useRef<HTMLInputElement>(null)
     const datePickerRef = useRef<HTMLDivElement>(null)
-
+    const router = useRouter()
     // Close dropdowns when clicking outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -56,7 +57,7 @@ const HeroCarousel = () => {
         setLanguageDropdownOpen(false)
         setProfileDropdownOpen(false)
         removeSearchFocus()
-        
+
         // For debugging
         console.log("Calendar icon clicked!")
     }
@@ -113,23 +114,29 @@ const HeroCarousel = () => {
                                 label="HOME"
                                 active
                                 icon={FaHome}
+                                path='/'
+
                             />
-                            <Divider className='text-orange-500'/>
+                            <Divider className='text-orange-500' />
                             <NavItem
                                 label="EVENTS"
+                                path='/event'
                             />
-                            <Divider className='text-orange-500'/>
+                            <Divider className='text-orange-500' />
                             <NavItem
                                 label="ABOUT US"
+                                path='/about'
+
                             />
-                            <Divider className='text-orange-500'/>
+                            <Divider className='text-orange-500' />
                             <NavItem
                                 label="HELP CENTER"
+                                path='/help'
                             />
                         </div>
                     </div>
                 </div>
-                
+
                 {/* SEARCH BAR SECTION */}
                 <div className="relative mt-4 sm:-mt-6 md:-mt-8 box-border max-w-full sm:max-w-[1230.7px] h-[173px] mx-auto px-3 sm:px-4">
                     <div className="bg-white rounded-xl sm:rounded-xl lg:rounded-2xl h-[173px] w-full shadow-md sm:shadow-lg border border-gray-100 px-4 sm:px-4 md:px-6 lg:px-8 xl:px-10 py-4 sm:py-4 lg:py-6 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 sm:gap-4 lg:gap-6">
@@ -149,7 +156,7 @@ const HeroCarousel = () => {
                                     }}
                                     onBlur={() => setSearchFocused(false)}
                                 />
-                                
+
                                 {/* Calendar Icon - FIXED with better click handling */}
                                 <div className="relative" ref={datePickerRef}>
                                     <button
@@ -263,18 +270,20 @@ const HeroCarousel = () => {
                                 )}
                             </div>
 
-                            <button className="bg-[#e9631e] hover:bg-orange-600 text-white px-3 sm:px-3 lg:px-5 rounded-lg text-xs sm:text-xs lg:text-sm font-medium transition-colors shadow-md whitespace-nowrap h-[42px] sm:h-[44px] lg:h-[44.8px]">
+                            <button className="bg-[#e9631e] hover:bg-orange-600 text-white px-3 sm:px-3 lg:px-5 rounded-lg text-xs sm:text-xs lg:text-sm font-medium transition-colors shadow-md whitespace-nowrap h-[42px] sm:h-[44px] lg:h-[44.8px]"
+                                onClick={() => router.push('signup')}
+                            >
                                 Sign Up
                             </button>
 
-                            <button 
+                            <button
                                 onClick={removeSearchFocus}
                                 className="hover:bg-gray-100 rounded-lg transition-colors w-[38px] sm:w-[40px] lg:w-[44.8px] h-[42px] sm:h-[44px] lg:h-[44.8px] flex items-center justify-center"
                             >
                                 <Menu className="w-4 h-4 sm:w-4 sm:h-4 lg:w-5 lg:h-5" />
                             </button>
 
-                            <button 
+                            <button
                                 onClick={removeSearchFocus}
                                 className="relative hover:bg-gray-100 rounded-lg transition-colors w-[38px] sm:w-[40px] lg:w-[44.8px] h-[42px] sm:h-[44px] lg:h-[44.8px] flex items-center justify-center"
                             >
@@ -334,15 +343,19 @@ const HeroCarousel = () => {
 
 export default HeroCarousel
 
-const NavItem = ({ label, active = false, icon }: any) => (
-    <Link
-        href="#"
-        className={`font-bold text-[8px] xs:text-[9px] sm:text-xs md:text-sm lg:text-base xl:text-lg uppercase tracking-wide flex items-center gap-0.5 sm:gap-1 md:gap-2 hover:text-orange-400 transition-colors whitespace-nowrap ${active ? "text-orange-400" : "text-white"
-            }`}
-    >
-        {icon && <span className="hidden md:inline text-sm lg:text-base"><FaHome /> </span>}
-        {label}
-    </Link>
-)
+const NavItem = ({ label, active = false, icon, path }: any) => {
+    const router = useRouter()
+    return (
+        <p
+            onClick={() => router.push(path)}
+            className={`cursor-pointer font-bold text-[8px] xs:text-[9px] sm:text-xs md:text-sm lg:text-base xl:text-lg uppercase tracking-wide flex items-center gap-0.5 sm:gap-1 md:gap-2 hover:text-orange-400 transition-colors whitespace-nowrap ${active ? "text-orange-400" : "text-white"
+                }`}
+        >
+            {icon && <span className="hidden md:inline text-sm lg:text-base"><FaHome /> </span>}
+            {label}
+        </p>
+    )
+}
+
 
 const Divider = ({ className }: any) => <span className={`text-white/20 text-base sm:text-lg hidden md:inline ${className}`}>|</span>

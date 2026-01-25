@@ -25,6 +25,10 @@ module.exports = {
         'text-gray': '#B8B8B8',
         'border-gray': '#2A2D3E',
         'card-bg': '#1A1D2E',
+        'purple': '#662D91',
+        'orange': '#E49E00',
+        'nav-dark': '#0F172A',
+        'accent': '#F59E0B',
       },
       screens: {
         'xs': '475px',

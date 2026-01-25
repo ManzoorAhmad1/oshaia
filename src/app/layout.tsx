@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import WhatsAppButton from "@/components/about/WhatsAppButton";
 
 const quicksans = localFont({
   src: "../../public/images/Font/Quicksans Accurate ICG Fill.ttf",
@@ -22,6 +23,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className={quicksans.variable}>
       <body className={quicksans.className} style={{ fontFamily: 'var(--font-quicksans), Quicksans, sans-serif' }}>
         {children}
+        <WhatsAppButton />
       </body>
     </html>
   );
