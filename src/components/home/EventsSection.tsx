@@ -123,16 +123,16 @@ const EventsSection = () => {
             <div key={event.id} className="w-full max-w-[324.1px] h-auto event-card group relative overflow-visible">
 
               {/* Badge Image at Top Left - Outside the card */}
-              <div className="absolute -top-[32px] -left-[52px] z-30">
+              <div className="absolute -top-[43px] -left-[36px] w-[300px] h-auto z-30">
                 <img
                   src={`/images/LOGO TAG/${index + 1}.png`}
                   alt="Badge"
-                  className="w-[300px] h-auto object-contain"
+                  className="w-[170px] h-auto object-contain"
                 />
               </div>
 
               {/* Main Content */}
-              <div className="relative z-10 overflow-hidden rounded-xl shadow-lg bg-white">
+              <div className="relative z-10 overflow-hidden rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg bg-white">
                 {/* Event Image */}
                 <div className="relative w-full aspect-square overflow-hidden">
                   <Image
