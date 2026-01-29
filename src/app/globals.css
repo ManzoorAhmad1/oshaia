@@ -15,7 +15,7 @@
   --primary-dark: #FFFFFF;
   --primary-navy: #F8F9FA;
   --secondary-purple: #6C3BAF;
-  --accent-orange: #FF5722;
+  --accent-orange: #c89c6b;
   --accent-pink: #E91E63;
   --text-white: #1F2937;
   --text-gray: #6B7280;
@@ -23,10 +23,12 @@
   --card-bg: #FFFFFF;
   --hover-overlay: rgba(108, 59, 175, 0.1);
   --purple: #662D91;
-  --orange: #E49E00;
-  --nav-dark: #0F172A;
-  --accent: #F59E0B;
+  --orange: #c89c6b;
+  --nav-dark: #112b38;
+  --accent: #c89c6b;
   --white: #fff;
+  --primary-orange: #c89c6b;
+  --primary-blue: #112b38;
 }
 
 /* Base Styles */

@@ -5,7 +5,7 @@ export default function AboutSection() {
     <section className="max-w-6xl mx-auto py-16 px-6">
       <div className="grid md:grid-cols-2 gap-10 items-center">
         <div>
-          <h2 className="text-3xl font-bold text-[#E85C0D] mb-4">Who We Are</h2>
+          <h2 className="text-3xl font-bold text-[#c89c6b] mb-4">Who We Are</h2>
           <p className="text-gray-700 leading-relaxed mb-4">
             We are a dynamic event ticketing platform built to make your event experience seamless — from browsing to booking.
             Our mission is to connect event organizers and attendees through an intuitive and secure digital environment.

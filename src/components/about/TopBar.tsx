@@ -29,7 +29,7 @@ export default function TopBar() {
         />
         <Link
           href="/calendar"
-          className="calendar-btn flex items-center justify-center px-3 text-gray-500 hover:text-[#F59E0B] transition-all"
+          className="calendar-btn flex items-center justify-center px-3 text-gray-500 hover:text-[#c89c6b] transition-all"
           title="View Calendar"
         >
           <BiCalendarEvent />
@@ -40,7 +40,7 @@ export default function TopBar() {
         <Link href="/account" className="text-gray-800 font-semibold flex items-center">
           <BiCalendarEvent className="mr-1" /> My Account
         </Link>
-        <button className="btn-signup bg-[#E49E00] text-white border-none py-2 px-5 rounded-full font-semibold hover:opacity-85 transition">
+        <button className="btn-signup bg-[#c89c6b] text-white border-none py-2 px-5 rounded-full font-semibold hover:opacity-85 transition">
           Sign Up
         </button>
         <Link href="/cart" className="text-gray-800 relative">

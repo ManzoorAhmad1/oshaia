@@ -88,7 +88,7 @@ export default function HelpChatBot() {
       <div className="grid md:grid-cols-2 gap-10 items-start">
         {/* Left Column – FAQ / Template Questions */}
         <div>
-          <h2 className="text-3xl font-bold text-[#E85C0D] mb-4">
+          <h2 className="text-3xl font-bold text-[#c89c6b] mb-4">
             Frequently Asked Questions
           </h2>
           <p className="text-gray-700 mb-6">
@@ -103,7 +103,7 @@ export default function HelpChatBot() {
                 className="w-full text-left bg-white border border-gray-200 rounded-lg px-4 py-3 shadow-sm hover:shadow-md transition flex items-center justify-between"
               >
                 <span className="text-sm font-medium">{question}</span>
-                <BsChatDots className="text-[#E85C0D]" />
+                <BsChatDots className="text-[#c89c6b]" />
               </button>
             ))}
           </div>
@@ -124,7 +124,7 @@ export default function HelpChatBot() {
                 <div
                   className={`inline-block rounded-2xl px-4 py-2 ${
                     msg.from === 'user'
-                      ? 'bg-[#E85C0D] text-white'
+                      ? 'bg-[#c89c6b] text-white'
                       : 'bg-gray-100 text-gray-800'
                   }`}
                 >
@@ -142,11 +142,11 @@ export default function HelpChatBot() {
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Ask something about the system..."
-              className="flex-1 border border-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E85C0D]"
+              className="flex-1 border border-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]"
             />
             <button
               onClick={() => handleSendMessage()}
-              className="ml-3 bg-[#E85C0D] text-white p-2 rounded-full hover:bg-[#d24f0b] transition"
+              className="ml-3 bg-[#c89c6b] text-white p-2 rounded-full hover:bg-[#b8885a] transition"
             >
               <BsSend />
             </button>

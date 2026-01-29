@@ -60,7 +60,7 @@ export default function EventCard({
                         <h3 className="text-lg sm:text-xl lg:text-2xl font-bold uppercase tracking-wide lg:pl-4">{title}</h3>
 
                         {/* Navy Blue Section with Title and Info */}
-                        <div className="bg-[#001f3f] text-white p-3 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 rounded-lg lg:rounded-none">
+                        <div className="bg-[#112b38] text-white p-3 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 rounded-lg lg:rounded-none">
                             <div className="flex-1">
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-2 text-xs sm:text-sm">
@@ -76,7 +76,7 @@ export default function EventCard({
                             </div>
 
                             <div className="sm:ml-4">
-                                <div className="bg-white text-[#001f3f] px-3 sm:px-4 py-1.5 sm:py-2 rounded text-xs font-bold uppercase whitespace-nowrap">
+                                <div className="bg-white text-[#112b38] px-3 sm:px-4 py-1.5 sm:py-2 rounded text-xs font-bold uppercase whitespace-nowrap">
                                     Last Tickets Left
                                 </div>
                             </div>
@@ -88,11 +88,11 @@ export default function EventCard({
                                 <Ticket className="w-6 h-6 sm:w-8 sm:h-8 text-gray-600" />
                                 <div className='flex items-center gap-2 sm:gap-4'>
                                     <div className="text-xs sm:text-sm text-gray-600 font-medium">As From</div>
-                                    <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#ff8c00]">{currency} {price}</div>
+                                    <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#c89c6b]">{currency} {price}</div>
                                 </div>
                             </div>
 
-                            <button className="w-full sm:w-auto bg-[#001f3f] text-white py-2.5 sm:py-3 px-6 sm:px-8 rounded-lg font-bold text-xs sm:text-sm uppercase hover:bg-[#003366] transition-colors duration-200">
+                            <button className="w-full sm:w-auto bg-[#112b38] text-white py-2.5 sm:py-3 px-6 sm:px-8 rounded-lg font-bold text-xs sm:text-sm uppercase hover:bg-[#1a3d52] transition-colors duration-200">
                                 Get Tickets Here
                             </button>
                         </div>

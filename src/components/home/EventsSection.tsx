@@ -95,7 +95,7 @@ const EventsSection = () => {
         <h2 className="section-title text-black">ALL EVENT</h2>
 
         {/* Category Tabs */}
-        <div className="w-full overflow-x-auto mb-8 sm:mb-12 border-b border-gray-200 bg-[#07114A]">
+        <div className="w-full overflow-x-auto mb-8 sm:mb-12 border-b border-gray-200 bg-[#112b38]">
           <div className="flex justify-start sm:justify-center items-center gap-0 min-w-max sm:min-w-0">
             {categories.map((category, idx) => (
               <React.Fragment key={category}>
@@ -103,14 +103,14 @@ const EventsSection = () => {
                   onClick={() => setActiveCategory(category)}
                   className={`px-3 sm:px-6 md:px-8 py-2 sm:py-3 md:py-4 text-xs sm:text-base md:text-lg font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer relative whitespace-nowrap
                         ${activeCategory === category
-                      ? 'text-[#e9631e]'
+                      ? 'text-[#c89c6b]'
                       : 'text-white hover:text-accent-orange'}
                       `}
                 >
                   {category}
                 </button>
                 {idx < categories.length - 1 && (
-                  <span className="h-6 sm:h-8 w-[2px] bg-[#e9631e] mx-1 sm:mx-2 inline-block opacity-40"></span>
+                  <span className="h-6 sm:h-8 w-[2px] bg-[#c89c6b] mx-1 sm:mx-2 inline-block opacity-40"></span>
                 )}
               </React.Fragment>
             ))}
@@ -151,7 +151,7 @@ const EventsSection = () => {
                     <p className="text-xs sm:text-sm font-bold whitespace-nowrap">{event.title}</p>
                     <p className="text-[10px] sm:text-xs text-gray-600">{event.location}</p>
                   </div>
-                  <div className='flex items-center py-2 sm:py-3 px-4 sm:px-6 bg-[#010f3e] text-white rouded-bl-lg'>
+                  <div className='flex items-center py-2 sm:py-3 px-4 sm:px-6 bg-[#112b38] text-white rouded-bl-lg'>
                     <p className="mr-1 sm:mr-2 text-[8px] sm:text-[9.9px]">As From</p>
                     <p className="text-xs sm:text-[15.9px]">{event.price}</p>
                   </div>
@@ -162,7 +162,7 @@ const EventsSection = () => {
         </div>
         {/* View All Button */}
         <div className="w-full flex items-center justify-center mt-8 sm:mt-10 md:mt-12">
-          <button className="w-full max-w-[365.4px] h-[60px] sm:h-[70px] md:h-[76.3px] bg-[#010f3e] text-white px-8 sm:px-10 md:px-12 py-3 sm:py-3.5 md:py-4 text-base sm:text-lg md:text-[21.8px] uppercase tracking-wider">
+          <button className="w-full max-w-[365.4px] h-[60px] sm:h-[70px] md:h-[76.3px] bg-[#112b38] text-white px-8 sm:px-10 md:px-12 py-3 sm:py-3.5 md:py-4 text-base sm:text-lg md:text-[21.8px] uppercase tracking-wider">
             VIEW ALL EVENT
           </button>
         </div>

@@ -29,10 +29,10 @@ export default function Footer() {
   };
 
   const features = [
-    { icon: <BsShieldCheck className="text-2xl text-[#E85C0D]" />, title: 'Secure Checkout', desc: 'Fast & Safe Payment' },
-    { icon: <BsLightningCharge className="text-2xl text-[#E85C0D]" />, title: 'Instant Confirmation', desc: 'Guaranteed Tickets' },
-    { icon: <BsTicketPerforated className="text-2xl text-[#E85C0D]" />, title: 'Official Ticket Seller', desc: 'Trusted by 10k+ Users' },
-    { icon: <BsHeadset className="text-2xl text-[#E85C0D]" />, title: '24/7 Support', desc: 'Reliable Assistance' },
+    { icon: <BsShieldCheck className="text-2xl text-[#c89c6b]" />, title: 'Secure Checkout', desc: 'Fast & Safe Payment' },
+    { icon: <BsLightningCharge className="text-2xl text-[#c89c6b]" />, title: 'Instant Confirmation', desc: 'Guaranteed Tickets' },
+    { icon: <BsTicketPerforated className="text-2xl text-[#c89c6b]" />, title: 'Official Ticket Seller', desc: 'Trusted by 10k+ Users' },
+    { icon: <BsHeadset className="text-2xl text-[#c89c6b]" />, title: '24/7 Support', desc: 'Reliable Assistance' },
   ];
 
   const categories = ['Concerts', 'Festivals', 'Clubbing', 'Theatre'];
@@ -57,12 +57,12 @@ export default function Footer() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Your email address"
-                className="w-full md:w-[420px] h-10 px-3 bg-white text-[#0a1326] outline-none border border-slate-300 focus:border-[#E85C0D] focus:ring-2 focus:ring-[#E85C0D]/30 rounded-none"
+                className="w-full md:w-[420px] h-10 px-3 bg-white text-[#112b38] outline-none border border-slate-300 focus:border-[#c89c6b] focus:ring-2 focus:ring-[#c89c6b]/30 rounded-none"
                 required
               />
               <button
                 type="submit"
-                className="h-10 px-4 bg-[#E85C0D] text-white font-semibold hover:bg-[#c74c00] transition"
+                className="h-10 px-4 bg-[#c89c6b] text-white font-semibold hover:bg-[#b8885a] transition"
               >
                 Submit
               </button>
@@ -104,7 +104,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <BsTicketPerforated className="text-[#E85C0D] text-2xl" />
+              <BsTicketPerforated className="text-[#c89c6b] text-2xl" />
               <span className="font-extrabold text-lg text-gray-900">TicketWeb</span>
             </div>
             <p className="text-sm text-gray-500 leading-snug">
@@ -118,7 +118,7 @@ export default function Footer() {
             <ul className="space-y-1 text-sm text-gray-600">
               {categories.map((category) => (
                 <li key={category}>
-                  <a href="#" className="hover:text-[#E85C0D] transition">
+                  <a href="#" className="hover:text-[#c89c6b] transition">
                     {category}
                   </a>
                 </li>
@@ -132,7 +132,7 @@ export default function Footer() {
             <ul className="space-y-1 text-sm text-gray-600">
               {forOrganizers.map((item) => (
                 <li key={item}>
-                  <a href="#" className="hover:text-[#E85C0D] transition">
+                  <a href="#" className="hover:text-[#c89c6b] transition">
                     {item}
                   </a>
                 </li>
@@ -146,7 +146,7 @@ export default function Footer() {
             <ul className="space-y-1 text-sm text-gray-600">
               {services.map((service) => (
                 <li key={service}>
-                  <a href="#" className="hover:text-[#E85C0D] transition">
+                  <a href="#" className="hover:text-[#c89c6b] transition">
                     {service}
                   </a>
                 </li>
@@ -160,7 +160,7 @@ export default function Footer() {
             <p className="text-sm text-gray-600 mb-2">Chat with us:</p>
             <a
               href="#"
-              className="flex items-center gap-2 border border-[#E85C0D] text-[#E85C0D] hover:bg-[#E85C0D] hover:text-white text-sm px-3 py-2 rounded-md w-fit transition-all duration-200"
+              className="flex items-center gap-2 border border-[#c89c6b] text-[#c89c6b] hover:bg-[#c89c6b] hover:text-white text-sm px-3 py-2 rounded-md w-fit transition-all duration-200"
             >
               <RiWhatsappFill /> Chat Online
             </a>

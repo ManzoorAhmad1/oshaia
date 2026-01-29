@@ -153,16 +153,16 @@ export default function EventsGrid() {
     return (
         <div className="w-full py-8 sm:py-12 lg:py-16">
             {/* Header Section */}
-            <div className="bg-[#001f3f] text-white py-4 px-6 mb-8 flex items-center justify-center gap-4">
-                <button className="text-[#ff8c00] font-bold uppercase text-sm hover:text-white transition-colors italic">
+            <div className="bg-[#112b38] text-white py-4 px-6 mb-8 flex items-center justify-center gap-4">
+                <button className="text-[#c89c6b] font-bold uppercase text-sm hover:text-white transition-colors italic">
                     All Events
                 </button>
                 <span className="text-white">|</span>
-                <button className="text-white font-bold uppercase text-sm hover:text-[#ff8c00] transition-colors italic">
+                <button className="text-white font-bold uppercase text-sm hover:text-[#c89c6b] transition-colors italic">
                     This Week
                 </button>
                 <span className="text-white">|</span>
-                <button className="text-white font-bold uppercase text-sm hover:text-[#ff8c00] transition-colors italic">
+                <button className="text-white font-bold uppercase text-sm hover:text-[#c89c6b] transition-colors italic">
                     This Month
                 </button>
             </div>

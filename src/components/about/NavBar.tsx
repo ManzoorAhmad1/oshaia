@@ -24,8 +24,8 @@ export default function NavBar({ activeLink, setActiveLink }: NavBarProps) {
             key={link.id}
             href={link.href}
             className={`nav-link relative text-white uppercase font-extrabold text-sm tracking-wide no-underline flex items-center gap-1 py-2 px-3 border-b-3 border-transparent ${
-              activeLink === link.id ? 'text-[#F59E0B] border-[#F59E0B]' : ''
-            } hover:text-[#F59E0B] hover:border-[#F59E0B] transition-colors`}
+              activeLink === link.id ? 'text-[#c89c6b] border-[#c89c6b]' : ''
+            } hover:text-[#c89c6b] hover:border-[#c89c6b] transition-colors`}
             onClick={() => setActiveLink(link.id)}
           >
             {link.icon && <span>{link.icon}</span>}

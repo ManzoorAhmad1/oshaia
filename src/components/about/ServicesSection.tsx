@@ -7,17 +7,17 @@ import {
 export default function ServicesSection() {
   const services = [
     {
-      icon: <BsShieldCheck className="text-[#E85C0D] text-4xl mb-3" />,
+      icon: <BsShieldCheck className="text-[#c89c6b] text-4xl mb-3" />,
       title: 'Online Ticketing',
       description: 'Book your tickets for concerts, sports, and festivals instantly through our secure platform.',
     },
     {
-      icon: <BsLightningCharge className="text-[#E85C0D] text-4xl mb-3" />,
+      icon: <BsLightningCharge className="text-[#c89c6b] text-4xl mb-3" />,
       title: 'Event Management',
       description: 'Event organizers can easily manage schedules, ticket categories, and customer data.',
     },
     {
-      icon: <BsHeadset className="text-[#E85C0D] text-4xl mb-3" />,
+      icon: <BsHeadset className="text-[#c89c6b] text-4xl mb-3" />,
       title: 'Sponsor & Partner Access',
       description: 'We connect sponsors with events that match their audience and brand goals.',
     },
@@ -26,7 +26,7 @@ export default function ServicesSection() {
   return (
     <section className="bg-white py-16 border-t">
       <div className="max-w-6xl mx-auto px-6 text-center">
-        <h2 className="text-3xl font-bold text-[#E85C0D] mb-10">What We Offer</h2>
+        <h2 className="text-3xl font-bold text-[#c89c6b] mb-10">What We Offer</h2>
         <div className="grid md:grid-cols-3 gap-8">
           {services.map((service, index) => (
             <div
