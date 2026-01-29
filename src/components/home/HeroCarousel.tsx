@@ -87,7 +87,7 @@ const HeroCarousel = () => {
 
             {/* HERO CARD */}
             <div className="relative max-w-full sm:max-w-[1434.1px] h-[240px] sm:h-[300px] md:h-[340px] lg:h-[354.6px] mx-auto px-3 sm:px-4 lg:px-8 xl:px-12 2xl:px-16 pt-4 sm:pt-6">
-                <div className="relative w-full h-full rounded-xl sm:rounded-xl lg:rounded-2xl overflow-hidden shadow-lg sm:shadow-xl lg:shadow-2xl">
+                <div className="relative w-full h-full rounded-xl sm:rounded-xl lg:rounded-3xl overflow-hidden shadow-lg sm:shadow-xl lg:shadow-2xl">
                     <Image
                         src="/images/BG photo/Copy of Copy of HOME.png"
                         alt="Oshaia - Beyond your Journey"
@@ -142,8 +142,8 @@ const HeroCarousel = () => {
                 </div>
 
                 {/* SEARCH BAR SECTION */}
-                <div className="relative mt-4 sm:-mt-6 md:-mt-8 box-border max-w-full sm:max-w-[1230.7px] h-[173px] mx-auto px-3 sm:px-4">
-                    <div className="bg-white rounded-xl sm:rounded-xl lg:rounded-2xl h-[173px] w-full shadow-md sm:shadow-lg border border-gray-100 px-4 sm:px-4 md:px-6 lg:px-8 xl:px-10 py-4 sm:py-4 lg:py-6 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 sm:gap-4 lg:gap-6">
+                <div className="relative mt-4 sm:-mt-6 md:-mt-8 box-border max-w-full sm:max-w-[1230.7px] h-[130px] mx-auto px-3 sm:px-4">
+                    <div className="bg-white rounded-xl sm:rounded-xl lg:rounded-2xl h-[123px] mt-2 w-full shadow-md sm:shadow-lg border border-gray-100 px-4 sm:px-4 md:px-6 lg:px-8 xl:px-10 py-4 sm:py-4 lg:py-6 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 sm:gap-4 lg:gap-6">
 
                         {/* Search Bar with Calendar Icon INSIDE */}
                         <div className="relative w-full lg:w-[436px] flex-shrink-0">
