@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useRef, useEffect } from "react"
+import React, { useState, useRef, useEffect, useCallback } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Search, User, Menu, ShoppingCart, Calendar, ChevronDown, LogOut, Settings, Ticket, Heart } from "lucide-react"
@@ -12,7 +12,6 @@ const HeroCarousel = () => {
     const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false)
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false)
     const [searchFocused, setSearchFocused] = useState(false)
-    const [showDatePicker, setShowDatePicker] = useState(false)
     const [selectedDate, setSelectedDate] = useState("")
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
     const [authMode, setAuthMode] = useState<'login' | 'signup'>('login')
@@ -20,8 +19,9 @@ const HeroCarousel = () => {
     const languageRef = useRef<HTMLDivElement>(null)
     const profileRef = useRef<HTMLDivElement>(null)
     const searchRef = useRef<HTMLInputElement>(null)
-    const datePickerRef = useRef<HTMLDivElement>(null)
+    const dateInputRef = useRef<HTMLInputElement>(null)
     const router = useRouter()
+
     // Close dropdowns when clicking outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -30,9 +30,6 @@ const HeroCarousel = () => {
             }
             if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
                 setProfileDropdownOpen(false)
-            }
-            if (datePickerRef.current && !datePickerRef.current.contains(event.target as Node)) {
-                setShowDatePicker(false)
             }
         }
 
@@ -48,28 +45,8 @@ const HeroCarousel = () => {
             searchRef.current.blur()
             setSearchFocused(false)
         }
-        setShowDatePicker(false)
         setLanguageDropdownOpen(false)
         setProfileDropdownOpen(false)
-    }
-
-    // Handle calendar icon click
-    const handleCalendarClick = (e: React.MouseEvent) => {
-        e.stopPropagation() // Important: Prevent event bubbling
-        setShowDatePicker(!showDatePicker)
-        setLanguageDropdownOpen(false)
-        setProfileDropdownOpen(false)
-        removeSearchFocus()
-
-        // For debugging
-        console.log("Calendar icon clicked!")
-    }
-
-    // Handle date change
-    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectedDate(e.target.value)
-        console.log("Date selected:", e.target.value)
-        setShowDatePicker(false)
     }
 
     // Get today's date in YYYY-MM-DD format
@@ -79,6 +56,71 @@ const HeroCarousel = () => {
         const month = String(today.getMonth() + 1).padStart(2, '0')
         const day = String(today.getDate()).padStart(2, '0')
         return `${year}-${month}-${day}`
+    }
+
+    // Handle calendar icon click - IMPROVED VERSION
+    const handleCalendarClick = useCallback((e: React.MouseEvent) => {
+        e.stopPropagation()
+        e.preventDefault()
+        
+        console.log("Calendar clicked")
+        
+        // Method 1: Use ref to trigger click
+        if (dateInputRef.current) {
+            console.log("Date input found, clicking...")
+            dateInputRef.current.click()
+        } else {
+            console.log("Date input not found")
+            
+            // Method 2: Create a temporary input element
+            const tempInput = document.createElement('input')
+            tempInput.type = 'date'
+            tempInput.style.position = 'absolute'
+            tempInput.style.opacity = '0'
+            tempInput.style.height = '0'
+            tempInput.style.width = '0'
+            tempInput.style.pointerEvents = 'none'
+            tempInput.max = getTodayDate()
+            tempInput.value = selectedDate
+            
+            tempInput.onchange = (e: any) => {
+                setSelectedDate(e.target.value)
+                console.log("Date selected via temp input:", e.target.value)
+                document.body.removeChild(tempInput)
+            }
+            
+            document.body.appendChild(tempInput)
+            tempInput.click()
+            
+            // Clean up after some time
+            setTimeout(() => {
+                if (document.body.contains(tempInput)) {
+                    document.body.removeChild(tempInput)
+                }
+            }, 1000)
+        }
+        
+        // Close other dropdowns
+        setLanguageDropdownOpen(false)
+        setProfileDropdownOpen(false)
+    }, [selectedDate])
+
+    // Handle date change
+    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newDate = e.target.value
+        setSelectedDate(newDate)
+        console.log("Date selected:", newDate)
+        
+        // Optional: Show selected date somewhere
+        if (newDate) {
+            const formattedDate = new Date(newDate).toLocaleDateString('en-US', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            })
+            console.log("Formatted date:", formattedDate)
+        }
     }
 
     return (
@@ -119,7 +161,6 @@ const HeroCarousel = () => {
                                 active
                                 icon={FaHome}
                                 path='/'
-
                             />
                             <Divider className='text-orange-500' />
                             <NavItem
@@ -130,7 +171,6 @@ const HeroCarousel = () => {
                             <NavItem
                                 label="ABOUT US"
                                 path='/about'
-
                             />
                             <Divider className='text-orange-500' />
                             <NavItem
@@ -156,57 +196,42 @@ const HeroCarousel = () => {
                                     className="w-full outline-none text-[11px] sm:text-xs lg:text-sm text-gray-700 placeholder:text-gray-400"
                                     onFocus={() => {
                                         setSearchFocused(true)
-                                        setShowDatePicker(false)
                                     }}
                                     onBlur={() => setSearchFocused(false)}
                                 />
 
-                                {/* Calendar Icon - FIXED with better click handling */}
-                                <div className="relative" ref={datePickerRef}>
+                                {/* Calendar Icon - WORKING SOLUTION */}
+                                <div className="relative">
                                     <button
                                         type="button"
                                         onClick={handleCalendarClick}
                                         className="flex items-center justify-center p-1 hover:bg-gray-100 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
-                                        aria-label="Open calendar"
+                                        aria-label="Select date"
+                                        title="Select date"
                                     >
-                                        <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-[#c89c6b]" />
+                                        <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-[#c89c6b] cursor-pointer" />
                                     </button>
-
-                                    {/* Date Picker Popup */}
-                                    {showDatePicker && (
-                                        <div className="absolute right-0 top-full mt-2 bg-white rounded-lg shadow-xl border border-gray-200 z-50 p-4 w-64">
-                                            <div className="mb-3">
-                                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                                    Select Date
-                                                </label>
-                                                <input
-                                                    type="date"
-                                                    value={selectedDate}
-                                                    onChange={handleDateChange}
-                                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                                                    max={getTodayDate()}
-                                                />
-                                            </div>
-                                            <div className="flex justify-between">
-                                                <button
-                                                    type="button"
-                                                    onClick={() => setSelectedDate("")}
-                                                    className="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-md transition-colors"
-                                                >
-                                                    Clear
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => setShowDatePicker(false)}
-                                                    className="px-3 py-1.5 text-sm bg-[#c89c6b] text-white hover:bg-orange-600 rounded-md transition-colors"
-                                                >
-                                                    Close
-                                                </button>
-                                            </div>
-                                        </div>
-                                    )}
+                                    
+                                    {/* Hidden date input - ALTERNATIVE APPROACH */}
+                                    <div className="absolute top-0 left-0 w-full h-full opacity-0 overflow-hidden">
+                                        <input
+                                            ref={dateInputRef}
+                                            type="date"
+                                            value={selectedDate}
+                                            onChange={handleDateChange}
+                                            className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
+                                            max={getTodayDate()}
+                                        />
+                                    </div>
                                 </div>
                             </div>
+                            
+                            {/* Show selected date below search bar (optional) */}
+                            {selectedDate && (
+                                <div className="mt-1 text-xs text-gray-600">
+                                    Selected date: {new Date(selectedDate).toLocaleDateString()}
+                                </div>
+                            )}
                         </div>
 
                         {/* Right Actions */}
@@ -216,7 +241,6 @@ const HeroCarousel = () => {
                                 <button
                                     onClick={() => {
                                         setProfileDropdownOpen(!profileDropdownOpen)
-                                        setShowDatePicker(false)
                                     }}
                                     className="flex items-center gap-1 text-xs sm:text-xs lg:text-sm text-gray-700 hover:text-[#c89c6b] transition-colors px-2 sm:px-2 py-1.5 sm:py-1.5 h-[42px] sm:h-[44px] lg:h-[44.8px] whitespace-nowrap"
                                 >
@@ -306,7 +330,6 @@ const HeroCarousel = () => {
                                 <button
                                     onClick={() => {
                                         setLanguageDropdownOpen(!languageDropdownOpen)
-                                        setShowDatePicker(false)
                                     }}
                                     className="flex items-center gap-1 text-xs sm:text-xs lg:text-sm text-gray-700 hover:bg-gray-100 px-2 sm:px-2 rounded-lg transition-colors h-[42px] sm:h-[44px] lg:h-[44.8px] whitespace-nowrap"
                                 >
@@ -347,6 +370,16 @@ const HeroCarousel = () => {
 
         </div>
         
+        {/* Hidden global date input - WORKING SOLUTION */}
+        <input
+            ref={dateInputRef}
+            type="date"
+            value={selectedDate}
+            onChange={handleDateChange}
+            className="fixed top-0 left-0 opacity-0 w-1 h-1 pointer-events-none"
+            max={getTodayDate()}
+        />
+        
         <AuthModal 
             isOpen={isAuthModalOpen} 
             onClose={() => setIsAuthModalOpen(false)}
@@ -371,6 +404,5 @@ const NavItem = ({ label, active = false, icon, path }: any) => {
         </p>
     )
 }
-
 
 const Divider = ({ className }: any) => <span className={`text-white/20 text-base sm:text-lg hidden md:inline ${className}`}>|</span>
