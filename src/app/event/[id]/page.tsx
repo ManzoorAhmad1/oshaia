@@ -87,7 +87,44 @@ export default function EventDetailPage({ params }: EventDetailProps) {
             }
         ]
     };
-
+    const events = [
+        {
+            id: 1,
+            title: "EN TOUTE INTIMITÉ",
+            venue: "Le Suffren Hotel & Spa",
+            price: "Rs450",
+            date: "7",
+            month: "Feb",
+            image: "/event1.jpg",
+        },
+        {
+            id: 2,
+            title: "EN TOUTE INTIMITÉ",
+            venue: "Le Suffren Hotel & Spa",
+            price: "Rs450",
+            date: "7",
+            month: "Feb",
+            image: "/event2.jpg",
+        },
+        {
+            id: 3,
+            title: "EN TOUTE INTIMITÉ",
+            venue: "Le Suffren Hotel & Spa",
+            price: "Rs450",
+            date: "7",
+            month: "Feb",
+            image: "/event3.jpg",
+        },
+        {
+            id: 4,
+            title: "EN TOUTE INTIMITÉ",
+            venue: "Le Suffren Hotel & Spa",
+            price: "Rs450",
+            date: "7",
+            month: "Feb",
+            image: "/event4.jpg",
+        },
+    ];
     return (
         <>
             <div className="min-h-screen bg-gray-50">
@@ -650,6 +687,61 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div className="w-full flex items-center max-w-7xl mx-auto justify-between my-8">
+                <div className="relative w-[300px] h-[300px]">
+                    {/* Last Tickets Left tag (1st - Top layer pe) */}
+                    <img
+                        alt="Last Tickets Left tag"
+                        src="https://otayo.com/wp-content/themes/otayo/assets/images/event_tags/last_tickets_left_tag.svg"
+                        className="listing_event_status_tag evt1127444 w-36 h-36 relative z-20"
+                        loading="lazy"
+                    />
+
+                    {/* Event Image (2nd - Back layer pe) */}
+                    <img
+                        alt="ZULU EK SO TRIBE LIVE @ BACKSTAGE"
+                        src="https://otayo.com/wp-content/uploads/2026/01/zulu-new-grid.jpg"
+                        className="img-fluid w-[300px] h-[300px] absolute top-0 left-0 z-10"
+                        loading="lazy"
+                    />
+                </div>
+
+                <div className="relative w-[300px] h-[300px]">
+                    {/* Last Tickets Left tag (1st - Top layer pe) */}
+                    <img
+                        alt="Last Tickets Left tag"
+                        src="https://otayo.com/wp-content/themes/otayo/assets/images/event_tags/last_tickets_left_tag.svg"
+                        className="listing_event_status_tag evt1127444 w-36 h-36 relative z-20"
+                        loading="lazy"
+                    />
+
+                    {/* Event Image (2nd - Back layer pe) */}
+                    <img
+                        alt="ZULU EK SO TRIBE LIVE @ BACKSTAGE"
+                        src="https://otayo.com/wp-content/uploads/2026/01/zulu-new-grid.jpg"
+                        className="img-fluid w-[300px] h-[300px] absolute top-0 left-0 z-10"
+                        loading="lazy"
+                    />
+                </div>
+
+                <div className="relative w-[300px] h-[300px]">
+                    {/* Last Tickets Left tag (1st - Top layer pe) */}
+                    <img
+                        alt="Last Tickets Left tag"
+                        src="https://otayo.com/wp-content/themes/otayo/assets/images/event_tags/last_tickets_left_tag.svg"
+                        className="listing_event_status_tag evt1127444 w-36 h-36 relative z-20"
+                        loading="lazy"
+                    />
+
+                    {/* Event Image (2nd - Back layer pe) */}
+                    <img
+                        alt="ZULU EK SO TRIBE LIVE @ BACKSTAGE"
+                        src="https://otayo.com/wp-content/uploads/2026/01/zulu-new-grid.jpg"
+                        className="img-fluid w-[300px] h-[300px] absolute top-0 left-0 z-10"
+                        loading="lazy"
+                    />
                 </div>
             </div>
             <Footer />
