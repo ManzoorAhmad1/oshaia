@@ -4,7 +4,7 @@ import EventCard from "./eventCard";
 
 
 // Unsplash images for events
-const eventImages = [
+export const eventImages = [
     'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop',
     'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&auto=format&fit=crop',
     'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&auto=format&fit=crop',
@@ -20,7 +20,7 @@ const eventImages = [
 ];
 
 // Sample events data
-const eventsData = [
+export const eventsData = [
     {
         id: 1,
         title: "Electronic Dance Music Festival",

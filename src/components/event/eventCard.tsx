@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { Calendar, MapPin, Ticket } from 'lucide-react';
+import Link from 'next/link';
 
 interface EventCardProps {
     id: number;
@@ -39,8 +40,8 @@ export default function EventCard({
     };
 
     return (
-        <div className='w-full h-[305.9px]'>
-            <div className="bg-white rounded-xl sm:rounded-2xl max-w-7xl mx-auto shadow-lg overflow-hidden border border-black hover:shadow-xl transition-all duration-300 p-3 sm:py-4 sm:pl-4 h-full">
+        <Link href={`/event/${id}`} className='w-full h-[305.9px] block'>
+            <div className="bg-white rounded-xl sm:rounded-2xl max-w-7xl mx-auto shadow-lg overflow-hidden border border-black hover:shadow-xl transition-all duration-300 p-3 sm:py-4 sm:pl-4 h-full cursor-pointer">
 
                 <div className="flex flex-col lg:flex-row h-full gap-4 lg:gap-0">
                     {/* Event Image */}
@@ -100,6 +101,6 @@ export default function EventCard({
                 </div>
 
             </div>
-        </div>
+        </Link>
     );
 }

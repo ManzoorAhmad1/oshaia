@@ -19,13 +19,6 @@ const slides = [
         duration: 5,
     },
     {
-        id: 3,
-        type: "video",
-        url: "/images/BANNER - SAMPLE/Video For Carousel and Main Event(Where Choose Tickets Or Seats).mp4",
-        alt: "Music Festival",
-        duration: 15,
-    },
-    {
         id: 4,
         type: "image",
         url: "/images/BANNER - SAMPLE/Video For Carousel and Main Event(Where Choose Tickets Or Seats)1.jpg",

@@ -18,7 +18,6 @@ const slides = [
         alt: "Concert Performance",
         duration: 5,
     },
-    
     {
         id: 4,
         type: "image",
@@ -35,7 +34,7 @@ const slides = [
     }
 ]
 
-const BestOfSessassonSlider = () => {
+const TicketHeroSection = () => {
     const [currentSlide, setCurrentSlide] = useState(0)
     const [timeLeft, setTimeLeft] = useState(slides[0].duration)
     const [isMuted, setIsMuted] = useState(true)
@@ -129,12 +128,8 @@ const BestOfSessassonSlider = () => {
     const currentSlideData = slides[currentSlide]
 
     return (
-        <div className="max-w-full sm:max-w-[1276.7px] h-auto mx-auto mb-4 px-2 sm:px-4">
-            <h2 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 mb-2 sm:mb-3 lg:mb-4 tracking-tight uppercase">
-                Best of Sessasson
-            </h2>
-
-            <div className="relative rounded-lg sm:rounded-xl lg:rounded-3xl overflow-hidden shadow-md sm:shadow-lg bg-white w-full h-auto">
+        <div className="max-w-full  h-auto mx-auto mb-4 ">
+            <div className="relative rounded-tr-lg rouded-bl-lg rounded-br-lg w-full h-auto">
                 {/* Slide Container */}
                 <div className="relative w-full h-[200px] sm:h-[280px] md:h-[320px] lg:h-[357.5px] overflow-hidden">
                     {/* Progress Loader */}
@@ -166,17 +161,9 @@ const BestOfSessassonSlider = () => {
                     {/* Slide Content */}
                     {currentSlideData.type === "video" ? (
                         <div className="relative w-full h-full">
-                            <video
-                                ref={videoRef}
-                                src={currentSlideData.url}
-                                className="w-full h-full object-cover"
-                                autoPlay
-                                muted={isMuted}
-                                loop
-                                playsInline
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                            
+
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-tr-lg rouded-bl-lg rounded-br-lg"></div>
+
                             {/* Mute Button - Only for videos */}
                             <button
                                 onClick={toggleMute}
@@ -194,11 +181,11 @@ const BestOfSessassonSlider = () => {
                             </button>
                         </div>
                     ) : (
-                        <div className="relative w-full h-full">
+                        <div className="relative w-full h-full rounded-xl">
                             <img
                                 src={currentSlideData.url}
                                 alt={currentSlideData.alt}
-                                className="w-full h-full object-cover"
+                                className="w-full h-full object-cover rounded-xl"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
                         </div>
@@ -223,11 +210,11 @@ const BestOfSessassonSlider = () => {
                         onClick={nextSlide}
                         className="absolute right-1 sm:right-2 md:right-4 lg:right-6 top-[40%] p-1 sm:p-2 z-10"
                     >
-                         <img
-                                src='/images/left-chevron.png'
-                                alt='slider button images'
-                                className="w-[24px] h-[16px] sm:w-[30px] sm:h-[20px] lg:w-[36.5px] lg:h-[24.8px] object-cover rotate-180"
-                            />
+                        <img
+                            src='/images/left-chevron.png'
+                            alt='slider button images'
+                            className="w-[24px] h-[16px] sm:w-[30px] sm:h-[20px] lg:w-[36.5px] lg:h-[24.8px] object-cover rotate-180"
+                        />
                     </button>
 
                     {/* Dotted Navigation - Bottom Center */}
@@ -236,11 +223,10 @@ const BestOfSessassonSlider = () => {
                             <button
                                 key={index}
                                 onClick={() => goToSlide(index)}
-                                className={`transition-all duration-300 ${
-                                    currentSlide === index 
-                                        ? 'w-6 sm:w-8 h-1.5 sm:h-2 bg-white rounded-full' 
-                                        : 'w-2 sm:w-3 h-1.5 sm:h-2 bg-white/60 rounded-full hover:bg-white/80'
-                                }`}
+                                className={`transition-all duration-300 ${currentSlide === index
+                                    ? 'w-6 sm:w-8 h-1.5 sm:h-2 bg-white rounded-full'
+                                    : 'w-2 sm:w-3 h-1.5 sm:h-2 bg-white/60 rounded-full hover:bg-white/80'
+                                    }`}
                                 aria-label={`Go to slide ${index + 1}`}
                             />
                         ))}
@@ -251,4 +237,4 @@ const BestOfSessassonSlider = () => {
     )
 }
 
-export default BestOfSessassonSlider
+export default TicketHeroSection
