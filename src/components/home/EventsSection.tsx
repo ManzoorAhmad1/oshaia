@@ -151,7 +151,7 @@ const EventsSection = () => {
                     <p className="text-xs sm:text-sm font-bold whitespace-nowrap">{event.title}</p>
                     <p className="text-[10px] sm:text-xs text-gray-600">{event.location}</p>
                   </div>
-                  <div className='flex items-center py-2 sm:py-3 px-4 sm:px-6 bg-[#112b38] text-white rouded-bl-lg'>
+                  <div className='flex items-center py-2 sm:py-3 px-4 sm:px-6 bg-[#112b38] text-white rounded-bl-3xl'>
                     <p className="mr-1 sm:mr-2 text-[8px] sm:text-[9.9px]">As From</p>
                     <p className="text-xs sm:text-[15.9px]">{event.price}</p>
                   </div>
@@ -162,7 +162,7 @@ const EventsSection = () => {
         </div>
         {/* View All Button */}
         <div className="w-full flex items-center justify-center mt-8 sm:mt-10 md:mt-12">
-          <button className="w-full max-w-[365.4px] h-[60px] sm:h-[70px] md:h-[76.3px] bg-[#112b38] text-white px-8 sm:px-10 md:px-12 py-3 sm:py-3.5 md:py-4 text-base sm:text-lg md:text-[21.8px] uppercase tracking-wider">
+          <button className="w-full max-w-[365.4px] h-[60px] sm:h-[70px] md:h-[76.3px] bg-[#112b38] text-white px-8 sm:px-10 md:px-12 py-3 sm:py-3.5 md:py-4 text-base sm:text-lg md:text-[21.8px] uppercase tracking-wider rounded-full">
             VIEW ALL EVENT
           </button>
         </div>

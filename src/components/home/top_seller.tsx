@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Calendar, ChevronRight, ChevronLeft, MapPin } from "lucide-react";
 import { Text } from "rizzui/typography";
+import { useRouter } from "next/navigation";
 
 const images = [
     "https://images.unsplash.com/photo-1504805572947-34fad45aed93?q=80&w=800",
@@ -14,7 +15,7 @@ export default function EventCard() {
     const [isPlaying, setIsPlaying] = useState(true);
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
     const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
-
+    const router = useRouter();
     // Auto slide with timer
     useEffect(() => {
         if (isPlaying) {
@@ -142,7 +143,7 @@ export default function EventCard() {
                                     {/* Navigation Button */}
                                     <button
                                         onClick={() => setIndex((index + 1) % images.length)}
-                                        className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 p-2 bg-black/70 text-white rounded-full hover:bg-black/90 flex items-center justify-center border-2 border-gray-300"
+                                        className="w-8 h-8 p-2 bg-black/70 text-white rounded-full hover:bg-black/90 flex items-center justify-center border-2 border-gray-300"
                                     >
                                         <img
                                             src='/images/double-chevron.png'
@@ -158,15 +159,15 @@ export default function EventCard() {
                     </div>
                 </div>
             </div>
-            <div className="max-w-full sm:max-w-[914px] h-auto rounded-lg overflow-hidden mt-6">
+            <div className="max-w-full sm:max-w-[914px] h-auto rounded-lg overflow-hidden mt-10">
                 <img
                     src='https://images.unsplash.com/photo-1521334884684-d80222895322?q=80&w=800'
                     alt="Event"
                     className="w-full h-32 sm:h-[100px] md:h-[109.31px] object-cover transition-all duration-500 rounded-lg"
                 />
             </div>
-            <div>
-                <Text>Sponsers <span className="text-">Advertising with us</span></Text>
+            <div className="w-full flex items-center justify-end">
+                <Text onClick={()=>router.push('HelpCenter')}>Sponsers <span className="text-">Advertising with us</span></Text>
             </div>
         </div>
     );
