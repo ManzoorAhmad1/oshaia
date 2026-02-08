@@ -289,6 +289,7 @@ export const en = {
     // CTA Section
     joinThousands: 'Join Thousands of Event-Goers Today',
     experienceEasiest: 'Experience the easiest way to discover and attend your favorite events.',
+    browseEvents: 'Browse Events',
     
     // Services Section
     whatWeOffer: 'What We Offer',
