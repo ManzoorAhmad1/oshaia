@@ -1,32 +1,38 @@
+'use client';
+
 import { BiCalendarEvent } from "react-icons/bi";
 import { 
   BsShieldCheck, 
   BsLightningCharge, 
   BsHeadset,
 } from 'react-icons/bs';
+import { useLanguage } from '@/context/LanguageContext';
+
 export default function ServicesSection() {
+  const { t } = useLanguage();
+  
   const services = [
     {
       icon: <BsShieldCheck className="text-[#c89c6b] text-4xl mb-3" />,
-      title: 'Online Ticketing',
-      description: 'Book your tickets for concerts, sports, and festivals instantly through our secure platform.',
+      title: t.onlineTicketing,
+      description: t.onlineTicketingDesc,
     },
     {
       icon: <BsLightningCharge className="text-[#c89c6b] text-4xl mb-3" />,
-      title: 'Event Management',
-      description: 'Event organizers can easily manage schedules, ticket categories, and customer data.',
+      title: t.eventManagement,
+      description: t.eventManagementDesc,
     },
     {
       icon: <BsHeadset className="text-[#c89c6b] text-4xl mb-3" />,
-      title: 'Sponsor & Partner Access',
-      description: 'We connect sponsors with events that match their audience and brand goals.',
+      title: t.sponsorPartnerAccess,
+      description: t.sponsorPartnerAccessDesc,
     },
   ];
 
   return (
     <section className="bg-white py-16 border-t">
       <div className="max-w-6xl mx-auto px-6 text-center">
-        <h2 className="text-3xl font-bold text-[#c89c6b] mb-10">What We Offer</h2>
+        <h2 className="text-3xl font-bold text-[#c89c6b] mb-10">{t.whatWeOffer}</h2>
         <div className="grid md:grid-cols-3 gap-8">
           {services.map((service, index) => (
             <div

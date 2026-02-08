@@ -1,8 +1,10 @@
 "use client"
 
 import React, { useState } from "react"
+import { useLanguage } from "@/context/LanguageContext"
 
 const NewsletterSection = () => {
+    const { t } = useLanguage()
     const [email, setEmail] = useState("")
     const [isSubscribed, setIsSubscribed] = useState(false)
 
@@ -22,7 +24,7 @@ const NewsletterSection = () => {
             <div className="w-full flex items-center justify-around">
                 {/* Title */}
                 <p className="text-2xl text-white">
-                    Subscribe to the Newsletter
+                    {t.subscribeToNewsletter}
                 </p>
 
                 {/* Subscription Form */}
@@ -32,16 +34,16 @@ const NewsletterSection = () => {
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                placeholder="Your email address"
+                                placeholder={t.yourEmailAddress}
                                 className="w-80 px-4 sm:px-6 py-3 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-accent-orange focus:border-transparent text-sm sm:text-base"
                                 required
                             />
                         </div>
                         <button
                             type="submit"
-                            className="bg-accent-orange hover:bg-orange-600 text-white font-bold px-6 sm:px-12 rounded-lg  transition-colors duration-300 whitespace-nowrap text-sm sm:text-base"
+                            className="bg-[#c89c6b] hover:bg-[#b8885a] text-white font-bold px-6 sm:px-12 rounded-lg transition-all duration-300 whitespace-nowrap text-sm sm:text-base hover:scale-105 shadow-md hover:shadow-lg"
                         >
-                            {isSubscribed ? "Subscribed! ✓" : "Submit"}
+                            {isSubscribed ? t.subscribed : t.submit}
                         </button>
                     </form>
                 </div>

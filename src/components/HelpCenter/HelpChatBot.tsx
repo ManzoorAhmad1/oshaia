@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { BsChatDots, BsSend } from 'react-icons/bs';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface Message {
   from: 'user' | 'bot';
@@ -9,23 +10,24 @@ interface Message {
 }
 
 export default function HelpChatBot() {
+  const { t } = useLanguage();
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const chatBoxRef = useRef<HTMLDivElement>(null);
 
   const templates = [
-    'How can I buy event tickets?',
-    'Where can I see my purchased tickets?',
-    'Can I refund or cancel my ticket?',
-    'How to contact event organizers?',
-    'How to reset my password?',
-    'What payment options do you support?'
+    t.faqBuyTickets,
+    t.faqViewTickets,
+    t.faqRefund,
+    t.faqContactOrganizer,
+    t.faqResetPassword,
+    t.faqPaymentOptions
   ];
 
   useEffect(() => {
     // Initialize with welcome message
-    setMessages([{ from: 'bot', text: "👋 Hi! I'm your TicketWeb Assistant. How can I help you today?" }]);
-  }, []);
+    setMessages([{ from: 'bot', text: t.chatbotWelcome }]);
+  }, [t.chatbotWelcome]);
 
   useEffect(() => {
     // Scroll to bottom when messages change
@@ -89,10 +91,10 @@ export default function HelpChatBot() {
         {/* Left Column – FAQ / Template Questions */}
         <div>
           <h2 className="text-3xl font-bold text-[#c89c6b] mb-4">
-            Frequently Asked Questions
+            {t.frequentlyAskedQuestions}
           </h2>
           <p className="text-gray-700 mb-6">
-            Choose a question below or chat directly with our assistant.
+            {t.chooseQuestionOrChat}
           </p>
 
           <div className="space-y-3">
@@ -141,7 +143,7 @@ export default function HelpChatBot() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Ask something about the system..."
+              placeholder={t.askSomething}
               className="flex-1 border border-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]"
             />
             <button

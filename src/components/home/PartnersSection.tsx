@@ -112,7 +112,7 @@ const PartnersSection = () => {
           {/* Navigation Buttons */}
           <button
             onClick={prevSlide}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/90 hover:bg-white p-1 sm:p-1.5 md:p-2 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 z-10"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/90 hover:bg-[#c89c6b] hover:text-white p-1 sm:p-1.5 md:p-2 rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 z-10"
             aria-label="Previous partners"
           >
             <svg className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -122,7 +122,7 @@ const PartnersSection = () => {
 
           <button
             onClick={nextSlide}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 bg-white/90 hover:bg-white p-1 sm:p-1.5 md:p-2 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 z-10"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 bg-white/90 hover:bg-[#c89c6b] hover:text-white p-1 sm:p-1.5 md:p-2 rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 z-10"
             aria-label="Next partners"
           >
             <svg className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">

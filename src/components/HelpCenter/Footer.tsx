@@ -12,32 +12,34 @@ import {
 import { FaPaypal } from 'react-icons/fa';
 import { RiWhatsappFill } from 'react-icons/ri';
 import SponsorsCarousel from './SponsorsCarousel';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function Footer() {
+  const { t } = useLanguage();
   const [email, setEmail] = useState('');
   const [newsletterMessage, setNewsletterMessage] = useState('');
 
   const handleNewsletterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) {
-      setNewsletterMessage('Please enter your email address.');
+      setNewsletterMessage(t.pleaseEnterEmail);
       return;
     }
-    setNewsletterMessage('Thanks! You are now subscribed.');
+    setNewsletterMessage(t.thanksSubscribed);
     setEmail('');
     setTimeout(() => setNewsletterMessage(''), 2500);
   };
 
   const features = [
-    { icon: <BsShieldCheck className="text-2xl text-[#c89c6b]" />, title: 'Secure Checkout', desc: 'Fast & Safe Payment' },
-    { icon: <BsLightningCharge className="text-2xl text-[#c89c6b]" />, title: 'Instant Confirmation', desc: 'Guaranteed Tickets' },
-    { icon: <BsTicketPerforated className="text-2xl text-[#c89c6b]" />, title: 'Official Ticket Seller', desc: 'Trusted by 10k+ Users' },
-    { icon: <BsHeadset className="text-2xl text-[#c89c6b]" />, title: '24/7 Support', desc: 'Reliable Assistance' },
+    { icon: <BsShieldCheck className="text-2xl text-[#c89c6b]" />, title: t.secureCheckout, desc: t.fastSafePayment },
+    { icon: <BsLightningCharge className="text-2xl text-[#c89c6b]" />, title: t.instantConfirmation, desc: t.guaranteedTickets },
+    { icon: <BsTicketPerforated className="text-2xl text-[#c89c6b]" />, title: t.officialTicketSeller, desc: t.trustedByUsers },
+    { icon: <BsHeadset className="text-2xl text-[#c89c6b]" />, title: t.support247, desc: t.reliableAssistance },
   ];
 
-  const categories = ['Concerts', 'Festivals', 'Clubbing', 'Theatre'];
-  const forOrganizers = ['Event Management', 'Ticketing Services', 'Marketing', 'Add Event'];
-  const services = ['Customer Support', 'Payment Methods', 'Venue Ticketing'];
+  const categories = [t.concerts, t.festivals, t.clubbing, t.theatre];
+  const forOrganizers = [t.eventManagement, t.ticketingServices, t.marketing, t.addEvent];
+  const services = [t.customerSupport, t.paymentMethods, t.venueTicketing];
 
   return (
     <footer className="bg-white text-gray-700 border-t border-gray-200 mt-16">
@@ -48,7 +50,7 @@ export default function Footer() {
       <section className="bg-[#0a1326] text-white border-t border-gray-800 py-6">
         <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           <h6 className="text-white font-extrabold tracking-tight text-lg">
-            Subscribe to the Newsletter
+            {t.subscribeToNewsletter}
           </h6>
           <form onSubmit={handleNewsletterSubmit} className="w-full md:w-auto">
             <div className="flex overflow-hidden shadow-sm">
@@ -56,7 +58,7 @@ export default function Footer() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Your email address"
+                placeholder={t.yourEmailAddress}
                 className="w-full md:w-[420px] h-10 px-3 bg-white text-[#112b38] outline-none border border-slate-300 focus:border-[#c89c6b] focus:ring-2 focus:ring-[#c89c6b]/30 rounded-none"
                 required
               />
@@ -64,7 +66,7 @@ export default function Footer() {
                 type="submit"
                 className="h-10 px-4 bg-[#c89c6b] text-white font-semibold hover:bg-[#b8885a] transition"
               >
-                Submit
+                {t.submit}
               </button>
             </div>
             {newsletterMessage && (
@@ -90,7 +92,7 @@ export default function Footer() {
       {/* Payment Methods */}
       <div className="border-t border-gray-100 bg-gray-50">
         <div className="max-w-6xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <h6 className="font-semibold text-gray-800">You choose how to pay</h6>
+          <h6 className="font-semibold text-gray-800">{t.youChooseHowToPay}</h6>
           <div className="flex items-center gap-5 text-3xl">
             <BsApple className="text-black" />
             <FaPaypal className="text-[#003087]" />
@@ -108,13 +110,13 @@ export default function Footer() {
               <span className="font-extrabold text-lg text-gray-900">TicketWeb</span>
             </div>
             <p className="text-sm text-gray-500 leading-snug">
-              Entertainment discovery and ticketing platform for your favorite events and shows.
+              {t.entertainmentPlatform}
             </p>
           </div>
 
           {/* Categories */}
           <div>
-            <h6 className="font-semibold text-gray-800 mb-3 uppercase tracking-wide text-sm">Categories</h6>
+            <h6 className="font-semibold text-gray-800 mb-3 uppercase tracking-wide text-sm">{t.categories}</h6>
             <ul className="space-y-1 text-sm text-gray-600">
               {categories.map((category) => (
                 <li key={category}>
@@ -128,7 +130,7 @@ export default function Footer() {
 
           {/* For Organizers */}
           <div>
-            <h6 className="font-semibold text-gray-800 mb-3 uppercase tracking-wide text-sm">For Organisers</h6>
+            <h6 className="font-semibold text-gray-800 mb-3 uppercase tracking-wide text-sm">{t.forOrganisers}</h6>
             <ul className="space-y-1 text-sm text-gray-600">
               {forOrganizers.map((item) => (
                 <li key={item}>
@@ -142,7 +144,7 @@ export default function Footer() {
 
           {/* Services */}
           <div>
-            <h6 className="font-semibold text-gray-800 mb-3 uppercase tracking-wide text-sm">Services</h6>
+            <h6 className="font-semibold text-gray-800 mb-3 uppercase tracking-wide text-sm">{t.services}</h6>
             <ul className="space-y-1 text-sm text-gray-600">
               {services.map((service) => (
                 <li key={service}>
@@ -156,15 +158,15 @@ export default function Footer() {
 
           {/* Help Section */}
           <div>
-            <h6 className="font-semibold text-gray-800 mb-3 uppercase tracking-wide text-sm">Need Help?</h6>
-            <p className="text-sm text-gray-600 mb-2">Chat with us:</p>
+            <h6 className="font-semibold text-gray-800 mb-3 uppercase tracking-wide text-sm">{t.needHelp}</h6>
+            <p className="text-sm text-gray-600 mb-2">{t.chatWithUs}</p>
             <a
               href="#"
               className="flex items-center gap-2 border border-[#c89c6b] text-[#c89c6b] hover:bg-[#c89c6b] hover:text-white text-sm px-3 py-2 rounded-md w-fit transition-all duration-200"
             >
-              <RiWhatsappFill /> Chat Online
+              <RiWhatsappFill /> {t.chatOnline}
             </a>
-            <p className="text-xs text-gray-500 mt-3">We accept</p>
+            <p className="text-xs text-gray-500 mt-3">{t.weAccept}</p>
             <div className="flex items-center gap-3 text-2xl mt-1">
               <BsApple className="text-black" />
               <FaPaypal className="text-[#003087]" />
@@ -176,7 +178,7 @@ export default function Footer() {
       {/* Copyright */}
       <div className="border-t border-gray-200 py-4 bg-gray-50">
         <p className="text-center text-sm text-gray-500">
-          © 2026 <span className="font-semibold text-gray-800">TicketWeb</span> — All rights reserved.
+          © 2026 <span className="font-semibold text-gray-800">TicketWeb</span> — {t.allRightsReserved}.
         </p>
       </div>
     </footer>

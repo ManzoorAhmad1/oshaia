@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { Calendar, MapPin, Ticket } from 'lucide-react';
 import Link from 'next/link';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface EventCardProps {
     id: number;
@@ -30,6 +31,7 @@ export default function EventCard({
     imageUrl,
     organizer = 'BLAKKANONYM'
 }: EventCardProps) {
+    const { t } = useLanguage();
     const [imageError, setImageError] = useState(false);
 
     // Fallback image if Unsplash fails
@@ -66,7 +68,7 @@ export default function EventCard({
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-2 text-xs sm:text-sm">
                                         <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
-                                        <span>{date} at 06:57 am</span>
+                                        <span>{date} {t.atTime} 06:57 am</span>
                                     </div>
 
                                     <div className="flex items-center gap-2 text-xs sm:text-sm">
@@ -78,7 +80,7 @@ export default function EventCard({
 
                             <div className="sm:ml-4">
                                 <div className="bg-white text-[#112b38] px-3 sm:px-4 py-1.5 sm:py-2 rounded text-xs font-bold uppercase whitespace-nowrap">
-                                    Last Tickets Left
+                                    {t.lastTicketsLeft}
                                 </div>
                             </div>
                         </div>
@@ -88,13 +90,13 @@ export default function EventCard({
                             <div className="flex items-center gap-2 sm:gap-3">
                                 <Ticket className="w-6 h-6 sm:w-8 sm:h-8 text-gray-600" />
                                 <div className='flex items-center gap-2 sm:gap-4'>
-                                    <div className="text-xs sm:text-sm text-gray-600 font-medium">As From</div>
+                                    <div className="text-xs sm:text-sm text-gray-600 font-medium">{t.asFrom}</div>
                                     <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#c89c6b]">{currency} {price}</div>
                                 </div>
                             </div>
 
-                            <button className="w-full sm:w-auto bg-[#112b38] text-white py-2.5 sm:py-3 px-6 sm:px-8 rounded-lg font-bold text-xs sm:text-sm uppercase hover:bg-[#1a3d52] transition-colors duration-200">
-                                Get Tickets Here
+                            <button className="w-full sm:w-auto  py-2.5 sm:py-3 px-6 sm:px-8 rounded-lg font-bold text-xs sm:text-sm uppercase tracking-wider bg-[#112b38] text-white hover:bg-[#c89c6b] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+                                {t.getTicketsHere}
                             </button>
                         </div>
                     </div>

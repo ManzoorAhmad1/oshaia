@@ -1,10 +1,47 @@
 'use client';
 
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { BiSearch, BiCalendarEvent} from 'react-icons/bi';
 
 export default function TopBar() {
+  const [typingPlaceholder, setTypingPlaceholder] = useState("Search ");
+  
+  // Typing animation for placeholder
+  const searchTexts = ["event or category", "concerts near you", "festivals this weekend", "sports events", "comedy shows"];
+  const typingIndexRef = useRef(0);
+  const charIndexRef = useRef(0);
+  const isDeletingRef = useRef(false);
+
+  useEffect(() => {
+    const typeEffect = () => {
+      const currentText = searchTexts[typingIndexRef.current];
+      
+      if (!isDeletingRef.current) {
+        if (charIndexRef.current < currentText.length) {
+          setTypingPlaceholder("Search " + currentText.substring(0, charIndexRef.current + 1));
+          charIndexRef.current++;
+        } else {
+          setTimeout(() => {
+            isDeletingRef.current = true;
+          }, 2000);
+        }
+      } else {
+        if (charIndexRef.current > 0) {
+          setTypingPlaceholder("Search " + currentText.substring(0, charIndexRef.current - 1));
+          charIndexRef.current--;
+        } else {
+          isDeletingRef.current = false;
+          typingIndexRef.current = (typingIndexRef.current + 1) % searchTexts.length;
+        }
+      }
+    };
+
+    const interval = setInterval(typeEffect, isDeletingRef.current ? 50 : 100);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="bg-white rounded-[50px] shadow-lg py-3 px-8 flex items-center justify-between max-w-7xl mx-auto mt-6">
       <Link href="/">
@@ -24,8 +61,8 @@ export default function TopBar() {
         <input
           type="text"
           name="q"
-          placeholder="Search event or category"
-          className="border-none flex-1 py-2 px-3 text-sm outline-none"
+          placeholder={typingPlaceholder}
+          className="border-none flex-1 py-2 px-3 text-sm outline-none focus:outline-none focus:ring-0"
         />
         <Link
           href="/calendar"
@@ -40,7 +77,7 @@ export default function TopBar() {
         <Link href="/account" className="text-gray-800 font-semibold flex items-center">
           <BiCalendarEvent className="mr-1" /> My Account
         </Link>
-        <button className="btn-signup bg-[#c89c6b] text-white border-none py-2 px-5 rounded-full font-semibold hover:opacity-85 transition">
+        <button className="btn-signup bg-[#c89c6b] text-white border-none py-2 px-5 rounded-full font-semibold hover:bg-[#b8885a] hover:scale-105 transition-all duration-300">
           Sign Up
         </button>
         <Link href="/cart" className="text-gray-800 relative">

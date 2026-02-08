@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Calendar, ChevronRight, ChevronLeft, MapPin } from "lucide-react";
 import { Text } from "rizzui/typography";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/context/LanguageContext";
 
 const images = [
     "https://images.unsplash.com/photo-1504805572947-34fad45aed93?q=80&w=800",
@@ -10,6 +11,7 @@ const images = [
 ];
 
 export default function EventCard() {
+    const { t } = useLanguage();
     const [index, setIndex] = useState(0);
     const [timeLeft, setTimeLeft] = useState(3);
     const [isPlaying, setIsPlaying] = useState(true);
@@ -74,7 +76,7 @@ export default function EventCard() {
             <div className="flex w-full flex-col">
                 <div className="py-2">
                     <p className="text-sm sm:text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 mb-2 sm:mb-4 tracking-tight uppercase">
-                        top seller
+                        {t.topSeller}
                     </p>
                 </div>
                 <div className="w-full flex flex-col sm:flex-row gap-4">
@@ -88,7 +90,7 @@ export default function EventCard() {
 
                         {/* TOP SELLER */}
                         <span className="absolute top-2 left-2 sm:top-3 sm:left-3 md:top-4 md:left-4 bg-white text-[10px] sm:text-xs font-bold px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-md shadow-lg">
-                            TOP SELLER
+                            {t.topSeller.toUpperCase()}
                         </span>
                     </div>
 
@@ -136,14 +138,14 @@ export default function EventCard() {
                                     {/* Venue */}
                                     <div className="flex items-center gap-1 text-gray-600">
                                         <MapPin size={14} className="text-gray-500 sm:w-4 sm:h-4" />
-                                        <p className="text-xs sm:text-sm">AS From <span>500</span></p>
+                                        <p className="text-xs sm:text-sm">{t.asFrom} <span>500</span></p>
                                     </div>
                                 </div>
                                 <div className="flex items-center justify-end">
                                     {/* Navigation Button */}
                                     <button
                                         onClick={() => setIndex((index + 1) % images.length)}
-                                        className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-black/70 text-white rounded-full hover:bg-black/90 flex items-center justify-center border-2 border-gray-300"
+                                        className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-[#112b38] text-white rounded-full hover:bg-[#c89c6b] hover:scale-110 flex items-center justify-center border-2 border-gray-300 transition-all duration-300 shadow-md hover:shadow-lg"
                                     >
                                         <img
                                             src='/images/double-chevron.png'
@@ -167,7 +169,7 @@ export default function EventCard() {
                 />
             </div>
             <div className="w-full flex items-center justify-end">
-                <Text onClick={()=>router.push('HelpCenter')}>Sponsers <span className="text-">Advertising with us</span></Text>
+                <Text className="cursor-pointer" onClick={()=>router.push('/help')}>{t.sponsers} <span className="text-">{t.advertisingWithUs}</span></Text>
             </div>
         </div>
     );

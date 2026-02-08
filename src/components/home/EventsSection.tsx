@@ -3,11 +3,26 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
 import { Calendar, MapPin, Clock } from 'lucide-react'
+import { useLanguage } from '@/context/LanguageContext'
 
 const EventsSection = () => {
+  const { t } = useLanguage()
   const [activeCategory, setActiveCategory] = useState('ALL')
 
-  const categories = ['ALL', 'CONCERT', 'FESTIVAL', 'CONFERENCES', 'SHOW', 'SPORT']
+  // Category keys mapping to translations
+  const categoryKeys = ['all', 'concert', 'festival', 'conferences', 'show', 'sport'] as const
+  
+  const getCategoryLabel = (key: string) => {
+    const labels: Record<string, string> = {
+      all: t.all,
+      concert: t.concert,
+      festival: t.festival,
+      conferences: t.conferences,
+      show: t.show,
+      sport: t.sport,
+    }
+    return labels[key] || key
+  }
 
   const events = [
     {
@@ -84,20 +99,20 @@ const EventsSection = () => {
     }
   ]
 
-  const filteredEvents = activeCategory === 'ALL'
+  const filteredEvents = activeCategory === 'all'
     ? events
-    : events.filter(event => event.category === activeCategory)
+    : events.filter(event => event.category.toLowerCase() === activeCategory)
 
   return (
     <section className="mt-16 ">
       <div className="">
         {/* Section Title */}
-        <h2 className="section-title text-black">ALL EVENT</h2>
+        <h2 className="section-title text-black">{t.allEvent}</h2>
 
         {/* Category Tabs */}
         <div className="w-full overflow-x-auto mb-8 sm:mb-12 border-b border-gray-200 bg-[#112b38]">
           <div className="flex justify-start sm:justify-center items-center gap-0 min-w-max sm:min-w-0">
-            {categories.map((category, idx) => (
+            {categoryKeys.map((category, idx) => (
               <React.Fragment key={category}>
                 <button
                   onClick={() => setActiveCategory(category)}
@@ -107,9 +122,9 @@ const EventsSection = () => {
                       : 'text-white hover:text-accent-orange'}
                       `}
                 >
-                  {category}
+                  {getCategoryLabel(category)}
                 </button>
-                {idx < categories.length - 1 && (
+                {idx < categoryKeys.length - 1 && (
                   <span className="h-6 sm:h-8 w-[2px] bg-[#c89c6b] mx-1 sm:mx-2 inline-block opacity-40"></span>
                 )}
               </React.Fragment>
@@ -118,12 +133,12 @@ const EventsSection = () => {
         </div>
 
         {/* Event Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 lg:gap-12 w-full max-w-full mx-auto justify-items-center px-12 sm:px-16 py-12 overflow-visible">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 mx-20 py-12 overflow-visible justify-items-center">
           {filteredEvents.map((event,index) => (
-            <div key={event.id} className="w-[300px] h-auto event-card group relative overflow-visible">
+            <div key={event.id} className="  mb-20 w-[400px] h-auto event-card group relative overflow-visible">
 
               {/* Badge Image at Top Left - Outside the card */}
-              <div className="absolute -top-[43px] -left-[36px] w-[300px] h-auto z-30">
+              <div className="absolute -top-[43px] -left-[36px] w-[400px] h-auto z-30">
                 <img
                   src={`/images/LOGO TAG/${index + 1}.png`}
                   alt="Badge"
@@ -134,13 +149,13 @@ const EventsSection = () => {
               {/* Main Content */}
               <div className="relative z-10 overflow-hidden rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg bg-white">
                 {/* Event Image */}
-                <div className="relative w-[300px] h-[300px] overflow-hidden">
+                <div className="relative w-[400px] h-[400px] overflow-hidden">
                   <Image
                     src={event.image}
                     alt={event.title}
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-500"
-                    sizes="300px"
+                    sizes="400px"
                     priority={event.id <= 3}
                   />
                 </div>
@@ -152,7 +167,7 @@ const EventsSection = () => {
                     <p className="text-[10px] sm:text-xs text-gray-600">{event.location}</p>
                   </div>
                   <div className='flex items-center py-2 sm:py-3 px-4 sm:px-6 bg-[#112b38] text-white rounded-bl-3xl'>
-                    <p className="mr-1 sm:mr-2 text-[8px] sm:text-[9.9px]">As From</p>
+                    <p className="mr-1 sm:mr-2 text-[8px] sm:text-[9.9px]">{t.asFrom}</p>
                     <p className="text-xs sm:text-[15.9px]">{event.price}</p>
                   </div>
                 </div>
@@ -162,8 +177,8 @@ const EventsSection = () => {
         </div>
         {/* View All Button */}
         <div className="w-full flex items-center justify-center mt-8 sm:mt-10 md:mt-12">
-          <button className="w-full max-w-[365.4px] h-[60px] sm:h-[70px] md:h-[76.3px] bg-[#112b38] text-white px-8 sm:px-10 md:px-12 py-3 sm:py-3.5 md:py-4 text-base sm:text-lg md:text-[21.8px] uppercase tracking-wider rounded-full">
-            VIEW ALL EVENT
+          <button className="w-full max-w-[365.4px] h-[60px] sm:h-[70px] md:h-[76.3px] bg-[#112b38] text-white px-8 sm:px-10 md:px-12 py-3 sm:py-3.5 md:py-4 text-base sm:text-lg md:text-[21.8px] uppercase tracking-wider rounded-full hover:bg-[#c89c6b] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+            {t.viewAllEvent}
           </button>
         </div>
       </div>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
 import WhatsAppButton from "@/components/about/WhatsAppButton";
+import { LanguageProvider } from "@/context/LanguageContext";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -23,8 +24,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={roboto.variable}>
       <body className={roboto.className}>
-        {children}
-        <WhatsAppButton />
+        <LanguageProvider>
+          {children}
+          <WhatsAppButton />
+        </LanguageProvider>
       </body>
     </html>
   );

@@ -51,7 +51,7 @@ const Header = () => {
           <div className="flex items-center space-x-2 sm:space-x-4">
             {/* Search Icon */}
             <button 
-              className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+              className="p-2 hover:bg-[#c89c6b] rounded-lg transition-all duration-300 hover:scale-110"
               aria-label="Search"
             >
               <Search className="w-5 h-5 text-white" />
@@ -70,7 +70,7 @@ const Header = () => {
 
             {/* Login Button */}
             <button 
-              className="hidden sm:flex items-center space-x-2 px-4 py-2 border border-white/20 rounded-lg hover:bg-white/10 transition-colors text-sm"
+              className="hidden sm:flex items-center space-x-2 px-4 py-2 border border-white/20 rounded-lg hover:bg-[#c89c6b] hover:border-[#c89c6b] hover:scale-105 transition-all duration-300 text-sm"
               onClick={() => {
                 setAuthMode('login')
                 setIsAuthModalOpen(true)
@@ -82,7 +82,7 @@ const Header = () => {
 
             {/* Mobile Menu Button */}
             <button
-              className="lg:hidden p-2 hover:bg-white/10 rounded-lg transition-colors"
+              className="lg:hidden p-2 hover:bg-[#c89c6b] rounded-lg transition-all duration-300 hover:scale-110"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle menu"
             >
@@ -123,7 +123,7 @@ const Header = () => {
                   Register
                 </button>
                 <button 
-                  className="px-4 py-3 border border-white/20 rounded-lg hover:bg-white/10 transition-colors"
+                  className="px-4 py-3 border border-white/20 rounded-lg hover:bg-[#c89c6b] hover:border-[#c89c6b] hover:scale-105 transition-all duration-300"
                   onClick={() => {
                     setAuthMode('login')
                     setIsAuthModalOpen(true)

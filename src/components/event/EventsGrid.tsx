@@ -1,6 +1,8 @@
 'use client';
 
+import React, { useState } from 'react';
 import EventCard from "./eventCard";
+import { useLanguage } from '@/context/LanguageContext';
 
 
 // Unsplash images for events
@@ -29,7 +31,8 @@ export const eventsData = [
         location: "Vacoas, Mauritius",
         price: 500,
         ticketsLeft: 42,
-        organizer: "BLAKKANONYM"
+        organizer: "BLAKKANONYM",
+        category: "FESTIVAL"
     },
     {
         id: 2,
@@ -39,7 +42,8 @@ export const eventsData = [
         location: "Port Louis Waterfront",
         price: 750,
         ticketsLeft: 18,
-        organizer: "ROCK MAURITIUS"
+        organizer: "ROCK MAURITIUS",
+        category: "CONCERT"
     },
     {
         id: 3,
@@ -49,7 +53,8 @@ export const eventsData = [
         location: "Grand Baie La Croisette",
         price: 350,
         ticketsLeft: 56,
-        organizer: "BLUES SYNDICATE"
+        organizer: "BLUES SYNDICATE",
+        category: "SHOW"
     },
     {
         id: 4,
@@ -59,7 +64,8 @@ export const eventsData = [
         location: "Flic en Flac Beach",
         price: 600,
         ticketsLeft: 23,
-        organizer: "BEACH VIBES"
+        organizer: "BEACH VIBES",
+        category: "FESTIVAL"
     },
     {
         id: 5,
@@ -69,7 +75,8 @@ export const eventsData = [
         location: "Bagatelle Mall of Mauritius",
         price: 450,
         ticketsLeft: 67,
-        organizer: "URBAN MAURITIUS"
+        organizer: "URBAN MAURITIUS",
+        category: "CONCERT"
     },
     {
         id: 6,
@@ -79,7 +86,8 @@ export const eventsData = [
         location: "Swanseeen Arts Centre",
         price: 300,
         ticketsLeft: 89,
-        organizer: "MAURITIUS SYMPHONY"
+        organizer: "MAURITIUS SYMPHONY",
+        category: "SHOW"
     },
     {
         id: 7,
@@ -89,7 +97,8 @@ export const eventsData = [
         location: "Trou aux Biches Beach",
         price: 400,
         ticketsLeft: 34,
-        organizer: "REGGAE VIBES"
+        organizer: "REGGAE VIBES",
+        category: "FESTIVAL"
     },
     {
         id: 8,
@@ -99,17 +108,19 @@ export const eventsData = [
         location: "Caudan Waterfront",
         price: 550,
         ticketsLeft: 27,
-        organizer: "POP FUSION"
+        organizer: "POP FUSION",
+        category: "CONCERT"
     },
     {
         id: 9,
-        title: "Techno Warehouse Party",
+        title: "Tech Conference 2025",
         date: "Sat 20 Dec 2025",
-        time: "10:00 PM - 06:00 AM",
+        time: "10:00 AM - 06:00 PM",
         location: "Industrial Zone, Phoenix",
         price: 650,
         ticketsLeft: 15,
-        organizer: "TECHNO MAURITIUS"
+        organizer: "TECH MAURITIUS",
+        category: "CONFERENCES"
     },
     {
         id: 10,
@@ -119,17 +130,19 @@ export const eventsData = [
         location: "Domaine Les Pailles",
         price: 250,
         ticketsLeft: 72,
-        organizer: "ACOUSTIC SESSIONS"
+        organizer: "ACOUSTIC SESSIONS",
+        category: "SHOW"
     },
     {
         id: 11,
-        title: "Bollywood Night",
+        title: "Football Championship",
         date: "Fri 26 Dec 2025",
         time: "08:00 PM - 02:00 AM",
         location: "Mahatma Gandhi Institute",
         price: 480,
         ticketsLeft: 41,
-        organizer: "BOLLYWOOD MAURITIUS"
+        organizer: "SPORT MAURITIUS",
+        category: "SPORT"
     },
     {
         id: 12,
@@ -139,37 +152,65 @@ export const eventsData = [
         location: "Various Venues Islandwide",
         price: 800,
         ticketsLeft: 8,
-        organizer: "NYE 2026"
+        organizer: "NYE 2026",
+        category: "FESTIVAL"
     },
 ];
 
 export default function EventsGrid() {
+    const { t } = useLanguage();
+    const [activeCategory, setActiveCategory] = useState('ALL');
+    const categories = ['ALL', 'CONCERT', 'FESTIVAL', 'CONFERENCES', 'SHOW', 'SPORT'];
+    
+    // Category translation map
+    const categoryLabels: { [key: string]: string } = {
+        'ALL': t.categoryAll,
+        'CONCERT': t.categoryConcert,
+        'FESTIVAL': t.categoryFestival,
+        'CONFERENCES': t.categoryConferences,
+        'SHOW': t.categoryShow,
+        'SPORT': t.categorySport,
+    };
+
     // Combine event data with images
     const eventsWithImages = eventsData.map((event, index) => ({
         ...event,
         imageUrl: eventImages[index % eventImages.length]
     }));
 
+    // Filter events based on active category
+    const filteredEvents = activeCategory === 'ALL'
+        ? eventsWithImages
+        : eventsWithImages.filter(event => event.category === activeCategory);
+
     return (
         <div className="w-full py-8 sm:py-12 lg:py-16">
-            {/* Header Section */}
-            <div className="bg-[#112b38] text-white py-4 px-6 mb-8 flex items-center justify-center gap-4">
-                <button className="text-[#c89c6b] font-bold uppercase text-sm hover:text-white transition-colors italic">
-                    All Events
-                </button>
-                <span className="text-white">|</span>
-                <button className="text-white font-bold uppercase text-sm hover:text-[#c89c6b] transition-colors italic">
-                    This Week
-                </button>
-                <span className="text-white">|</span>
-                <button className="text-white font-bold uppercase text-sm hover:text-[#c89c6b] transition-colors italic">
-                    This Month
-                </button>
+            {/* Category Tabs - Same as Home Page */}
+            <div className="w-full overflow-x-auto mb-8 sm:mb-12 border-b border-gray-200 bg-[#112b38]">
+                <div className="flex justify-start sm:justify-center items-center gap-0 min-w-max sm:min-w-0">
+                    {categories.map((category, idx) => (
+                        <React.Fragment key={category}>
+                            <button
+                                onClick={() => setActiveCategory(category)}
+                                className={`px-3 sm:px-6 md:px-8 py-2 sm:py-3 md:py-4 text-xs sm:text-base md:text-lg font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer relative whitespace-nowrap
+                                    ${activeCategory === category
+                                        ? 'text-[#c89c6b]'
+                                        : 'text-white hover:text-[#c89c6b]'}
+                                `}
+                            >
+                                {categoryLabels[category] || category}
+                            </button>
+                            {idx < categories.length - 1 && (
+                                <span className="h-6 sm:h-8 w-[2px] bg-[#c89c6b] mx-1 sm:mx-2 inline-block opacity-40"></span>
+                            )}
+                        </React.Fragment>
+                    ))}
+                </div>
             </div>
 
             {/* Events List - One card per row */}
             <div className="w-full space-y-6 flex flex-col items-center">
-                {eventsWithImages.map((event) => (
+                {filteredEvents.map((event) => (
                     <EventCard
                         key={event.id}
                         {...event}
@@ -180,7 +221,7 @@ export default function EventsGrid() {
             {/* Load More Button */}
             <div className="text-center mt-12">
                 <button className="bg-black text-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors duration-200 text-lg">
-                    Load More Events
+                    {t.loadMoreEvents}
                 </button>
             </div>
         </div>

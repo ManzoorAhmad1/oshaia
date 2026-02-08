@@ -7,8 +7,10 @@ import { FaLocationDot } from "react-icons/fa6";
 import { Text } from 'rizzui/typography';
 import { FaPhoneAlt } from 'react-icons/fa';
 import { TfiEmail } from "react-icons/tfi";
+import { useLanguage } from '@/context/LanguageContext'
 
 const Footer = () => {
+  const { t } = useLanguage()
   const [email, setEmail] = useState('')
 
   const handleSubscribe = (e: React.FormEvent) => {
@@ -25,26 +27,26 @@ const Footer = () => {
 
           {/* Categories Column */}
           <div>
-            <h3 className="text-black font-bold text-sm sm:text-base md:text-lg mb-3 sm:mb-4 md:mb-5 uppercase tracking-wider">Categories</h3>
+            <h3 className="text-black font-bold text-sm sm:text-base md:text-lg mb-3 sm:mb-4 md:mb-5 uppercase tracking-wider">{t.categories}</h3>
             <ul className="space-y-2 sm:space-y-3">
               <li>
                 <Link href="/concerts" className="text-blue-500 hover:text-[#c89c6b] transition-colors text-xs sm:text-sm">
-                  Concerts
+                  {t.concerts}
                 </Link>
               </li>
               <li>
                 <Link href="/festivals" className="text-blue-500 hover:text-[#c89c6b] transition-colors text-xs sm:text-sm">
-                  Festivals
+                  {t.festivals}
                 </Link>
               </li>
               <li>
                 <Link href="/clubbing" className="text-blue-500 hover:text-[#c89c6b] transition-colors text-xs sm:text-sm">
-                  Clubbing
+                  {t.clubbing}
                 </Link>
               </li>
               <li>
                 <Link href="/theatre" className="text-blue-500 hover:text-[#c89c6b] transition-colors text-xs sm:text-sm">
-                  Theatre
+                  {t.theatre}
                 </Link>
               </li>
             </ul>
@@ -52,26 +54,26 @@ const Footer = () => {
 
           {/* For Organisers Column */}
           <div>
-            <h3 className="text-black font-bold text-sm sm:text-base md:text-lg mb-3 sm:mb-4 md:mb-5 uppercase tracking-wider">For Organisers</h3>
+            <h3 className="text-black font-bold text-sm sm:text-base md:text-lg mb-3 sm:mb-4 md:mb-5 uppercase tracking-wider">{t.forOrganisers}</h3>
             <ul className="space-y-2 sm:space-y-3">
               <li>
                 <Link href="/event-management" className="text-blue-500 hover:text-[#c89c6b] transition-colors text-sm">
-                  Event Management
+                  {t.eventManagement}
                 </Link>
               </li>
               <li>
                 <Link href="/ticketing-services" className="text-blue-500 hover:text-[#c89c6b] transition-colors text-sm">
-                  Ticketing Services
+                  {t.ticketingServices}
                 </Link>
               </li>
               <li>
                 <Link href="/marketing" className="text-blue-500 hover:text-[#c89c6b] transition-colors text-sm">
-                  Marketing
+                  {t.marketing}
                 </Link>
               </li>
               <li>
                 <Link href="/add-event" className="text-blue-500 hover:text-[#c89c6b] transition-colors text-sm">
-                  Add Event
+                  {t.addEvent}
                 </Link>
               </li>
             </ul>
@@ -79,21 +81,21 @@ const Footer = () => {
 
           {/* Services Column */}
           <div>
-            <h3 className="text-black font-bold text-sm sm:text-base md:text-lg mb-3 sm:mb-4 md:mb-5 uppercase tracking-wider">Services</h3>
+            <h3 className="text-black font-bold text-sm sm:text-base md:text-lg mb-3 sm:mb-4 md:mb-5 uppercase tracking-wider">{t.services}</h3>
             <ul className="space-y-2 sm:space-y-3">
               <li>
                 <Link href="/customer-support" className="text-blue-500 hover:text-[#c89c6b] transition-colors text-sm">
-                  Customer Support
+                  {t.customerSupport}
                 </Link>
               </li>
               <li>
                 <Link href="/payment-methods" className="text-blue-500 hover:text-[#c89c6b] transition-colors text-sm">
-                  Payment Methods
+                  {t.paymentMethods}
                 </Link>
               </li>
               <li>
                 <Link href="/venue-ticketing" className="text-blue-500 hover:text-[#c89c6b] transition-colors text-sm">
-                  Venue Ticketing
+                  {t.venueTicketing}
                 </Link>
               </li>
             </ul>
@@ -101,20 +103,20 @@ const Footer = () => {
 
           {/* Need Help Column */}
           <div className="space-y-4 sm:space-y-5 md:space-y-6">
-            <h3 className="text-black font-bold text-sm sm:text-base md:text-lg mb-3 sm:mb-4 md:mb-5 uppercase tracking-wider">Need Help?</h3>
+            <h3 className="text-black font-bold text-sm sm:text-base md:text-lg mb-3 sm:mb-4 md:mb-5 uppercase tracking-wider">{t.needHelp}</h3>
 
             {/* Chat Online Section */}
             <div className="space-y-3 sm:space-y-4">
-              <div className="text-blue-500 text-xs sm:text-sm font-medium">Chat with us:</div>
-              <button className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-[#c89c6b] text-white rounded-lg hover:bg-green-600 transition-colors text-sm">
+              <div className="text-blue-500 text-xs sm:text-sm font-medium">{t.chatWithUs}</div>
+              <button className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-[#c89c6b] text-white rounded-lg hover:bg-[#b8885a] hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg text-sm">
                 <MessageCircle className="w-4 h-4 flex-shrink-0" />
-                <span>Chat Online</span>
+                <span>{t.chatOnline}</span>
               </button>
             </div>
 
             {/* We Accept Section */}
             <div className="space-y-3 sm:space-y-4">
-              <div className="text-blue-500 text-sm sm:text-base font-medium">We accept</div>
+              <div className="text-blue-500 text-sm sm:text-base font-medium">{t.weAccept}</div>
                 <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3">
                 <div className="flex items-center justify-center transition-colors">
                   <img
@@ -180,12 +182,12 @@ const Footer = () => {
         </div>
         <div className="py-3 sm:py-4 border-t border-gray-300 text-center bg-black text-white w-full">
           <div className="text-gray-400 text-[10px] sm:text-xs md:text-sm px-4">
-            © {new Date().getFullYear()} Platinumlist. All rights reserved.
+            © {new Date().getFullYear()} Platinumlist. {t.allRightsReserved}.
             <span className="hidden sm:inline"> | </span>
             <span className="block sm:inline mt-1 sm:mt-0">
-              <Link href="/terms" className="hover:text-[#c89c6b] transition-colors">Terms & Conditions</Link>
+              <Link href="/terms" className="hover:text-[#c89c6b] transition-colors">{t.termsConditions}</Link>
               <span className="mx-1 sm:mx-2">|</span>
-              <Link href="/privacy" className="hover:text-[#c89c6b] transition-colors">Privacy Policy</Link>
+              <Link href="/privacy" className="hover:text-[#c89c6b] transition-colors">{t.privacyPolicy}</Link>
             </span>
           </div>
         </div>

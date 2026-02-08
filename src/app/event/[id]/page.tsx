@@ -15,6 +15,7 @@ import AllEvents from '@/components/event/allEvent';
 import TicketHeroSection from '@/components/event/ticketHeroSection';
 import { Text } from 'rizzui/typography';
 import { Footer } from '@/components/home';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface EventDetailProps {
     params: {
@@ -23,6 +24,7 @@ interface EventDetailProps {
 }
 
 export default function EventDetailPage({ params }: EventDetailProps) {
+    const { t } = useLanguage();
     const [selectedTicket, setSelectedTicket] = useState<number | null>(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [activeTab, setActiveTab] = useState<'tickets' | 'description' | 'moreInfo'>('tickets');
@@ -148,7 +150,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                 </div>
                                 <div className="absolute -top-[40px] sm:top-[5px] left-[25px] sm:left-[10px] h-auto z-20 bg-[#0D5870] px-8 py-4 rounded-full">
                                     <Text>
-                                        Top Seller
+                                        {t.topSeller}
                                     </Text>
                                 </div>
                                 {/* Main Content */}
@@ -187,7 +189,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                             {event.title}
                                         </h2>
                                         <Text className="text-sm sm:text-base text-[#c89c6b] mb-3">
-                                            By {event.organizer}
+                                            {t.by} {event.organizer}
                                         </Text>
                                         <Text className="text-xs sm:text-sm text-[#c89c6b] leading-relaxed line-clamp-2">
                                             {event.description}
@@ -212,7 +214,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                             {/* Price */}
                                             <div className="flex items-center gap-2 text-sm">
                                                 <TicketIcon className="w-4 h-4 text-[#112b38] flex-shrink-0" />
-                                                <span className="text-[#c89c6b]">From <span className="font-bold text-[#112b38]">Rs 1,000</span></span>
+                                                <span className="text-[#c89c6b]">{t.from} <span className="font-bold text-[#112b38]">Rs 1,000</span></span>
                                             </div>
 
                                             {/* Countdown Timer */}
@@ -222,7 +224,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                     <div className="flex-1 bg-[#c89c6b] w-14 rounded p-1 text-center">
                                                         <div className="text-2xl sm:text-3xl font-bold text-white leading-none">5</div>
                                                     </div>
-                                                    <div className="text-[11px] sm:text-xs text-[#112b38] font-medium">Days</div>
+                                                    <div className="text-[11px] sm:text-xs text-[#112b38] font-medium">{t.days}</div>
                                                 </div>
 
                                                 <div className='flex flex-col items-center justify-center'>
@@ -230,7 +232,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                     <div className="flex-1 bg-[#c89c6b] w-14 rounded p-1 text-center">
                                                         <div className="text-2xl sm:text-3xl font-bold text-white leading-none">19</div>
                                                     </div>
-                                                    <div className="text-[11px] sm:text-xs text-[#112b38] font-medium">Hours</div>
+                                                    <div className="text-[11px] sm:text-xs text-[#112b38] font-medium">{t.hours}</div>
                                                 </div>
 
                                                 <div className='flex flex-col items-center justify-center'>
@@ -238,7 +240,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                     <div className="flex-1 bg-[#c89c6b] w-14 rounded p-1 text-center">
                                                         <div className="text-2xl sm:text-3xl font-bold text-white leading-none">55</div>
                                                     </div>
-                                                    <div className="text-[11px] sm:text-xs text-[#112b38] font-medium">Minutes</div>
+                                                    <div className="text-[11px] sm:text-xs text-[#112b38] font-medium">{t.minutes}</div>
                                                 </div>
 
                                             </div>
@@ -257,7 +259,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                             : 'text-gray-400 hover:text-[#c89c6b]'
                                             }`}
                                     >
-                                        Tickets
+                                        {t.tickets}
                                         {activeTab === 'tickets' && (
                                             <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-600 rounded-t"></div>
                                         )}
@@ -269,7 +271,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                             : 'text-gray-400 hover:text-[#c89c6b]'
                                             }`}
                                     >
-                                        Description
+                                        {t.description}
                                         {activeTab === 'description' && (
                                             <div className="absolute bottom-0 left-0 right-0 h-1 bg-black rounded-t"></div>
                                         )}
@@ -281,7 +283,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                             : 'text-gray-400 hover:text-[#c89c6b]'
                                             }`}
                                     >
-                                        More info
+                                        {t.moreInfo}
                                         {activeTab === 'moreInfo' && (
                                             <div className="absolute bottom-0 left-0 right-0 h-1 bg-black rounded-t"></div>
                                         )}
@@ -289,14 +291,14 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                 </div>
                                 <div className='flex gap-2 items-center'>
                                     <HeartCrack />
-                                    <Text>Add To Favourites</Text>
+                                    <Text>{t.addToFavourites}</Text>
                                 </div>
                             </div>
 
                             {/* Ticket Selection */}
                             {activeTab === 'tickets' && (
                                 <div className="p-4 sm:p-6 ">
-                                    <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-[#112b38]">Choose Your Tickets</h2>
+                                    <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-[#112b38]">{t.chooseYourTickets}</h2>
                                     <div className="space-y-4">
                                         {event.tickets.map((ticket) => (
                                             <div
@@ -308,24 +310,24 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                 <div className="font-bold text-lg text-[#112b38]">Rs{ticket.price.toLocaleString()}</div>
 
                                                 <div className="text-[#c89c6b] font-semibold text-sm flex-1">
-                                                    Offer ends in 8 days
+                                                    {t.offerEndsIn} 8 {t.days.toLowerCase()}
                                                 </div>
 
                                                 <div className="flex items-center gap-3">
-                                                    <button className="w-10 h-10 rounded-full bg-black flex items-center justify-center hover:bg-gray-800 transition-colors">
+                                                    <button className="w-10 h-10 rounded-full bg-[#112b38] flex items-center justify-center hover:bg-[#c89c6b] hover:scale-110 transition-all duration-300">
                                                         <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                                                         </svg>
                                                     </button>
 
                                                     <div className="flex items-center gap-2">
-                                                        <button className="w-10 h-10 border-2 border-gray-300 rounded flex items-center justify-center hover:bg-gray-200 transition-colors text-gray-700 font-bold text-xl">
+                                                        <button className="w-10 h-10 border-2 border-gray-300 rounded flex items-center justify-center hover:bg-[#112b38] hover:text-white hover:border-[#112b38] transition-all duration-300 text-gray-700 font-bold text-xl">
                                                             -
                                                         </button>
                                                         <div className="w-12 text-center font-semibold text-lg">
                                                             0
                                                         </div>
-                                                        <button className="w-10 h-10 border-2 border-[#c89c6b] text-[#c89c6b] rounded flex items-center justify-center hover:bg-[#c89c6b]/10 transition-colors font-bold text-xl">
+                                                        <button className="w-10 h-10 border-2 border-[#c89c6b] text-[#c89c6b] rounded flex items-center justify-center hover:bg-[#c89c6b] hover:text-white transition-all duration-300 font-bold text-xl">
                                                             +
                                                         </button>
                                                     </div>
@@ -335,8 +337,8 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                     </div>
 
                                     {selectedTicket && (
-                                        <button className="w-full mt-6 bg-[#112b38] hover:bg-[#1a3d52] text-white py-4 rounded-xl font-bold text-base sm:text-lg transition-colors">
-                                            Book Now
+                                        <button className="w-full mt-6 bg-[#112b38] hover:bg-[#c89c6b] text-white py-4 rounded-xl font-bold text-base sm:text-lg transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl">
+                                            {t.bookNow}
                                         </button>
                                     )}
                                 </div>
@@ -345,7 +347,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             {/* Description Tab */}
                             {activeTab === 'description' && (
                                 <div className="bg-white rounded-b-xl p-4 sm:p-6 shadow-md border border-t-0 border-gray-200">
-                                    <h2 className="text-xl sm:text-2xl font-bold mb-4 text-[#112b38]">Event Description</h2>
+                                    <h2 className="text-xl sm:text-2xl font-bold mb-4 text-[#112b38]">{t.eventDescription}</h2>
                                     <div className="prose max-w-none text-[#c89c6b] text-sm sm:text-base">
                                         <Text>{event.description}</Text>
                                         <Text className="mt-4">Join us for an unforgettable experience at {event.title}. This event promises to be one of the most exciting gatherings of the year.</Text>
@@ -356,19 +358,19 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             {/* More Info Tab */}
                             {activeTab === 'moreInfo' && (
                                 <div className="bg-white rounded-b-xl p-4 sm:p-6 shadow-md border border-t-0 border-gray-200">
-                                    <h2 className="text-xl sm:text-2xl font-bold mb-4 text-[#112b38]">More Information</h2>
+                                    <h2 className="text-xl sm:text-2xl font-bold mb-4 text-[#112b38]">{t.moreInformation}</h2>
                                     <div className="space-y-4 text-sm sm:text-base text-[#c89c6b]">
                                         <div>
-                                            <h3 className="font-bold text-lg mb-2">Age Restriction</h3>
-                                            <Text>This event is open to all ages. Children under 12 must be accompanied by an adult.</Text>
+                                            <h3 className="font-bold text-lg mb-2">{t.ageRestriction}</h3>
+                                            <Text>{t.ageRestrictionDesc}</Text>
                                         </div>
                                         <div>
-                                            <h3 className="font-bold text-lg mb-2">Parking</h3>
-                                            <Text>Free parking is available at the venue. Additional paid parking options are nearby.</Text>
+                                            <h3 className="font-bold text-lg mb-2">{t.parking}</h3>
+                                            <Text>{t.parkingDesc}</Text>
                                         </div>
                                         <div>
-                                            <h3 className="font-bold text-lg mb-2">What to Bring</h3>
-                                            <Text>Valid ID, your ticket confirmation, and comfortable clothing recommended.</Text>
+                                            <h3 className="font-bold text-lg mb-2">{t.whatToBring}</h3>
+                                            <Text>{t.whatToBringDesc}</Text>
                                         </div>
                                     </div>
                                 </div>
@@ -381,7 +383,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         <div className='flex flex-col items-center justify-center  px-2 rounded-lg shadow-md'>
                                             <MapPin className="w-5 h-5 text-[#c89c6b] flex-shrink-0 mt-1" />
                                             <div className="font-semibold text-sm sm:text-base">{event.location}</div>
-                                            <div className="text-xs sm:text-sm text-[#c89c6b]">Location</div>
+                                            <div className="text-xs sm:text-sm text-[#c89c6b]">{t.location}</div>
                                         </div>
                                         <div>
                                             <Text>
@@ -390,7 +392,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                             <Text>
                                                 {event.fullAddress}
                                             </Text>
-                                            <Text className='flex gap-2 items-center '>View Direction <FaGreaterThan /></Text>
+                                            <Text className='flex gap-2 items-center '>{t.viewDirection} <FaGreaterThan /></Text>
                                         </div>
                                     </div>
                                     <div className="w-full h-[250px] sm:h-[300px] md:h-[350px] bg-gray-200 rounded-xl overflow-hidden">
@@ -409,7 +411,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
                             {/* Site Plan */}
                             <div className="bg-white rounded-xl">
-                                <h2 className="text-xl sm:text-2xl font-bold mb-4 text-[#112b38]">Site Plan</h2>
+                                <h2 className="text-xl sm:text-2xl font-bold mb-4 text-[#112b38]">{t.sitePlan}</h2>
                                 <div className="relative w-full h-[250px] sm:h-[300px] bg-gradient-to-br from-green-50 to-blue-50 rounded-xl overflow-hidden border border-gray-200">
                                     <img
                                         src='/images/mapImage.png'
@@ -422,32 +424,32 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             <div>
                                 {/* Why buy with Platinumlist */}
                                 <p className='text-base sm:text-lg font-semibold mb-4 sm:mb-5 md:mb-6'>
-                                    Why buy with Platinumlist?
+                                    {t.whyBuyWithUs}
                                 </p>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-10 md:mb-12">
                                     {[
                                         {
                                             icon: <Shield className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />,
-                                            title: "Secure Checkout",
-                                            desc: "Fast & Secured Payment",
+                                            title: t.secureCheckout,
+                                            desc: t.fastSecuredPayment,
                                             color: "text-blue-600"
                                         },
                                         {
                                             icon: <Zap className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />,
-                                            title: "Instant Confirmation",
-                                            desc: "Refund guarantee options",
+                                            title: t.instantConfirmation,
+                                            desc: t.refundGuarantee,
                                             color: "text-green-600"
                                         },
                                         {
                                             icon: <Ticket className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />,
-                                            title: "Official Ticket Seller",
-                                            desc: "Used by 10m+ people",
+                                            title: t.officialTicketSeller,
+                                            desc: t.usedByPeople,
                                             color: "text-purple-600"
                                         },
                                         {
                                             icon: <Clock className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />,
-                                            title: "24/7 Customer Service",
-                                            desc: "Reliable after sales support",
+                                            title: t.customerService247,
+                                            desc: t.reliableAfterSales,
                                             color: "text-orange-600"
                                         }
                                     ].map((feature, index) => (
@@ -470,7 +472,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                 {/* Payment Methods */}
                                 <div className="mb-8 sm:mb-10 md:mb-12">
                                     <div className="flex flex-col">
-                                        <div className="font-bold text-lg sm:text-xl mb-3 sm:mb-4 text-gray-800">You choose how to pay</div>
+                                        <div className="font-bold text-lg sm:text-xl mb-3 sm:mb-4 text-gray-800">{t.youChooseHowToPay}</div>
                                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
                                             <div className="flex items-center justify-center   transition-shadow">
                                                 <img
@@ -535,8 +537,8 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
                                         <div className="flex items-center gap-2">
                                             <span className="text-blue-500">🕒</span>
-                                            <span>Doors: 20:00</span>
-                                            <span>Start: 20:00</span>
+                                            <span>{t.doors}: 20:00</span>
+                                            <span>{t.start}: 20:00</span>
                                         </div>
                                     </div>
 
@@ -550,18 +552,18 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                 ⏱
                                             </div>
                                             <div>
-                                                <p className="text-blue-600 font-semibold">Buy now</p>
-                                                <p className="text-xs text-gray-500">Sale ends in</p>
+                                                <p className="text-blue-600 font-semibold">{t.buyNow}</p>
+                                                <p className="text-xs text-gray-500">{t.saleEndsIn}</p>
                                             </div>
                                         </div>
 
                                         {/* Countdown */}
                                         <div className="flex gap-4 text-center">
                                             {[
-                                                { value: "03", label: "Days" },
-                                                { value: "22", label: "Hours" },
-                                                { value: "56", label: "Mins" },
-                                                { value: "17", label: "Seconds" },
+                                                { value: "03", label: t.days },
+                                                { value: "22", label: t.hours },
+                                                { value: "56", label: t.mins },
+                                                { value: "17", label: t.seconds },
                                             ].map((item, index) => (
                                                 <div key={index}>
                                                     <p className="text-lg font-bold text-gray-700">{item.value}</p>
@@ -574,23 +576,23 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                     {/* Total + Button */}
                                     <div className="flex items-center justify-between mt-6">
                                         <div>
-                                            <p className="text-sm text-gray-500">Total Amount</p>
+                                            <p className="text-sm text-gray-500">{t.totalAmount}</p>
                                             <p className="text-xl font-bold text-red-500">Rs 0</p>
                                         </div>
 
-                                        <button className="bg-rose-400 hover:bg-rose-500 text-white font-semibold px-8 py-3 rounded-md transition">
-                                            Book Now
+                                        <button className="bg-[#c89c6b] hover:bg-[#b8885a] text-white font-semibold px-8 py-3 rounded-md transition-all duration-300 hover:scale-105 shadow-md hover:shadow-lg">
+                                            {t.bookNow}
                                         </button>
                                     </div>
                                 </div>
 
                                 {/* Bottom actions */}
                                 <div className="flex justify-center gap-10 mt-6 text-sm text-gray-600">
-                                    <button className="flex items-center gap-2 hover:text-blue-600">
-                                        📅 Add to calendar
+                                    <button className="flex items-center gap-2 hover:text-[#c89c6b] transition-all duration-300">
+                                        📅 {t.addToCalendar}
                                     </button>
-                                    <button className="flex items-center gap-2 hover:text-blue-600">
-                                        🔗 Share event
+                                    <button className="flex items-center gap-2 hover:text-[#c89c6b] transition-all duration-300">
+                                        🔗 {t.shareEvent}
                                     </button>
                                 </div>
                             </div>
@@ -614,11 +616,11 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
                                 {/* Right: Icons */}
                                 <div className="flex items-center gap-4">
-                                    <button className="text-gray-400 hover:text-rose-500 transition">
+                                    <button className="text-gray-400 hover:text-[#c89c6b] hover:scale-110 transition-all duration-300">
                                         ❤️
                                     </button>
 
-                                    <button className="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-100 transition">
+                                    <button className="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center hover:bg-[#c89c6b] hover:text-white hover:border-[#c89c6b] transition-all duration-300">
                                         ▶
                                     </button>
                                 </div>
@@ -641,11 +643,11 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
                                 {/* Right: Icons */}
                                 <div className="flex items-center gap-4">
-                                    <button className="text-gray-400 hover:text-rose-500 transition">
+                                    <button className="text-gray-400 hover:text-[#c89c6b] hover:scale-110 transition-all duration-300">
                                         ❤️
                                     </button>
 
-                                    <button className="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-100 transition">
+                                    <button className="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center hover:bg-[#c89c6b] hover:text-white hover:border-[#c89c6b] transition-all duration-300">
                                         ▶
                                     </button>
                                 </div>
@@ -668,11 +670,11 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
                                 {/* Right: Icons */}
                                 <div className="flex items-center gap-4">
-                                    <button className="text-gray-400 hover:text-rose-500 transition">
+                                    <button className="text-gray-400 hover:text-[#c89c6b] hover:scale-110 transition-all duration-300">
                                         ❤️
                                     </button>
 
-                                    <button className="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-100 transition">
+                                    <button className="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center hover:bg-[#c89c6b] hover:text-white hover:border-[#c89c6b] transition-all duration-300">
                                         ▶
                                     </button>
                                 </div>
@@ -681,8 +683,8 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             {/* Advertisement */}
                             <div className="bg-gray-200 rounded-xl p-8 sm:p-12 shadow-md border border-gray-300 flex items-center justify-center min-h-[300px] sm:min-h-[400px]">
                                 <div className="text-center">
-                                    <div className="text-4xl sm:text-6xl font-bold text-gray-400 mb-2">ADS</div>
-                                    <div className="text-xs sm:text-sm text-gray-500">Advertisement Space</div>
+                                    <div className="text-4xl sm:text-6xl font-bold text-gray-400 mb-2">{t.ads}</div>
+                                    <div className="text-xs sm:text-sm text-gray-500">{t.advertisementSpace}</div>
                                 </div>
                             </div>
                         </div>

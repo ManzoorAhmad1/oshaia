@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { X, Eye, EyeOff } from 'lucide-react';
 import { FcGoogle } from 'react-icons/fc';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface AuthModalProps {
     isOpen: boolean;
@@ -256,6 +257,7 @@ const countries: Country[] = [
 const sortedCountries = [...countries].sort((a, b) => a.name.localeCompare(b.name));
 
 export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: AuthModalProps) {
+    const { t } = useLanguage();
     const [mode, setMode] = useState<'login' | 'signup'>(initialMode);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -270,6 +272,11 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
     const backdropRef = useRef<HTMLDivElement>(null);
     const countryDropdownRef = useRef<HTMLDivElement>(null);
     const countryButtonRef = useRef<HTMLButtonElement>(null);
+
+    // Sync mode with initialMode when it changes
+    useEffect(() => {
+        setMode(initialMode);
+    }, [initialMode]);
 
     // Filter countries based on search term
     const filteredCountries = sortedCountries.filter(country =>
@@ -387,9 +394,9 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                 <div className="p-8">
                     {mode === 'login' ? (
                         <>
-                            <h2 className="text-2xl font-bold text-center mb-2">Enter Your Email & Password</h2>
+                            <h2 className="text-2xl font-bold text-center mb-2">{t.enterEmailPassword}</h2>
                             <p className="text-sm text-gray-600 text-center mb-6">
-                                If you don't have an account yet, we'll create one for you
+                                {t.noAccountYet}
                             </p>
 
                             <form onSubmit={handleSubmit} className="space-y-4">
@@ -397,7 +404,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                 <div>
                                     <input
                                         type="email"
-                                        placeholder="Email"
+                                        placeholder={t.email}
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         className="w-full h-[42px] px-3 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -410,7 +417,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                     <div className="relative">
                                         <input
                                             type={showPassword ? 'text' : 'password'}
-                                            placeholder="Password"
+                                            placeholder={t.password}
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
                                             className="w-full h-[42px] px-3 pr-10 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -428,13 +435,13 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                         type="button"
                                         className="text-xs text-gray-600 hover:text-purple-600 mt-1"
                                     >
-                                        Lost your password?
+                                        {t.lostPassword}
                                     </button>
                                 </div>
 
                                 {/* Sign in with Google */}
                                 <div className="flex items-center justify-center gap-2 text-sm text-gray-700">
-                                    <span>Sign in with</span>
+                                    <span>{t.signInWith}</span>
                                     <button type="button" className="flex items-center justify-center">
                                         <FcGoogle size={24} />
                                     </button>
@@ -442,13 +449,13 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
 
                                 {/* Create Account Link */}
                                 <div className="text-center text-sm">
-                                    <span className="text-gray-600">New here? </span>
+                                    <span className="text-gray-600">{t.newHere} </span>
                                     <button
                                         type="button"
                                         onClick={() => setMode('signup')}
                                         className="text-blue-500 hover:underline font-medium"
                                     >
-                                        Create an account
+                                        {t.createAccount}
                                     </button>
                                 </div>
 
@@ -457,18 +464,18 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                     type="submit"
                                     className="w-full bg-black text-white py-3 rounded hover:bg-gray-800 transition-colors font-medium"
                                 >
-                                    Continue
+                                    {t.continueBtn}
                                 </button>
 
                                 {/* Terms */}
                                 <div className="text-center text-xs text-gray-500">
-                                    By continuing, you agree to our{' '}
+                                    {t.byContinuing}{' '}
                                     <a href="/terms" className="text-gray-700 hover:underline">
-                                        Terms of Service
+                                        {t.termsOfService}
                                     </a>
                                     {' '}
                                     <a href="/privacy" className="text-gray-700 hover:underline">
-                                        Privacy Policy
+                                        {t.privacyPolicy}
                                     </a>
                                 </div>
                             </form>
@@ -476,10 +483,10 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                     ) : (
                         <>
                             <h2 className="text-2xl font-bold text-center mb-2">
-                                Enter Your Mobile Number & Email
+                                {t.enterMobileEmail}
                             </h2>
                             <p className="text-sm text-gray-600 text-center mb-6">
-                                Please Register Your Account & Fill The Information
+                                {t.registerAccount}
                             </p>
 
                             <form onSubmit={handleSubmit} className="space-y-4">
@@ -487,7 +494,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                 <div>
                                     <input
                                         type="email"
-                                        placeholder="Email"
+                                        placeholder={t.email}
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         className="w-full h-[42px] px-3 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -521,7 +528,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                                 <div className="sticky top-0 bg-white p-2 border-b">
                                                     <input
                                                         type="text"
-                                                        placeholder="Search country..."
+                                                        placeholder={t.searchCountry}
                                                         value={searchTerm}
                                                         onChange={(e) => setSearchTerm(e.target.value)}
                                                         className="w-full h-8 px-3 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-purple-500"
@@ -556,7 +563,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                                         ))
                                                     ) : (
                                                         <div className="px-3 py-4 text-center text-gray-500 text-sm">
-                                                            No countries found
+                                                            {t.noCountriesFound}
                                                         </div>
                                                     )}
                                                 </div>
@@ -566,7 +573,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
 
                                     <input
                                         type="tel"
-                                        placeholder="Mobile Number (Whatsapp)"
+                                        placeholder={t.mobileNumber}
                                         value={mobileNumber}
                                         onChange={(e) => setMobileNumber(e.target.value.replace(/\D/g, ''))}
                                         className="flex-1 h-[42px] px-3 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -579,7 +586,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                 <div>
                                     <input
                                         type="text"
-                                        placeholder="Full Name"
+                                        placeholder={t.fullName}
                                         value={fullName}
                                         onChange={(e) => setFullName(e.target.value)}
                                         className="w-full h-[42px] px-3 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -591,7 +598,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                 <div className="relative">
                                     <input
                                         type={showPassword ? 'text' : 'password'}
-                                        placeholder="Password"
+                                        placeholder={t.password}
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         className="w-full h-[42px] px-3 pr-10 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -608,7 +615,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
 
                                 {/* Sign in with Google */}
                                 <div className="flex items-center justify-center gap-2 text-sm text-gray-700">
-                                    <span>Sign in with</span>
+                                    <span>{t.signInWith}</span>
                                     <button type="button" className="flex items-center justify-center">
                                         <FcGoogle size={24} />
                                     </button>
@@ -616,14 +623,25 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
 
                                 {/* Login Link */}
                                 <div className="text-center text-sm">
-                                    <span className="text-gray-600">Already have an account? </span>
+                                    <span className="text-gray-600">{t.alreadyHaveAccount} </span>
                                     <button
                                         type="button"
                                         onClick={() => setMode('login')}
                                         className="text-blue-500 hover:underline font-medium"
                                     >
-                                        Login here
+                                        {t.loginHere}
                                     </button>
+                                </div>
+
+                                {/* Verification Code Input */}
+                                <div>
+                                    <input
+                                        type="text"
+                                        placeholder={t.verificationCode}
+                                        className="w-full h-[42px] px-3 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                        maxLength={6}
+                                    />
+                                    <p className="text-xs text-gray-500 mt-1">{t.verificationCodeSent}</p>
                                 </div>
 
                                 {/* Continue Button */}
@@ -631,18 +649,18 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                     type="submit"
                                     className="w-full bg-black text-white py-3 rounded hover:bg-gray-800 transition-colors font-medium"
                                 >
-                                    Continue
+                                    {t.continueBtn}
                                 </button>
 
                                 {/* Terms */}
                                 <div className="text-center text-xs text-gray-500">
-                                    By continuing, you agree to our{' '}
+                                    {t.byContinuing}{' '}
                                     <a href="/terms" className="text-gray-700 hover:underline">
-                                        Terms of Service
+                                        {t.termsOfService}
                                     </a>
                                     {' '}
                                     <a href="/privacy" className="text-gray-700 hover:underline">
-                                        Privacy Policy
+                                        {t.privacyPolicy}
                                     </a>
                                 </div>
                             </form>

@@ -38,6 +38,14 @@
     overflow-x: hidden;
   }
 
+  /* Remove focus outline from inputs */
+  input:focus,
+  input:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: transparent !important;
+  }
+
   /* Prevent horizontal scroll */
   html,
   body {
@@ -102,15 +110,15 @@
 
   /* Button Styles */
   .btn-primary {
-    @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 bg-accent-orange text-white hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-accent-orange focus:ring-offset-2 focus:ring-offset-primary-dark;
+    @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 bg-accent-orange text-white hover:bg-[#b8885a] hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-accent-orange focus:ring-offset-2 focus:ring-offset-primary-dark;
   }
 
   .btn-secondary {
-    @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 bg-secondary-purple text-white hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-secondary-purple focus:ring-offset-2 focus:ring-offset-primary-dark;
+    @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 bg-secondary-purple text-white hover:bg-[#5a3299] hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-secondary-purple focus:ring-offset-2 focus:ring-offset-primary-dark;
   }
 
   .btn-outline {
-    @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 border-2 border-accent-orange text-accent-orange hover:bg-accent-orange hover:text-white;
+    @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 border-2 border-accent-orange text-accent-orange hover:bg-accent-orange hover:text-white hover:scale-105 hover:shadow-lg;
   }
 
   /* Category Tab */

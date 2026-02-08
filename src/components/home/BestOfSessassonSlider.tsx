@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState, useEffect, useRef } from "react"
+import { useLanguage } from "@/context/LanguageContext"
 
 // Mock data array with images and videos
 const slides = [
@@ -36,6 +37,7 @@ const slides = [
 ]
 
 const BestOfSessassonSlider = () => {
+    const { t } = useLanguage()
     const [currentSlide, setCurrentSlide] = useState(0)
     const [timeLeft, setTimeLeft] = useState(slides[0].duration)
     const [isMuted, setIsMuted] = useState(true)
@@ -131,7 +133,7 @@ const BestOfSessassonSlider = () => {
     return (
         <div className="max-w-full sm:max-w-[1276.7px] h-auto mx-auto mb-4 px-2 sm:px-4">
             <h2 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 mb-2 sm:mb-3 lg:mb-4 tracking-tight uppercase">
-                Best of Sessasson
+                {t.bestOfSeason}
             </h2>
 
             <div className="relative rounded-lg sm:rounded-xl lg:rounded-3xl overflow-hidden shadow-md sm:shadow-lg bg-white w-full h-auto">
