@@ -143,12 +143,12 @@ export default function EventCard() {
                                     {/* Navigation Button */}
                                     <button
                                         onClick={() => setIndex((index + 1) % images.length)}
-                                        className="w-8 h-8 p-2 bg-black/70 text-white rounded-full hover:bg-black/90 flex items-center justify-center border-2 border-gray-300"
+                                        className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-black/70 text-white rounded-full hover:bg-black/90 flex items-center justify-center border-2 border-gray-300"
                                     >
                                         <img
                                             src='/images/double-chevron.png'
                                             alt='slider button images'
-                                            className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 object-cover"
+                                            className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 object-contain"
                                         />
                                     </button>
                                 </div>

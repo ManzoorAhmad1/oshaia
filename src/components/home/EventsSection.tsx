@@ -120,7 +120,7 @@ const EventsSection = () => {
         {/* Event Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 lg:gap-12 w-full max-w-full mx-auto justify-items-center px-12 sm:px-16 py-12 overflow-visible">
           {filteredEvents.map((event,index) => (
-            <div key={event.id} className="w-full max-w-[324.1px] h-auto event-card group relative overflow-visible">
+            <div key={event.id} className="w-[300px] h-auto event-card group relative overflow-visible">
 
               {/* Badge Image at Top Left - Outside the card */}
               <div className="absolute -top-[43px] -left-[36px] w-[300px] h-auto z-30">
@@ -134,13 +134,13 @@ const EventsSection = () => {
               {/* Main Content */}
               <div className="relative z-10 overflow-hidden rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg bg-white">
                 {/* Event Image */}
-                <div className="relative w-full aspect-square overflow-hidden">
+                <div className="relative w-[300px] h-[300px] overflow-hidden">
                   <Image
                     src={event.image}
                     alt={event.title}
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-500"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    sizes="300px"
                     priority={event.id <= 3}
                   />
                 </div>

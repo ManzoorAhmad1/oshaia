@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Roboto } from "next/font/google";
 import "./globals.css";
 import WhatsAppButton from "@/components/about/WhatsAppButton";
 
-const quicksans = localFont({
-  src: "../../public/images/Font/Quicksans Accurate ICG Fill.ttf",
-  variable: "--font-quicksans",
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["100", "300", "400", "500", "700", "900"],
+  variable: "--font-roboto",
   display: "swap",
 });
 
@@ -20,8 +21,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={quicksans.variable}>
-      <body className={quicksans.className} style={{ fontFamily: 'var(--font-quicksans), Quicksans, sans-serif' }}>
+    <html lang="en" suppressHydrationWarning className={roboto.variable}>
+      <body className={roboto.className}>
         {children}
         <WhatsAppButton />
       </body>

@@ -2,14 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Quicksans Font */
-@font-face {
-  font-family: 'Quicksans';
-  src: url('/images/Font/Quicksans Accurate ICG Fill.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
 /* Event Website Color Scheme */
 :root {
   --primary-dark: #FFFFFF;
@@ -29,17 +21,18 @@
   --white: #fff;
   --primary-orange: #c89c6b;
   --primary-blue: #112b38;
+  --font-roboto: 'Roboto', sans-serif;
 }
 
 /* Base Styles */
 @layer base {
   * {
     @apply border-border-gray;
-    font-family: 'Quicksans', sans-serif !important;
+    font-family: var(--font-roboto), 'Roboto', sans-serif !important;
   }
 
   body {
-    font-family: 'Quicksans', sans-serif !important;
+    font-family: var(--font-roboto), 'Roboto', sans-serif !important;
     @apply antialiased bg-white text-gray-900;
     transition: background-color 0.3s ease, color 0.3s ease;
     overflow-x: hidden;
@@ -68,7 +61,7 @@
   select,
   label,
   div {
-    font-family: 'Quicksans', sans-serif !important;
+    font-family: var(--font-roboto), 'Roboto', sans-serif !important;
   }
 
   /* Professional Scrollbar */

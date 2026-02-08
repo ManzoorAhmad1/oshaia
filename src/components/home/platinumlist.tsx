@@ -58,12 +58,12 @@ const Platinumlist = () => {
         <div className="mb-8 sm:mb-10 md:mb-12">
           <div className="flex flex-col">
             <div className="font-bold text-lg sm:text-xl mb-3 sm:mb-4 text-gray-800">You choose how to pay</div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
+            <div className="flex gap-2">
               <div className="flex items-center justify-center   transition-shadow">
                 <img
                   src='/images/1) - Juice MCB LOGO.png'
                   alt="Juice MCB"
-                  className="h-8 sm:h-10 md:h-12 w-auto object-contain"
+                  className="h-8 sm:h-10 md:h-32 w-auto object-contain"
                 />
               </div>
               <div className="flex items-center justify-center   transition-shadow">
@@ -98,7 +98,7 @@ const Platinumlist = () => {
                 <img
                   src='/images/6) - My.t Money .png'
                   alt="My.t Money"
-                  className="h-8 sm:h-10 md:h-12 w-auto object-contain"
+                  className="h-8 sm:h-10 md:h-24 w-auto object-contain"
                 />
               </div>
             </div>
@@ -160,42 +160,42 @@ const Platinumlist = () => {
                   <img
                     src='/images/1) - Juice MCB LOGO.png'
                     alt="Juice MCB"
-                    className="h-6 sm:h-8 lg:h-10 w-auto object-contain"
+                    className="h-12 w-16 sm:h-14 sm:w-20 lg:h-16 lg:w-24 object-contain"
                   />
                 </div>
                 <div className="flex items-center justify-center transition-colors">
                   <img
                     src='/images/2) - emtel-blink-logo-500px.png'
                     alt="Emtel Blink"
-                    className="h-6 sm:h-8 lg:h-10 w-auto object-contain"
+                    className="h-12 w-16 sm:h-14 sm:w-20 lg:h-16 lg:w-24 object-contain"
                   />
                 </div>
                 <div className="flex items-center justify-center  transition-colors">
                   <img
                     src='/images/3) - Visa-Logo-2014.png'
                     alt="Visa"
-                    className="h-6 sm:h-8 lg:h-10 w-auto object-contain"
+                    className="h-12 w-16 sm:h-14 sm:w-20 lg:h-16 lg:w-24 object-contain"
                   />
                 </div>
                 <div className="flex items-center justify-center transition-colors">
                   <img
                     src='/images/4) - Mastercard-logo.png'
                     alt="Mastercard"
-                    className="h-6 sm:h-8 lg:h-10 w-auto object-contain"
+                    className="h-12 w-16 sm:h-14 sm:w-20 lg:h-16 lg:w-24 object-contain"
                   />
                 </div>
                 <div className="flex items-center justify-center transition-colors">
                   <img
                     src='/images/5) - maucas-logo-1024x263.png'
                     alt="Maucas"
-                    className="h-6 sm:h-8 lg:h-10 w-auto object-contain"
+                    className="h-12 w-16 sm:h-14 sm:w-20 lg:h-16 lg:w-24 object-contain"
                   />
                 </div>
                 <div className="flex items-center justify-center  transition-colors">
                   <img
                     src='/images/6) - My.t Money .png'
                     alt="My.t Money"
-                    className="h-6 sm:h-8 lg:h-10 w-auto object-contain"
+                    className="h-12 w-16 sm:h-14 sm:w-20 lg:h-16 lg:w-24 object-contain"
                   />
                 </div>
               </div>
