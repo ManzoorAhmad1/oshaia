@@ -30,9 +30,9 @@ export default function ServicesSection() {
   ];
 
   return (
-    <section className="bg-white py-16 border-t">
+    <section className="bg-white py-8 border-t">
       <div className="max-w-6xl mx-auto px-6 text-center">
-        <h2 className="text-3xl font-bold text-[#c89c6b] mb-10">{t.whatWeOffer}</h2>
+        <h2 className="text-3xl font-bold text-[#c89c6b] mb-6">{t.whatWeOffer}</h2>
         <div className="grid md:grid-cols-3 gap-8">
           {services.map((service, index) => (
             <div

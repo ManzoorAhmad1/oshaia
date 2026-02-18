@@ -70,12 +70,12 @@ const PartnersSection = () => {
 
   return (
     <section 
-      className="py-6 sm:py-10 mt-8 sm:mt-12"
+      className="py-3 sm:py-4 mt-4 sm:mt-5"
       onMouseEnter={() => setIsAutoPlaying(false)}
       onMouseLeave={() => setIsAutoPlaying(true)}
     >
       <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
-        <h2 className="text-sm sm:text-xl md:text-2xl lg:text-3xl font-bold text-center text-accent-orange mb-4 sm:mb-6 md:mb-8 lg:mb-10 uppercase tracking-wider">
+        <h2 className="text-sm sm:text-xl md:text-2xl lg:text-3xl font-bold text-center text-accent-orange mb-3 sm:mb-4 md:mb-5 lg:mb-6 uppercase tracking-wider">
           OUR PARTNERS
         </h2>
 

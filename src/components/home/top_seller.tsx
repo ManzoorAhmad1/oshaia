@@ -72,7 +72,7 @@ export default function EventCard() {
     };
 
     return (
-        <div className="max-w-full sm:max-w-[914px] h-auto mx-auto mb-4 px-2 sm:px-4 flex gap-2 flex-col gap:8 mt-8 sm:mt-12 lg:mt-16">
+        <div className="max-w-full sm:max-w-[914px] h-auto mx-auto mb-2 px-2 sm:px-4 flex gap-2 flex-col gap:8 mt-4 sm:mt-5 lg:mt-6">
             <div className="flex w-full flex-col">
                 <div className="py-2">
                     <p className="text-sm sm:text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 mb-2 sm:mb-4 tracking-tight uppercase">

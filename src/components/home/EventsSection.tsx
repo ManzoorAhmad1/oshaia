@@ -104,13 +104,13 @@ const EventsSection = () => {
     : events.filter(event => event.category.toLowerCase() === activeCategory)
 
   return (
-    <section className="mt-16 ">
+    <section className="mt-0 pb-2 sm:pb-3 md:pb-4">
       <div className="">
         {/* Section Title */}
-        <h2 className="section-title text-black">{t.allEvent}</h2>
+        <h2 className="section-title text-black my-4">{t.allEvent}</h2>
 
         {/* Category Tabs */}
-        <div className="w-full overflow-x-auto mb-8 sm:mb-12 border-b border-gray-200 bg-[#112b38]">
+        <div className="w-full overflow-x-auto mb-6 sm:mb-8 border-b border-gray-200 bg-[#112b38]">
           <div className="flex justify-start sm:justify-center items-center gap-0 min-w-max sm:min-w-0">
             {categoryKeys.map((category, idx) => (
               <React.Fragment key={category}>
@@ -133,9 +133,9 @@ const EventsSection = () => {
         </div>
 
         {/* Event Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 mx-20 py-12 overflow-visible justify-items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 mx-20 py-4 overflow-visible justify-items-center">
           {filteredEvents.map((event,index) => (
-            <div key={event.id} className="  mb-20 w-[400px] h-auto event-card group relative overflow-visible">
+            <div key={event.id} className="  mb-12 w-[400px] h-auto event-card group relative overflow-visible">
 
               {/* Badge Image at Top Left - Outside the card */}
               <div className="absolute -top-[43px] -left-[36px] w-[400px] h-auto z-30">
@@ -176,8 +176,8 @@ const EventsSection = () => {
           ))}
         </div>
         {/* View All Button */}
-        <div className="w-full flex items-center justify-center mt-8 sm:mt-10 md:mt-12">
-          <button className="w-full max-w-[365.4px] h-[60px] sm:h-[70px] md:h-[76.3px] bg-[#112b38] text-white px-8 sm:px-10 md:px-12 py-3 sm:py-3.5 md:py-4 text-base sm:text-lg md:text-[21.8px] uppercase tracking-wider rounded-full hover:bg-[#c89c6b] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+        <div className="w-full flex items-center justify-center mt-2 sm:mt-3 md:mt-4">
+          <button className="w-full max-w-[365.4px] h-[60px] sm:h-[70px] md:h-[76.3px] bg-transparent border-2 border-[#c89c6b] text-[#c89c6b] px-8 sm:px-10 md:px-12 py-3 sm:py-3.5 md:py-4 text-base sm:text-lg md:text-[21.8px] uppercase tracking-wider rounded-full hover:bg-[#112b38] hover:text-[#c89c6b] hover:border-[#112b38] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
             {t.viewAllEvent}
           </button>
         </div>

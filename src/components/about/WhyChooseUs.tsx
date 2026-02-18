@@ -29,8 +29,8 @@ export default function WhyChooseUs() {
   ];
 
   return (
-    <section className="max-w-6xl mx-auto py-16 px-6">
-      <h2 className="text-3xl font-bold text-center text-[#c89c6b] mb-10">{t.whyChooseUs}</h2>
+    <section className="max-w-6xl mx-auto py-8 px-6">
+      <h2 className="text-3xl font-bold text-center text-[#c89c6b] mb-6">{t.whyChooseUs}</h2>
       <div className="grid md:grid-cols-3 gap-8 text-center">
         {reasons.map((reason, index) => (
           <div key={index} className="bg-white rounded-2xl p-6 border shadow-sm">

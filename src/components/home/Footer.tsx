@@ -23,7 +23,7 @@ const Footer = () => {
     <footer className="w-full bg-white border-t border-gray-200">
       <div className="max-w-6xl mx-auto">
         {/* Top Section with 4 Columns */}
-        <div className="pt-8 sm:pt-10 md:pt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-10 xl:gap-12 mb-8 sm:mb-10 md:mb-12">
+        <div className="pt-4 sm:pt-6 md:pt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-10 xl:gap-12 mb-4 sm:mb-6 md:mb-8">
 
           {/* Categories Column */}
           <div>
@@ -122,7 +122,7 @@ const Footer = () => {
                   <img
                   src='/images/1) - Juice MCB LOGO.png'
                   alt="Juice MCB"
-                  className="h-12 w-16 sm:h-14 sm:w-20 lg:h-16 lg:w-24 object-contain"
+                  className="h-16 w-20 sm:h-18 sm:w-24 lg:h-20 lg:w-28 object-contain"
                   />
                 </div>
                 <div className="flex items-center justify-center transition-colors">
@@ -150,23 +150,17 @@ const Footer = () => {
                   <img
                   src='/images/5) - maucas-logo-1024x263.png'
                   alt="Maucas"
-                  className="h-12 w-16 sm:h-14 sm:w-20 lg:h-16 lg:w-24 object-contain"
+                  className="h-16 w-20 sm:h-18 sm:w-24 lg:h-20 lg:w-28 object-contain"
                   />
                 </div>
-                <div className="flex items-center justify-center transition-colors">
-                  <img
-                  src='/images/6) - My.t Money .png'
-                  alt="My.t Money"
-                  className="h-12 w-16 sm:h-14 sm:w-20 lg:h-16 lg:w-24 object-contain"
-                  />
-                </div>
+           
                 </div>
             </div>
           </div>
         </div>
       </div>
       <div className='w-full'>
-        <div className='w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 py-8 sm:py-10 lg:py-14 mt-4 bg-[#f5f5f8] px-4 sm:px-8 md:px-16 lg:px-28 xl:px-44'>
+        <div className='w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 py-4 sm:py-6 lg:py-8 mt-4 bg-[#f5f5f8] px-4 sm:px-8 md:px-16 lg:px-28 xl:px-44'>
           <div className='flex gap-2 sm:gap-3 items-center justify-center sm:justify-start'>
             <FaLocationDot className='text-orange-500 flex-shrink-0 text-base sm:text-lg' />
             <Text className='text-xs sm:text-sm md:text-base'>Maxuel street, Frankfurt 2589 Germany</Text>

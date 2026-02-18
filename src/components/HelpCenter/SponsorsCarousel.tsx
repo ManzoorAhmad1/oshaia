@@ -14,9 +14,9 @@ export default function SponsorsCarousel() {
   }));
 
   return (
-    <section className="bg-white py-16 border-t overflow-hidden relative">
+    <section className="bg-white py-8 border-t overflow-hidden relative">
       <div className="max-w-6xl mx-auto px-6 text-center">
-        <h2 className="text-3xl font-bold text-[#c89c6b] mb-10">{t.ourSponsors}</h2>
+        <h2 className="text-3xl font-bold text-[#c89c6b] mb-6">{t.ourSponsors}</h2>
 
         <div className="relative overflow-hidden">
           <div

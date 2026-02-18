@@ -206,26 +206,24 @@ const HeroCarousel = () => {
                                 active={pathname === '/'}
                                 icon={FaHome}
                                 path='/'
+                                showIcon={true}
                             />
                             <Divider className='text-orange-500' />
                             <NavItem
                                 label={t.events}
                                 active={pathname === '/event' || pathname?.startsWith('/event/')}
-                                icon={FaCalendarAlt}
                                 path='/event'
                             />
                             <Divider className='text-orange-500' />
                             <NavItem
                                 label={t.aboutUs}
                                 active={pathname === '/about'}
-                                icon={FaInfoCircle}
                                 path='/about'
                             />
                             <Divider className='text-orange-500' />
                             <NavItem
                                 label={t.helpCenter}
                                 active={pathname === '/help'}
-                                icon={FaQuestionCircle}
                                 path='/help'
                             />
                         </div>
@@ -351,7 +349,7 @@ const HeroCarousel = () => {
 
                             <div className="flex">
                                 <button 
-                                    className="bg-[#112b38] border border-[#c89c6b] hover:bg-[#1a3d4d] text-white px-3 sm:px-3 lg:px-5 rounded-l-lg text-xs sm:text-xs lg:text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 whitespace-nowrap h-[42px] sm:h-[44px] lg:h-[44.8px]"
+                                    className="bg-transparent border-2 border-[#c89c6b] text-[#c89c6b] hover:bg-[#112b38] hover:text-[#c89c6b] hover:border-[#112b38] px-3 sm:px-3 lg:px-5 rounded-l-lg text-xs sm:text-xs lg:text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg whitespace-nowrap h-[42px] sm:h-[44px] lg:h-[44.8px]"
                                     onClick={() => {
                                         setAuthMode('login')
                                         setIsAuthModalOpen(true)
@@ -360,7 +358,7 @@ const HeroCarousel = () => {
                                     {t.login}
                                 </button>
                                 <button 
-                                    className="bg-[#c89c6b] hover:bg-[#b8885a] text-white px-3 sm:px-3 lg:px-5 rounded-r-lg text-xs sm:text-xs lg:text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 whitespace-nowrap h-[42px] sm:h-[44px] lg:h-[44.8px]"
+                                    className="bg-transparent border-2 border-[#112b38] text-[#112b38] hover:bg-[#c89c6b] hover:text-[#112b38] hover:border-[#c89c6b] px-3 sm:px-3 lg:px-5 rounded-r-lg text-xs sm:text-xs lg:text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg whitespace-nowrap h-[42px] sm:h-[44px] lg:h-[44.8px]"
                                     onClick={() => {
                                         setAuthMode('signup')
                                         setIsAuthModalOpen(true)
@@ -457,7 +455,7 @@ const HeroCarousel = () => {
 
 export default HeroCarousel
 
-const NavItem = ({ label, active = false, icon, path }: any) => {
+const NavItem = ({ label, active = false, icon, path, showIcon = false }: any) => {
     const router = useRouter()
     const Icon = icon
     return (
@@ -466,7 +464,7 @@ const NavItem = ({ label, active = false, icon, path }: any) => {
             className={`cursor-pointer font-bold text-[8px] xs:text-[9px] sm:text-xs md:text-sm lg:text-base xl:text-lg uppercase tracking-wide flex items-center gap-0.5 sm:gap-1 md:gap-2 hover:text-[#c89c6b] transition-colors whitespace-nowrap ${active ? "text-[#c89c6b]" : "text-white"
                 }`}
         >
-            {active && Icon && <span className="text-sm lg:text-base"><Icon /> </span>}
+            {showIcon && Icon && <span className="text-sm lg:text-base"><Icon /> </span>}
             {label}
         </p>
     )

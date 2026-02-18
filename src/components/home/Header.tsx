@@ -59,7 +59,7 @@ const Header = () => {
 
             {/* Register Button */}
             <button 
-              className="hidden sm:block btn-primary text-xs sm:text-sm px-3 sm:px-5 py-1 sm:py-2"
+              className="hidden sm:block bg-transparent border-2 border-[#112b38] text-[#112b38] rounded-full hover:bg-[#c89c6b] hover:text-[#112b38] hover:border-[#c89c6b] transition-all duration-300 text-xs sm:text-sm px-3 sm:px-5 py-1 sm:py-2"
               onClick={() => {
                 setAuthMode('signup')
                 setIsAuthModalOpen(true)
@@ -70,7 +70,7 @@ const Header = () => {
 
             {/* Login Button */}
             <button 
-              className="hidden sm:flex items-center space-x-2 px-4 py-2 border border-white/20 rounded-lg hover:bg-[#c89c6b] hover:border-[#c89c6b] hover:scale-105 transition-all duration-300 text-sm"
+              className="hidden sm:flex items-center space-x-2 px-4 py-2 bg-transparent border-2 border-[#c89c6b] text-[#c89c6b] rounded-full hover:bg-[#112b38] hover:text-[#c89c6b] hover:border-[#112b38] transition-all duration-300 text-sm"
               onClick={() => {
                 setAuthMode('login')
                 setIsAuthModalOpen(true)
@@ -113,7 +113,7 @@ const Header = () => {
               ))}
               <div className="flex flex-col space-y-2 pt-4 border-t border-border-gray">
                 <button 
-                  className="btn-primary w-full"
+                  className="w-full bg-transparent border-2 border-[#112b38] text-[#112b38] rounded-full hover:bg-[#c89c6b] hover:text-[#112b38] hover:border-[#c89c6b] transition-all duration-300 px-4 py-3"
                   onClick={() => {
                     setAuthMode('signup')
                     setIsAuthModalOpen(true)
@@ -123,7 +123,7 @@ const Header = () => {
                   Register
                 </button>
                 <button 
-                  className="px-4 py-3 border border-white/20 rounded-lg hover:bg-[#c89c6b] hover:border-[#c89c6b] hover:scale-105 transition-all duration-300"
+                  className="px-4 py-3 bg-transparent border-2 border-[#c89c6b] text-[#c89c6b] rounded-full hover:bg-[#112b38] hover:text-[#c89c6b] hover:border-[#112b38] transition-all duration-300"
                   onClick={() => {
                     setAuthMode('login')
                     setIsAuthModalOpen(true)

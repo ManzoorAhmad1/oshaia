@@ -43,8 +43,8 @@ export default function HelpChatBot() {
       return "You can purchase tickets by visiting an event page and selecting your preferred seat, then clicking 'Buy Ticket'.";
     } else if (lower.includes('view') && lower.includes('ticket')) {
       return "Go to your profile and click on 'My Tickets' to view all your purchased tickets.";
-    } else if (lower.includes('refund') || lower.includes('cancel')) {
-      return "Refunds or cancellations depend on the event organizer's policy. Check the event page or contact support.";
+    } else if (lower.includes('support') || lower.includes('help')) {
+      return "For any assistance, please contact our support team through the Help Center or use the chat feature on our website.";
     } else if (lower.includes('contact') || lower.includes('organizer')) {
       return "Organizer contact info is shown on the event details page under 'Contact Organizer'.";
     } else if (lower.includes('reset') || lower.includes('password')) {
@@ -86,7 +86,7 @@ export default function HelpChatBot() {
   };
 
   return (
-    <section className="max-w-5xl mx-auto py-16 px-6">
+    <section className="max-w-5xl mx-auto py-8 px-6">
       <div className="grid md:grid-cols-2 gap-10 items-start">
         {/* Left Column – FAQ / Template Questions */}
         <div>

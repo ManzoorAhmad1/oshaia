@@ -184,9 +184,8 @@ export default function EventsGrid() {
         : eventsWithImages.filter(event => event.category === activeCategory);
 
     return (
-        <div className="w-full py-8 sm:py-12 lg:py-16">
-            {/* Category Tabs - Same as Home Page */}
-            <div className="w-full overflow-x-auto mb-8 sm:mb-12 border-b border-gray-200 bg-[#112b38]">
+        <div className="w-full">
+            <div className="w-full  my-6 overflow-x-auto border-b border-gray-200 bg-[#112b38]">
                 <div className="flex justify-start sm:justify-center items-center gap-0 min-w-max sm:min-w-0">
                     {categories.map((category, idx) => (
                         <React.Fragment key={category}>
@@ -219,8 +218,8 @@ export default function EventsGrid() {
             </div>
 
             {/* Load More Button */}
-            <div className="text-center mt-12">
-                <button className="bg-black text-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors duration-200 text-lg">
+            <div className="text-center mt-6">
+                <button className="bg-transparent border-2 border-[#c89c6b] text-[#c89c6b] px-8 py-3 rounded-full font-semibold hover:bg-[#112b38] hover:text-[#c89c6b] hover:border-[#112b38] hover:scale-105 transition-all duration-300 text-lg uppercase tracking-wider shadow-lg hover:shadow-xl">
                     {t.loadMoreEvents}
                 </button>
             </div>

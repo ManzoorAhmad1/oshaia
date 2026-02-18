@@ -478,7 +478,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                 <img
                                                     src='/images/1) - Juice MCB LOGO.png'
                                                     alt="Juice MCB"
-                                                    className="h-8 sm:h-10 md:h-12 w-auto object-contain"
+                                                    className="h-10 sm:h-12 md:h-16 w-auto object-contain"
                                                 />
                                             </div>
                                             <div className="flex items-center justify-center   transition-shadow">
@@ -506,16 +506,10 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                 <img
                                                     src='/images/5) - maucas-logo-1024x263.png'
                                                     alt="Maucas"
-                                                    className="h-8 sm:h-10 md:h-12 w-auto object-contain"
+                                                    className="h-10 sm:h-12 md:h-16 w-auto object-contain"
                                                 />
                                             </div>
-                                            <div className="flex items-center justify-center   transition-shadow">
-                                                <img
-                                                    src='/images/6) - My.t Money .png'
-                                                    alt="My.t Money"
-                                                    className="h-8 sm:h-10 md:h-12 w-auto object-contain"
-                                                />
-                                            </div>
+                                         
                                         </div>
                                     </div>
                                 </div>

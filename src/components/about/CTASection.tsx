@@ -7,7 +7,7 @@ export default function CTASection() {
   const { t } = useLanguage();
   
   return (
-    <section className="bg-[#c89c6b] text-white py-12 text-center">
+    <section className="bg-[#c89c6b] text-white py-6 text-center">
       <h2 className="text-2xl md:text-3xl font-bold mb-3">
         {t.joinThousands}
       </h2>

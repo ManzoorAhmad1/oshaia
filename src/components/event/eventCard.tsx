@@ -63,8 +63,18 @@ export default function EventCard({
                         <h3 className="text-lg sm:text-xl lg:text-2xl font-bold uppercase tracking-wide lg:pl-4">{title}</h3>
 
                         {/* Navy Blue Section with Title and Info */}
-                        <div className="bg-[#112b38] text-white p-3 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 rounded-lg lg:rounded-none">
-                            <div className="flex-1">
+                        <div 
+                            className="relative text-white p-3 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 rounded-lg lg:rounded-none overflow-hidden"
+                            style={{
+                                backgroundImage: `url(${imageError ? fallbackImage : imageUrl})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center',
+                            }}
+                        >
+                            {/* Dark overlay for readability */}
+                            <div className="absolute inset-0 bg-[#112b38]/65"></div>
+                            
+                            <div className="flex-1 relative z-10">
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-2 text-xs sm:text-sm">
                                         <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -78,7 +88,7 @@ export default function EventCard({
                                 </div>
                             </div>
 
-                            <div className="sm:ml-4">
+                            <div className="sm:ml-4 relative z-10">
                                 <div className="bg-white text-[#112b38] px-3 sm:px-4 py-1.5 sm:py-2 rounded text-xs font-bold uppercase whitespace-nowrap">
                                     {t.lastTicketsLeft}
                                 </div>

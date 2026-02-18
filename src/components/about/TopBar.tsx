@@ -77,7 +77,7 @@ export default function TopBar() {
         <Link href="/account" className="text-gray-800 font-semibold flex items-center">
           <BiCalendarEvent className="mr-1" /> My Account
         </Link>
-        <button className="btn-signup bg-[#c89c6b] text-white border-none py-2 px-5 rounded-full font-semibold hover:bg-[#b8885a] hover:scale-105 transition-all duration-300">
+        <button className="btn-signup bg-transparent border-2 border-[#112b38] text-[#112b38] py-2 px-5 rounded-full font-semibold hover:bg-[#c89c6b] hover:text-[#112b38] hover:border-[#c89c6b] transition-all duration-300">
           Sign Up
         </button>
         <Link href="/cart" className="text-gray-800 relative">

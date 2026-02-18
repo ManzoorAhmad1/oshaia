@@ -8,15 +8,15 @@ const Platinumlist = () => {
   const { t } = useLanguage();
   
   return (
-    <section className="w-full bg-gradient-to-br from-gray-50 to-white py-8 sm:py-12 md:py-16 px-3 sm:px-4 md:px-8 rounded-xl sm:rounded-2xl mt-8 sm:mt-10 md:mt-12 shadow-lg">
+    <section className="w-full bg-gradient-to-br from-gray-50 to-white py-4 sm:py-6 md:py-8 px-3 sm:px-4 md:px-8 rounded-xl sm:rounded-2xl mt-4 sm:mt-5 md:mt-6 shadow-lg">
 
       <div className="max-w-6xl mx-auto">
         <div>
           {/* Why buy with Platinumlist */}
-          <p className='text-base sm:text-lg font-semibold mb-4 sm:mb-5 md:mb-6'>
+          <p className='text-base sm:text-lg font-semibold mb-3 sm:mb-4 md:mb-5'>
             {t.whyBuyWithUs}
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-10 md:mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 mb-4 sm:mb-6 md:mb-8">
             {[
               {
                 icon: <Shield className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />,
@@ -60,7 +60,7 @@ const Platinumlist = () => {
             ))}
           </div>
         {/* Payment Methods */}
-        <div className="mb-8 sm:mb-10 md:mb-12">
+        <div className="mb-4 sm:mb-6 md:mb-8">
           <div className="flex flex-col">
             <div className="font-bold text-lg sm:text-xl mb-3 sm:mb-4 text-gray-800">{t.youChooseHowToPay}</div>
             <div className="flex gap-2">
@@ -68,7 +68,7 @@ const Platinumlist = () => {
                 <img
                   src='/images/1) - Juice MCB LOGO.png'
                   alt="Juice MCB"
-                  className="h-8 sm:h-10 md:h-32 w-auto object-contain"
+                  className="h-10 sm:h-12 md:h-16 w-auto object-contain"
                 />
               </div>
               <div className="flex items-center justify-center   transition-shadow">
@@ -96,24 +96,18 @@ const Platinumlist = () => {
                 <img
                   src='/images/5) - maucas-logo-1024x263.png'
                   alt="Maucas"
-                  className="h-8 sm:h-10 md:h-12 w-auto object-contain"
+                  className="h-10 sm:h-12 md:h-16 w-auto object-contain"
                 />
               </div>
-              <div className="flex items-center justify-center   transition-shadow">
-                <img
-                  src='/images/6) - My.t Money .png'
-                  alt="My.t Money"
-                  className="h-8 sm:h-10 md:h-24 w-auto object-contain"
-                />
-              </div>
+         
             </div>
           </div>
         </div>
         </div>
 
         {/* Main Content */}
-        <div className="mb-8 sm:mb-10 md:mb-12">
-          <div className="flex items-center mb-4 sm:mb-5 md:mb-6">
+        <div className="mb-4 sm:mb-6 md:mb-8">
+          <div className="flex items-center mb-3 sm:mb-4 md:mb-5">
             <div className="w-1.5 sm:w-2 h-6 sm:h-7 md:h-8 bg-gradient-to-b from-blue-600 to-purple-600 rounded-full mr-2 sm:mr-3 flex-shrink-0"></div>
             <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-gray-900">{t.dubaiEventsTickets}</h2>
           </div>
@@ -165,7 +159,7 @@ const Platinumlist = () => {
                   <img
                     src='/images/1) - Juice MCB LOGO.png'
                     alt="Juice MCB"
-                    className="h-12 w-16 sm:h-14 sm:w-20 lg:h-16 lg:w-24 object-contain"
+                    className="h-16 w-20 sm:h-18 sm:w-24 lg:h-20 lg:w-28 object-contain"
                   />
                 </div>
                 <div className="flex items-center justify-center transition-colors">
@@ -193,16 +187,10 @@ const Platinumlist = () => {
                   <img
                     src='/images/5) - maucas-logo-1024x263.png'
                     alt="Maucas"
-                    className="h-12 w-16 sm:h-14 sm:w-20 lg:h-16 lg:w-24 object-contain"
+                    className="h-16 w-20 sm:h-18 sm:w-24 lg:h-20 lg:w-28 object-contain"
                   />
                 </div>
-                <div className="flex items-center justify-center  transition-colors">
-                  <img
-                    src='/images/6) - My.t Money .png'
-                    alt="My.t Money"
-                    className="h-12 w-16 sm:h-14 sm:w-20 lg:h-16 lg:w-24 object-contain"
-                  />
-                </div>
+               
               </div>
             </div>
           </div>
