@@ -115,46 +115,35 @@ const Footer = () => {
             </div>
 
             {/* We Accept Section */}
-            <div className="space-y-3 sm:space-y-4">
+            <div className="space-y-2">
               <div className="text-blue-500 text-sm sm:text-base font-medium">{t.weAccept}</div>
-                <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3">
-                <div className="flex items-center justify-center transition-colors">
-                  <img
+              <div className="flex gap-1 sm:gap-2 items-center">
+                <img
                   src='/images/1) - Juice MCB LOGO.png'
                   alt="Juice MCB"
-                  className="h-16 w-20 sm:h-18 sm:w-24 lg:h-20 lg:w-28 object-contain"
-                  />
-                </div>
-                <div className="flex items-center justify-center transition-colors">
-                  <img
+                  className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto object-contain"
+                />
+                <img
                   src='/images/2) - emtel-blink-logo-500px.png'
                   alt="Emtel Blink"
-                  className="h-12 w-16 sm:h-14 sm:w-20 lg:h-16 lg:w-24 object-contain"
-                  />
-                </div>
-                <div className="flex items-center justify-center  transition-colors">
-                  <img
+                  className="h-3 sm:h-4 md:h-5 lg:h-6 w-auto object-contain"
+                />
+                <img
                   src='/images/3) - Visa-Logo-2014.png'
                   alt="Visa"
-                  className="h-12 w-16 sm:h-14 sm:w-20 lg:h-16 lg:w-24 object-contain"
-                  />
-                </div>
-                <div className="flex items-center justify-center transition-colors">
-                  <img
+                  className="h-3 sm:h-4 md:h-5 lg:h-6 w-auto object-contain"
+                />
+                <img
                   src='/images/4) - Mastercard-logo.png'
                   alt="Mastercard"
-                  className="h-12 w-16 sm:h-14 sm:w-20 lg:h-16 lg:w-24 object-contain"
-                  />
-                </div>
-                <div className="flex items-center justify-center transition-colors">
-                  <img
+                  className="h-3 sm:h-4 md:h-5 lg:h-6 w-auto object-contain"
+                />
+                <img
                   src='/images/5) - maucas-logo-1024x263.png'
                   alt="Maucas"
-                  className="h-16 w-20 sm:h-18 sm:w-24 lg:h-20 lg:w-28 object-contain"
-                  />
-                </div>
-           
-                </div>
+                  className="h-4 sm:h-5 md:h-6 lg:h-7 w-auto object-contain"
+                />
+              </div>
             </div>
           </div>
         </div>

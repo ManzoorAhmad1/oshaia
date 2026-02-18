@@ -154,43 +154,32 @@ const Platinumlist = () => {
             {/* Payment Methods */}
             <div className="flex flex-col">
               <div className="font-semibold text-gray-800 mb-3 sm:mb-4 text-sm sm:text-base md:text-lg">{t.weAccept}</div>
-              <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3">
-                <div className="flex items-center justify-center transition-colors">
-                  <img
-                    src='/images/1) - Juice MCB LOGO.png'
-                    alt="Juice MCB"
-                    className="h-16 w-20 sm:h-18 sm:w-24 lg:h-20 lg:w-28 object-contain"
-                  />
-                </div>
-                <div className="flex items-center justify-center transition-colors">
-                  <img
-                    src='/images/2) - emtel-blink-logo-500px.png'
-                    alt="Emtel Blink"
-                    className="h-12 w-16 sm:h-14 sm:w-20 lg:h-16 lg:w-24 object-contain"
-                  />
-                </div>
-                <div className="flex items-center justify-center  transition-colors">
-                  <img
-                    src='/images/3) - Visa-Logo-2014.png'
-                    alt="Visa"
-                    className="h-12 w-16 sm:h-14 sm:w-20 lg:h-16 lg:w-24 object-contain"
-                  />
-                </div>
-                <div className="flex items-center justify-center transition-colors">
-                  <img
-                    src='/images/4) - Mastercard-logo.png'
-                    alt="Mastercard"
-                    className="h-12 w-16 sm:h-14 sm:w-20 lg:h-16 lg:w-24 object-contain"
-                  />
-                </div>
-                <div className="flex items-center justify-center transition-colors">
-                  <img
-                    src='/images/5) - maucas-logo-1024x263.png'
-                    alt="Maucas"
-                    className="h-16 w-20 sm:h-18 sm:w-24 lg:h-20 lg:w-28 object-contain"
-                  />
-                </div>
-               
+              <div className="flex gap-1 sm:gap-2 items-center">
+                <img
+                  src='/images/1) - Juice MCB LOGO.png'
+                  alt="Juice MCB"
+                  className="h-16 sm:h-20 md:h-24 lg:h-28 w-auto object-contain"
+                />
+                <img
+                  src='/images/2) - emtel-blink-logo-500px.png'
+                  alt="Emtel Blink"
+                  className="h-4 sm:h-5 md:h-6 lg:h-8 w-auto object-contain"
+                />
+                <img
+                  src='/images/3) - Visa-Logo-2014.png'
+                  alt="Visa"
+                  className="h-4 sm:h-5 md:h-6 lg:h-8 w-auto object-contain"
+                />
+                <img
+                  src='/images/4) - Mastercard-logo.png'
+                  alt="Mastercard"
+                  className="h-4 sm:h-5 md:h-6 lg:h-8 w-auto object-contain"
+                />
+                <img
+                  src='/images/5) - maucas-logo-1024x263.png'
+                  alt="Maucas"
+                  className="h-5 sm:h-6 md:h-7 lg:h-9 w-auto object-contain"
+                />
               </div>
             </div>
           </div>
