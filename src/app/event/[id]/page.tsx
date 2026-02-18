@@ -686,7 +686,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                 </div>
             </div>
             <div className="w-full flex items-center max-w-7xl mx-auto justify-between my-8">
-                <div className="relative w-[300px] h-[300px]">
+                <Link href="/event/1" className="relative w-[300px] h-[300px] block cursor-pointer">
                     {/* Last Tickets Left tag (1st - Top layer pe) */}
                     <img
                         alt="Last Tickets Left tag"
@@ -702,9 +702,9 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                         className="img-fluid w-[300px] h-[300px] absolute top-0 left-0 z-10"
                         loading="lazy"
                     />
-                </div>
+                </Link>
 
-                <div className="relative w-[300px] h-[300px]">
+                <Link href="/event/2" className="relative w-[300px] h-[300px] block cursor-pointer">
                     {/* Last Tickets Left tag (1st - Top layer pe) */}
                     <img
                         alt="Last Tickets Left tag"
@@ -720,9 +720,9 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                         className="img-fluid w-[300px] h-[300px] absolute top-0 left-0 z-10"
                         loading="lazy"
                     />
-                </div>
+                </Link>
 
-                <div className="relative w-[300px] h-[300px]">
+                <Link href="/event/3" className="relative w-[300px] h-[300px] block cursor-pointer">
                     {/* Last Tickets Left tag (1st - Top layer pe) */}
                     <img
                         alt="Last Tickets Left tag"
@@ -738,7 +738,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                         className="img-fluid w-[300px] h-[300px] absolute top-0 left-0 z-10"
                         loading="lazy"
                     />
-                </div>
+                </Link>
             </div>
             <Footer />
         </>

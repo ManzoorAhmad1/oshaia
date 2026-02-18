@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState, useEffect, useRef } from "react"
+import Link from "next/link"
 
 // Mock data array with images and videos
 const slides = [
@@ -193,14 +194,14 @@ const AllEvents = () => {
                             </button>
                         </div>
                     ) : (
-                        <div className="relative w-full h-full">
+                        <Link href={`/event/${currentSlideData.id}`} className="relative w-full h-full block cursor-pointer">
                             <img
                                 src={currentSlideData.url}
                                 alt={currentSlideData.alt}
                                 className="w-full h-full object-cover"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
-                        </div>
+                        </Link>
                     )}
 
                     {/* Left Arrow */}
