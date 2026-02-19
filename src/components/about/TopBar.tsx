@@ -95,12 +95,12 @@ export default function TopBar() {
             /> EN
           </button>
           <div className="dropdown-menu absolute right-0 mt-2 bg-white shadow-lg rounded-lg hidden">
-            <a href="#" className="dropdown-item flex items-center px-4 py-2 hover:bg-gray-100">
+            <button type="button" className="dropdown-item flex items-center px-4 py-2 hover:bg-gray-100 w-full text-left">
               <img src="https://flagcdn.com/gb.svg" className="lang-flag w-5 me-2" /> English
-            </a>
-            <a href="#" className="dropdown-item flex items-center px-4 py-2 hover:bg-gray-100">
+            </button>
+            <button type="button" className="dropdown-item flex items-center px-4 py-2 hover:bg-gray-100 w-full text-left">
               <img src="https://flagcdn.com/fr.svg" className="lang-flag w-5 me-2" /> Français
-            </a>
+            </button>
           </div>
         </div>
       </div>

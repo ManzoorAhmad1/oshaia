@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { 
   BsShieldCheck, 
   BsLightningCharge, 
@@ -120,9 +121,9 @@ export default function Footer() {
             <ul className="space-y-1 text-sm text-gray-600">
               {categories.map((category) => (
                 <li key={category}>
-                  <a href="#" className="hover:text-[#c89c6b] transition">
+                  <span className="hover:text-[#c89c6b] transition cursor-pointer">
                     {category}
-                  </a>
+                  </span>
                 </li>
               ))}
             </ul>
@@ -134,9 +135,9 @@ export default function Footer() {
             <ul className="space-y-1 text-sm text-gray-600">
               {forOrganizers.map((item) => (
                 <li key={item}>
-                  <a href="#" className="hover:text-[#c89c6b] transition">
+                  <span className="hover:text-[#c89c6b] transition cursor-pointer">
                     {item}
-                  </a>
+                  </span>
                 </li>
               ))}
             </ul>
@@ -148,9 +149,9 @@ export default function Footer() {
             <ul className="space-y-1 text-sm text-gray-600">
               {services.map((service) => (
                 <li key={service}>
-                  <a href="#" className="hover:text-[#c89c6b] transition">
+                  <span className="hover:text-[#c89c6b] transition cursor-pointer">
                     {service}
-                  </a>
+                  </span>
                 </li>
               ))}
             </ul>
@@ -160,12 +161,12 @@ export default function Footer() {
           <div>
             <h6 className="font-semibold text-gray-800 mb-3 uppercase tracking-wide text-sm">{t.needHelp}</h6>
             <p className="text-sm text-gray-600 mb-2">{t.chatWithUs}</p>
-            <a
-              href="#"
+            <button
+              type="button"
               className="flex items-center gap-2 border border-[#c89c6b] text-[#c89c6b] hover:bg-[#c89c6b] hover:text-white text-sm px-3 py-2 rounded-md w-fit transition-all duration-200"
             >
               <RiWhatsappFill /> {t.chatOnline}
-            </a>
+            </button>
             <p className="text-xs text-gray-500 mt-3">{t.weAccept}</p>
             <div className="flex items-center gap-3 text-2xl mt-1">
               <BsApple className="text-black" />
