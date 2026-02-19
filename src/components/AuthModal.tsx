@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { X, Eye, EyeOff } from 'lucide-react';
 import { FcGoogle } from 'react-icons/fc';
 import { useLanguage } from '@/context/LanguageContext';
+import Link from 'next/link';
 
 interface AuthModalProps {
     isOpen: boolean;
@@ -470,13 +471,13 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                 {/* Terms */}
                                 <div className="text-center text-xs text-gray-500">
                                     {t.byContinuing}{' '}
-                                    <a href="/terms" className="text-gray-700 hover:underline">
+                                    <Link href="/terms" className="text-gray-700 hover:underline">
                                         {t.termsOfService}
-                                    </a>
+                                    </Link>
                                     {' '}
-                                    <a href="/privacy" className="text-gray-700 hover:underline">
+                                    <Link href="/privacy" className="text-gray-700 hover:underline">
                                         {t.privacyPolicy}
-                                    </a>
+                                    </Link>
                                 </div>
                             </form>
                         </>
@@ -655,13 +656,13 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                 {/* Terms */}
                                 <div className="text-center text-xs text-gray-500">
                                     {t.byContinuing}{' '}
-                                    <a href="/terms" className="text-gray-700 hover:underline">
+                                    <Link href="/terms" className="text-gray-700 hover:underline">
                                         {t.termsOfService}
-                                    </a>
+                                    </Link>
                                     {' '}
-                                    <a href="/privacy" className="text-gray-700 hover:underline">
+                                    <Link href="/privacy" className="text-gray-700 hover:underline">
                                         {t.privacyPolicy}
-                                    </a>
+                                    </Link>
                                 </div>
                             </form>
                         </>
