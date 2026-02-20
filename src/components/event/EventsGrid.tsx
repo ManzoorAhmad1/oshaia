@@ -185,7 +185,7 @@ export default function EventsGrid() {
 
     return (
         <div className="w-full">
-            <div className="w-full  my-6 overflow-x-auto border-b border-gray-200 bg-[#112b38]">
+            <div className="w-full  my-6 overflow-x-auto border-gray-200 bg-[#112b38]">
                 <div className="flex justify-start sm:justify-center items-center gap-0 min-w-max sm:min-w-0">
                     {categories.map((category, idx) => (
                         <React.Fragment key={category}>

@@ -132,7 +132,7 @@ const BestOfSessassonSlider = () => {
     const currentSlideData = slides[currentSlide]
 
     return (
-        <div className="max-w-full sm:max-w-[1276.7px] h-auto mx-auto mb-0 px-2 sm:px-4">
+        <div className="max-w-full sm:max-w-[1276.7px] h-auto mx-auto mb-6 sm:mb-8 md:mb-10 px-2 sm:px-4">
             <h2 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1 sm:mb-2 lg:mb-3 tracking-tight uppercase">
                 {t.bestOfSeason}
             </h2>

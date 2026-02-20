@@ -20,7 +20,7 @@ const Header = () => {
   ]
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-sm border-b border-border-gray">
+    <header className="sticky top-0 z-50 backdrop-blur-sm border-border-gray">
       <div className="section-container py-2 sm:py-4">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-0">
           {/* Logo */}

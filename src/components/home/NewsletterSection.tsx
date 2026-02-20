@@ -20,7 +20,7 @@ const NewsletterSection = () => {
     }
 
     return (
-        <div className="w-full bg-black h-[121.2px] flex items-center">
+        <div className="w-full bg-black h-[121.2px] flex items-center my-6 sm:my-8 md:my-10">
             <div className="w-full flex items-center justify-around">
                 {/* Title */}
                 <p className="text-2xl text-white">

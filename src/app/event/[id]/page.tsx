@@ -11,7 +11,6 @@ import {
     Ticket
 } from 'lucide-react';
 import { FaFacebook, FaTwitter, FaWhatsapp, FaInstagram, FaGreaterThan } from 'react-icons/fa';
-import AllEvents from '@/components/event/allEvent';
 import TicketHeroSection from '@/components/event/ticketHeroSection';
 import { Text } from 'rizzui/typography';
 import { Footer } from '@/components/home';
@@ -537,7 +536,6 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                     </div>
 
                                     {/* Divider */}
-                                    <hr className="my-5" />
 
                                     {/* Sale + Countdown */}
                                     <div className="flex items-center justify-between bg-blue-50 rounded-lg p-4">

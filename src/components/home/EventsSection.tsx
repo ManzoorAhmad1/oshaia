@@ -110,13 +110,13 @@ const EventsSection = () => {
     : events.filter(event => event.category.toLowerCase() === activeCategory)
 
   return (
-    <section className="mt-0 pb-2 sm:pb-3 md:pb-4">
+    <section className="mt-6 sm:mt-8 md:mt-10 pb-6 sm:pb-8 md:pb-10">
       <div className="">
         {/* Section Title */}
-        <h2 className="section-title text-black my-4">{t.allEvent}</h2>
+        <h2 className="section-title text-black my-4 mb-8">{t.allEvent}</h2>
 
         {/* Category Tabs */}
-        <div className="w-full overflow-x-auto mb-6 sm:mb-8 border-b border-gray-200 bg-[#112b38]">
+        <div className="w-full overflow-x-auto mb-6 sm:mb-8 border-gray-200 bg-[#112b38] py-2">
           <div className="flex justify-start sm:justify-center items-center gap-0 min-w-max sm:min-w-0">
             {categoryKeys.map((category, idx) => (
               <React.Fragment key={category}>
@@ -139,9 +139,9 @@ const EventsSection = () => {
         </div>
 
         {/* Event Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 lg:gap-12 mx-4 sm:mx-8 lg:mx-12 py-8 overflow-visible justify-items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 mx-4 sm:mx-8 lg:mx-12 py-8 overflow-visible justify-items-center">
           {filteredEvents.map((event,index) => (
-            <div key={event.id} className="mb-16 w-full max-w-[380px] h-auto event-card group relative overflow-visible">
+            <div key={event.id} className="mb-12 w-full max-w-[380px] h-auto event-card group relative overflow-visible">
 
               {/* Badge Image at Top Left - Outside the card */}
               <div className="absolute -top-[22px] -left-[30px] w-full h-auto z-30">
@@ -175,7 +175,7 @@ const EventsSection = () => {
                 </div>
 
                 {/* Event Info */}
-                <div className="w-full bg-white flex items-center justify-between border-b border-x rounded-bl-lg rounded-br-lg">
+                <div className="w-full bg-white flex items-center justify-between border-x rounded-bl-lg rounded-br-lg">
                   <div className='flex flex-col pl-3 sm:pl-4 '>
                     <p className="text-xs sm:text-sm font-bold whitespace-nowrap">{event.title}</p>
                     <p className="text-[10px] sm:text-xs text-gray-600">{event.location}</p>

@@ -70,7 +70,7 @@ const PartnersSection = () => {
 
   return (
     <section 
-      className="py-3 sm:py-4 mt-4 sm:mt-5"
+      className="py-6 sm:py-8 md:py-10 mt-6 sm:mt-8 md:mt-10"
       onMouseEnter={() => setIsAutoPlaying(false)}
       onMouseLeave={() => setIsAutoPlaying(true)}
     >
@@ -81,7 +81,7 @@ const PartnersSection = () => {
 
         <div className="relative px-2 sm:px-4 md:px-8 lg:px-12">
           {/* Slider Container */}
-          <div className="overflow-hidden">
+          <div className="overflow-x-hidden overflow-y-visible py-4">
             <motion.div
               className="flex gap-4 md:gap-6 lg:gap-8"
               animate={{ x: `-${(currentIndex * 100) / slidesToShow}%` }}
@@ -93,7 +93,7 @@ const PartnersSection = () => {
                   className="flex-shrink-0"
                   style={{ width: `calc(${100 / slidesToShow}% - ${(4 * (slidesToShow - 1)) / slidesToShow}rem)` }}
                 >
-                  <div className="flex items-center justify-center p-2 sm:p-3 md:p-4 lg:p-6 bg-white border border-gray-200 rounded-lg sm:rounded-xl hover:border-accent-orange hover:shadow-md transition-all duration-300 cursor-pointer h-full">
+                  <div className="flex items-center justify-center p-2 sm:p-3 md:p-4 lg:p-6 bg-white border border-gray-200 rounded-lg sm:rounded-xl hover:border-accent-orange hover:shadow-xl hover:scale-110 transition-all duration-300 cursor-pointer h-full">
                     <div className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24">
                       <Image
                         src={partner.logo}

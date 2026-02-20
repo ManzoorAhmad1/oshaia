@@ -73,7 +73,7 @@ export default function EventCard() {
     };
 
     return (
-        <div className="max-w-full sm:max-w-[914px] h-auto mx-auto mb-2 px-2 sm:px-4 flex gap-2 flex-col gap:8 mt-4 sm:mt-5 lg:mt-6">
+        <div className="max-w-full sm:max-w-[914px] h-auto mx-auto mb-6 sm:mb-8 md:mb-10 px-2 sm:px-4 flex gap-2 flex-col gap:8 mt-6 sm:mt-8 md:mt-10">
             <div className="flex w-full flex-col">
                 <div className="py-2">
                     <p className="text-sm sm:text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 mb-2 sm:mb-4 tracking-tight uppercase">
@@ -99,25 +99,22 @@ export default function EventCard() {
                     <div className="w-full sm:w-1/2 h-auto sm:h-[180px] md:h-[200.1px] flex flex-col justify-between relative pt-6 sm:pt-8 md:pt-10">
                         {/* Timer Loader - Top Right */}
                         <div className="absolute top-0 right-0 w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10">
-                            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                                <path
-                                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                                    fill="none"
-                                    stroke="rgba(0,0,0,0.1)"
-                                    strokeWidth="2"
-                                />
-                                <path
-                                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                                    fill="none"
-                                    stroke="#3b82f6"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeDasharray={`${(timeLeft / 3) * 100}, 100`}
-                                />
+                            <svg className="loader-circle w-full h-full" viewBox="0 0 48 48" onClick={() => setIndex((index + 1) % images.length)}>
+                                <g transform="translate(24, 24)">
+                                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((segmentIndex) => (
+                                        <rect
+                                            key={segmentIndex}
+                                            fill={segmentIndex > (3 - timeLeft) * (10 / 3) ? '#112b38' : 'rgba(17, 43, 56, 0.3)'}
+                                            x="-1.5"
+                                            y="-22"
+                                            width="4.5"
+                                            height="9"
+                                            rx="2"
+                                            transform={`rotate(${(segmentIndex - 1) * 36})`}
+                                        />
+                                    ))}
+                                </g>
                             </svg>
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <span className="text-[10px] sm:text-xs font-bold text-gray-700">{timeLeft}s</span>
-                            </div>
                         </div>
                         {/* Main Content */}
                         <div className="flex flex-col gap-2 sm:gap-3 md:gap-4 mt-2 sm:mt-3 md:mt-4">
