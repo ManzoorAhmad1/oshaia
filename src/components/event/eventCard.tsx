@@ -63,8 +63,8 @@ export default function EventCard({
                         <h3 className="text-lg sm:text-xl lg:text-2xl font-bold uppercase tracking-wide lg:pl-4">{title}</h3>
 
                         {/* Navy Blue Section with Title and Info */}
-                        <div 
-                            className="relative text-white p-3 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 rounded-lg lg:rounded-none overflow-hidden"
+                        <div
+                            className="relative h-[155px] text-white p-3 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 rounded-lg lg:rounded-none overflow-hidden"
                             style={{
                                 backgroundImage: `url(${imageError ? fallbackImage : imageUrl})`,
                                 backgroundSize: 'cover',
@@ -73,7 +73,7 @@ export default function EventCard({
                         >
                             {/* Dark overlay for readability */}
                             <div className="absolute inset-0 bg-[#112b38]/65"></div>
-                            
+
                             <div className="flex-1 relative z-10">
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-2 text-xs sm:text-sm">
@@ -105,7 +105,7 @@ export default function EventCard({
                                 </div>
                             </div>
 
-                            <button className="w-full sm:w-auto py-1.5 sm:py-2 px-3 sm:px-4 rounded-lg font-bold text-xs uppercase tracking-wider bg-[#112b38] text-white hover:bg-[#c89c6b] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+                            <button className="w-[230px] h-[35px] sm:h-[40px] md:h-[45px] bg-transparent border-2 border-[#c89c6b] text-[#c89c6b] px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 md:py-2.5 text-sm sm:text-base md:text-lg uppercase tracking-wider rounded-full hover:bg-[#112b38] hover:text-[#c89c6b] hover:border-[#112b38] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl whitespace-nowrap flex items-center justify-center">
                                 {t.getTicketsHere}
                             </button>
                         </div>

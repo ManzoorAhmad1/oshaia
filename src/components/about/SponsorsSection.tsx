@@ -1,46 +1,128 @@
 'use client';
 
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import { Autoplay } from 'swiper/modules';
+import React, { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 export default function SponsorsSection() {
-  const sponsors = Array.from({ length: 12 }, (_, i) => ({
-    id: i + 1,
-    src: `https://via.placeholder.com/140x70?text=Sponsor+${i + 1}`,
-    alt: `Sponsor ${i + 1}`,
-  }));
+  const sponsors = [
+    { id: 1, name: 'Sponsor 1', logo: '/images/image-1768921181363.png' },
+    { id: 2, name: 'Sponsor 2', logo: '/images/image-1768921181363.png' },
+    { id: 3, name: 'Sponsor 3', logo: '/images/image-1768921181363.png' },
+    { id: 4, name: 'Sponsor 4', logo: '/images/image-1768921181363.png' },
+    { id: 5, name: 'Sponsor 5', logo: '/images/image-1768921181363.png' },
+    { id: 6, name: 'Sponsor 6', logo: '/images/image-1768921181363.png' },
+    { id: 7, name: 'Sponsor 7', logo: '/images/image-1768921181363.png' },
+    { id: 8, name: 'Sponsor 8', logo: '/images/image-1768921181363.png' },
+  ];
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [slidesToShow, setSlidesToShow] = useState(6);
+
+  // Responsive slides calculation
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width >= 1280) setSlidesToShow(6);
+      else if (width >= 1024) setSlidesToShow(5);
+      else if (width >= 768) setSlidesToShow(4);
+      else if (width >= 640) setSlidesToShow(3);
+      else setSlidesToShow(2);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Auto-play functionality
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+
+    const interval = setInterval(() => {
+      nextSlide();
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [isAutoPlaying]);
+
+  const nextSlide = useCallback(() => {
+    setCurrentIndex((prev) => 
+      prev + slidesToShow >= sponsors.length ? 0 : prev + 1
+    );
+  }, [slidesToShow, sponsors.length]);
+
+  const prevSlide = useCallback(() => {
+    setCurrentIndex((prev) => 
+      prev === 0 ? Math.max(0, sponsors.length - slidesToShow) : prev - 1
+    );
+  }, [slidesToShow, sponsors.length]);
 
   return (
-    <section className="bg-white py-8 border-t">
-      <div className="max-w-6xl mx-auto px-6 text-center">
-        <h2 className="text-3xl font-bold text-[#c89c6b] mb-6">Our Sponsors</h2>
-        <div className="px-4">
-          <Swiper
-            modules={[Autoplay]}
-            spaceBetween={30}
-            slidesPerView={5}
-            autoplay={{ delay: 2000 }}
-            loop={true}
-            breakpoints={{
-              320: { slidesPerView: 2 },
-              640: { slidesPerView: 3 },
-              1024: { slidesPerView: 5 },
-            }}
-            className="sponsors-swiper"
-          >
-            {sponsors.map((sponsor) => (
-              <SwiperSlide key={sponsor.id}>
-                <div className="flex justify-center items-center h-full">
-                  <img
-                    src={sponsor.src}
-                    alt={sponsor.alt}
-                    className="h-14 w-auto object-contain grayscale hover:grayscale-0 transition duration-300"
-                  />
+    <section 
+      className="bg-white py-10 mt-6 sm:mt-8 md:mt-10 mb-6 sm:mb-8 md:mb-10"
+      onMouseEnter={() => setIsAutoPlaying(false)}
+      onMouseLeave={() => setIsAutoPlaying(true)}
+    >
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+        <h2 className="text-sm sm:text-xl md:text-2xl lg:text-3xl font-bold text-center text-[#c89c6b] mb-3 sm:mb-4 md:mb-5 lg:mb-6 uppercase tracking-wider">
+          OUR SPONSORS
+        </h2>
+
+        <div className="relative px-2 sm:px-4 md:px-8 lg:px-12">
+          {/* Slider Container */}
+          <div className="overflow-x-hidden overflow-y-visible py-4">
+            <motion.div
+              className="flex gap-4 md:gap-6 lg:gap-8"
+              animate={{ x: `-${(currentIndex * 100) / slidesToShow}%` }}
+              transition={{ type: "tween", duration: 0.5 }}
+            >
+              {[...sponsors, ...sponsors.slice(0, slidesToShow)].map((sponsor, index) => (
+                <div
+                  key={`${sponsor.id}-${index}`}
+                  className="flex-shrink-0"
+                  style={{ width: `calc(${100 / slidesToShow}% - ${(4 * (slidesToShow - 1)) / slidesToShow}rem)` }}
+                >
+                  <Link href={`/event/${sponsor.id}`} className="block h-full">
+                    <div className="flex items-center justify-center p-2 sm:p-3 md:p-4 lg:p-6 bg-white border border-gray-200 rounded-lg sm:rounded-xl hover:border-[#c89c6b] hover:shadow-xl hover:scale-110 transition-all duration-300 cursor-pointer h-full">
+                      <div className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24">
+                        <Image
+                          src={sponsor.logo}
+                          alt={sponsor.name}
+                          fill
+                          className="object-contain opacity-100 hover:opacity-100 transition-opacity duration-300"
+                          sizes="(max-width: 640px) 64px, (max-width: 768px) 80px, 96px"
+                        />
+                      </div>
+                    </div>
+                  </Link>
                 </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Navigation Buttons */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/90 hover:bg-[#c89c6b] hover:text-white p-1 sm:p-1.5 md:p-2 rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 z-10"
+            aria-label="Previous sponsors"
+          >
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          <button
+            onClick={nextSlide}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 bg-white/90 hover:bg-[#c89c6b] hover:text-white p-1 sm:p-1.5 md:p-2 rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 z-10"
+            aria-label="Next sponsors"
+          >
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
         </div>
       </div>
     </section>

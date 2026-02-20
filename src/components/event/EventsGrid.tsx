@@ -184,14 +184,14 @@ export default function EventsGrid() {
         : eventsWithImages.filter(event => event.category === activeCategory);
 
     return (
-        <div className="w-full">
-            <div className="w-full  my-6 overflow-x-auto border-gray-200 bg-[#112b38]">
-                <div className="flex justify-start sm:justify-center items-center gap-0 min-w-max sm:min-w-0">
+        <div className="w-full mb-6 sm:mb-8 md:mb-10">
+            <div className="w-full my-6  sm:my-8 md:my-10 overflow-x-auto border-gray-200 bg-[#112b38]">
+                <div className="flex justify-start sm:justify-center items-center gap-0 min-w-max sm:min-w-0 py-2">
                     {categories.map((category, idx) => (
                         <React.Fragment key={category}>
                             <button
                                 onClick={() => setActiveCategory(category)}
-                                className={`px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 text-xs sm:text-sm md:text-base font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer relative whitespace-nowrap
+                                className={`px-2  sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 text-xs sm:text-sm md:text-base font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer relative whitespace-nowrap
                                     ${activeCategory === category
                                         ? 'text-[#c89c6b]'
                                         : 'text-white hover:text-[#c89c6b]'}
@@ -208,7 +208,7 @@ export default function EventsGrid() {
             </div>
 
             {/* Events List - One card per row */}
-            <div className="w-full space-y-6 flex flex-col items-center">
+            <div className="w-full space-y-6 sm:space-y-8 md:space-y-10 flex flex-col items-center">
                 {filteredEvents.map((event) => (
                     <EventCard
                         key={event.id}
@@ -218,8 +218,8 @@ export default function EventsGrid() {
             </div>
 
             {/* Load More Button */}
-            <div className="text-center mt-6">
-                <button className="bg-transparent border-2 border-[#c89c6b] text-[#c89c6b] px-4 py-1.5 rounded-full font-semibold hover:bg-[#112b38] hover:text-[#c89c6b] hover:border-[#112b38] hover:scale-105 transition-all duration-300 text-sm uppercase tracking-wider shadow-lg hover:shadow-xl">
+            <div className="w-full flex items-center justify-center mt-6 sm:mt-8 md:mt-10">
+                <button className="w-[200px] h-[35px] sm:h-[40px] md:h-[45px] bg-transparent border-2 border-[#c89c6b] text-[#c89c6b] px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 md:py-2.5 text-sm sm:text-base md:text-lg uppercase tracking-wider rounded-full hover:bg-[#112b38] hover:text-[#c89c6b] hover:border-[#112b38] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl whitespace-nowrap flex items-center justify-center">
                     {t.loadMoreEvents}
                 </button>
             </div>

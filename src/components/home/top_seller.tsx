@@ -14,7 +14,7 @@ const images = [
 export default function EventCard() {
     const { t } = useLanguage();
     const [index, setIndex] = useState(0);
-    const [timeLeft, setTimeLeft] = useState(3);
+    const [timeLeft, setTimeLeft] = useState(10);
     const [isPlaying, setIsPlaying] = useState(true);
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
     const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -35,9 +35,9 @@ export default function EventCard() {
 
     const startAutoSlide = () => {
         clearAutoSlide();
-        setTimeLeft(3);
+        setTimeLeft(10);
 
-        // Progress timer (countdown)
+        // Progress timer (countdown) - 300ms per segment
         progressIntervalRef.current = setInterval(() => {
             setTimeLeft(prev => {
                 if (prev <= 1) {
@@ -46,7 +46,7 @@ export default function EventCard() {
                 }
                 return prev - 1;
             });
-        }, 1000);
+        }, 300);
 
         // Slide transition timer
         intervalRef.current = setTimeout(() => {
@@ -104,7 +104,7 @@ export default function EventCard() {
                                     {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((segmentIndex) => (
                                         <rect
                                             key={segmentIndex}
-                                            fill={segmentIndex > (3 - timeLeft) * (10 / 3) ? '#112b38' : 'rgba(17, 43, 56, 0.3)'}
+                                            fill={segmentIndex > (10 - timeLeft) ? '#112b38' : 'rgba(17, 43, 56, 0.3)'}
                                             x="-1.5"
                                             y="-22"
                                             width="4.5"

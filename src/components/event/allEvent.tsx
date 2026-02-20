@@ -129,7 +129,7 @@ const AllEvents = () => {
     const currentSlideData = slides[currentSlide]
 
     return (
-        <div className="max-w-full sm:max-w-[1276.7px] h-auto mx-auto mb-4 px-2 sm:px-4 mt-1">
+        <div className="max-w-full sm:max-w-[1276.7px] h-auto mx-auto mb-6 sm:mb-8 md:mb-10 px-2 sm:px-4 mt-6 sm:mt-8 md:mt-10">
             <h2 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 mb-2 sm:mb-3 lg:mb-4 tracking-tight uppercase">
                 All Event
             </h2>
@@ -140,25 +140,21 @@ const AllEvents = () => {
                     {/* Progress Loader */}
                     <div className="absolute top-2 right-2 sm:top-3 sm:right-3 z-20">
                         <div className="relative w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12">
-                            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                                <path
-                                    d="M18 2.0845
-                    a 15.9155 15.9155 0 0 1 0 31.831
-                    a 15.9155 15.9155 0 0 1 0 -31.831"
-                                    fill="none"
-                                    stroke="rgba(255,255,255,0.2)"
-                                    strokeWidth="3"
-                                />
-                                <path
-                                    d="M18 2.0845
-                    a 15.9155 15.9155 0 0 1 0 31.831
-                    a 15.9155 15.9155 0 0 1 0 -31.831"
-                                    fill="none"
-                                    stroke="white"
-                                    strokeWidth="3"
-                                    strokeLinecap="round"
-                                    strokeDasharray={`${(timeLeft / currentSlideData.duration) * 100}, 100`}
-                                />
+                            <svg className="loader-circle" viewBox="0 0 48 48" onClick={nextSlide}>
+                                <g transform="translate(24, 24)">
+                                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((index) => (
+                                        <rect
+                                            key={index}
+                                            fill={index > (currentSlideData.duration - timeLeft) * (10 / currentSlideData.duration) ? 'white' : 'rgba(255, 255, 255, 0.3)'}
+                                            x="-1.5"
+                                            y="-22"
+                                            width="4.5"
+                                            height="9"
+                                            rx="2"
+                                            transform={`rotate(${(index - 1) * 36})`}
+                                        />
+                                    ))}
+                                </g>
                             </svg>
                         </div>
                     </div>

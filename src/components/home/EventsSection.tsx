@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Calendar, MapPin, Clock } from 'lucide-react'
 import { useLanguage } from '@/context/LanguageContext'
 
@@ -141,7 +142,7 @@ const EventsSection = () => {
         {/* Event Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 mx-4 sm:mx-8 lg:mx-12 py-8 overflow-visible justify-items-center">
           {filteredEvents.map((event,index) => (
-            <div key={event.id} className="mb-12 w-full max-w-[380px] h-auto event-card group relative overflow-visible">
+            <Link key={event.id} href={`/event/${event.id}`} className="mb-12 w-full max-w-[380px] h-auto event-card group relative overflow-visible block cursor-pointer">
 
               {/* Badge Image at Top Left - Outside the card */}
               <div className="absolute -top-[22px] -left-[30px] w-full h-auto z-30">
@@ -186,7 +187,7 @@ const EventsSection = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
         {/* View All Button */}

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const PartnersSection = () => {
@@ -93,17 +94,19 @@ const PartnersSection = () => {
                   className="flex-shrink-0"
                   style={{ width: `calc(${100 / slidesToShow}% - ${(4 * (slidesToShow - 1)) / slidesToShow}rem)` }}
                 >
-                  <div className="flex items-center justify-center p-2 sm:p-3 md:p-4 lg:p-6 bg-white border border-gray-200 rounded-lg sm:rounded-xl hover:border-accent-orange hover:shadow-xl hover:scale-110 transition-all duration-300 cursor-pointer h-full">
-                    <div className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24">
-                      <Image
-                        src={partner.logo}
-                        alt={partner.name}
-                        fill
-                        className="object-contain opacity-100 hover:opacity-100 transition-opacity duration-300"
-                        sizes="(max-width: 640px) 64px, (max-width: 768px) 80px, 96px"
-                      />
+                  <Link href={`/event/${partner.id}`} className="block h-full">
+                    <div className="flex items-center justify-center p-2 sm:p-3 md:p-4 lg:p-6 bg-white border border-gray-200 rounded-lg sm:rounded-xl hover:border-accent-orange hover:shadow-xl hover:scale-110 transition-all duration-300 cursor-pointer h-full">
+                      <div className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24">
+                        <Image
+                          src={partner.logo}
+                          alt={partner.name}
+                          fill
+                          className="object-contain opacity-100 hover:opacity-100 transition-opacity duration-300"
+                          sizes="(max-width: 640px) 64px, (max-width: 768px) 80px, 96px"
+                        />
+                      </div>
                     </div>
-                  </div>
+                  </Link>
                 </div>
               ))}
             </motion.div>
