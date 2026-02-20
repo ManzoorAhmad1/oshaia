@@ -11,29 +11,29 @@ const slides = [
         type: "image",
         url: "/images/BANNER - SAMPLE/fire-horse-grid-1 1090x1080.jpg",
         alt: "Festival Crowd",
-        duration: 5,
+        duration: 6,
     },
     {
         id: 2,
         type: "image",
         url: "/images/BANNER - SAMPLE/Home Page Carousel.jpg",
         alt: "Concert Performance",
-        duration: 5,
+        duration: 6,
     },
-    
+
     {
         id: 4,
         type: "image",
         url: "/images/BANNER - SAMPLE/Video For Carousel and Main Event(Where Choose Tickets Or Seats)1.jpg",
         alt: "DJ Performance",
-        duration: 5,
+        duration: 6,
     },
     {
         id: 5,
         type: "image",
         url: "/images/BANNER - SAMPLE/Video For Carousel and Main Event(Where Choose Tickets Or Seats)2.jpg",
         alt: "Dance Performance",
-        duration: 5,
+        duration: 6,
     }
 ]
 
@@ -143,25 +143,21 @@ const BestOfSessassonSlider = () => {
                     {/* Progress Loader */}
                     <div className="absolute top-2 right-2 sm:top-3 sm:right-3 z-20">
                         <div className="relative w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12">
-                            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                                <path
-                                    d="M18 2.0845
-                    a 15.9155 15.9155 0 0 1 0 31.831
-                    a 15.9155 15.9155 0 0 1 0 -31.831"
-                                    fill="none"
-                                    stroke="rgba(255,255,255,0.2)"
-                                    strokeWidth="3"
-                                />
-                                <path
-                                    d="M18 2.0845
-                    a 15.9155 15.9155 0 0 1 0 31.831
-                    a 15.9155 15.9155 0 0 1 0 -31.831"
-                                    fill="none"
-                                    stroke="white"
-                                    strokeWidth="3"
-                                    strokeLinecap="round"
-                                    strokeDasharray={`${(timeLeft / currentSlideData.duration) * 100}, 100`}
-                                />
+                            <svg className="loader-circle" viewBox="0 0 48 48" onClick={nextSlide}>
+                                <g transform="translate(24, 24)">
+                                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((index) => (
+                                        <rect
+                                            key={index}
+                                            fill={index > (currentSlideData.duration - timeLeft) * (10 / currentSlideData.duration) ? 'white' : 'rgba(255, 255, 255, 0.3)'}
+                                            x="-1.5"
+                                            y="-22"
+                                            width="4.5"
+                                            height="9"
+                                            rx="2"
+                                            transform={`rotate(${(index - 1) * 36})`}
+                                        />
+                                    ))}
+                                </g>
                             </svg>
                         </div>
                     </div>
@@ -179,7 +175,7 @@ const BestOfSessassonSlider = () => {
                                 playsInline
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                            
+
                             {/* Mute Button - Only for videos */}
                             <button
                                 onClick={toggleMute}
@@ -226,11 +222,11 @@ const BestOfSessassonSlider = () => {
                         onClick={nextSlide}
                         className="absolute right-1 sm:right-2 md:right-4 lg:right-6 top-[40%] p-1 sm:p-2 z-10"
                     >
-                         <img
-                                src='/images/left-chevron.png'
-                                alt='slider button images'
-                                className="w-[24px] h-[16px] sm:w-[30px] sm:h-[20px] lg:w-[36.5px] lg:h-[24.8px] object-cover rotate-180"
-                            />
+                        <img
+                            src='/images/left-chevron.png'
+                            alt='slider button images'
+                            className="w-[24px] h-[16px] sm:w-[30px] sm:h-[20px] lg:w-[36.5px] lg:h-[24.8px] object-cover rotate-180"
+                        />
                     </button>
 
                     {/* Dotted Navigation - Bottom Center */}
@@ -239,11 +235,10 @@ const BestOfSessassonSlider = () => {
                             <button
                                 key={index}
                                 onClick={() => goToSlide(index)}
-                                className={`transition-all duration-300 ${
-                                    currentSlide === index 
-                                        ? 'w-6 sm:w-8 h-1.5 sm:h-2 bg-white rounded-full' 
+                                className={`transition-all duration-300 ${currentSlide === index
+                                        ? 'w-6 sm:w-8 h-1.5 sm:h-2 bg-white rounded-full'
                                         : 'w-2 sm:w-3 h-1.5 sm:h-2 bg-white/60 rounded-full hover:bg-white/80'
-                                }`}
+                                    }`}
                                 aria-label={`Go to slide ${index + 1}`}
                             />
                         ))}

@@ -77,7 +77,7 @@ export default function TopBar() {
         <Link href="/account" className="text-gray-800 font-semibold flex items-center">
           <BiCalendarEvent className="mr-1" /> My Account
         </Link>
-        <button className="btn-signup bg-transparent border-2 border-[#112b38] text-[#112b38] py-2 px-5 rounded-full font-semibold hover:bg-[#c89c6b] hover:text-[#112b38] hover:border-[#c89c6b] transition-all duration-300">
+        <button className="btn-signup bg-transparent border-2 border-[#112b38] text-[#112b38] py-1 px-3 rounded-full font-semibold hover:bg-[#c89c6b] hover:text-[#112b38] hover:border-[#c89c6b] transition-all duration-300">
           Sign Up
         </button>
         <Link href="/cart" className="text-gray-800 relative">
@@ -95,11 +95,11 @@ export default function TopBar() {
             /> EN
           </button>
           <div className="dropdown-menu absolute right-0 mt-2 bg-white shadow-lg rounded-lg hidden">
-            <button type="button" className="dropdown-item flex items-center px-4 py-2 hover:bg-gray-100 w-full text-left">
-              <img src="https://flagcdn.com/gb.svg" className="lang-flag w-5 me-2" /> English
+            <button type="button" className="dropdown-item flex items-center px-2 py-1 hover:bg-gray-100 w-full text-left text-sm">
+              <img src="https://flagcdn.com/gb.svg" className="lang-flag w-4 me-2" /> English
             </button>
-            <button type="button" className="dropdown-item flex items-center px-4 py-2 hover:bg-gray-100 w-full text-left">
-              <img src="https://flagcdn.com/fr.svg" className="lang-flag w-5 me-2" /> Français
+            <button type="button" className="dropdown-item flex items-center px-2 py-1 hover:bg-gray-100 w-full text-left text-sm">
+              <img src="https://flagcdn.com/fr.svg" className="lang-flag w-4 me-2" /> Français
             </button>
           </div>
         </div>

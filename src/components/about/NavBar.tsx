@@ -11,7 +11,7 @@ interface NavBarProps {
 export default function NavBar({ activeLink, setActiveLink }: NavBarProps) {
   const links = [
     { id: 'home', label: 'Home', href: '/', icon: <BiHome /> },
-    { id: 'events', label: 'Events', href: '/events' },
+    { id: 'events', label: 'Events', href: '/event' },
     { id: 'about', label: 'About Us', href: '/about' },
     { id: 'help', label: 'Help Center', href: '/help' },
   ];

@@ -14,7 +14,7 @@ const Header = () => {
   const router=useRouter()
   const navLinks = [
     { name: 'HOME', href: '/', active: true },
-    { name: 'EVENTS', href: '/events', active: false },
+    { name: 'EVENTS', href: '/event', active: false },
     { name: 'ABOUT', href: '/about', active: false },
     { name: 'HELP CENTER', href: '/help', active: false },
   ]
@@ -103,7 +103,7 @@ const Header = () => {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`px-4 py-3 hover:bg-white/10 rounded-lg transition-colors ${
+                  className={`px-3 py-1.5 hover:bg-white/10 rounded-lg transition-colors text-sm ${
                     link.active ? 'text-accent-orange' : 'text-white'
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -113,7 +113,7 @@ const Header = () => {
               ))}
               <div className="flex flex-col space-y-2 pt-4 border-t border-border-gray">
                 <button 
-                  className="w-full bg-transparent border-2 border-[#112b38] text-[#112b38] rounded-full hover:bg-[#c89c6b] hover:text-[#112b38] hover:border-[#c89c6b] transition-all duration-300 px-4 py-3"
+                  className="w-full bg-transparent border-2 border-[#112b38] text-[#112b38] rounded-full hover:bg-[#c89c6b] hover:text-[#112b38] hover:border-[#c89c6b] transition-all duration-300 px-3 py-1.5 text-sm"
                   onClick={() => {
                     setAuthMode('signup')
                     setIsAuthModalOpen(true)
@@ -123,7 +123,7 @@ const Header = () => {
                   Register
                 </button>
                 <button 
-                  className="px-4 py-3 bg-transparent border-2 border-[#c89c6b] text-[#c89c6b] rounded-full hover:bg-[#112b38] hover:text-[#c89c6b] hover:border-[#112b38] transition-all duration-300"
+                  className="px-3 py-1.5 bg-transparent border-2 border-[#c89c6b] text-[#c89c6b] rounded-full hover:bg-[#112b38] hover:text-[#c89c6b] hover:border-[#112b38] transition-all duration-300 text-sm"
                   onClick={() => {
                     setAuthMode('login')
                     setIsAuthModalOpen(true)

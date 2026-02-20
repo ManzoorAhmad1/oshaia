@@ -162,11 +162,11 @@ export default function EventCard() {
                     </div>
                 </div>
             </div>
-            <Link href="/event/3" className="max-w-full sm:max-w-[914px] h-auto rounded-lg overflow-hidden mt-10 block cursor-pointer">
+            <Link href="/event/3" className="max-w-full sm:max-w-[914px] h-[200px] rounded-lg overflow-hidden mt-10 block cursor-pointer">
                 <img
                     src='https://images.unsplash.com/photo-1521334884684-d80222895322?q=80&w=800'
                     alt="Event"
-                    className="w-full h-32 sm:h-[100px] md:h-[109.31px] object-cover transition-all duration-500 rounded-lg"
+                    className="w-full h-[200px] object-cover transition-all duration-500 rounded-lg"
                 />
             </Link>
             <div className="w-full flex items-center justify-end">

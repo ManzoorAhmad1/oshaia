@@ -7,7 +7,7 @@ import { useLanguage } from '@/context/LanguageContext'
 
 const EventsSection = () => {
   const { t } = useLanguage()
-  const [activeCategory, setActiveCategory] = useState('ALL')
+  const [activeCategory, setActiveCategory] = useState('all')
 
   // Category keys mapping to translations
   const categoryKeys = ['all', 'concert', 'festival', 'conferences', 'show', 'sport'] as const
@@ -30,8 +30,9 @@ const EventsSection = () => {
       image: '/images/BANNER - SAMPLE/fire-horse-grid-1 1090x1080.jpg',
       title: 'Night Concert Live',
       category: 'CONCERT',
-      date: '25 JAN 2026',
-      time: '8:00 PM',
+      day: '25',
+      month: 'Jan',
+      year: '2026',
       location: 'Dubai Arena',
       price: 'AED 299',
       badge: 'TRENDING',
@@ -42,8 +43,9 @@ const EventsSection = () => {
       image: '/images/BANNER - SAMPLE/Home Page Carousel.jpg',
       title: 'The First Ever',
       category: 'FESTIVAL',
-      date: '15 FEB 2026',
-      time: '6:00 PM',
+      day: '15',
+      month: 'Feb',
+      year: '2026',
       location: 'Festival City',
       price: 'AED 199',
       badge: 'HOT',
@@ -54,8 +56,9 @@ const EventsSection = () => {
       image: '/images/BANNER - SAMPLE/Video For Carousel and Main Event(Where Choose Tickets Or Seats)1.jpg',
       title: 'Antalay Championship',
       category: 'SPORT',
-      date: '10 MAR 2026',
-      time: '7:00 PM',
+      day: '10',
+      month: 'Mar',
+      year: '2026',
       location: 'Sports Complex',
       price: 'AED 399',
       badge: 'NEW',
@@ -66,8 +69,9 @@ const EventsSection = () => {
       image: '/images/BANNER - SAMPLE/Video For Carousel and Main Event(Where Choose Tickets Or Seats)2.jpg',
       title: 'Summer Music Fest',
       category: 'CONCERT',
-      date: '20 APR 2026',
-      time: '9:00 PM',
+      day: '20',
+      month: 'Apr',
+      year: '2026',
       location: 'Beach Arena',
       price: 'AED 249',
       badge: '',
@@ -78,8 +82,9 @@ const EventsSection = () => {
       image: '/images/BANNER - SAMPLE/fire-horse-grid-1 1090x1080.jpg',
       title: 'Tech Conference 2026',
       category: 'CONFERENCES',
-      date: '05 MAY 2026',
-      time: '10:00 AM',
+      day: '05',
+      month: 'May',
+      year: '2026',
       location: 'Convention Center',
       price: 'AED 499',
       badge: 'NEW',
@@ -90,8 +95,9 @@ const EventsSection = () => {
       image: '/images/BANNER - SAMPLE/Home Page Carousel.jpg',
       title: 'Comedy Night Show',
       category: 'SHOW',
-      date: '18 MAY 2026',
-      time: '8:30 PM',
+      day: '18',
+      month: 'May',
+      year: '2026',
       location: 'Theater Hall',
       price: 'AED 149',
       badge: '',
@@ -116,7 +122,7 @@ const EventsSection = () => {
               <React.Fragment key={category}>
                 <button
                   onClick={() => setActiveCategory(category)}
-                  className={`px-3 sm:px-6 md:px-8 py-2 sm:py-3 md:py-4 text-xs sm:text-base md:text-lg font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer relative whitespace-nowrap
+                  className={`px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 text-xs sm:text-sm md:text-base font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer relative whitespace-nowrap
                         ${activeCategory === category
                       ? 'text-[#c89c6b]'
                       : 'text-white hover:text-accent-orange'}
@@ -133,31 +139,39 @@ const EventsSection = () => {
         </div>
 
         {/* Event Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 mx-20 py-4 overflow-visible justify-items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 lg:gap-12 mx-4 sm:mx-8 lg:mx-12 py-8 overflow-visible justify-items-center">
           {filteredEvents.map((event,index) => (
-            <div key={event.id} className="  mb-12 w-[400px] h-auto event-card group relative overflow-visible">
+            <div key={event.id} className="mb-16 w-full max-w-[380px] h-auto event-card group relative overflow-visible">
 
               {/* Badge Image at Top Left - Outside the card */}
-              <div className="absolute -top-[43px] -left-[36px] w-[400px] h-auto z-30">
+              <div className="absolute -top-[22px] -left-[30px] w-full h-auto z-30">
                 <img
                   src={`/images/LOGO TAG/${index + 1}.png`}
                   alt="Badge"
-                  className="w-[170px] h-auto object-contain"
+                  className="w-[150px] h-auto object-contain"
                 />
               </div>
 
               {/* Main Content */}
-              <div className="relative z-10 overflow-hidden rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg bg-white">
+              <div className="relative z-10 overflow-hidden rounded-2xl shadow-xl bg-white">
                 {/* Event Image */}
-                <div className="relative w-[400px] h-[400px] overflow-hidden">
+                <div className="relative w-full aspect-square overflow-hidden">
                   <Image
                     src={event.image}
                     alt={event.title}
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-500"
-                    sizes="400px"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     priority={event.id <= 3}
                   />
+                  
+                  {/* Date Badge */}
+                  <div className="absolute top-3 right-3 bg-white rounded-xl shadow-lg overflow-hidden z-20 px-4 py-2">
+                    <div className="flex items-center gap-2">
+                      <div className="text-lg sm:text-xl font-bold text-[#112b38] leading-none">{event.day}</div>
+                      <div className="text-sm sm:text-base font-bold text-[#112b38] uppercase">{event.month}</div>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Event Info */}
@@ -177,7 +191,7 @@ const EventsSection = () => {
         </div>
         {/* View All Button */}
         <div className="w-full flex items-center justify-center mt-2 sm:mt-3 md:mt-4">
-          <button className="w-full max-w-[365.4px] h-[60px] sm:h-[70px] md:h-[76.3px] bg-transparent border-2 border-[#c89c6b] text-[#c89c6b] px-8 sm:px-10 md:px-12 py-3 sm:py-3.5 md:py-4 text-base sm:text-lg md:text-[21.8px] uppercase tracking-wider rounded-full hover:bg-[#112b38] hover:text-[#c89c6b] hover:border-[#112b38] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+          <button className="w-[200px] h-[35px] sm:h-[40px] md:h-[45px] bg-transparent border-2 border-[#c89c6b] text-[#c89c6b] px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 md:py-2.5 text-sm sm:text-base md:text-lg uppercase tracking-wider rounded-full hover:bg-[#112b38] hover:text-[#c89c6b] hover:border-[#112b38] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl whitespace-nowrap flex items-center justify-center">
             {t.viewAllEvent}
           </button>
         </div>

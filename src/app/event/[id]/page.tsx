@@ -254,7 +254,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                 <div className="flex items-center gap-8 px-4 sm:px-6">
                                     <button
                                         onClick={() => setActiveTab('tickets')}
-                                        className={`py-4 text-base sm:text-lg font-bold relative transition-colors ${activeTab === 'tickets'
+                                        className={`py-2 text-sm sm:text-base font-bold relative transition-colors ${activeTab === 'tickets'
                                             ? 'text-[#112b38]'
                                             : 'text-gray-400 hover:text-[#c89c6b]'
                                             }`}
@@ -266,7 +266,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                     </button>
                                     <button
                                         onClick={() => setActiveTab('description')}
-                                        className={`py-4 text-base sm:text-base relative transition-colors ${activeTab === 'description'
+                                        className={`py-2 text-sm sm:text-base relative transition-colors ${activeTab === 'description'
                                             ? 'text-[#112b38]'
                                             : 'text-gray-400 hover:text-[#c89c6b]'
                                             }`}
@@ -278,7 +278,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                     </button>
                                     <button
                                         onClick={() => setActiveTab('moreInfo')}
-                                        className={`py-4 text-base sm:text-lg font-bold relative transition-colors ${activeTab === 'moreInfo'
+                                        className={`py-2 text-sm sm:text-base font-bold relative transition-colors ${activeTab === 'moreInfo'
                                             ? 'text-[#112b38]'
                                             : 'text-gray-400 hover:text-[#c89c6b]'
                                             }`}
@@ -314,20 +314,20 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                 </div>
 
                                                 <div className="flex items-center gap-3">
-                                                    <button className="w-10 h-10 rounded-full bg-[#112b38] flex items-center justify-center hover:bg-[#c89c6b] hover:scale-110 transition-all duration-300">
+                                                    <button className="w-6 h-6 rounded-full bg-[#112b38] flex items-center justify-center hover:bg-[#c89c6b] hover:scale-110 transition-all duration-300">
                                                         <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                                                         </svg>
                                                     </button>
 
                                                     <div className="flex items-center gap-2">
-                                                        <button className="w-10 h-10 border-2 border-gray-300 rounded flex items-center justify-center hover:bg-[#112b38] hover:text-white hover:border-[#112b38] transition-all duration-300 text-gray-700 font-bold text-xl">
+                                                        <button className="w-6 h-6 border-2 border-gray-300 rounded flex items-center justify-center hover:bg-[#112b38] hover:text-white hover:border-[#112b38] transition-all duration-300 text-gray-700 font-bold text-base">
                                                             -
                                                         </button>
                                                         <div className="w-12 text-center font-semibold text-lg">
                                                             0
                                                         </div>
-                                                        <button className="w-10 h-10 border-2 border-[#c89c6b] text-[#c89c6b] rounded flex items-center justify-center hover:bg-[#c89c6b] hover:text-white transition-all duration-300 font-bold text-xl">
+                                                        <button className="w-6 h-6 border-2 border-[#c89c6b] text-[#c89c6b] rounded flex items-center justify-center hover:bg-[#c89c6b] hover:text-white transition-all duration-300 font-bold text-base">
                                                             +
                                                         </button>
                                                     </div>
@@ -337,7 +337,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                     </div>
 
                                     {selectedTicket && (
-                                        <button className="w-full mt-6 bg-[#112b38] hover:bg-[#c89c6b] text-white py-4 rounded-xl font-bold text-base sm:text-lg transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl">
+                                        <button className="w-full mt-6 bg-[#112b38] hover:bg-[#c89c6b] text-white py-2.5 rounded-xl font-bold text-sm sm:text-base transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl">
                                             {t.bookNow}
                                         </button>
                                     )}
@@ -574,7 +574,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                             <p className="text-xl font-bold text-red-500">Rs 0</p>
                                         </div>
 
-                                        <button className="bg-[#c89c6b] hover:bg-[#b8885a] text-white font-semibold px-8 py-3 rounded-md transition-all duration-300 hover:scale-105 shadow-md hover:shadow-lg">
+                                        <button className="bg-[#c89c6b] hover:bg-[#b8885a] text-white font-semibold px-4 py-1.5 rounded-md transition-all duration-300 hover:scale-105 shadow-md hover:shadow-lg">
                                             {t.bookNow}
                                         </button>
                                     </div>
@@ -614,7 +614,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         ❤️
                                     </button>
 
-                                    <button className="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center hover:bg-[#c89c6b] hover:text-white hover:border-[#c89c6b] transition-all duration-300">
+                                    <button className="w-5 h-5 rounded-full border border-gray-200 flex items-center justify-center hover:bg-[#c89c6b] hover:text-white hover:border-[#c89c6b] transition-all duration-300">
                                         ▶
                                     </button>
                                 </div>
@@ -641,7 +641,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         ❤️
                                     </button>
 
-                                    <button className="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center hover:bg-[#c89c6b] hover:text-white hover:border-[#c89c6b] transition-all duration-300">
+                                    <button className="w-5 h-5 rounded-full border border-gray-200 flex items-center justify-center hover:bg-[#c89c6b] hover:text-white hover:border-[#c89c6b] transition-all duration-300">
                                         ▶
                                     </button>
                                 </div>
@@ -668,7 +668,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         ❤️
                                     </button>
 
-                                    <button className="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center hover:bg-[#c89c6b] hover:text-white hover:border-[#c89c6b] transition-all duration-300">
+                                    <button className="w-5 h-5 rounded-full border border-gray-200 flex items-center justify-center hover:bg-[#c89c6b] hover:text-white hover:border-[#c89c6b] transition-all duration-300">
                                         ▶
                                     </button>
                                 </div>

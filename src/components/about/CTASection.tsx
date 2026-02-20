@@ -15,7 +15,7 @@ export default function CTASection() {
         {t.experienceEasiest}
       </p>
       <Link
-        href="/events"
+        href="/event"
         className="inline-block bg-white text-[#c89c6b] px-6 py-2 rounded-lg font-semibold hover:bg-gray-100 transition"
       >
         {t.browseEvents}

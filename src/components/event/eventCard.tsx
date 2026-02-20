@@ -105,7 +105,7 @@ export default function EventCard({
                                 </div>
                             </div>
 
-                            <button className="w-full sm:w-auto  py-2.5 sm:py-3 px-6 sm:px-8 rounded-lg font-bold text-xs sm:text-sm uppercase tracking-wider bg-[#112b38] text-white hover:bg-[#c89c6b] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+                            <button className="w-full sm:w-auto py-1.5 sm:py-2 px-3 sm:px-4 rounded-lg font-bold text-xs uppercase tracking-wider bg-[#112b38] text-white hover:bg-[#c89c6b] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
                                 {t.getTicketsHere}
                             </button>
                         </div>

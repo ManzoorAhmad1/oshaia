@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { MessageCircle, CreditCard, Headphones, Ticket, Calendar, Users, Shield, Smartphone } from 'lucide-react'
 import { FaLocationDot } from "react-icons/fa6";
 import { Text } from 'rizzui/typography';
-import { FaPhoneAlt } from 'react-icons/fa';
+import { FaPhoneAlt, FaFacebook, FaTwitter, FaInstagram, FaPinterest, FaYoutube } from 'react-icons/fa';
 import { TfiEmail } from "react-icons/tfi";
 import { useLanguage } from '@/context/LanguageContext'
 
@@ -19,137 +19,19 @@ const Footer = () => {
     setEmail('')
   }
 
+  const socialLinks = [
+    { name: 'Facebook', icon: FaFacebook, url: '#' },
+    { name: 'Twitter', icon: FaTwitter, url: '#' },
+    { name: 'Instagram', icon: FaInstagram, url: '#' },
+    { name: 'Pinterest', icon: FaPinterest, url: '#' },
+    { name: 'YouTube', icon: FaYoutube, url: '#' },
+  ]
+
   return (
-    <footer className="w-full bg-white border-t border-gray-200">
-      <div className="max-w-6xl mx-auto">
-        {/* Top Section with 4 Columns */}
-        <div className="pt-4 sm:pt-6 md:pt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-10 xl:gap-12 mb-4 sm:mb-6 md:mb-8">
-
-          {/* Categories Column */}
-          <div>
-            <h3 className="text-black font-bold text-sm sm:text-base md:text-lg mb-3 sm:mb-4 md:mb-5 uppercase tracking-wider">{t.categories}</h3>
-            <ul className="space-y-2 sm:space-y-3">
-              <li>
-                <Link href="/concerts" className="text-blue-500 hover:text-[#c89c6b] transition-colors text-xs sm:text-sm">
-                  {t.concerts}
-                </Link>
-              </li>
-              <li>
-                <Link href="/festivals" className="text-blue-500 hover:text-[#c89c6b] transition-colors text-xs sm:text-sm">
-                  {t.festivals}
-                </Link>
-              </li>
-              <li>
-                <Link href="/clubbing" className="text-blue-500 hover:text-[#c89c6b] transition-colors text-xs sm:text-sm">
-                  {t.clubbing}
-                </Link>
-              </li>
-              <li>
-                <Link href="/theatre" className="text-blue-500 hover:text-[#c89c6b] transition-colors text-xs sm:text-sm">
-                  {t.theatre}
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* For Organisers Column */}
-          <div>
-            <h3 className="text-black font-bold text-sm sm:text-base md:text-lg mb-3 sm:mb-4 md:mb-5 uppercase tracking-wider">{t.forOrganisers}</h3>
-            <ul className="space-y-2 sm:space-y-3">
-              <li>
-                <Link href="/event-management" className="text-blue-500 hover:text-[#c89c6b] transition-colors text-sm">
-                  {t.eventManagement}
-                </Link>
-              </li>
-              <li>
-                <Link href="/ticketing-services" className="text-blue-500 hover:text-[#c89c6b] transition-colors text-sm">
-                  {t.ticketingServices}
-                </Link>
-              </li>
-              <li>
-                <Link href="/marketing" className="text-blue-500 hover:text-[#c89c6b] transition-colors text-sm">
-                  {t.marketing}
-                </Link>
-              </li>
-              <li>
-                <Link href="/add-event" className="text-blue-500 hover:text-[#c89c6b] transition-colors text-sm">
-                  {t.addEvent}
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Services Column */}
-          <div>
-            <h3 className="text-black font-bold text-sm sm:text-base md:text-lg mb-3 sm:mb-4 md:mb-5 uppercase tracking-wider">{t.services}</h3>
-            <ul className="space-y-2 sm:space-y-3">
-              <li>
-                <Link href="/customer-support" className="text-blue-500 hover:text-[#c89c6b] transition-colors text-sm">
-                  {t.customerSupport}
-                </Link>
-              </li>
-              <li>
-                <Link href="/payment-methods" className="text-blue-500 hover:text-[#c89c6b] transition-colors text-sm">
-                  {t.paymentMethods}
-                </Link>
-              </li>
-              <li>
-                <Link href="/venue-ticketing" className="text-blue-500 hover:text-[#c89c6b] transition-colors text-sm">
-                  {t.venueTicketing}
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Need Help Column */}
-          <div className="space-y-4 sm:space-y-5 md:space-y-6">
-            <h3 className="text-black font-bold text-sm sm:text-base md:text-lg mb-3 sm:mb-4 md:mb-5 uppercase tracking-wider">{t.needHelp}</h3>
-
-            {/* Chat Online Section */}
-            <div className="space-y-3 sm:space-y-4">
-              <div className="text-blue-500 text-xs sm:text-sm font-medium">{t.chatWithUs}</div>
-              <button className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-[#c89c6b] text-white rounded-lg hover:bg-[#b8885a] hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg text-sm">
-                <MessageCircle className="w-4 h-4 flex-shrink-0" />
-                <span>{t.chatOnline}</span>
-              </button>
-            </div>
-
-            {/* We Accept Section */}
-            <div className="space-y-2">
-              <div className="text-blue-500 text-sm sm:text-base font-medium">{t.weAccept}</div>
-              <div className="flex gap-1 sm:gap-2 items-center">
-                <img
-                  src='/images/1) - Juice MCB LOGO.png'
-                  alt="Juice MCB"
-                  className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto object-contain"
-                />
-                <img
-                  src='/images/2) - emtel-blink-logo-500px.png'
-                  alt="Emtel Blink"
-                  className="h-3 sm:h-4 md:h-5 lg:h-6 w-auto object-contain"
-                />
-                <img
-                  src='/images/3) - Visa-Logo-2014.png'
-                  alt="Visa"
-                  className="h-3 sm:h-4 md:h-5 lg:h-6 w-auto object-contain"
-                />
-                <img
-                  src='/images/4) - Mastercard-logo.png'
-                  alt="Mastercard"
-                  className="h-3 sm:h-4 md:h-5 lg:h-6 w-auto object-contain"
-                />
-                <img
-                  src='/images/5) - maucas-logo-1024x263.png'
-                  alt="Maucas"
-                  className="h-4 sm:h-5 md:h-6 lg:h-7 w-auto object-contain"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <footer className="w-full bg-white">
       <div className='w-full'>
-        <div className='w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 py-4 sm:py-6 lg:py-8 mt-4 bg-[#f5f5f8] px-4 sm:px-8 md:px-16 lg:px-28 xl:px-44'>
+        {/* Contact Info Bar */}
+        <div className='w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 py-4 sm:py-6 lg:py-8 bg-[#f5f5f8] px-4 sm:px-8 md:px-16 lg:px-28 xl:px-44'>
           <div className='flex gap-2 sm:gap-3 items-center justify-center sm:justify-start'>
             <FaLocationDot className='text-orange-500 flex-shrink-0 text-base sm:text-lg' />
             <Text className='text-xs sm:text-sm md:text-base'>Maxuel street, Frankfurt 2589 Germany</Text>
@@ -163,15 +45,77 @@ const Footer = () => {
             <Text className='text-xs sm:text-sm md:text-base'>needhelp@gmail.com</Text>
           </div>
         </div>
-        <div className="py-3 sm:py-4 border-t border-gray-300 text-center bg-black text-white w-full">
-          <div className="text-gray-400 text-[10px] sm:text-xs md:text-sm px-4">
-            © {new Date().getFullYear()} Platinumlist. {t.allRightsReserved}.
-            <span className="hidden sm:inline"> | </span>
-            <span className="block sm:inline mt-1 sm:mt-0">
-              <Link href="/terms" className="hover:text-[#c89c6b] transition-colors">{t.termsConditions}</Link>
-              <span className="mx-1 sm:mx-2">|</span>
-              <Link href="/privacy" className="hover:text-[#c89c6b] transition-colors">{t.privacyPolicy}</Link>
-            </span>
+
+        {/* Payment Methods Section */}
+        <div className="w-full bg-white py-4 sm:py-5 md:py-6">
+          <div className="text-center">
+            <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-3 sm:mb-4">OUR PAYMENT METHODS</div>
+            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-8 px-4">
+              <div className="flex gap-1 sm:gap-2 items-center">
+                <img
+                  src='/images/1) - Juice MCB LOGO.png'
+                  alt="Juice MCB"
+                  className="h-16 sm:h-20 md:h-24 lg:h-28 w-auto object-contain"
+                />
+                <img
+                  src='/images/2) - emtel-blink-logo-500px.png'
+                  alt="Emtel Blink"
+                  className="h-4 sm:h-5 md:h-6 lg:h-8 w-auto object-contain"
+                />
+                <img
+                  src='/images/3) - Visa-Logo-2014.png'
+                  alt="Visa"
+                  className="h-4 sm:h-5 md:h-6 lg:h-8 w-auto object-contain"
+                />
+                <img
+                  src='/images/4) - Mastercard-logo.png'
+                  alt="Mastercard"
+                  className="h-4 sm:h-5 md:h-6 lg:h-8 w-auto object-contain"
+                />
+                <img
+                  src='/images/5) - maucas-logo-1024x263.png'
+                  alt="Maucas"
+                  className="h-5 sm:h-6 md:h-7 lg:h-9 w-auto object-contain"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Keep in Touch Section */}
+        <div className="w-full bg-white py-4 sm:py-5 md:py-6 border-t border-gray-200">
+          <div className="text-center">
+            <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-3 sm:mb-4">KEEP IN TOUCH</div>
+            <div className="flex items-center justify-center gap-4 sm:gap-5 md:gap-6 px-4">
+              {socialLinks.map((social) => (
+                <Link 
+                  key={social.name} 
+                  href={social.url}
+                  className="text-black hover:text-[#c89c6b] transition-colors"
+                  aria-label={social.name}
+                >
+                  <social.icon className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Copyright Section */}
+        <div className="py-4 sm:py-5 md:py-6 bg-white border-t border-gray-200">
+          <div className="text-center px-4">
+            <p className="text-gray-700 text-xs sm:text-sm md:text-base mb-3 sm:mb-4">
+              <span className="font-semibold">Copyright © {new Date().getFullYear()} Ticketbox.mu, TICKETBOX MAURITIUS LTD.</span> All rights reserved. BRN: C1816081 | OTO: 14910.
+            </p>
+            <div className="flex items-center justify-center gap-3 sm:gap-4 md:gap-6 text-gray-600 text-xs sm:text-sm">
+              <Link href="/terms" className="hover:text-[#c89c6b] transition-colors">
+                Terms & condition
+              </Link>
+              <span className="text-gray-400">|</span>
+              <Link href="/cookie-terms" className="hover:text-[#c89c6b] transition-colors">
+                Cookie terms
+              </Link>
+            </div>
           </div>
         </div>
       </div>

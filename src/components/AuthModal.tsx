@@ -463,7 +463,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                 {/* Continue Button */}
                                 <button
                                     type="submit"
-                                    className="w-full bg-black text-white py-3 rounded hover:bg-gray-800 transition-colors font-medium"
+                                    className="w-full bg-black text-white py-1.5 rounded hover:bg-gray-800 transition-colors font-medium text-sm"
                                 >
                                     {t.continueBtn}
                                 </button>
@@ -549,7 +549,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                                                     setShowCountryDropdown(false);
                                                                     setSearchTerm('');
                                                                 }}
-                                                                className={`w-full px-3 py-2 text-left hover:bg-gray-100 flex items-center gap-3 text-sm ${
+                                                                className={`w-full px-2 py-1 text-left hover:bg-gray-100 flex items-center gap-3 text-xs ${
                                                                     country.code === countryCode ? 'bg-purple-50' : ''
                                                                 }`}
                                                             >
@@ -648,7 +648,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                 {/* Continue Button */}
                                 <button
                                     type="submit"
-                                    className="w-full bg-black text-white py-3 rounded hover:bg-gray-800 transition-colors font-medium"
+                                    className="w-full bg-black text-white py-1.5 rounded hover:bg-gray-800 transition-colors font-medium text-sm"
                                 >
                                     {t.continueBtn}
                                 </button>

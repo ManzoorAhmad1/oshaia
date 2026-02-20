@@ -232,11 +232,11 @@ const HeroCarousel = () => {
 
                 {/* SEARCH BAR SECTION */}
                 <div className="relative mt-4 sm:-mt-6 md:-mt-8 box-border max-w-full sm:max-w-[1230.7px] h-[130px] mx-auto px-3 sm:px-4">
-                    <div className="bg-white rounded-xl sm:rounded-xl lg:rounded-2xl h-[123px] mt-2 w-full shadow-md sm:shadow-lg border border-gray-100 px-4 sm:px-4 md:px-6 lg:px-8 xl:px-10 py-4 sm:py-4 lg:py-6 flex flex-col lg:flex-row items-stretch lg:items-center justify-center gap-3 sm:gap-4 lg:gap-6">
-
-                        {/* Search Bar with Calendar Icon INSIDE */}
-                        <div className="relative w-full lg:w-[436px] flex-shrink-0 mx-auto">
-                            <div className={`flex items-center gap-2 sm:gap-2 lg:gap-3 border border-[#c89c6b] ${searchFocused ? 'border-orange-500' : 'border-orange-500'} rounded-full px-3 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-2 lg:py-3 h-[42px] sm:h-[44px] lg:h-[44.8px] transition-colors`}>
+                    <div className="!pt-12 bg-white rounded-xl sm:rounded-xl lg:rounded-2xl h-[123px] mt-2 w-full shadow-md sm:shadow-lg border border-gray-100 px-4 sm:px-4 md:px-6 lg:px-8 xl:px-10 py-4 sm:py-4 lg:py-6">
+                        <div className="h-full flex flex-col lg:flex-row items-center justify-center gap-3 sm:gap-4 lg:gap-6">
+                            {/* Search Bar with Calendar Icon INSIDE */}
+                            <div className="relative w-full lg:w-[436px] flex-shrink-0">
+                                <div className={`flex items-center gap-2 sm:gap-2 lg:gap-3 border border-[#c89c6b] ${searchFocused ? 'border-orange-500' : 'border-orange-500'} rounded-full px-3 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-2 lg:py-3 h-[42px] sm:h-[44px] lg:h-[44.8px] transition-colors`}>
                                 <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-[#c89c6b] flex-shrink-0" />
                                 <input
                                     ref={searchRef}
@@ -274,6 +274,7 @@ const HeroCarousel = () => {
                                     </div>
                                 </div>
                             </div>
+                            </div>
                             
                             {/* Show selected date below search bar (optional) */}
                             {selectedDate && (
@@ -281,7 +282,6 @@ const HeroCarousel = () => {
                                     Selected date: {new Date(selectedDate).toLocaleDateString()}
                                 </div>
                             )}
-                        </div>
 
                         {/* Right Actions */}
                         <div className="flex items-center justify-between lg:justify-end gap-2 sm:gap-2 lg:gap-3 flex-shrink-0 flex-wrap sm:flex-nowrap w-full lg:w-auto">
@@ -302,7 +302,7 @@ const HeroCarousel = () => {
                                     <div className="absolute top-full left-0 mt-2 w-48 sm:w-56 bg-white rounded-lg shadow-xl border border-gray-200 z-50 py-2">
                                         <Link
                                             href="/my-profile"
-                                            className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 hover:text-[#c89c6b] transition-colors"
+                                            className="flex items-center gap-3 px-2 py-1.5 hover:bg-gray-50 text-gray-700 hover:text-[#c89c6b] transition-colors text-sm"
                                             onClick={() => setProfileDropdownOpen(false)}
                                         >
                                             <User className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -310,7 +310,7 @@ const HeroCarousel = () => {
                                         </Link>
                                         <Link
                                             href="/my-tickets"
-                                            className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 hover:text-[#c89c6b] transition-colors"
+                                            className="flex items-center gap-3 px-2 py-1.5 hover:bg-gray-50 text-gray-700 hover:text-[#c89c6b] transition-colors text-sm"
                                             onClick={() => setProfileDropdownOpen(false)}
                                         >
                                             <Ticket className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -318,7 +318,7 @@ const HeroCarousel = () => {
                                         </Link>
                                         <Link
                                             href="/wishlist"
-                                            className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 hover:text-[#c89c6b] transition-colors"
+                                            className="flex items-center gap-3 px-2 py-1.5 hover:bg-gray-50 text-gray-700 hover:text-[#c89c6b] transition-colors text-sm"
                                             onClick={() => setProfileDropdownOpen(false)}
                                         >
                                             <Heart className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -326,7 +326,7 @@ const HeroCarousel = () => {
                                         </Link>
                                         <Link
                                             href="/settings"
-                                            className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 hover:text-[#c89c6b] transition-colors"
+                                            className="flex items-center gap-3 px-2 py-1.5 hover:bg-gray-50 text-gray-700 hover:text-[#c89c6b] transition-colors text-sm"
                                             onClick={() => setProfileDropdownOpen(false)}
                                         >
                                             <Settings className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -334,7 +334,7 @@ const HeroCarousel = () => {
                                         </Link>
                                         <div className="border-t border-gray-200 my-1"></div>
                                         <button
-                                            className="flex items-center gap-3 w-full px-4 py-3 hover:bg-gray-50 text-red-600 hover:text-red-700 transition-colors text-left"
+                                            className="flex items-center gap-3 w-full px-2 py-1.5 hover:bg-gray-50 text-red-600 hover:text-red-700 transition-colors text-left text-sm"
                                             onClick={() => {
                                                 console.log("Logout clicked")
                                                 setProfileDropdownOpen(false)
@@ -409,7 +409,7 @@ const HeroCarousel = () => {
                                                 setLanguage('en')
                                                 setLanguageDropdownOpen(false)
                                             }}
-                                            className={`flex items-center gap-3 w-full px-4 py-3 hover:bg-[#c89c6b] hover:text-white transition-all duration-300 ${language === 'en' ? 'bg-[#c89c6b] text-white' : 'text-gray-700'}`}
+                                            className={`flex items-center gap-3 w-full px-2 py-1.5 hover:bg-[#c89c6b] hover:text-white transition-all duration-300 text-sm ${language === 'en' ? 'bg-[#c89c6b] text-white' : 'text-gray-700'}`}
                                         >
                                             <img src="https://flagcdn.com/gb.svg" alt="EN" className="w-5 h-3.5 object-cover rounded" />
                                             <span className="font-medium">{t.english}</span>
@@ -419,7 +419,7 @@ const HeroCarousel = () => {
                                                 setLanguage('fr')
                                                 setLanguageDropdownOpen(false)
                                             }}
-                                            className={`flex items-center gap-3 w-full px-4 py-3 hover:bg-[#c89c6b] hover:text-white transition-all duration-300 ${language === 'fr' ? 'bg-[#c89c6b] text-white' : 'text-gray-700'}`}
+                                            className={`flex items-center gap-3 w-full px-2 py-1.5 hover:bg-[#c89c6b] hover:text-white transition-all duration-300 text-sm ${language === 'fr' ? 'bg-[#c89c6b] text-white' : 'text-gray-700'}`}
                                         >
                                             <img src="https://flagcdn.com/fr.svg" alt="FR" className="w-5 h-3.5 object-cover rounded" />
                                             <span className="font-medium">{t.french}</span>
@@ -427,6 +427,7 @@ const HeroCarousel = () => {
                                     </div>
                                 )}
                             </div>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -456,17 +457,16 @@ const HeroCarousel = () => {
 export default HeroCarousel
 
 const NavItem = ({ label, active = false, icon, path, showIcon = false }: any) => {
-    const router = useRouter()
     const Icon = icon
     return (
-        <p
-            onClick={() => router.push(path)}
+        <Link
+            href={path}
             className={`cursor-pointer font-bold text-[8px] xs:text-[9px] sm:text-xs md:text-sm lg:text-base xl:text-lg uppercase tracking-wide flex items-center gap-0.5 sm:gap-1 md:gap-2 hover:text-[#c89c6b] transition-colors whitespace-nowrap ${active ? "text-[#c89c6b]" : "text-white"
                 }`}
-        >
+        > 
             {showIcon && Icon && <span className="text-sm lg:text-base"><Icon /> </span>}
             {label}
-        </p>
+        </Link>
     )
 }
 

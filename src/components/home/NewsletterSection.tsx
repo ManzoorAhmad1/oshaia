@@ -35,13 +35,13 @@ const NewsletterSection = () => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder={t.yourEmailAddress}
-                                className="w-80 px-4 sm:px-6 py-3 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-accent-orange focus:border-transparent text-sm sm:text-base"
+                                className="w-64 px-3 sm:px-4 py-1.5 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-accent-orange focus:border-transparent text-sm"
                                 required
                             />
                         </div>
                         <button
                             type="submit"
-                            className="bg-[#c89c6b] hover:bg-[#b8885a] text-white font-bold px-6 sm:px-12 rounded-lg transition-all duration-300 whitespace-nowrap text-sm sm:text-base hover:scale-105 shadow-md hover:shadow-lg"
+                            className="bg-[#c89c6b] hover:bg-[#b8885a] text-white font-bold px-4 sm:px-6 py-1.5 rounded-lg transition-all duration-300 whitespace-nowrap text-sm hover:scale-105 shadow-md hover:shadow-lg"
                         >
                             {isSubscribed ? t.subscribed : t.submit}
                         </button>

@@ -191,7 +191,7 @@ export default function EventsGrid() {
                         <React.Fragment key={category}>
                             <button
                                 onClick={() => setActiveCategory(category)}
-                                className={`px-3 sm:px-6 md:px-8 py-2 sm:py-3 md:py-4 text-xs sm:text-base md:text-lg font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer relative whitespace-nowrap
+                                className={`px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 text-xs sm:text-sm md:text-base font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer relative whitespace-nowrap
                                     ${activeCategory === category
                                         ? 'text-[#c89c6b]'
                                         : 'text-white hover:text-[#c89c6b]'}
@@ -219,7 +219,7 @@ export default function EventsGrid() {
 
             {/* Load More Button */}
             <div className="text-center mt-6">
-                <button className="bg-transparent border-2 border-[#c89c6b] text-[#c89c6b] px-8 py-3 rounded-full font-semibold hover:bg-[#112b38] hover:text-[#c89c6b] hover:border-[#112b38] hover:scale-105 transition-all duration-300 text-lg uppercase tracking-wider shadow-lg hover:shadow-xl">
+                <button className="bg-transparent border-2 border-[#c89c6b] text-[#c89c6b] px-4 py-1.5 rounded-full font-semibold hover:bg-[#112b38] hover:text-[#c89c6b] hover:border-[#112b38] hover:scale-105 transition-all duration-300 text-sm uppercase tracking-wider shadow-lg hover:shadow-xl">
                     {t.loadMoreEvents}
                 </button>
             </div>

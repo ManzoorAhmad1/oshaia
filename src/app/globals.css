@@ -72,21 +72,32 @@
     font-family: var(--font-roboto), 'Roboto', sans-serif !important;
   }
 
-  /* Professional Scrollbar */
+  /* Professional Scrollbar - Hidden but functional */
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 0px;
+    height: 0px;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-primary-navy;
+    @apply bg-transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-secondary-purple rounded-full;
+    @apply bg-transparent;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-accent-orange;
+    @apply bg-transparent;
+  }
+
+  /* Hide scrollbar for Firefox */
+  * {
+    scrollbar-width: none;
+  }
+
+  /* Hide scrollbar for IE, Edge */
+  * {
+    -ms-overflow-style: none;
   }
 
   /* Selection Color */
