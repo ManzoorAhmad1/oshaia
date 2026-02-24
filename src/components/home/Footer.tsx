@@ -24,7 +24,7 @@ const Footer = () => {
           <div className="max-w-4xl mx-auto">
 
             {/* Payment Methods Section */}
-            <div className="mb-4">
+            <div className="my-4">
               <h4 className="text-base sm:text-lg md:text-xl font-bold uppercase mb-3 sm:mb-4 md:mb-5 text-black">
                 OUR PAYMENT METHODS
               </h4>

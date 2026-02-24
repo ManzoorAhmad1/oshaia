@@ -116,7 +116,7 @@
 
   /* Event Card */
   .event-card {
-    @apply bg-transparent rounded-xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-secondary-purple/10 hover:-translate-y-1 cursor-pointer;
+    @apply bg-transparent rounded-xl overflow-hidden cursor-pointer;
   }
 
   /* Button Styles */

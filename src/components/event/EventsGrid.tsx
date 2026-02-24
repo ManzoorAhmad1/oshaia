@@ -219,7 +219,7 @@ export default function EventsGrid() {
 
             {/* Load More Button */}
             <div className="w-full max-w-[75%] mx-auto flex items-center justify-center mt-6 sm:mt-8 md:mt-10">
-                <button className="w-[230px] h-[35px] sm:h-[40px] md:h-[45px] bg-transparent border-2 border-[#c89c6b] text-[#c89c6b] px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 md:py-2.5 text-sm sm:text-base md:text-lg uppercase tracking-wider rounded-full hover:bg-[#112b38] hover:text-[#c89c6b] hover:border-[#112b38] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl whitespace-nowrap flex items-center justify-center">
+                <button className="w-[230px] h-[35px] sm:h-[40px] md:h-[45px] bg-transparent border-2 border-[#c89c6b] text-[#c89c6b] px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 md:py-2.5 text-sm sm:text-base md:text-lg uppercase tracking-wider rounded-full shadow-lg whitespace-nowrap flex items-center justify-center">
                     {t.loadMoreEvents}
                 </button>
             </div>

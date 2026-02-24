@@ -43,11 +43,11 @@ export default function EventCard({
 
     return (
         <Link href={`/event/${id}`} className='w-full h-[305.9px] block'>
-            <div className="bg-white rounded-xl sm:rounded-2xl w-full mx-auto shadow-lg overflow-hidden border border-black hover:shadow-xl transition-all duration-300 p-3 sm:py-4 sm:pl-4 h-full cursor-pointer">
+            <div className="bg-white rounded-xl sm:rounded-2xl w-full mx-auto shadow-lg overflow-hidden border border-black p-3 sm:py-4 sm:pl-4 h-full cursor-pointer">
 
-                <div className="flex flex-col h-full gap-4">
+                <div className="flex flex-col lg:flex-row h-full gap-4 lg:gap-0">
                     {/* Event Image */}
-                    <div className="relative w-full h-[200px] sm:h-[240px] flex-shrink-0 rounded-lg overflow-hidden">
+                    <div className="relative w-full lg:w-[262.9px] h-[200px] sm:h-[240px] lg:h-full flex-shrink-0 rounded-lg overflow-hidden">
                         <Image
                             src={imageError ? fallbackImage : imageUrl}
                             alt={title}
@@ -105,7 +105,7 @@ export default function EventCard({
                                 </div>
                             </div>
 
-                            <button className="w-[230px] h-[35px] sm:h-[40px] md:h-[45px] bg-transparent border-2 border-[#c89c6b] text-[#c89c6b] px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 md:py-2.5 text-sm sm:text-base md:text-lg uppercase tracking-wider rounded-full hover:bg-[#112b38] hover:text-[#c89c6b] hover:border-[#112b38] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl whitespace-nowrap flex items-center justify-center">
+                            <button className="w-[230px] h-[35px] sm:h-[40px] md:h-[45px] bg-transparent border-2 border-[#c89c6b] text-[#c89c6b] px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 md:py-2.5 text-sm sm:text-base md:text-lg uppercase tracking-wider rounded-full shadow-lg whitespace-nowrap flex items-center justify-center">
                                 {t.getTicketsHere}
                             </button>
                         </div>
