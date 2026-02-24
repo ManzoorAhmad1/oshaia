@@ -192,7 +192,7 @@ const EventsSection = () => {
         </div>
         {/* View All Button */}
         <div className="w-full flex items-center justify-center mt-2 sm:mt-3 md:mt-4">
-          <button className="w-[200px] h-[35px] sm:h-[40px] md:h-[45px] bg-transparent border-2 border-[#c89c6b] text-[#c89c6b] px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 md:py-2.5 text-sm sm:text-base md:text-lg uppercase tracking-wider rounded-full hover:bg-[#112b38] hover:text-[#c89c6b] hover:border-[#112b38] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl whitespace-nowrap flex items-center justify-center">
+          <button className="w-[200px] h-[35px] sm:h-[40px] md:h-[45px] bg-transparent border-2 border-[#c89c6b] text-[#c89c6b] px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 md:py-2.5 text-sm sm:text-base md:text-lg uppercase tracking-wider rounded-full shadow-lg whitespace-nowrap flex items-center justify-center">
             {t.viewAllEvent}
           </button>
         </div>
