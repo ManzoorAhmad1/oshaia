@@ -62,46 +62,13 @@ const Platinumlist = () => {
           </div>
           {/* Payment Methods */}
           <div className="mb-4 sm:mb-6 md:mb-8">
-            <div className="flex flex-col">
+            <div className="flex flex-col items-start">
               <div className="font-bold text-lg sm:text-xl mb-3 sm:mb-4 text-gray-800">{t.youChooseHowToPay}</div>
-              <div className="flex gap-2">
-                <div className="flex items-center justify-center   transition-shadow">
-                  <img
-                    src='/images/1) - Juice MCB LOGO.png'
-                    alt="Juice MCB"
-                    className="h-12 sm:h-14 md:h-16 lg:h-20 w-auto object-contain"
-                  />
-                </div>
-                <div className="flex items-center justify-center   transition-shadow">
-                  <img
-                    src='/images/2) - emtel-blink-logo-500px.png'
-                    alt="Emtel Blink"
-                    className="h-7 sm:h-8 w-auto object-contain"
-                  />
-                </div>
-                <div className="flex items-center justify-center   transition-shadow">
-                  <img
-                    src='/images/3) - Visa-Logo-2014.png'
-                    alt="Visa"
-                    className="h-7 sm:h-8 w-auto object-contain"
-                  />
-                </div>
-                <div className="flex items-center justify-center   transition-shadow">
-                  <img
-                    src='/images/4) - Mastercard-logo.png'
-                    alt="Mastercard"
-                    className="h-7 sm:h-8 w-auto object-contain"
-                  />
-                </div>
-                <div className="flex items-center justify-center   transition-shadow">
-                  <img
-                    src='/images/5) - maucas-logo-1024x263.png'
-                    alt="Maucas"
-                    className="h-7 sm:h-8 w-auto object-contain"
-                  />
-                </div>
-
-              </div>
+              <img
+                src='/Red Simple Typographic 2026 Christmas Supplies Logo.png'
+                alt="Payment Methods"
+                className="h-8 sm:h-10 md:h-12 w-auto object-contain"
+              />
             </div>
           </div>
         </div>
@@ -164,31 +131,11 @@ const Platinumlist = () => {
                 {/* Right - We Accept */}
                 <div className="space-y-3 text-center md:text-left">
                   <h3 className="text-base sm:text-lg font-bold text-black">We accept</h3>
-                  <div className="flex items-center gap-1 justify-center md:justify-start">
+                  <div className="flex justify-center md:justify-start">
                     <img
-                      src='/images/1) - Juice MCB LOGO.png'
-                      alt="Juice MCB"
-                      className="h-12 sm:h-14 md:h-16 lg:h-20 w-auto object-contain"
-                    />
-                    <img
-                      src='/images/2) - emtel-blink-logo-500px.png'
-                      alt="Blink"
-                      className="h-7 sm:h-8 w-auto object-contain"
-                    />
-                    <img
-                      src='/images/3) - Visa-Logo-2014.png'
-                      alt="Visa"
-                      className="h-7 sm:h-8 w-auto object-contain"
-                    />
-                    <img
-                      src='/images/4) - Mastercard-logo.png'
-                      alt="Mastercard"
-                      className="h-7 sm:h-8 w-auto object-contain"
-                    />
-                    <img
-                      src='/images/5) - maucas-logo-1024x263.png'
-                      alt="Maucas"
-                      className="h-7 sm:h-8 w-auto object-contain"
+                      src='/Red Simple Typographic 2026 Christmas Supplies Logo.png'
+                      alt="Payment Methods"
+                      className="h-8 sm:h-10 md:h-12 w-auto object-contain"
                     />
                   </div>
                 </div>

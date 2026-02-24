@@ -93,33 +93,11 @@ const Footer = () => {
           <div className="text-center">
             <div className="text-lg sm:text-xl md:text-2xl font-bold text-black mb-2 sm:mb-3">OUR PAYMENT METHODS</div>
             <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 md:gap-4 px-4">
-              <div className="flex gap-1 sm:gap-2 items-center">
-                <img
-                  src='/images/1) - Juice MCB LOGO.png'
-                  alt="Juice MCB"
-                  className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto object-contain"
-                />
-                <img
-                  src='/images/2) - emtel-blink-logo-500px.png'
-                  alt="Emtel Blink"
-                  className="h-4 sm:h-5 md:h-6 w-auto object-contain"
-                />
-                <img
-                  src='/images/3) - Visa-Logo-2014.png'
-                  alt="Visa"
-                  className="h-4 sm:h-5 md:h-6 w-auto object-contain"
-                />
-                <img
-                  src='/images/4) - Mastercard-logo.png'
-                  alt="Mastercard"
-                  className="h-4 sm:h-5 md:h-6 w-auto object-contain"
-                />
-                <img
-                  src='/images/5) - maucas-logo-1024x263.png'
-                  alt="Maucas"
-                  className="h-4 sm:h-5 md:h-6 w-auto object-contain"
-                />
-              </div>
+              <img
+                src='/Red Simple Typographic 2026 Christmas Supplies Logo.png'
+                alt="Payment Methods"
+                className="h-8 sm:h-10 md:h-12 w-auto object-contain"
+              />
             </div>
           </div>
         </div>

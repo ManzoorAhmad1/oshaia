@@ -7,7 +7,7 @@ export default function ContactCTA() {
   const { t } = useLanguage();
   
   return (
-    <section className="bg-[#c89c6b] text-white text-center mt-6 sm:mt-8 md:mt-10 pb-6 sm:pb-8 md:pb-10">
+    <section className="bg-[#112b38] text-white text-center mt-6 sm:mt-8 md:mt-10 pb-6 sm:pb-8 md:pb-10">
       <h2 className="text-2xl md:text-3xl font-bold mb-3 pt-8">
         {t.stillNeedHelp}
       </h2>

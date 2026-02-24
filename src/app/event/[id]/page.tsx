@@ -470,46 +470,13 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                 </div>
                                 {/* Payment Methods */}
                                 <div className="mb-8 sm:mb-10 md:mb-12">
-                                    <div className="flex flex-col">
+                                    <div className="flex flex-col items-start">
                                         <div className="font-bold text-lg sm:text-xl mb-3 sm:mb-4 text-gray-800">{t.youChooseHowToPay}</div>
-                                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
-                                            <div className="flex items-center justify-center   transition-shadow">
-                                                <img
-                                                    src='/images/1) - Juice MCB LOGO.png'
-                                                    alt="Juice MCB"
-                                                    className="h-10 sm:h-12 md:h-16 w-auto object-contain"
-                                                />
-                                            </div>
-                                            <div className="flex items-center justify-center   transition-shadow">
-                                                <img
-                                                    src='/images/2) - emtel-blink-logo-500px.png'
-                                                    alt="Emtel Blink"
-                                                    className="h-8 sm:h-10 md:h-12 w-auto object-contain"
-                                                />
-                                            </div>
-                                            <div className="flex items-center justify-center   transition-shadow">
-                                                <img
-                                                    src='/images/3) - Visa-Logo-2014.png'
-                                                    alt="Visa"
-                                                    className="h-8 sm:h-10 md:h-12 w-auto object-contain"
-                                                />
-                                            </div>
-                                            <div className="flex items-center justify-center   transition-shadow">
-                                                <img
-                                                    src='/images/4) - Mastercard-logo.png'
-                                                    alt="Mastercard"
-                                                    className="h-8 sm:h-10 md:h-12 w-auto object-contain"
-                                                />
-                                            </div>
-                                            <div className="flex items-center justify-center   transition-shadow">
-                                                <img
-                                                    src='/images/5) - maucas-logo-1024x263.png'
-                                                    alt="Maucas"
-                                                    className="h-10 sm:h-12 md:h-16 w-auto object-contain"
-                                                />
-                                            </div>
-                                         
-                                        </div>
+                                        <img
+                                            src='/Red Simple Typographic 2026 Christmas Supplies Logo.png'
+                                            alt="Payment Methods"
+                                            className="h-8 sm:h-10 md:h-12 w-auto object-contain"
+                                        />
                                     </div>
                                 </div>
                             </div>
