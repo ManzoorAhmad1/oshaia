@@ -208,7 +208,7 @@ export default function EventsGrid() {
             </div>
 
             {/* Events List - One card per row */}
-            <div className="w-full max-w-[75%] mx-auto space-y-6 sm:space-y-8 md:space-y-10 flex flex-col items-center">
+            <div className="w-full max-w-[83%] mx-auto space-y-6 sm:space-y-8 md:space-y-10 flex flex-col items-center">
                 {filteredEvents.map((event) => (
                     <EventCard
                         key={event.id}
