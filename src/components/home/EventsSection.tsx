@@ -112,12 +112,13 @@ const EventsSection = () => {
 
   return (
     <section className="mt-6 sm:mt-8 md:mt-10 pb-6 sm:pb-8 md:pb-10">
-      <div className="">
-        {/* Section Title */}
+      {/* Section Title - 85% centered */}
+      <div className="w-full sm:w-[85%] mx-auto">
         <h2 className="section-title text-black my-4 mb-8">{t.allEvent}</h2>
+      </div>
 
-        {/* Category Tabs */}
-        <div className="w-full overflow-x-auto mb-6 sm:mb-8 border-gray-200 bg-[#112b38] py-2">
+      {/* Category Tabs - full width */}
+      <div className="w-full overflow-x-auto mb-6 sm:mb-8 border-gray-200 bg-[#112b38] py-2">
           <div className="flex justify-start sm:justify-center items-center gap-0 min-w-max sm:min-w-0">
             {categoryKeys.map((category, idx) => (
               <React.Fragment key={category}>
@@ -139,8 +140,10 @@ const EventsSection = () => {
           </div>
         </div>
 
+      {/* Cards + Button - 85% centered */}
+      <div className="w-full sm:w-[85%] mx-auto">
         {/* Event Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 mx-4 sm:mx-8 lg:mx-12 py-8 overflow-visible justify-items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 py-8 overflow-visible justify-items-center px-4">
           {filteredEvents.map((event,index) => (
             <Link key={event.id} href={`/event/${event.id}`} className="mb-12 w-full max-w-[380px] h-auto event-card relative overflow-visible block cursor-pointer">
 

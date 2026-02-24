@@ -9,9 +9,9 @@ const Platinumlist = () => {
   const { t } = useLanguage();
 
   return (
-    <section className="w-full bg-gradient-to-br from-gray-50 to-white py-6 sm:py-8 md:py-10 px-3 sm:px-4 md:px-8 rounded-xl sm:rounded-2xl mt-6 sm:mt-8 md:mt-10 shadow-lg">
+    <section className="w-full sm:w-[85%] mx-auto py-6 sm:py-8 md:py-10 px-0 mt-6 sm:mt-8 md:mt-10">
 
-      <div className="max-w-6xl mx-auto">
+      <div className="w-full mx-auto">
         <div>
           {/* Why buy with Platinumlist */}
           <h2 className='text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 md:mb-8 text-gray-900'>
@@ -97,7 +97,7 @@ const Platinumlist = () => {
 
         {/* Footer-like Info */}
           <div className="w-full bg-white border-gray-200 py-6 sm:py-8 md:py-10">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="w-full mx-auto">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 items-start">
 
                 {/* Left - Platinumlist Brand */}
