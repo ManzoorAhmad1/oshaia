@@ -14,49 +14,49 @@ const Platinumlist = () => {
       <div className="max-w-6xl mx-auto">
         <div>
           {/* Why buy with Platinumlist */}
-          <p className='text-base sm:text-lg font-semibold mb-3 sm:mb-4 md:mb-5'>
+          <h2 className='text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 md:mb-8 text-gray-900'>
             {t.whyBuyWithUs}
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 mb-4 sm:mb-6 md:mb-8">
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 md:gap-10 mb-6 sm:mb-8 md:mb-10">
             {[
               {
-                icon: <Shield className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />,
+                icon: <Shield className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12" />,
                 title: t.secureCheckout,
                 desc: t.fastSecuredPayment,
                 color: "text-blue-600"
               },
               {
-                icon: <Zap className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />,
+                icon: <Zap className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12" />,
                 title: t.instantConfirmation,
                 desc: t.refundGuarantee,
                 color: "text-green-600"
               },
               {
-                icon: <Ticket className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />,
+                icon: <Ticket className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12" />,
                 title: t.officialTicketSeller,
                 desc: t.usedByPeople,
-                color: "text-purple-600"
+                color: "text-gray-800"
               },
               {
-                icon: <Clock className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />,
+                icon: <Clock className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12" />,
                 title: t.customerService247,
                 desc: t.reliableAfterSales,
-                color: "text-orange-600"
+                color: "text-gray-800"
               }
             ].map((feature, index) => (
               <div
                 key={index}
-                className="cursor-pointer flex  flex-col"
+                className="flex flex-col items-start"
               >
-                <div className={`mb-3 sm:mb-4 ${feature.color} flex- text-center transition-transform duration-300`}>
+                <div className={`mb-3 sm:mb-4 ${feature.color}`}>
                   {feature.icon}
                 </div>
-                <div className="font-bold text-base sm:text-lg mb-1 sm:mb-2 text-gray-800  transition-colors">
+                <h3 className="font-bold text-base sm:text-lg md:text-xl mb-1 sm:mb-2 text-gray-900">
                   {feature.title}
-                </div>
-                <div className="text-xs sm:text-sm text-gray-500  transition-colors">
+                </h3>
+                <p className="text-sm sm:text-base text-gray-500">
                   {feature.desc}
-                </div>
+                </p>
               </div>
             ))}
           </div>
@@ -136,7 +136,7 @@ const Platinumlist = () => {
                 {/* Left - Platinumlist Brand */}
                 <div className="space-y-3 text-center md:text-left">
                   <div className="flex items-center gap-3 justify-center md:justify-start">
-                    <div className="bg-black text-white p-2.5 rounded-lg">
+                    <div className="bg-[#112b38] text-white p-2.5 rounded-lg">
                       <MessageCircle className="w-5 h-5" fill="white" />
                     </div>
                     <h3 className="text-xl sm:text-2xl font-bold text-black">Platinumlist</h3>

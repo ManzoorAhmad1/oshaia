@@ -145,11 +145,11 @@ const EventsSection = () => {
             <Link key={event.id} href={`/event/${event.id}`} className="mb-12 w-full max-w-[380px] h-auto event-card group relative overflow-visible block cursor-pointer">
 
               {/* Badge Image at Top Left - Outside the card */}
-              <div className="absolute -top-[22px] -left-[30px] w-full h-auto z-30">
+              <div className="absolute -top-[22px] -left-[30px] w-[150px] h-auto z-30">
                 <img
                   src={`/images/LOGO TAG/${index + 1}.png`}
                   alt="Badge"
-                  className="w-[150px] h-auto object-contain"
+                  className="w-full h-auto object-contain"
                 />
               </div>
 
@@ -161,13 +161,13 @@ const EventsSection = () => {
                     src={event.image}
                     alt={event.title}
                     fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    className="object-cover"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     priority={event.id <= 3}
                   />
                   
                   {/* Date Badge */}
-                  <div className="absolute top-3 right-3 bg-white rounded-xl shadow-lg overflow-hidden z-20 px-4 py-2">
+                  <div className="absolute top-3 right-3 bg-white rounded-2xl shadow-lg overflow-hidden z-20 px-4 py-2">
                     <div className="flex items-center gap-2">
                       <div className="text-lg sm:text-xl font-bold text-[#112b38] leading-none">{event.day}</div>
                       <div className="text-sm sm:text-base font-bold text-[#112b38] uppercase">{event.month}</div>
@@ -176,7 +176,7 @@ const EventsSection = () => {
                 </div>
 
                 {/* Event Info */}
-                <div className="w-full bg-white flex items-center justify-between border-x rounded-bl-lg rounded-br-lg">
+                <div className="w-full bg-white flex items-center justify-between border border-t-0 rounded-bl-2xl rounded-br-lg">
                   <div className='flex flex-col pl-3 sm:pl-4 '>
                     <p className="text-xs sm:text-sm font-bold whitespace-nowrap">{event.title}</p>
                     <p className="text-[10px] sm:text-xs text-gray-600">{event.location}</p>

@@ -60,6 +60,11 @@ export default function SponsorsSection() {
     );
   }, [slidesToShow, sponsors.length]);
 
+  const isCenterItem = (index: number) => {
+    const centerIndex = Math.floor(slidesToShow / 2);
+    return index === centerIndex;
+  };
+
   return (
     <section 
       className="bg-white py-10 mt-6 sm:mt-8 md:mt-10 mb-6 sm:mb-8 md:mb-10"
@@ -79,27 +84,33 @@ export default function SponsorsSection() {
               animate={{ x: `-${(currentIndex * 100) / slidesToShow}%` }}
               transition={{ type: "tween", duration: 0.5 }}
             >
-              {[...sponsors, ...sponsors.slice(0, slidesToShow)].map((sponsor, index) => (
-                <div
-                  key={`${sponsor.id}-${index}`}
-                  className="flex-shrink-0"
-                  style={{ width: `calc(${100 / slidesToShow}% - ${(4 * (slidesToShow - 1)) / slidesToShow}rem)` }}
-                >
-                  <Link href={`/event/${sponsor.id}`} className="block h-full">
-                    <div className="flex items-center justify-center p-2 sm:p-3 md:p-4 lg:p-6 bg-white border border-gray-200 rounded-lg sm:rounded-xl hover:border-[#c89c6b] hover:shadow-xl hover:scale-110 transition-all duration-300 cursor-pointer h-full">
-                      <div className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24">
-                        <Image
-                          src={sponsor.logo}
-                          alt={sponsor.name}
-                          fill
-                          className="object-contain opacity-100 hover:opacity-100 transition-opacity duration-300"
-                          sizes="(max-width: 640px) 64px, (max-width: 768px) 80px, 96px"
-                        />
+              {[...sponsors, ...sponsors.slice(0, slidesToShow)].map((sponsor, index) => {
+                const displayIndex = index % sponsors.length;
+                const positionIndex = index - currentIndex;
+                const isCenter = positionIndex >= 0 && positionIndex < slidesToShow && isCenterItem(positionIndex);
+                
+                return (
+                  <div
+                    key={`${sponsor.id}-${index}`}
+                    className="flex-shrink-0"
+                    style={{ width: `calc(${100 / slidesToShow}% - ${(4 * (slidesToShow - 1)) / slidesToShow}rem)` }}
+                  >
+                    <Link href={`/event/${sponsor.id}`} className="block h-full">
+                      <div className={`flex items-center justify-center p-2 sm:p-3 md:p-4 lg:p-6 bg-white border border-gray-200 rounded-lg sm:rounded-xl hover:border-[#c89c6b] hover:shadow-xl transition-all duration-300 cursor-pointer h-full ${isCenter ? 'scale-110' : ''}`}>
+                        <div className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24">
+                          <Image
+                            src={sponsor.logo}
+                            alt={sponsor.name}
+                            fill
+                            className="object-contain opacity-100 transition-opacity duration-300"
+                            sizes="(max-width: 640px) 64px, (max-width: 768px) 80px, 96px"
+                          />
+                        </div>
                       </div>
-                    </div>
-                  </Link>
-                </div>
-              ))}
+                    </Link>
+                  </div>
+                );
+              })}
             </motion.div>
           </div>
 

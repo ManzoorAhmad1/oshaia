@@ -386,7 +386,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
     return (
         <div 
             ref={backdropRef}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 overflow-hidden p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-[#112b38] bg-opacity-75 overflow-hidden p-4"
             style={{ touchAction: 'none' }}
         >
             <div 
@@ -481,7 +481,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                 {/* Continue Button */}
                                 <button
                                     type="submit"
-                                    className="w-full bg-black text-white py-1.5 rounded hover:bg-gray-800 transition-colors font-medium text-sm mt-auto"
+                                    className="w-full bg-[#112b38] text-white py-1.5 rounded hover:bg-gray-800 transition-colors font-medium text-sm mt-auto"
                                 >
                                     {t.continueBtn}
                                 </button>
@@ -668,7 +668,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                 {/* Continue Button */}
                                 <button
                                     type="submit"
-                                    className="w-full bg-black text-white py-1.5 rounded hover:bg-gray-800 transition-colors font-medium text-sm mt-auto"
+                                    className="w-full bg-[#112b38] text-white py-1.5 rounded hover:bg-gray-800 transition-colors font-medium text-sm mt-auto"
                                 >
                                     {t.continueBtn}
                                 </button>
