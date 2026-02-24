@@ -45,9 +45,9 @@ export default function EventCard({
         <Link href={`/event/${id}`} className='w-full h-[305.9px] block'>
             <div className="bg-white rounded-xl sm:rounded-2xl w-full mx-auto shadow-lg overflow-hidden border border-black hover:shadow-xl transition-all duration-300 p-3 sm:py-4 sm:pl-4 h-full cursor-pointer">
 
-                <div className="flex flex-col lg:flex-row h-full gap-4 lg:gap-0">
+                <div className="flex flex-col h-full gap-4">
                     {/* Event Image */}
-                    <div className="relative w-full lg:w-[262.9px] h-[200px] sm:h-[240px] lg:h-full flex-shrink-0 rounded-lg overflow-hidden">
+                    <div className="relative w-full h-[200px] sm:h-[240px] flex-shrink-0 rounded-lg overflow-hidden">
                         <Image
                             src={imageError ? fallbackImage : imageUrl}
                             alt={title}

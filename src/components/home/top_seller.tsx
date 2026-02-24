@@ -74,7 +74,7 @@ export default function EventCard() {
 
     return (
         <div className="w-full h-auto mx-auto mb-6 sm:mb-8 md:mb-10 px-2 sm:px-4 flex gap-2 flex-col gap:8 mt-6 sm:mt-8 md:mt-10">
-            <div className="flex w-full flex-col">
+            <div className="flex w-[75%] flex-col mx-auto">
                 <div className="py-2">
                     <p className="text-sm sm:text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 mb-2 sm:mb-4 tracking-tight uppercase">
                         {t.topSeller}
@@ -159,15 +159,17 @@ export default function EventCard() {
                     </div>
                 </div>
             </div>
-            <Link href="/event/3" className="w-full h-[200px] rounded-lg overflow-hidden mt-10 block cursor-pointer">
-                <img
-                    src='https://images.unsplash.com/photo-1521334884684-d80222895322?q=80&w=800'
-                    alt="Event"
-                    className="w-full h-[200px] object-cover transition-all duration-500 rounded-lg"
-                />
-            </Link>
-            <div className="w-full flex items-center justify-end ">
-                <Text className="cursor-pointer text-[#112b38]" onClick={()=>router.push('/help')}>{t.sponsers} <span className="text-[#112b38]">{t.advertisingWithUs}</span></Text>
+            <div className="w-[65%] mx-auto mt-10 flex flex-col">
+                <Link href="/event/3" className="w-full h-[200px] rounded-lg overflow-hidden block cursor-pointer">
+                    <img
+                        src='https://images.unsplash.com/photo-1521334884684-d80222895322?q=80&w=800'
+                        alt="Event"
+                        className="w-full h-[200px] object-cover transition-all duration-500 rounded-lg"
+                    />
+                </Link>
+                <div className="w-full flex items-center justify-end mt-4">
+                    <Text className="cursor-pointer text-[#112b38]" onClick={()=>router.push('/help')}>{t.sponsers} <span className="text-[#112b38]">{t.advertisingWithUs}</span></Text>
+                </div>
             </div>
         </div>
     );
