@@ -164,7 +164,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                 </div>
 
                 {/* Main Content */}
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-10">
+                <div className="max-w-[89%] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 py-6 sm:py-8 md:py-10">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
                         {/* Left Column - Main Content */}
                         <div className="lg:col-span-2 space-y-6">
@@ -650,7 +650,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                     </div>
                 </div>
             </div>
-            <div className="w-full flex items-center max-w-7xl mx-auto justify-between my-8">
+            <div className="w-full flex items-center max-w-[89%] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 justify-between my-8">
                 <Link href="/event/1" className="relative w-[300px] h-[300px] block cursor-pointer">
                     {/* Last Tickets Left tag (1st - Top layer pe) */}
                     <img
