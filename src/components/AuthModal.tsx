@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { X, Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, X } from 'lucide-react';
 import { FcGoogle } from 'react-icons/fc';
 import { useLanguage } from '@/context/LanguageContext';
 import Link from 'next/link';
@@ -285,6 +285,11 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
         country.code.includes(searchTerm)
     );
 
+    // Sync mode with initialMode when it changes
+    useEffect(() => {
+        setMode(initialMode);
+    }, [initialMode]);
+
     // Close modal when clicking outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -300,12 +305,23 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
 
         if (isOpen) {
             document.addEventListener('mousedown', handleClickOutside);
-            document.body.style.overflow = 'hidden';
+            // Prevent body scroll
+            const scrollY = window.scrollY;
+            document.body.style.position = 'fixed';
+            document.body.style.top = `-${scrollY}px`;
+            document.body.style.width = '100%';
         }
 
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
-            document.body.style.overflow = 'unset';
+            // Restore body scroll
+            const scrollY = document.body.style.top;
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.width = '';
+            if (scrollY) {
+                window.scrollTo(0, parseInt(scrollY || '0') * -1);
+            }
         };
     }, [isOpen, onClose]);
 
@@ -370,14 +386,16 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
     return (
         <div 
             ref={backdropRef}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 overflow-hidden p-4"
+            style={{ touchAction: 'none' }}
         >
             <div 
                 ref={modalRef}
-                className="bg-white rounded-lg shadow-xl w-full max-w-[505.9px] max-h-[90vh] overflow-y-auto"
+                className="bg-white rounded-lg shadow-xl w-full max-w-[505.9px] overflow-hidden flex flex-col max-h-[85vh]"
+                style={{ touchAction: 'auto' }}
             >
                 {/* Header with Purple Background */}
-                <div className="bg-gradient-to-r from-purple-600 to-purple-700 text-white text-center relative">
+                <div className="bg-gradient-to-r from-purple-600 to-purple-700 text-white text-center relative flex-shrink-0">
                     <button
                         onClick={onClose}
                         className="absolute top-4 right-4 text-white hover:text-gray-200 transition z-10"
@@ -387,20 +405,20 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                     <img
                         src='/images/Payment Graphic.jpg.jpeg'
                         alt='auth image error'
-                        className='object-cover h-[266.2px] w-[505.9px]'
+                        className='object-cover h-[200px] w-full'
                     />
                 </div>
 
                 {/* Form Content */}
-                <div className="p-8">
+                <div className="p-6 overflow-hidden flex-1 flex flex-col">
                     {mode === 'login' ? (
                         <>
-                            <h2 className="text-2xl font-bold text-center mb-2">{t.enterEmailPassword}</h2>
-                            <p className="text-sm text-gray-600 text-center mb-6">
+                            <h2 className="text-xl font-bold text-center mb-1">{t.enterEmailPassword}</h2>
+                            <p className="text-xs text-gray-600 text-center mb-4">
                                 {t.noAccountYet}
                             </p>
 
-                            <form onSubmit={handleSubmit} className="space-y-4">
+                            <form onSubmit={handleSubmit} className="space-y-3 flex-1 flex flex-col">
                                 {/* Email Input */}
                                 <div>
                                     <input
@@ -463,7 +481,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                 {/* Continue Button */}
                                 <button
                                     type="submit"
-                                    className="w-full bg-black text-white py-1.5 rounded hover:bg-gray-800 transition-colors font-medium text-sm"
+                                    className="w-full bg-black text-white py-1.5 rounded hover:bg-gray-800 transition-colors font-medium text-sm mt-auto"
                                 >
                                     {t.continueBtn}
                                 </button>
@@ -483,14 +501,15 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                         </>
                     ) : (
                         <>
-                            <h2 className="text-2xl font-bold text-center mb-2">
+                            <h2 className="text-xl font-bold text-center mb-1">
                                 {t.enterMobileEmail}
                             </h2>
-                            <p className="text-sm text-gray-600 text-center mb-6">
+                            <p className="text-xs text-gray-600 text-center mb-4">
                                 {t.registerAccount}
                             </p>
 
-                            <form onSubmit={handleSubmit} className="space-y-4">
+                            <form onSubmit={handleSubmit} className="space-y-3 flex-1 flex flex-col overflow-hidden">
+                                <div className="space-y-3 overflow-hidden">
                                 {/* Email Input */}
                                 <div>
                                     <input
@@ -644,11 +663,12 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                     />
                                     <p className="text-xs text-gray-500 mt-1">{t.verificationCodeSent}</p>
                                 </div>
+                                </div>
 
                                 {/* Continue Button */}
                                 <button
                                     type="submit"
-                                    className="w-full bg-black text-white py-1.5 rounded hover:bg-gray-800 transition-colors font-medium text-sm"
+                                    className="w-full bg-black text-white py-1.5 rounded hover:bg-gray-800 transition-colors font-medium text-sm mt-auto"
                                 >
                                     {t.continueBtn}
                                 </button>
