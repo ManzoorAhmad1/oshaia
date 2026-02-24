@@ -7,7 +7,7 @@ export default function AboutSection() {
   const { t } = useLanguage();
   
   return (
-    <section className="max-w-6xl mx-auto px-6 mt-6 sm:mt-8 md:mt-10 mb-6 sm:mb-8 md:mb-10">
+    <section className="w-full sm:w-[85%] mx-auto px-0 mt-6 sm:mt-8 md:mt-10 mb-6 sm:mb-8 md:mb-10">
       <div className="grid md:grid-cols-2 gap-10 items-center">
         <div>
           <h2 className="text-3xl font-bold text-[#c89c6b] mb-4">{t.whoWeAre}</h2>

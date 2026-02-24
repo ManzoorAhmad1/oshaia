@@ -31,7 +31,7 @@ export default function ServicesSection() {
 
   return (
     <section className="bg-white  mt-6 sm:mt-8 md:mt-10 py-10 mb-6 sm:mb-8 md:mb-10">
-      <div className="max-w-6xl mx-auto px-6 text-center">
+      <div className="w-full sm:w-[85%] mx-auto px-0 text-center">
         <h2 className="text-3xl font-bold text-[#c89c6b] mb-6">{t.whatWeOffer}</h2>
         <div className="grid md:grid-cols-3 gap-8">
           {services.map((service, index) => (
