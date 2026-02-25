@@ -28,7 +28,7 @@ const EventsSection = () => {
   const events = [
     {
       id: 1,
-      image: '/images/BANNER - SAMPLE/fire-horse-grid-1 1090x1080.jpg',
+      image: '/1080X1080/Bollywood-Unwind-Grid.jpg',
       title: 'Night Concert Live',
       category: 'CONCERT',
       day: '25',
@@ -41,7 +41,7 @@ const EventsSection = () => {
     },
     {
       id: 2,
-      image: '/images/BANNER - SAMPLE/Home Page Carousel.jpg',
+      image: '/1080X1080/kabul-grid-1.jpg',
       title: 'The First Ever',
       category: 'FESTIVAL',
       day: '15',
@@ -54,7 +54,7 @@ const EventsSection = () => {
     },
     {
       id: 3,
-      image: '/images/BANNER - SAMPLE/Video For Carousel and Main Event(Where Choose Tickets Or Seats)1.jpg',
+      image: '/1080X1080/lv-new-grid.jpg',
       title: 'Antalay Championship',
       category: 'SPORT',
       day: '10',
@@ -67,7 +67,7 @@ const EventsSection = () => {
     },
     {
       id: 4,
-      image: '/images/BANNER - SAMPLE/Video For Carousel and Main Event(Where Choose Tickets Or Seats)2.jpg',
+      image: '/1080X1080/y2k-grid.jpg',
       title: 'Summer Music Fest',
       category: 'CONCERT',
       day: '20',
@@ -80,7 +80,7 @@ const EventsSection = () => {
     },
     {
       id: 5,
-      image: '/images/BANNER - SAMPLE/fire-horse-grid-1 1090x1080.jpg',
+      image: '/1080X1080/Bollywood-Unwind-Grid.jpg',
       title: 'Tech Conference 2026',
       category: 'CONFERENCES',
       day: '05',
@@ -93,7 +93,7 @@ const EventsSection = () => {
     },
     {
       id: 6,
-      image: '/images/BANNER - SAMPLE/Home Page Carousel.jpg',
+      image: '/1080X1080/kabul-grid-1.jpg',
       title: 'Comedy Night Show',
       category: 'SHOW',
       day: '18',
@@ -124,7 +124,7 @@ const EventsSection = () => {
               <React.Fragment key={category}>
                 <button
                   onClick={() => setActiveCategory(category)}
-                  className={`px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 text-xs sm:text-sm md:text-base font-bold uppercase tracking-wider cursor-pointer relative whitespace-nowrap
+                  className={`px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 text-[1.3rem] font-extrabold uppercase tracking-[0.02em] cursor-pointer relative whitespace-nowrap
                         ${activeCategory === category
                       ? 'text-[#c89c6b]'
                       : 'text-white'}
@@ -143,9 +143,9 @@ const EventsSection = () => {
       {/* Cards + Button - 85% centered */}
       <div className="w-full sm:w-[85%] mx-auto">
         {/* Event Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 py-8 overflow-visible justify-items-center px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-20 py-8 overflow-visible justify-items-center px-4">
           {filteredEvents.map((event,index) => (
-            <Link key={event.id} href={`/event/${event.id}`} className="mb-12 w-full max-w-[380px] h-auto event-card relative overflow-visible block cursor-pointer">
+            <Link key={event.id} href={`/event/${event.id}`} className=" w-full max-w-[340px] h-auto event-card relative overflow-visible block cursor-pointer">
 
               {/* Badge Image at Top Left - Outside the card */}
               <div className="absolute -top-[22px] -left-[30px] w-[150px] h-auto z-30">
@@ -159,7 +159,7 @@ const EventsSection = () => {
               {/* Main Content */}
               <div className="relative z-10 overflow-hidden rounded-2xl shadow-xl bg-white">
                 {/* Event Image */}
-                <div className="relative w-full aspect-square overflow-hidden">
+                <div className="relative w-full h-[340px] overflow-hidden">
                   <Image
                     src={event.image}
                     alt={event.title}
@@ -179,12 +179,12 @@ const EventsSection = () => {
                 </div>
 
                 {/* Event Info */}
-                <div className="w-full bg-white flex items-center justify-between border border-t-0 rounded-bl-2xl rounded-br-lg">
+                <div className="w-full bg-white flex items-center justify-between border border-[#7e7b7b] border-t-0 rounded-bl-2xl rounded-br-lg">
                   <div className='flex flex-col pl-3 sm:pl-4 '>
                     <p className="text-xs sm:text-sm font-bold whitespace-nowrap">{event.title}</p>
                     <p className="text-[10px] sm:text-xs text-gray-600">{event.location}</p>
                   </div>
-                  <div className='w-[200px] flex flex-col gap-2 items-center py-2 sm:py-3 px-4 sm:px-6 bg-[#112b38] text-white rounded-bl-3xl'>
+                  <div className='w-[160px] flex flex-col gap-2 items-center py-2 sm:py-3 px-4 sm:px-6 bg-[#112b38] text-white rounded-bl-3xl'>
                     <p className="mr-1 sm:mr-2 text-[8px] sm:text-[9.9px]">{t.asFrom}</p>
                     <p className="text-xs sm:text-[15.9px]">{event.price}</p>
                   </div>

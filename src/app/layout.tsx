@@ -12,8 +12,8 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "DMCA Master - Professional Copyright Protection Service",
-  description: "Protect your digital content from copyright infringement, piracy, and unauthorized use with expert DMCA takedown services.",
+  title: "oshaia",
+  description: "oshaia",
 };
 
 export default function RootLayout({

@@ -6,9 +6,9 @@ import { useLanguage } from "@/context/LanguageContext";
 import Link from "next/link";
 
 const images = [
-    "https://images.unsplash.com/photo-1504805572947-34fad45aed93?q=80&w=800",
-    "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=800",
-    "https://images.unsplash.com/photo-1521334884684-d80222895322?q=80&w=800",
+    "/TOP%20SLLER/22054_9834dd51a16eba240c0c6c97a5237e74-0-en1771488562.jpg",
+    "/TOP%20SLLER/22078_75ef9ba7a61c8303513ef023de00195d-0-en1771489174.jpg",
+    "/TOP%20SLLER/22099_3899b925d49dbee2814e0c1278a6dc64-0-en1771579388.jpg",
 ];
 
 export default function EventCard() {
@@ -162,7 +162,7 @@ export default function EventCard() {
             <div className="w-[65%] mx-auto mt-10 flex flex-col">
                 <Link href="/event/3" className="w-full h-[200px] rounded-lg overflow-hidden block cursor-pointer">
                     <img
-                        src='https://images.unsplash.com/photo-1521334884684-d80222895322?q=80&w=800'
+                        src='/TOP%20SLLER/22054_9834dd51a16eba240c0c6c97a5237e74-0-en1771488562.jpg'
                         alt="Event"
                         className="w-full h-[200px] object-cover transition-all duration-500 rounded-lg"
                     />

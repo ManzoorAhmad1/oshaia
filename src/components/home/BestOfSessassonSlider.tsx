@@ -9,30 +9,29 @@ const slides = [
     {
         id: 1,
         type: "image",
-        url: "/images/BANNER - SAMPLE/fire-horse-grid-1 1090x1080.jpg",
-        alt: "Festival Crowd",
+        url: "/BIG%20BANNER/Bollywood-Unwind-Slider.jpg",
+        alt: "Bollywood Unwind",
         duration: 6,
     },
     {
         id: 2,
         type: "image",
-        url: "/images/BANNER - SAMPLE/Home Page Carousel.jpg",
-        alt: "Concert Performance",
+        url: "/BIG%20BANNER/kabul-slider-1.jpg",
+        alt: "Kabul Slider",
         duration: 6,
     },
-
     {
         id: 4,
         type: "image",
-        url: "/images/BANNER - SAMPLE/Video For Carousel and Main Event(Where Choose Tickets Or Seats)1.jpg",
-        alt: "DJ Performance",
+        url: "/BIG%20BANNER/lv-new-slider.jpg",
+        alt: "LV New Slider",
         duration: 6,
     },
     {
         id: 5,
         type: "image",
-        url: "/images/BANNER - SAMPLE/Video For Carousel and Main Event(Where Choose Tickets Or Seats)2.jpg",
-        alt: "Dance Performance",
+        url: "/BIG%20BANNER/y2k-slider.jpg",
+        alt: "Y2K Slider",
         duration: 6,
     }
 ]

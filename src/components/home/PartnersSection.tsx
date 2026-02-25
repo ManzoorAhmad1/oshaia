@@ -37,17 +37,6 @@ const PartnersSection = () => {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  // Auto-play functionality
-  useEffect(() => {
-    if (!isAutoPlaying) return
-
-    const interval = setInterval(() => {
-      nextSlide()
-    }, 3000)
-
-    return () => clearInterval(interval)
-  }, [isAutoPlaying])
-
   const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => 
       prev + slidesToShow >= partners.length ? 0 : prev + 1
@@ -59,6 +48,17 @@ const PartnersSection = () => {
       prev === 0 ? Math.max(0, partners.length - slidesToShow) : prev - 1
     )
   }, [slidesToShow, partners.length])
+
+  // Auto-play functionality
+  useEffect(() => {
+    if (!isAutoPlaying) return
+
+    const interval = setInterval(() => {
+      nextSlide()
+    }, 3000)
+
+    return () => clearInterval(interval)
+  }, [isAutoPlaying, nextSlide])
 
   const getVisiblePartners = () => {
     const visible = []
@@ -105,7 +105,7 @@ const PartnersSection = () => {
                     style={{ width: `calc(${100 / slidesToShow}% - ${(4 * (slidesToShow - 1)) / slidesToShow}rem)` }}
                   >
                     <Link href={`/event/${partner.id}`} className="block h-full">
-                      <div className={`flex items-center justify-center p-2 sm:p-3 md:p-4 lg:p-6 bg-white rounded-lg sm:rounded-xl cursor-pointer h-full ${isCenter ? 'scale-110 border-2 border-accent-orange shadow-xl' : 'border border-black'}`}>
+                      <div className={`flex items-center justify-center p-2 sm:p-3 md:p-4 lg:p-6 bg-white rounded-lg sm:rounded-xl cursor-pointer h-full ${isCenter ? 'scale-110 ring-2 ring-[#c89c6b]' : 'ring-1 ring-black'}`}>
                         <div className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24">
                           <Image
                             src={partner.logo}
@@ -126,7 +126,7 @@ const PartnersSection = () => {
           {/* Navigation Buttons */}
           <button
             onClick={prevSlide}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/90 p-1 sm:p-1.5 md:p-2 rounded-full shadow-lg z-10"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/90 p-1 sm:p-1.5 md:p-2 rounded-full z-10"
             aria-label="Previous partners"
           >
             <svg className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -136,7 +136,7 @@ const PartnersSection = () => {
 
           <button
             onClick={nextSlide}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 bg-white/90 p-1 sm:p-1.5 md:p-2 rounded-full shadow-lg z-10"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 bg-white/90 p-1 sm:p-1.5 md:p-2 rounded-full z-10"
             aria-label="Next partners"
           >
             <svg className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">

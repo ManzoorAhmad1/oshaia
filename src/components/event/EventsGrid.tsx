@@ -191,7 +191,7 @@ export default function EventsGrid() {
                         <React.Fragment key={category}>
                             <button
                                 onClick={() => setActiveCategory(category)}
-                                className={`px-2  sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 text-xs sm:text-sm md:text-base font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer relative whitespace-nowrap
+                                className={`px-2  sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 text-[1.3rem] font-extrabold uppercase tracking-[0.02em] transition-all duration-300 cursor-pointer relative whitespace-nowrap
                                     ${activeCategory === category
                                         ? 'text-[#c89c6b]'
                                         : 'text-white hover:text-[#c89c6b]'}
