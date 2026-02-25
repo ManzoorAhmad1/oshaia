@@ -285,66 +285,15 @@ const HeroCarousel = () => {
 
                         {/* Right Actions */}
                         <div className="flex items-center justify-between lg:justify-end gap-2 sm:gap-2 lg:gap-3 flex-shrink-0 flex-wrap sm:flex-nowrap w-full lg:w-auto">
-                            {/* My Account Dropdown */}
+                            {/* My Account - navigates to account page */}
                             <div className="relative" ref={profileRef}>
-                                <button
-                                    onClick={() => {
-                                        setProfileDropdownOpen(!profileDropdownOpen)
-                                    }}
+                                <Link
+                                    href="/account"
                                     className="flex items-center gap-1 text-xs sm:text-xs lg:text-sm text-gray-700 hover:text-[#c89c6b] transition-colors px-2 sm:px-2 py-1.5 sm:py-1.5 h-[42px] sm:h-[44px] lg:h-[44.8px] whitespace-nowrap"
                                 >
                                     <User className="w-4 h-4 sm:w-5 sm:h-5" />
                                     <span className="hidden xl:inline">{t.myAccount}</span>
-                                    <ChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform ${profileDropdownOpen ? 'rotate-180' : ''}`} />
-                                </button>
-
-                                {profileDropdownOpen && (
-                                    <div className="absolute top-full left-0 mt-2 w-48 sm:w-56 bg-white rounded-lg shadow-xl border border-gray-200 z-50 py-2">
-                                        <Link
-                                            href="/my-profile"
-                                            className="flex items-center gap-3 px-2 py-1.5 hover:bg-gray-50 text-gray-700 hover:text-[#c89c6b] transition-colors text-sm"
-                                            onClick={() => setProfileDropdownOpen(false)}
-                                        >
-                                            <User className="w-4 h-4 sm:w-5 sm:h-5" />
-                                            <span className="text-sm font-medium">{t.profile}</span>
-                                        </Link>
-                                        <Link
-                                            href="/my-tickets"
-                                            className="flex items-center gap-3 px-2 py-1.5 hover:bg-gray-50 text-gray-700 hover:text-[#c89c6b] transition-colors text-sm"
-                                            onClick={() => setProfileDropdownOpen(false)}
-                                        >
-                                            <Ticket className="w-4 h-4 sm:w-5 sm:h-5" />
-                                            <span className="text-sm font-medium">{t.myTickets}</span>
-                                        </Link>
-                                        <Link
-                                            href="/wishlist"
-                                            className="flex items-center gap-3 px-2 py-1.5 hover:bg-gray-50 text-gray-700 hover:text-[#c89c6b] transition-colors text-sm"
-                                            onClick={() => setProfileDropdownOpen(false)}
-                                        >
-                                            <Heart className="w-4 h-4 sm:w-5 sm:h-5" />
-                                            <span className="text-sm font-medium">{t.favorites}</span>
-                                        </Link>
-                                        <Link
-                                            href="/settings"
-                                            className="flex items-center gap-3 px-2 py-1.5 hover:bg-gray-50 text-gray-700 hover:text-[#c89c6b] transition-colors text-sm"
-                                            onClick={() => setProfileDropdownOpen(false)}
-                                        >
-                                            <Settings className="w-4 h-4 sm:w-5 sm:h-5" />
-                                            <span className="text-sm font-medium">{t.settings}</span>
-                                        </Link>
-                                        <div className="border-t border-gray-200 my-1"></div>
-                                        <button
-                                            className="flex items-center gap-3 w-full px-2 py-1.5 hover:bg-gray-50 text-red-600 hover:text-red-700 transition-colors text-left text-sm"
-                                            onClick={() => {
-                                                console.log("Logout clicked")
-                                                setProfileDropdownOpen(false)
-                                            }}
-                                        >
-                                            <LogOut className="w-4 h-4 sm:w-5 sm:h-5" />
-                                            <span className="text-sm font-medium">{t.logout}</span>
-                                        </button>
-                                    </div>
-                                )}
+                                </Link>
                             </div>
 
                             <div className="flex">
