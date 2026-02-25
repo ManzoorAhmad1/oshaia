@@ -170,7 +170,7 @@ const HeroCarousel = () => {
 
     return (
         <>
-        <div className="bg-white min-h-[70h] sm:min-h-[65vh]">
+        <div className="bg-white">
 
             {/* HERO CARD */}
             <div className="relative max-w-full sm:max-w-[1400.1px] h-[240px] sm:h-[300px] md:h-[340px] lg:h-[354.6px] mx-auto px-3 sm:px-4 lg:px-8 xl:px-12 2xl:px-16 pt-4 sm:pt-6">

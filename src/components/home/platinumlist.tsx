@@ -96,53 +96,49 @@ const Platinumlist = () => {
         </div>
 
         {/* Footer-like Info */}
-          <div className="w-full bg-white border-gray-200 py-6 sm:py-8 md:py-10">
-            <div className="w-full mx-auto">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 items-start">
+        <div className="w-full bg-white border-gray-200 py-6 sm:py-8 md:py-10">
+          <div className="w-full mx-auto">
+            <div className="flex flex-col md:flex-row items-stretch gap-0">
 
-                {/* Left - Platinumlist Brand */}
-                <div className="space-y-3 text-center md:text-left">
-                  <div className="flex items-center gap-3 justify-center md:justify-start">
-                    <div className="bg-[#112b38] text-white p-2.5 rounded-lg">
-                      <MessageCircle className="w-5 h-5" fill="white" />
-                    </div>
-                    <h3 className="text-xl sm:text-2xl font-bold text-black">Platinumlist</h3>
+              {/* Left - Platinumlist Brand */}
+              <div className="flex-1 space-y-3 text-center md:text-left py-4 px-4">
+                <div className="flex items-center gap-3 justify-center md:justify-start">
+                  <div className="bg-[#112b38] text-white p-2.5 rounded-lg">
+                    <MessageCircle className="w-5 h-5" fill="white" />
                   </div>
-                  <p className="text-gray-600 text-sm leading-relaxed">
-                    Entertainment discovery and monetisation platform.
-                  </p>
+                  <h3 className="text-xl sm:text-2xl font-bold text-black">Platinumlist</h3>
                 </div>
-
-                {/* Middle - Contact Question */}
-                <div className="space-y-3 text-center">
-                  <h3 className="text-base sm:text-lg font-bold text-black">Do you have any questions?</h3>
-                  <p className="text-gray-600 text-sm">Please contact us</p>
-                  <div className="flex items-center justify-center gap-3">
-                    <button className="bg-green-500 hover:bg-green-600 text-white p-2.5 rounded-full transition-colors">
-                      <FaWhatsapp className="w-5 h-5" />
-                    </button>
-                    <button className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-black text-black rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium">
-                      <MessageCircle className="w-4 h-4" />
-                      <span>Chat Online</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Right - We Accept */}
-                <div className="space-y-3 text-center md:text-left">
-                  <h3 className="text-base sm:text-lg font-bold text-black">We accept</h3>
-                  <div className="flex justify-center md:justify-start">
-                    <img
-                      src='/Red Simple Typographic 2026 Christmas Supplies Logo.png'
-                      alt="Payment Methods"
-                      className="h-8 sm:h-10 md:h-12 w-auto object-contain"
-                    />
-                  </div>
-                </div>
-
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  Entertainment discovery and monetisation platform.
+                </p>
               </div>
+
+              {/* Divider 1 */}
+              <div className="hidden md:block w-[1px] bg-[#112b38] self-stretch mx-6"></div>
+
+              {/* Middle - Contact Question */}
+              <div className="flex-1 space-y-3 text-center py-4 px-4 flex flex-col items-center justify-center">
+                <h3 className="text-base sm:text-lg font-bold text-black">Do you have any questions?</h3>
+                <p className="text-gray-600 text-sm">Please contact us</p>
+              </div>
+
+              {/* Divider 2 */}
+              <div className="hidden md:block w-[1px] bg-[#112b38] self-stretch mx-6"></div>
+
+              {/* Right - Buttons */}
+              <div className="flex-1 flex flex-row items-center justify-center gap-3 py-4 px-4">
+                <button className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-black text-black rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium">
+                  <MessageCircle className="w-4 h-4" />
+                  <span>Chat Online</span>
+                </button>
+                <button className="bg-green-500 hover:bg-green-600 text-white p-2.5 rounded-full transition-colors">
+                  <FaWhatsapp className="w-5 h-5" />
+                </button>
+              </div>
+
             </div>
           </div>
+        </div>
       </div>
     </section>
   );

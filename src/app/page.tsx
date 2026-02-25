@@ -18,9 +18,7 @@ const HomePage = () => {
         <BestOfSessassonSlider />
         <EventsSection />
         <Top_seller/>
-        <PartnersSection />
-        <NewsletterSection />
-        <Platinumlist />
+        
       </main>
       <Footer />
     </div>

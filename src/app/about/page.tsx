@@ -17,10 +17,8 @@ export default function AboutPage() {
             <AboutSection />
             <ServicesSection />
             <WhyChooseUs />
-            <SponsorsSection />
             <CTASection />
             <Footer />
-
         </Layout>
     );
 }

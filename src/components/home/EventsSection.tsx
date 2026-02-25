@@ -179,12 +179,12 @@ const EventsSection = () => {
                 </div>
 
                 {/* Event Info */}
-                <div className="w-full bg-white flex items-center justify-between border border-[#7e7b7b] border-t-0 rounded-bl-2xl rounded-br-lg">
-                  <div className='flex flex-col pl-3 sm:pl-4 '>
+                <div className="w-full bg-white flex items-stretch justify-between border border-[#7e7b7b] border-t-0 rounded-bl-2xl rounded-br-lg overflow-hidden">
+                  <div className='flex flex-col justify-center pl-3 sm:pl-4 py-2 sm:py-3'>
                     <p className="text-xs sm:text-sm font-bold whitespace-nowrap">{event.title}</p>
-                    <p className="text-[10px] sm:text-xs text-gray-600">{event.location}</p>
+                    <p className="text-[10px] sm:text-xs text-[#112b38]">{event.location}</p>
                   </div>
-                  <div className='w-[160px] flex flex-col gap-2 items-center py-2 sm:py-3 px-4 sm:px-6 bg-[#112b38] text-white rounded-bl-3xl'>
+                  <div className='w-[185px] flex-shrink-0 flex flex-col gap-2 items-center justify-center py-2 sm:py-3 px-4 sm:px-6 bg-[#112b38] text-white rounded-bl-3xl'>
                     <p className="mr-1 sm:mr-2 text-[8px] sm:text-[9.9px]">{t.asFrom}</p>
                     <p className="text-xs sm:text-[15.9px]">{event.price}</p>
                   </div>

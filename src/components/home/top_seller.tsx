@@ -159,7 +159,7 @@ export default function EventCard() {
                     </div>
                 </div>
             </div>
-            <div className="w-[65%] mx-auto mt-10 flex flex-col">
+            <div className="w-[65%] mx-auto mt-20 flex flex-col">
                 <Link href="/event/3" className="w-full h-[200px] rounded-lg overflow-hidden block cursor-pointer">
                     <img
                         src='/TOP%20SLLER/22054_9834dd51a16eba240c0c6c97a5237e74-0-en1771488562.jpg'
@@ -168,7 +168,7 @@ export default function EventCard() {
                     />
                 </Link>
                 <div className="w-full flex items-center justify-end mt-4">
-                    <Text className="cursor-pointer text-[#112b38]" onClick={()=>router.push('/help')}>{t.sponsers} <span className="text-[#112b38]">{t.advertisingWithUs}</span></Text>
+                    <Text className="cursor-pointer text-[#112b38] hover:text-[#c89c6b] transition-colors duration-300 font-medium" onClick={() => router.push('/help')}>{t.sponsers}{' '}{t.advertisingWithUs} </Text>
                 </div>
             </div>
         </div>

@@ -129,7 +129,7 @@ const AllEvents = () => {
     const currentSlideData = slides[currentSlide]
 
     return (
-        <div className="w-full max-w-[85%] h-auto mx-auto mb-6 sm:mb-8 md:mb-10 px-2 sm:px-4 ">
+        <div className="w-full max-w-[85%] h-auto mx-auto mb-6 sm:mb-8 md:mb-10 px-2 sm:px-4 mt-16 sm:mt-24 md:mt-28">
             <h2 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 mb-2 sm:mb-3 lg:mb-4 tracking-tight uppercase">
                 All Event
             </h2>

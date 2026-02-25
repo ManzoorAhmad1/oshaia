@@ -11,7 +11,7 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className="bg-[#f7f7f7] text-gray-800 font-sans">
+    <div className="text-gray-800 font-sans">
       <main>{children}</main>
       <WhatsAppButton />
     </div>

@@ -7,6 +7,9 @@ import { FaLocationDot, FaTiktok } from "react-icons/fa6";
 import { TfiEmail } from "react-icons/tfi";
 import { FaFacebook, FaTwitter, FaInstagram, FaWhatsapp, FaYoutube, FaPhoneAlt } from 'react-icons/fa'
 import { Text } from 'rizzui/typography'
+import PartnersSection from './PartnersSection';
+import NewsletterSection from './NewsletterSection';
+import Platinumlist from './platinumlist';
 
 const Footer = () => {
 
@@ -19,6 +22,9 @@ const Footer = () => {
 
   return (
     <footer className="w-full bg-white">
+      <PartnersSection />
+              <NewsletterSection />
+              <Platinumlist />
       <div className='w-full text-center '>
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
