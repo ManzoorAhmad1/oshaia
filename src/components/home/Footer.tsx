@@ -67,8 +67,7 @@ const Footer = () => {
             {/* Copyright Section */}
             <div className="">
               <p className="text-gray-700 text-xs sm:text-sm md:text-base mb-0">
-                Copyright © {new Date().getFullYear()} Ticketbox.mu,{' '}
-                <strong>TICKETBOX MAURITIUS LTD.</strong> All rights reserved.
+             Copyright ©️ 2026 Oshaia.com, Aventure Agency LTD. All rights reserved.
               </p>
             </div>
 
