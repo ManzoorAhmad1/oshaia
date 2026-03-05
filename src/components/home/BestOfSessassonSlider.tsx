@@ -144,16 +144,16 @@ const BestOfSessassonSlider = () => {
                         <div className="relative w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12">
                             <svg className="loader-circle" viewBox="0 0 48 48" onClick={nextSlide}>
                                 <g transform="translate(24, 24)">
-                                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((index) => (
+                                    {[1, 2, 3, 4, 5, 6].map((index) => (
                                         <rect
                                             key={index}
-                                            fill={index > (currentSlideData.duration - timeLeft) * (10 / currentSlideData.duration) ? 'white' : 'rgba(255, 255, 255, 0.3)'}
+                                            fill={index > (currentSlideData.duration - timeLeft) * (6 / currentSlideData.duration) ? 'white' : 'rgba(255, 255, 255, 0.3)'}
                                             x="-1.5"
                                             y="-22"
                                             width="4.5"
                                             height="9"
                                             rx="2"
-                                            transform={`rotate(${(index - 1) * 36})`}
+                                            transform={`rotate(${(index - 1) * 60})`}
                                         />
                                     ))}
                                 </g>

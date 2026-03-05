@@ -92,7 +92,7 @@ export default function AccountPage() {
                 <div className="w-full max-w-[1100px] mx-auto flex flex-col md:flex-row gap-6 items-stretch justify-evenly">
 
                     {/* ── LOGIN CARD ── */}
-                    <div className="flex-1 bg-white border border-gray-100 rounded-2xl shadow-[0_8px_30px_rgba(17,43,56,0.12)] px-14 py-14 flex flex-col">
+                    <div className="flex-1 bg-white border border-gray-100 rounded-2xl shadow-[0_8px_30px_rgba(17,43,56,0.12)] px-14 py-14 flex flex-col mt-12">
                         <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">Log In</h2>
 
                         <form onSubmit={handleLogin} className="flex flex-col gap-6 flex-1 justify-between">
@@ -184,7 +184,7 @@ export default function AccountPage() {
 
 
                     {/* ── SIGN UP CARD ── */}
-                    <div className="flex-1 bg-white border border-gray-100 rounded-2xl shadow-[0_8px_30px_rgba(200,156,107,0.15)] px-14 py-14 flex flex-col">
+                    <div className="flex-1 bg-white border border-gray-100 rounded-2xl shadow-[0_8px_30px_rgba(200,156,107,0.15)] px-14 py-14 flex flex-col mt-12">
                         <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">Sign Up</h2>
 
                         <form onSubmit={handleSignup} className="flex flex-col gap-6 flex-1 justify-between">

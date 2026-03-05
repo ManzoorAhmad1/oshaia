@@ -148,7 +148,7 @@ const EventsSection = () => {
             <Link key={event.id} href={`/event/${event.id}`} className=" w-full max-w-[340px] h-auto event-card relative overflow-visible block cursor-pointer">
 
               {/* Badge Image at Top Left - Outside the card */}
-              <div className="absolute -top-[22px] -left-[30px] w-[150px] h-auto z-30">
+              <div className="absolute -top-[35px] -left-[57px] w-[330px] h-auto z-30">
                 <img
                   src={`/images/LOGO TAG/${index + 1}.png`}
                   alt="Badge"
@@ -157,7 +157,7 @@ const EventsSection = () => {
               </div>
 
               {/* Main Content */}
-              <div className="relative z-10 overflow-hidden rounded-2xl shadow-xl bg-white">
+              <div className="relative z-10 overflow-hidden rounded-tr-2xl rounded-br-2xl ronded-bl-2xl shadow-xl bg-white">
                 {/* Event Image */}
                 <div className="relative w-full h-[340px] overflow-hidden">
                   <Image
@@ -170,7 +170,7 @@ const EventsSection = () => {
                   />
                   
                   {/* Date Badge */}
-                  <div className="absolute top-3 right-3 bg-white rounded-2xl shadow-lg overflow-hidden z-20 px-4 py-2">
+                  <div className="absolute top-3 right-3 bg-white rounded shadow-lg overflow-hidden z-20 px-1">
                     <div className="flex items-center gap-2">
                       <div className="text-lg sm:text-xl font-bold text-[#112b38] leading-none">{event.day}</div>
                       <div className="text-sm sm:text-base font-bold text-[#112b38] uppercase">{event.month}</div>
@@ -184,7 +184,7 @@ const EventsSection = () => {
                     <p className="text-xs sm:text-sm font-bold whitespace-nowrap">{event.title}</p>
                     <p className="text-[10px] sm:text-xs text-[#112b38]">{event.location}</p>
                   </div>
-                  <div className='w-[185px] flex-shrink-0 flex flex-col gap-2 items-center justify-center py-2 sm:py-3 px-4 sm:px-6 bg-[#112b38] text-white rounded-bl-3xl'>
+                  <div className='w-[135px] flex-shrink-0 flex flex-col gap-2 items-center justify-center py-2 sm:py-3 px-4 sm:px-6 bg-[#112b38] text-white rounded-bl-3xl'>
                     <p className="mr-1 sm:mr-2 text-[8px] sm:text-[9.9px]">{t.asFrom}</p>
                     <p className="text-xs sm:text-[15.9px]">{event.price}</p>
                   </div>

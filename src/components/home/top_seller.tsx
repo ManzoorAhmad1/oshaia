@@ -14,7 +14,7 @@ const images = [
 export default function EventCard() {
     const { t } = useLanguage();
     const [index, setIndex] = useState(0);
-    const [timeLeft, setTimeLeft] = useState(10);
+    const [timeLeft, setTimeLeft] = useState(6);
     const [isPlaying, setIsPlaying] = useState(true);
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
     const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -35,9 +35,9 @@ export default function EventCard() {
 
     const startAutoSlide = () => {
         clearAutoSlide();
-        setTimeLeft(10);
+        setTimeLeft(6);
 
-        // Progress timer (countdown) - 300ms per segment
+        // Progress timer (countdown) - 1000ms per segment (1 second)
         progressIntervalRef.current = setInterval(() => {
             setTimeLeft(prev => {
                 if (prev <= 1) {
@@ -46,12 +46,12 @@ export default function EventCard() {
                 }
                 return prev - 1;
             });
-        }, 300);
+        }, 1000);
 
-        // Slide transition timer
+        // Slide transition timer - 6 seconds
         intervalRef.current = setTimeout(() => {
             setIndex((prev) => (prev + 1) % images.length);
-        }, 3000);
+        }, 6000);
     };
 
     const clearAutoSlide = () => {
@@ -101,16 +101,16 @@ export default function EventCard() {
                         <div className="absolute top-0 right-0 w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10">
                             <svg className="loader-circle w-full h-full" viewBox="0 0 48 48" onClick={() => setIndex((index + 1) % images.length)}>
                                 <g transform="translate(24, 24)">
-                                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((segmentIndex) => (
+                                    {[1, 2, 3, 4, 5, 6].map((segmentIndex) => (
                                         <rect
                                             key={segmentIndex}
-                                            fill={segmentIndex > (10 - timeLeft) ? '#112b38' : 'rgba(17, 43, 56, 0.3)'}
+                                            fill={segmentIndex > (6 - timeLeft) ? '#112b38' : 'rgba(17, 43, 56, 0.3)'}
                                             x="-1.5"
                                             y="-22"
                                             width="4.5"
                                             height="9"
                                             rx="2"
-                                            transform={`rotate(${(segmentIndex - 1) * 36})`}
+                                            transform={`rotate(${(segmentIndex - 1) * 60})`}
                                         />
                                     ))}
                                 </g>

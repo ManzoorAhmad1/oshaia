@@ -257,7 +257,7 @@ const HeroCarousel = () => {
 
                                     {/* Custom Calendar Popup */}
                                     {calendarOpen && (
-                                        <div className="absolute top-[calc(100%+8px)] left-0 z-50 bg-white rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.18)] p-5 w-[300px] select-none">
+                                        <div className="absolute top-[calc(100%+8px)] right-0 z-50 bg-white rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.18)] p-5 w-[260px] select-none">
                                             {/* Header */}
                                             <div className="flex items-center justify-between mb-4">
                                                 <button
@@ -320,13 +320,43 @@ const HeroCarousel = () => {
                                 <div className="flex items-center justify-between lg:justify-end gap-2 sm:gap-2 lg:gap-3 flex-shrink-0 flex-wrap sm:flex-nowrap w-full lg:w-auto">
                                     {/* My Account - navigates to account page */}
                                     <div className="relative" ref={profileRef}>
-                                        <Link
-                                            href="/account"
-                                            className="flex items-center gap-1 text-xs sm:text-xs lg:text-sm text-gray-700 hover:text-[#c89c6b] transition-colors px-2 sm:px-2 py-1.5 sm:py-1.5 h-[42px] sm:h-[44px] lg:h-[44.8px] whitespace-nowrap"
-                                        >
-                                            <User className="w-4 h-4 sm:w-5 sm:h-5" />
-                                            <span className="hidden xl:inline">{t.myAccount}</span>
-                                        </Link>
+                                        <div className="flex items-center h-[42px] sm:h-[44px] lg:h-[44.8px] gap-0">
+                                            <Link
+                                                href="/account"
+                                                className="flex items-center gap-1 text-xs sm:text-xs lg:text-sm text-gray-700 hover:text-[#c89c6b] transition-colors pl-2 py-1.5 h-full whitespace-nowrap"
+                                            >
+                                                <User className="w-4 h-4 sm:w-5 sm:h-5" />
+                                                <span className="hidden xl:inline">{t.myAccount}</span>
+                                            </Link>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setProfileDropdownOpen(!profileDropdownOpen)
+                                                }}
+                                                className="px-1 h-full flex items-center justify-center text-gray-700 hover:text-[#c89c6b] transition-colors"
+                                            >
+                                                <ChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform ${profileDropdownOpen ? 'rotate-180' : ''}`} />
+                                            </button>
+                                        </div>
+
+                                        {profileDropdownOpen && (
+                                            <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 z-50 py-2">
+                                                <Link href="/account" className="block px-4 py-2 hover:bg-[#c89c6b] hover:text-white text-sm text-gray-700 transition-colors">
+                                                    {t.myAccount}
+                                                </Link>
+                                                <button
+                                                    onClick={() => {
+                                                        setProfileDropdownOpen(false)
+                                                        setAuthMode('login')
+                                                        setIsAuthModalOpen(true)
+                                                    }}
+                                                    className="w-full text-left px-4 py-2 hover:bg-[#c89c6b] hover:text-white text-sm text-gray-700 transition-colors flex items-center gap-2"
+                                                >
+                                                    <LogOut className="w-4 h-4" />
+                                                    {t.login} / {t.signUp}
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
 
                                     <div className="flex">
