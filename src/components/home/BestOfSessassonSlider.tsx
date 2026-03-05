@@ -14,6 +14,20 @@ const slides = [
         duration: 6,
     },
     {
+        id: 101,
+        type: "video",
+        url: "/21971_cb42a1d4c3a2dd327fcce42ba642f04c-1-en1771248482.mp4",
+        alt: "Video 1",
+        duration: 6,
+    },
+    {
+        id: 102,
+        type: "video",
+        url: "/22193_398acba9ebf32f60d280ccecab409d04-1-en1772118332.mp4",
+        alt: "Video 2",
+        duration: 6,
+    },
+    {
         id: 2,
         type: "image",
         url: "/BIG%20BANNER/kabul-slider-1.jpg",
@@ -42,13 +56,14 @@ const BestOfSessassonSlider = () => {
     const [timeLeft, setTimeLeft] = useState(slides[0].duration)
     const [isMuted, setIsMuted] = useState(true)
     const [isPlaying, setIsPlaying] = useState(true)
+    const [isHovering, setIsHovering] = useState(false)
     const videoRef = useRef<HTMLVideoElement>(null)
     const intervalRef = useRef<NodeJS.Timeout | null>(null)
     const progressIntervalRef = useRef<NodeJS.Timeout | null>(null)
 
     // Auto-slide functionality
     useEffect(() => {
-        if (isPlaying) {
+        if (isPlaying && !isHovering) {
             startAutoSlide()
         } else {
             clearAutoSlide()
@@ -58,7 +73,7 @@ const BestOfSessassonSlider = () => {
             clearAutoSlide()
             clearProgressTimer()
         }
-    }, [currentSlide, isPlaying])
+    }, [currentSlide, isPlaying, isHovering])
 
     const startAutoSlide = () => {
         clearAutoSlide()
@@ -136,7 +151,11 @@ const BestOfSessassonSlider = () => {
                 {t.bestOfSeason}
             </h2>
 
-            <div className="relative rounded-lg sm:rounded-xl lg:rounded-3xl overflow-hidden shadow-md sm:shadow-lg bg-white w-full h-auto">
+            <div 
+                className="relative rounded-lg sm:rounded-xl lg:rounded-3xl overflow-hidden shadow-md sm:shadow-lg bg-white w-full h-auto"
+                onMouseEnter={() => setIsHovering(true)}
+                onMouseLeave={() => setIsHovering(false)}
+            >
                 {/* Slide Container */}
                 <div className="relative w-full h-[200px] sm:h-[280px] md:h-[320px] lg:h-[357.5px] overflow-hidden">
                     {/* Progress Loader */}
@@ -173,7 +192,7 @@ const BestOfSessassonSlider = () => {
                                 loop
                                 playsInline
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                            {/* <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div> */}
 
                             {/* Mute Button - Only for videos */}
                             <button

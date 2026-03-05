@@ -88,11 +88,7 @@ export default function EventCard({
                                 </div>
                             </div>
 
-                            <div className="sm:ml-4 relative z-10">
-                                <div className="bg-white text-[#112b38] px-3 sm:px-4 py-1.5 sm:py-2 rounded text-xs font-bold uppercase whitespace-nowrap">
-                                    {t.lastTicketsLeft}
-                                </div>
-                            </div>
+                      
                         </div>
 
                         {/* Price and Button Section */}

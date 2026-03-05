@@ -21,7 +21,6 @@ const HeroCarousel = () => {
     const [authMode, setAuthMode] = useState<'login' | 'signup'>('login')
     const [typingPlaceholder, setTypingPlaceholder] = useState(t.searchPlaceholder)
     const [isTyping, setIsTyping] = useState(true)
-
     const languageRef = useRef<HTMLDivElement>(null)
     const profileRef = useRef<HTMLDivElement>(null)
     const searchRef = useRef<HTMLInputElement>(null)
@@ -181,7 +180,7 @@ const HeroCarousel = () => {
                         />
 
                         {/* Center Text Container with Logo */}
-                        <div className="absolute inset-0 flex items-center justify-center z-10 px-4">
+                        <div className="absolute inset-0 flex items-center justify-center z-10 px-4 pointer-events-none">
                             <div className="relative w-[240px] h-[57px] xs:w-[280px] xs:h-[66px] sm:w-[400px] sm:h-[95px] md:w-[500px] md:h-[118px] lg:w-[594.4px] lg:h-[140.7px]">
                                 <Image
                                     src="/images/Logo/white-01.png"

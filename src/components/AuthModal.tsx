@@ -391,26 +391,26 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
         >
             <div 
                 ref={modalRef}
-                className="bg-white rounded-lg shadow-xl w-full max-w-[505.9px] overflow-hidden flex flex-col max-h-[85vh]"
+                className="bg-white rounded-lg shadow-xl w-full max-w-[700px] overflow-hidden flex flex-col md:flex-row max-h-[85vh] md:max-h-[500px]"
                 style={{ touchAction: 'auto' }}
             >
-                {/* Header with Purple Background */}
-                <div className="bg-gradient-to-r from-purple-600 to-purple-700 text-white text-center relative flex-shrink-0">
-                    <button
-                        onClick={onClose}
-                        className="absolute top-4 right-4 text-white hover:text-gray-200 transition z-10"
-                    >
-                        <X size={24} />
-                    </button>
+                {/* Left Side - Artboard Image */}
+                <div className="hidden md:block w-[37.5%] relative bg-gray-100">
                     <img
-                        src='/images/Payment Graphic.jpg.jpeg'
-                        alt='auth image error'
-                        className='object-cover h-[200px] w-full'
+                        src='/Artboard.png'
+                        alt='Auth Banner'
+                        className='object-cover w-full h-full'
                     />
                 </div>
 
-                {/* Form Content */}
-                <div className="p-6 overflow-hidden flex-1 flex flex-col">
+                {/* Right Side - Form Content */}
+                <div className="w-full md:w-[62.5%] p-6 overflow-y-auto flex flex-col justify-center relative">
+                     <button
+                        onClick={onClose}
+                        className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition z-10"
+                    >
+                        <X size={24} />
+                    </button>
                     {mode === 'login' ? (
                         <>
                             <h2 className="text-xl font-bold text-center mb-1">{t.enterEmailPassword}</h2>
@@ -418,7 +418,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                 {t.noAccountYet}
                             </p>
 
-                            <form onSubmit={handleSubmit} className="space-y-3 flex-1 flex flex-col">
+                            <form onSubmit={handleSubmit} className="space-y-3 flex flex-col justify-center">
                                 {/* Email Input */}
                                 <div>
                                     <input
@@ -481,7 +481,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                 {/* Continue Button */}
                                 <button
                                     type="submit"
-                                    className="w-full bg-[#112b38] text-white py-1.5 rounded hover:bg-gray-800 transition-colors font-medium text-sm mt-auto"
+                                    className="w-full bg-[#112b38] text-white py-1.5 rounded hover:bg-gray-800 transition-colors font-medium text-sm mt-4"
                                 >
                                     {t.continueBtn}
                                 </button>
@@ -508,7 +508,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                 {t.registerAccount}
                             </p>
 
-                            <form onSubmit={handleSubmit} className="space-y-3 flex-1 flex flex-col overflow-hidden">
+                            <form onSubmit={handleSubmit} className="space-y-3 flex flex-col overflow-hidden justify-center">
                                 <div className="space-y-3 overflow-hidden">
                                 {/* Email Input */}
                                 <div>
@@ -668,7 +668,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                 {/* Continue Button */}
                                 <button
                                     type="submit"
-                                    className="w-full bg-[#112b38] text-white py-1.5 rounded hover:bg-gray-800 transition-colors font-medium text-sm mt-auto"
+                                    className="w-full bg-[#112b38] text-white py-1.5 rounded hover:bg-gray-800 transition-colors font-medium text-sm mt-4"
                                 >
                                     {t.continueBtn}
                                 </button>

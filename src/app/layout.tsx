@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
 import WhatsAppButton from "@/components/about/WhatsAppButton";
+import ScrollToTop from "@/components/ScrollToTop";
 import { LanguageProvider } from "@/context/LanguageContext";
 
 const roboto = Roboto({
@@ -27,6 +28,7 @@ export default function RootLayout({
         <LanguageProvider>
           {children}
           <WhatsAppButton />
+          <ScrollToTop />
         </LanguageProvider>
       </body>
     </html>

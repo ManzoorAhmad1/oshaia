@@ -300,7 +300,6 @@ export const en = {
     sponsorPartnerAccessDesc: 'We connect sponsors with events that match their audience and brand goals.',
     
     // Event Cards
-    lastTicketsLeft: 'Last Tickets Left',
     getTicketsHere: 'Get Tickets Here',
     atTime: 'at',
     

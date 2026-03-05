@@ -300,7 +300,6 @@ export const fr = {
     sponsorPartnerAccessDesc: 'Nous connectons les sponsors avec des événements correspondant à leur audience et objectifs de marque.',
     
     // Event Cards
-    lastTicketsLeft: 'Derniers billets disponibles',
     getTicketsHere: 'Obtenir des billets',
     atTime: 'à',
     
