@@ -141,7 +141,7 @@ const events = [
     date: '25 JAN 2026',
     time: '8:00 PM',
     location: 'Venue Name',
-    price: 'AED 299',
+    price: 'RS 299',
     badge: 'NEW',
     badgeColor: 'bg-accent-orange'
   },

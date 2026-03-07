@@ -35,7 +35,7 @@ const EventsSection = () => {
       month: 'Jan',
       year: '2026',
       location: 'Dubai Arena',
-      price: 'AED 299',
+      price: 'RS 299',
       badge: 'TRENDING',
       badgeColor: 'bg-accent-orange'
     },
@@ -48,7 +48,7 @@ const EventsSection = () => {
       month: 'Feb',
       year: '2026',
       location: 'Festival City',
-      price: 'AED 199',
+      price: 'RS 199',
       badge: 'HOT',
       badgeColor: 'bg-accent-pink'
     },
@@ -61,7 +61,7 @@ const EventsSection = () => {
       month: 'Mar',
       year: '2026',
       location: 'Sports Complex',
-      price: 'AED 399',
+      price: 'RS 399',
       badge: 'NEW',
       badgeColor: 'bg-secondary-purple'
     },
@@ -74,7 +74,7 @@ const EventsSection = () => {
       month: 'Apr',
       year: '2026',
       location: 'Beach Arena',
-      price: 'AED 249',
+      price: 'RS 249',
       badge: '',
       badgeColor: ''
     },
@@ -87,7 +87,7 @@ const EventsSection = () => {
       month: 'May',
       year: '2026',
       location: 'Convention Center',
-      price: 'AED 499',
+      price: 'RS 499',
       badge: 'NEW',
       badgeColor: 'bg-secondary-purple'
     },
@@ -100,7 +100,7 @@ const EventsSection = () => {
       month: 'May',
       year: '2026',
       location: 'Theater Hall',
-      price: 'AED 149',
+      price: 'RS 149',
       badge: '',
       badgeColor: ''
     }
