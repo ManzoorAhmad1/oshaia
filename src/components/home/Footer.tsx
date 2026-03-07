@@ -10,6 +10,7 @@ import { Text } from 'rizzui/typography'
 import PartnersSection from './PartnersSection';
 import NewsletterSection from './NewsletterSection';
 import Platinumlist from './platinumlist';
+import { useRouter } from 'next/navigation';
 
 const Footer = () => {
 
@@ -19,7 +20,7 @@ const Footer = () => {
     { name: 'WhatsApp', icon: FaWhatsapp, url: '#' },
     { name: 'TikTok', icon: FaTiktok, url: '#' },
   ]
-
+ const router=useRouter()
   return (
     <footer className="w-full bg-white">
       <PartnersSection />
@@ -75,15 +76,15 @@ const Footer = () => {
             <div className="mt-3 sm:mt-4 md:mt-5">
               <ul className="flex items-center justify-center gap-2 sm:gap-3 list-none text-xs sm:text-sm">
                 <li>
-                  <Link href="/terms" className="text-gray-600 hover:text-[#c89c6b] transition-colors">
+                  <p className="text-gray-600 hover:text-[#c89c6b] transition-colors cursor-pointer"  onClick={()=>router.push('help')}>
                     Terms &amp; condition
-                  </Link>
+                  </p>
                 </li>
                 <li className="text-gray-400">|</li>
                 <li>
-                  <Link href="/cookie-terms" className="text-gray-600 hover:text-[#c89c6b] transition-colors">
+                  <p className="text-gray-600 hover:text-[#c89c6b] transition-colors cursor-pointer"  onClick={()=>router.push('help')}>
                     Cookie terms
-                  </Link>
+                  </p>
                 </li>
               </ul>
             </div>

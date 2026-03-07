@@ -1,13 +1,12 @@
 'use client';
 
 import React from 'react';
-import { MessageCircle } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
-import { FaWhatsapp } from 'react-icons/fa';
+import { useRouter } from 'next/navigation';
 
 const Platinumlist = () => {
   const { t } = useLanguage();
-
+  const router=useRouter()
   return (
     <section className="w-full sm:w-[85%] mx-auto py-6 sm:py-8 md:py-10 px-0 mt-6 sm:mt-8 md:mt-10">
 
@@ -134,7 +133,7 @@ const Platinumlist = () => {
                 <h3 className="text-lg md:text-xl font-semibold text-gray-900">
                   Do you have any questions?
                 </h3>
-                <p className="text-gray-600 text-sm md:text-base">
+                <p className="text-gray-600 text-sm md:text-base hover:text-[#c89c6b] cursor-pointer" onClick={()=>router.push('help')}>
                   Please contact us
                 </p>
               </div>
