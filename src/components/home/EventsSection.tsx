@@ -12,7 +12,7 @@ const EventsSection = () => {
 
   // Category keys mapping to translations
   const categoryKeys = ['all', 'concert', 'festival', 'conferences', 'show', 'sport'] as const
-  
+
   const getCategoryLabel = (key: string) => {
     const labels: Record<string, string> = {
       all: t.all,
@@ -119,43 +119,43 @@ const EventsSection = () => {
 
       {/* Category Tabs - full width */}
       <div className="w-full overflow-x-auto mb-6 sm:mb-8 border-gray-200 bg-[#112b38] py-2">
-          <div className="flex justify-start sm:justify-center items-center gap-0 min-w-max sm:min-w-0">
-            {categoryKeys.map((category, idx) => (
-              <React.Fragment key={category}>
-                <button
-                  onClick={() => setActiveCategory(category)}
-                  className={`px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 text-[1.3rem] font-extrabold uppercase tracking-[0.02em] cursor-pointer relative whitespace-nowrap
+        <div className="flex justify-start sm:justify-center items-center gap-0 min-w-max sm:min-w-0">
+          {categoryKeys.map((category, idx) => (
+            <React.Fragment key={category}>
+              <button
+                onClick={() => setActiveCategory(category)}
+                className={`px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 text-[1.3rem] font-extrabold uppercase tracking-[0.02em] cursor-pointer relative whitespace-nowrap
                         ${activeCategory === category
-                      ? 'text-[#c89c6b]'
-                      : 'text-white'}
+                    ? 'text-[#c89c6b]'
+                    : 'text-white'}
                       `}
-                >
-                  {getCategoryLabel(category)}
-                </button>
-                {idx < categoryKeys.length - 1 && (
-                  <span className="h-6 sm:h-8 w-[2px] bg-[#c89c6b] mx-1 sm:mx-2 inline-block opacity-40"></span>
-                )}
-              </React.Fragment>
-            ))}
-          </div>
+              >
+                {getCategoryLabel(category)}
+              </button>
+              {idx < categoryKeys.length - 1 && (
+                <span className="h-6 sm:h-8 w-[2px] bg-[#c89c6b] mx-1 sm:mx-2 inline-block opacity-40"></span>
+              )}
+            </React.Fragment>
+          ))}
         </div>
+      </div>
 
       {/* Cards + Button - 85% centered */}
       <div className="w-full sm:w-[85%] mx-auto">
         {/* Event Cards Grid - Fixed for last row centering */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-20 py-8 overflow-visible justify-items-center px-4">
           {filteredEvents.map((event, index) => (
-            <Link 
-              key={event.id} 
-              href={`/event/${event.id}`} 
+            <Link
+              key={event.id}
+              href={`/event/${event.id}`}
               className="w-full max-w-[340px] h-auto event-card relative overflow-visible block cursor-pointer"
             >
-              {/* Badge Image at Top Left - Outside the card - INCREASED SIZE */}
-              <div className="absolute -top-[28px] -left-[59px] w-[420px] h-auto z-30">
+              {/* Badge Image at Top Left - Z-index high but with pointer-events-none */}
+              <div className="absolute -top-[28px] -left-[59px] w-[420px] h-auto z-50 pointer-events-none">
                 <img
                   src={`/images/LOGO TAG/${index + 1}.png`}
                   alt="Badge"
-                  className="w-full h-auto object-contain scale-110" // Added scale for even larger size
+                  className="w-full h-auto object-contain scale-110"
                 />
               </div>
 
@@ -171,7 +171,7 @@ const EventsSection = () => {
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     priority={event.id <= 3}
                   />
-                  
+
                   {/* Date Badge */}
                   <div className="absolute top-3 right-3 bg-white rounded shadow-lg overflow-hidden z-20 px-1">
                     <div className="flex items-center gap-2">
@@ -187,7 +187,7 @@ const EventsSection = () => {
                     <p className="text-xs sm:text-sm font-bold whitespace-nowrap">{event.title}</p>
                     <p className="text-[10px] sm:text-xs text-[#112b38]">{event.location}</p>
                   </div>
-                  <div className='w-[135px] flex-shrink-0 flex flex-col gap-2 items-center justify-center py-2 sm:py-3 px-4 sm:px-6 bg-[#112b38] hover:bg-[#c89c6b] text-white rounded-bl-3xl'>
+                  <div className='w-[135px] bg-[#112b38] hover:bg-[#c89c6b] flex-shrink-0 flex flex-col items-center justify-center py-2 sm:py-3 px-4 sm:px-6 text-white rounded-bl-3xl transition-colors duration-300 relative z-10'>
                     <p className="mr-1 sm:mr-2 text-[8px] sm:text-[9.9px]">{t.asFrom}</p>
                     <p className="text-xs sm:text-[15.9px]">{event.price}</p>
                   </div>
