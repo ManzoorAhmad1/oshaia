@@ -142,22 +142,25 @@ const EventsSection = () => {
 
       {/* Cards + Button - 85% centered */}
       <div className="w-full sm:w-[85%] mx-auto">
-        {/* Event Cards Grid */}
+        {/* Event Cards Grid - Fixed for last row centering */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-20 py-8 overflow-visible justify-items-center px-4">
-          {filteredEvents.map((event,index) => (
-            <Link key={event.id} href={`/event/${event.id}`} className=" w-full max-w-[340px] h-auto event-card relative overflow-visible block cursor-pointer">
-
-              {/* Badge Image at Top Left - Outside the card */}
-              <div className="absolute -top-[35px] -left-[57px] w-[330px] h-auto z-30">
+          {filteredEvents.map((event, index) => (
+            <Link 
+              key={event.id} 
+              href={`/event/${event.id}`} 
+              className="w-full max-w-[340px] h-auto event-card relative overflow-visible block cursor-pointer"
+            >
+              {/* Badge Image at Top Left - Outside the card - INCREASED SIZE */}
+              <div className="absolute -top-[28px] -left-[59px] w-[420px] h-auto z-30">
                 <img
                   src={`/images/LOGO TAG/${index + 1}.png`}
                   alt="Badge"
-                  className="w-full h-auto object-contain"
+                  className="w-full h-auto object-contain scale-110" // Added scale for even larger size
                 />
               </div>
 
               {/* Main Content */}
-              <div className="relative z-10 overflow-hidden rounded-tr-2xl rounded-br-2xl ronded-bl-2xl shadow-xl bg-white">
+              <div className="relative z-10 overflow-hidden rounded-tr-2xl rounded-br-2xl rounded-bl-2xl shadow-xl bg-white">
                 {/* Event Image */}
                 <div className="relative w-full h-[340px] overflow-hidden">
                   <Image
@@ -193,6 +196,7 @@ const EventsSection = () => {
             </Link>
           ))}
         </div>
+
         {/* View All Button */}
         <div className="w-full flex items-center justify-center mt-2 sm:mt-3 md:mt-4">
           <button className="w-[200px] h-[35px] sm:h-[40px] md:h-[45px] bg-transparent border-2 border-[#c89c6b] text-[#c89c6b] hover:bg-[#112b38] hover:text-white px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 md:py-2.5 text-sm sm:text-base md:text-lg uppercase tracking-wider rounded-full shadow-lg whitespace-nowrap flex items-center justify-center">
