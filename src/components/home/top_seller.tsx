@@ -104,46 +104,30 @@ export default function EventCard() {
                     {/* Right Half - Content */}
                     <div className="w-full px-4 box-border shadow-md rounded-tr-lg rounded-br-lg sm:w-1/2 h-auto sm:h-[180px] md:h-[200.1px] flex flex-col justify-between relative pt-6 sm:pt-8 md:pt-10">
                         {/* Timer Loader - Top Right */}
-                        <div className="absolute top-0 right-0 w-8 h-8 sm:w-9 sm:h-9 md:w-12 md:h-12 pr-4">
-                            <svg className="loader-circle w-full h-full" viewBox="0 0 48 48" onClick={() => setIndex((index + 1) % images.length)}>
-                                <g transform="translate(24, 24)">
-                                    {[1, 2, 3, 4, 5, 6].map((segmentIndex) => {
-                                        // Har segment ke liye starting angle
-                                        const startAngleDeg = (segmentIndex - 1) * 60;
-
-                                        // Gap ke saath end angle (58 degree tak, 2 degree gap)
-                                        const endAngleDeg = startAngleDeg + 58;
-
-                                        const startAngle = (startAngleDeg * Math.PI) / 180;
-                                        const endAngle = (endAngleDeg * Math.PI) / 180;
-                                        const radius = 20;
-
-                                        // Arc path calculate karo
-                                        const x1 = radius * Math.cos(startAngle);
-                                        const y1 = radius * Math.sin(startAngle);
-                                        const x2 = radius * Math.cos(endAngle);
-                                        const y2 = radius * Math.sin(endAngle);
-
-                                        const largeArcFlag = 0;
-
-                                        const pathData = [
-                                            "M", x1, y1,
-                                            "A", radius, radius, 0, largeArcFlag, 1, x2, y2
-                                        ].join(" ");
-                                        const isBlack = segmentIndex <= timeLeft;
-
-                                        return (
-                                            <path
-                                                key={segmentIndex}
-                                                d={pathData}
-                                                fill="none"
-                                                stroke={isBlack ? '#112b38' : '#ffffff'}
-                                                strokeWidth="5"
-                                                strokeLinecap="round"
-                                            />
-                                        );
-                                    })}
-                                </g>
+                        {/* Timer Loader - Top Right */}
+                        <div className="absolute top-0 right-0 w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 mr-2 sm:mr-3 md:mr-4">
+                            <svg
+                                className="loader-spinner w-full h-full cursor-pointer rotating"
+                                viewBox="0 0 30 28"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            // onClick={goToNextSlide}
+                            >
+                                {[
+                                    { path: "M27.5005 6.38885L25.7058 7.56105C23.524 4.41549 20.0528 2.42183 16.1824 2.09124L16.3721 1.95767e-05C20.8962 0.386322 24.9522 2.71505 27.5005 6.38885Z", condition: timeLeft > 5 },
+                                    { path: "M26.5002 19.1499C27.2222 17.5683 27.5882 15.8801 27.5882 14.1325C27.5882 12.3849 27.2222 10.6968 26.5002 9.11519L28.4783 8.26504C29.3233 10.1161 29.7517 12.0901 29.7517 14.1325C29.7517 16.1749 29.3233 18.149 28.4783 20L26.5002 19.1499Z", condition: timeLeft > 4 },
+                                    { path: "M16.5 28L16.3103 25.9088C20.1808 25.5782 23.652 23.5845 25.8338 20.439L27.6284 21.6112C25.0801 25.285 21.0241 27.6136 16.5 28Z", condition: timeLeft > 3 },
+                                    { path: "M3.03551 21.6112L4.83017 20.439C7.01195 23.5845 10.4831 25.5782 14.3536 25.9088L14.1639 28C9.63983 27.6137 5.58377 25.285 3.03551 21.6112Z", condition: timeLeft > 2 },
+                                    { path: "M4.00009 9.1017C3.27807 10.6833 2.912 12.3714 2.912 14.119C2.912 15.8666 3.27807 17.5547 4.00009 19.1363L2.02196 19.9865C1.17691 18.1355 0.748535 16.1614 0.748535 14.119C0.748535 12.0767 1.17691 10.1026 2.02196 8.25156L4.00009 9.1017Z", condition: timeLeft > 1 },
+                                    { path: "M14.1287 -3.79799e-06L14.3184 2.09121C10.4479 2.42181 6.97673 4.41547 4.79495 7.56104L3.00028 6.38883C5.54855 2.71503 9.60461 0.386439 14.1287 -3.79799e-06Z", condition: timeLeft > 0 }
+                                ].map((item, index) => (
+                                    <path
+                                        key={index}
+                                        d={item.path}
+                                        fill={item.condition ? '#112b38' : '#e5e7eb'}
+                                        className="transition-colors duration-300"
+                                    />
+                                ))}
                             </svg>
                         </div>
                         {/* Main Content */}
