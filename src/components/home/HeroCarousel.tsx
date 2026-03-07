@@ -256,7 +256,7 @@ const HeroCarousel = () => {
 
                                     {/* Custom Calendar Popup */}
                                     {calendarOpen && (
-                                        <div className="absolute top-[calc(100%+8px)] right-0 z-50 bg-white rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.18)] p-5 w-[260px] select-none">
+                                        <div className="absolute top-[calc(100%+8px)] right-[-180px] z-50 bg-white rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.18)] p-5 w-[230px] select-none">
                                             {/* Header */}
                                             <div className="flex items-center justify-between mb-4">
                                                 <button

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { CreditCard, Apple, MessageCircle, Shield, Zap, Ticket, Clock, ChevronRight } from 'lucide-react';
+import { MessageCircle } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { FaWhatsapp } from 'react-icons/fa';
 
@@ -12,44 +12,48 @@ const Platinumlist = () => {
     <section className="w-full sm:w-[85%] mx-auto py-6 sm:py-8 md:py-10 px-0 mt-6 sm:mt-8 md:mt-10">
 
       <div className="w-full mx-auto">
-        <div>
+        <div className="md:w-1/2">
           {/* Why buy with Platinumlist */}
           <h2 className='text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 md:mb-8 text-gray-900'>
             {t.whyBuyWithUs}
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 md:gap-10 mb-6 sm:mb-8 md:mb-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 md:gap-6 mb-6 sm:mb-8 md:mb-10">
             {[
               {
-                icon: <Shield className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12" />,
+                icon: "https://cdn.platinumlist.net/dist/v876/img/why-buy-with-us/secure-checkout.svg",
                 title: t.secureCheckout,
                 desc: t.fastSecuredPayment,
-                color: "text-blue-600"
+                alt: "Secure Checkout"
               },
               {
-                icon: <Zap className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12" />,
+                icon: "https://cdn.platinumlist.net/dist/v876/img/why-buy-with-us/instant-confirmation.svg",
                 title: t.instantConfirmation,
                 desc: t.refundGuarantee,
-                color: "text-green-600"
+                alt: "Instant confirmation"
               },
               {
-                icon: <Ticket className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12" />,
+                icon: "https://cdn.platinumlist.net/dist/v876/img/why-buy-with-us/official-ticket-seller.svg",
                 title: t.officialTicketSeller,
                 desc: t.usedByPeople,
-                color: "text-gray-800"
+                alt: "Official Ticket Seller"
               },
               {
-                icon: <Clock className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12" />,
+                icon: "https://cdn.platinumlist.net/dist/v876/img/why-buy-with-us/customer-service.svg",
                 title: t.customerService247,
                 desc: t.reliableAfterSales,
-                color: "text-gray-800"
+                alt: "24/7 Customer Service"
               }
             ].map((feature, index) => (
               <div
                 key={index}
                 className="flex flex-col items-start"
               >
-                <div className={`mb-3 sm:mb-4 ${feature.color}`}>
-                  {feature.icon}
+                <div className="mb-3 sm:mb-4">
+                  <img
+                    src={feature.icon}
+                    alt={feature.alt}
+                    className="w-8 h-8 "
+                  />
                 </div>
                 <h3 className="font-bold text-base sm:text-lg md:text-xl mb-1 sm:mb-2 text-gray-900">
                   {feature.title}
@@ -64,11 +68,12 @@ const Platinumlist = () => {
           <div className="mb-4 sm:mb-6 md:mb-8">
             <div className="flex flex-col items-start">
               <div className="font-bold text-lg sm:text-xl mb-3 sm:mb-4 text-gray-800">{t.youChooseHowToPay}</div>
-              <img
-                src='/Red Simple Typographic 2026 Christmas Supplies Logo.png'
-                alt="Payment Methods"
-                className="h-8 sm:h-10 md:h-12 w-auto object-contain"
-              />
+              <div className="flex items-center gap-3">
+                <img src="https://cdn.platinumlist.net/dist/v876/img/payment-systems/visa-logo.svg" alt="Visa" className="h-6 sm:h-8 w-auto object-contain" />
+                <img src="https://cdn.platinumlist.net/dist/v876/img/payment-systems/mastercard-logo.svg" alt="Mastercard" className="h-6 sm:h-8 w-auto object-contain" />
+                <img src="https://cdn.platinumlist.net/dist/v876/img/payment-systems/american-express.svg" alt="American Express" className="h-6 sm:h-8 w-auto object-contain" />
+                <img src="https://cdn.platinumlist.net/dist/v876/img/payment-systems/apple-pay.svg" alt="Apple Pay" className="h-6 sm:h-8 w-auto object-contain" />
+              </div>
             </div>
           </div>
         </div>
@@ -96,44 +101,56 @@ const Platinumlist = () => {
         </div>
 
         {/* Footer-like Info */}
-        <div className="w-full bg-white border-gray-200 py-6 sm:py-8 md:py-10">
-          <div className="w-full mx-auto">
-            <div className="flex flex-col md:flex-row items-stretch gap-0">
+        <div className="w-full bg-white border-t border-gray-200 py-8 sm:py-10 md:py-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center">
 
-              {/* Left - Platinumlist Brand */}
-              <div className="flex-1 space-y-3 text-center md:text-left py-4 px-4">
-                <div className="flex items-center gap-3 justify-center md:justify-start">
-                  <div className="bg-[#112b38] text-white p-2.5 rounded-lg">
-                    <MessageCircle className="w-5 h-5" fill="white" />
+              {/* Left - Brand Section */}
+              <div className="md:col-span-5 flex flex-col items-center md:items-start space-y-3">
+                <div className="flex items-center gap-3">
+                  <div className="flex-shrink-0">
+                    <img
+                      src='Main Oshaia.com.png'
+                      alt="Platinumlist Logo"
+                      className="h-12 w-auto md:h-14 object-contain"
+                    />
                   </div>
-                  <h3 className="text-xl sm:text-2xl font-bold text-black">Platinumlist</h3>
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
+                    Platinumlist
+                  </h2>
                 </div>
-                <p className="text-gray-600 text-sm leading-relaxed">
+                <p className="text-gray-600 text-sm md:text-base leading-relaxed max-w-md text-center md:text-left">
                   Entertainment discovery and monetisation platform.
                 </p>
               </div>
 
-              {/* Divider 1 */}
-              <div className="hidden md:block w-[1px] bg-[#112b38] self-stretch mx-6"></div>
-
-              {/* Middle - Contact Question */}
-              <div className="flex-1 space-y-3 text-center py-4 px-4 flex flex-col items-center justify-center">
-                <h3 className="text-base sm:text-lg font-bold text-black">Do you have any questions?</h3>
-                <p className="text-gray-600 text-sm">Please contact us</p>
+              {/* Divider - Hidden on mobile */}
+              <div className="hidden md:block md:col-span-1">
+                <div className="h-12 w-px bg-gray-300 mx-auto"></div>
               </div>
 
-              {/* Divider 2 */}
-              <div className="hidden md:block w-[1px] bg-[#112b38] self-stretch mx-6"></div>
+              {/* Middle - Contact Section */}
+              <div className="md:col-span-3 flex flex-col items-center space-y-2">
+                <h3 className="text-lg md:text-xl font-semibold text-gray-900">
+                  Do you have any questions?
+                </h3>
+                <p className="text-gray-600 text-sm md:text-base">
+                  Please contact us
+                </p>
+              </div>
 
-              {/* Right - Buttons */}
-              <div className="flex-1 flex flex-row items-center justify-center gap-3 py-4 px-4">
-                <button className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-black text-black rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium">
-                  <MessageCircle className="w-4 h-4" />
-                  <span>Chat Online</span>
-                </button>
-                <button className="bg-green-500 hover:bg-green-600 text-white p-2.5 rounded-full transition-colors">
-                  <FaWhatsapp className="w-5 h-5" />
-                </button>
+              {/* Divider - Hidden on mobile */}
+              <div className="hidden md:block md:col-span-1">
+                <div className="h-12 w-px bg-gray-300 mx-auto"></div>
+              </div>
+
+              {/* Right - Original Size WhatsApp Image */}
+              <div className="md:col-span-2 flex justify-center md:justify-start">
+                <img
+                  src='/whatsapp12.png'
+                  alt="WhatsApp"
+                  className="w-auto h-auto max-w-full object-contain cursor-pointer"
+                />
               </div>
 
             </div>

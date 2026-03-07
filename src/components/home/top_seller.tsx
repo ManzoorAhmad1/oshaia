@@ -14,11 +14,21 @@ const images = [
 export default function EventCard() {
     const { t } = useLanguage();
     const [index, setIndex] = useState(0);
+    const [bottomIndex, setBottomIndex] = useState(0);
     const [timeLeft, setTimeLeft] = useState(6);
     const [isPlaying, setIsPlaying] = useState(true);
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
     const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
     const router = useRouter();
+
+    // Auto slide for bottom carousel
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setBottomIndex((prev) => (prev + 1) % images.length);
+        }, 5000);
+        return () => clearInterval(interval);
+    }, []);
+
     // Auto slide with timer
     useEffect(() => {
         if (isPlaying) {
@@ -68,10 +78,6 @@ export default function EventCard() {
         }
     };
 
-    const togglePlayPause = () => {
-        setIsPlaying(!isPlaying);
-    };
-
     return (
         <div className="w-full h-auto mx-auto mb-6 sm:mb-8 md:mb-10 px-2 sm:px-4 flex gap-2 flex-col gap:8 mt-6 sm:mt-8 md:mt-10">
             <div className="flex w-[85%] flex-col mx-auto">
@@ -80,9 +86,9 @@ export default function EventCard() {
                         {t.topSeller}
                     </p>
                 </div>
-                <div className="w-full flex flex-col sm:flex-row gap-4">
+                <div className="w-full flex flex-col sm:flex-row ">
                     {/* Left Half - Image Slider */}
-                    <Link href={`/event/${index + 1}`} className="w-full sm:w-1/2 relative h-48 sm:h-[180px] md:h-[200.1px] rounded-lg sm:rounded-xl overflow-hidden block cursor-pointer">
+                    <Link href={`/event/${index + 1}`} className="w-full sm:w-1/2 relative h-48 sm:h-[180px] md:h-[200.1px] rounded-tl-lg rounded-lb-lg overflow-hidden block cursor-pointer">
                         <img
                             src={images[index]}
                             alt="Event"
@@ -96,23 +102,47 @@ export default function EventCard() {
                     </Link>
 
                     {/* Right Half - Content */}
-                    <div className="w-full sm:w-1/2 h-auto sm:h-[180px] md:h-[200.1px] flex flex-col justify-between relative pt-6 sm:pt-8 md:pt-10">
+                    <div className="w-full px-4 box-border shadow-md rounded-tr-lg rounded-br-lg sm:w-1/2 h-auto sm:h-[180px] md:h-[200.1px] flex flex-col justify-between relative pt-6 sm:pt-8 md:pt-10">
                         {/* Timer Loader - Top Right */}
-                        <div className="absolute top-0 right-0 w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10">
+                        <div className="absolute top-0 right-0 w-8 h-8 sm:w-9 sm:h-9 md:w-12 md:h-12 pr-4">
                             <svg className="loader-circle w-full h-full" viewBox="0 0 48 48" onClick={() => setIndex((index + 1) % images.length)}>
                                 <g transform="translate(24, 24)">
-                                    {[1, 2, 3, 4, 5, 6].map((segmentIndex) => (
-                                        <rect
-                                            key={segmentIndex}
-                                            fill={segmentIndex > (6 - timeLeft) ? '#112b38' : 'rgba(17, 43, 56, 0.3)'}
-                                            x="-1.5"
-                                            y="-22"
-                                            width="4.5"
-                                            height="9"
-                                            rx="2"
-                                            transform={`rotate(${(segmentIndex - 1) * 60})`}
-                                        />
-                                    ))}
+                                    {[1, 2, 3, 4, 5, 6].map((segmentIndex) => {
+                                        // Har segment ke liye starting angle
+                                        const startAngleDeg = (segmentIndex - 1) * 60;
+
+                                        // Gap ke saath end angle (58 degree tak, 2 degree gap)
+                                        const endAngleDeg = startAngleDeg + 58;
+
+                                        const startAngle = (startAngleDeg * Math.PI) / 180;
+                                        const endAngle = (endAngleDeg * Math.PI) / 180;
+                                        const radius = 20;
+
+                                        // Arc path calculate karo
+                                        const x1 = radius * Math.cos(startAngle);
+                                        const y1 = radius * Math.sin(startAngle);
+                                        const x2 = radius * Math.cos(endAngle);
+                                        const y2 = radius * Math.sin(endAngle);
+
+                                        const largeArcFlag = 0;
+
+                                        const pathData = [
+                                            "M", x1, y1,
+                                            "A", radius, radius, 0, largeArcFlag, 1, x2, y2
+                                        ].join(" ");
+                                        const isBlack = segmentIndex <= timeLeft;
+
+                                        return (
+                                            <path
+                                                key={segmentIndex}
+                                                d={pathData}
+                                                fill="none"
+                                                stroke={isBlack ? '#112b38' : '#ffffff'}
+                                                strokeWidth="5"
+                                                strokeLinecap="round"
+                                            />
+                                        );
+                                    })}
                                 </g>
                             </svg>
                         </div>
@@ -159,14 +189,39 @@ export default function EventCard() {
                     </div>
                 </div>
             </div>
-            <div className="w-[65%] mx-auto mt-20 flex flex-col">
-                <Link href="/event/3" className="w-full h-[200px] rounded-lg overflow-hidden block cursor-pointer">
-                    <img
-                        src='/TOP%20SLLER/22054_9834dd51a16eba240c0c6c97a5237e74-0-en1771488562.jpg'
-                        alt="Event"
-                        className="w-full h-[200px] object-cover transition-all duration-500 rounded-lg"
-                    />
-                </Link>
+            <div className="w-[65%] mx-auto mt-20 flex flex-col relative">
+                <div className="w-full h-[200px] rounded-lg overflow-hidden relative shadow-md">
+                    {images.map((img, i) => (
+                        <Link
+                            key={i}
+                            href={`/event/${i + 1}`}
+                            className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ${i === bottomIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+                        >
+                            <img
+                                src={img}
+                                alt="Event"
+                                className="w-full h-full object-cover"
+                            />
+                        </Link>
+                    ))}
+
+                    {/* Pagination Dots */}
+                    <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 z-20 flex gap-2">
+                        {images.map((_, i) => (
+                            <button
+                                key={i}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    setBottomIndex(i);
+                                }}
+                                className={`w-2 h-2 rounded-full transition-all duration-300 shadow-sm ${i === bottomIndex ? 'bg-white scale-125' : 'bg-white/60 hover:bg-white'}`}
+                                aria-label={`Go to slide ${i + 1}`}
+                            />
+                        ))}
+                    </div>
+                </div>
+
                 <div className="w-full flex items-center justify-end mt-4">
                     <Text className="cursor-pointer text-[#112b38] hover:text-[#c89c6b] transition-colors duration-300 font-medium" onClick={() => router.push('/help')}>{t.sponsers}{' '}{t.advertisingWithUs} </Text>
                 </div>

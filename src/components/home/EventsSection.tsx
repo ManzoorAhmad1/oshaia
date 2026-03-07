@@ -184,7 +184,7 @@ const EventsSection = () => {
                     <p className="text-xs sm:text-sm font-bold whitespace-nowrap">{event.title}</p>
                     <p className="text-[10px] sm:text-xs text-[#112b38]">{event.location}</p>
                   </div>
-                  <div className='w-[135px] flex-shrink-0 flex flex-col gap-2 items-center justify-center py-2 sm:py-3 px-4 sm:px-6 bg-[#112b38] text-white rounded-bl-3xl'>
+                  <div className='w-[135px] flex-shrink-0 flex flex-col gap-2 items-center justify-center py-2 sm:py-3 px-4 sm:px-6 bg-[#112b38] hover:bg-[#c89c6b] text-white rounded-bl-3xl'>
                     <p className="mr-1 sm:mr-2 text-[8px] sm:text-[9.9px]">{t.asFrom}</p>
                     <p className="text-xs sm:text-[15.9px]">{event.price}</p>
                   </div>
@@ -195,7 +195,7 @@ const EventsSection = () => {
         </div>
         {/* View All Button */}
         <div className="w-full flex items-center justify-center mt-2 sm:mt-3 md:mt-4">
-          <button className="w-[200px] h-[35px] sm:h-[40px] md:h-[45px] bg-transparent border-2 border-[#c89c6b] text-[#c89c6b] px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 md:py-2.5 text-sm sm:text-base md:text-lg uppercase tracking-wider rounded-full shadow-lg whitespace-nowrap flex items-center justify-center">
+          <button className="w-[200px] h-[35px] sm:h-[40px] md:h-[45px] bg-transparent border-2 border-[#c89c6b] text-[#c89c6b] hover:bg-[#112b38] hover:text-white px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 md:py-2.5 text-sm sm:text-base md:text-lg uppercase tracking-wider rounded-full shadow-lg whitespace-nowrap flex items-center justify-center">
             {t.viewAllEvent}
           </button>
         </div>
