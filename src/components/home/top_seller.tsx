@@ -102,10 +102,9 @@ export default function EventCard() {
                     </Link>
 
                     {/* Right Half - Content */}
-                    <div className="w-full px-4 box-border shadow-md rounded-tr-lg rounded-br-lg sm:w-1/2 h-auto sm:h-[180px] md:h-[200.1px] flex flex-col justify-between relative pt-6 sm:pt-8 md:pt-10">
+                    <div className="w-full px-4 box-border shadow-[0_-3px_6px_rgba(0,0,0,0.08),3px_0_6px_rgba(0,0,0,0.08),0_3px_6px_rgba(0,0,0,0.08)] rounded-tr-lg rounded-br-lg sm:w-1/2 h-auto sm:h-[180px] md:h-[200.1px] flex flex-col justify-between relative pt-6 sm:pt-8 md:pt-10">
                         {/* Timer Loader - Top Right */}
-                        {/* Timer Loader - Top Right */}
-                        <div className="absolute top-0 right-0 w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 mr-2 sm:mr-3 md:mr-4">
+                        <div className="absolute top-0 right-0 w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 mr-2 sm:mr-3 md:mr-4 mt-4">
                             <svg
                                 className="loader-spinner w-full h-full cursor-pointer rotating"
                                 viewBox="0 0 30 28"

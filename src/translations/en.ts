@@ -133,8 +133,8 @@ export const en = {
     happyCustomers: 'Happy Customers',
     successfulEvents: 'Successful Events',
     whoWeAre: 'Who We Are',
-    whoWeAreDesc1: 'We are a dynamic event ticketing platform built to make your event experience seamless — from browsing to booking. Our mission is to connect event organizers and attendees through an intuitive and secure digital environment.',
-    whoWeAreDesc2: "Whether you're looking to host concerts, festivals, conferences, or community gatherings, we provide the tools to manage ticket sales, seat selections, and promotions efficiently.",
+    whoWeAreDesc1: 'Oshaia.com is a modern event ticketing platform created to make discovering and booking events simple, fast, and reliable. Our goal is to provide a seamless experience for both event organisers and attendees through a secure and user-friendly digital platform.',
+    whoWeAreDesc2: "We connect people with the best events happening across Mauritius while giving organisers powerful tools to manage ticket sales, promotions, and event access efficiently.",
     trustedPlatform: 'Your trusted platform for discovering and booking amazing events.',
     securePayment: 'Secure Payment',
     securePaymentDesc: 'All transactions are encrypted for your safety and peace of mind.',
@@ -366,11 +366,11 @@ export const en = {
     ourSponsors: 'Our Sponsors',
     
     // Platinumlist Section
-    dubaiEventsTickets: 'Dubai Events Tickets',
-    dubaiDesc1: 'Dubai is a vibrant city where entertainment and events are abundant. With so many options available, it\'s easy to feel overwhelmed. How do you determine which entertainment venues in Dubai are worth your visit?',
-    dubaiDesc2: 'Our comprehensive events listing platform serves as your personal guide, helping you discover activities that match your preferences, budget, and schedule perfectly.',
-    dubaiDesc3: 'Platinumlist.net is your ultimate entertainment companion in Dubai (UAE). We continuously monitor the latest indoor entertainment, live shows, concerts, and regional events, promptly updating our platform to ensure you never miss out on what\'s happening.',
-    dubaiDesc4: 'Our mission is to provide visitors with the most engaging Dubai experiences while offering competitive pricing. Save time, money, and effort by booking your event tickets through Platinumlist.net.',
+    dubaiEventsTickets: 'Mauritius Event Tickets',
+    dubaiDesc1: 'Mauritius is a vibrant island with a rich calendar of concerts, festivals, cultural shows, and live entertainment throughout the year. With so many events happening across the island, finding the right experience that fits your interests, schedule, and budget can sometimes be challenging.',
+    dubaiDesc2: 'Oshaia.com simplifies this process by offering a modern and reliable platform to discover and book the best events in Mauritius. Our platform continuously tracks and lists upcoming events, helping users easily explore what’s happening and secure their tickets in just a few simple steps.',
+    dubaiDesc3: 'Designed with advanced technology, Oshaia.com provides a seamless, user-friendly, and easy-to-use experience. The platform is supported by highly secure encrypted payment systems, ensuring every transaction is safe, reliable, and protected.',
+    dubaiDesc4: 'Our mission is to connect people with the most exciting events across Mauritius while offering a convenient, secure, and eco-friendly digital ticketing solution. With Oshaia.com, discovering and booking event experiences becomes simple, efficient, and enjoyable.',
     doYouHaveQuestion: 'Do you have any question?',
     pleaseContactUs: 'Please contact us',
  

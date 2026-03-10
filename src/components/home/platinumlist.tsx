@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 const Platinumlist = () => {
   const { t } = useLanguage();
-  const router=useRouter()
+  const router = useRouter()
   return (
     <section className="w-full sm:w-[85%] mx-auto py-6 sm:py-8 md:py-10 px-0 mt-6 sm:mt-8 md:mt-10">
 
@@ -67,11 +67,12 @@ const Platinumlist = () => {
           <div className="mb-4 sm:mb-6 md:mb-8">
             <div className="flex flex-col items-start">
               <div className="font-bold text-lg sm:text-xl mb-3 sm:mb-4 text-gray-800">{t.youChooseHowToPay}</div>
-              <div className="flex items-center gap-3">
-                <img src="https://cdn.platinumlist.net/dist/v876/img/payment-systems/visa-logo.svg" alt="Visa" className="h-6 sm:h-8 w-auto object-contain" />
-                <img src="https://cdn.platinumlist.net/dist/v876/img/payment-systems/mastercard-logo.svg" alt="Mastercard" className="h-6 sm:h-8 w-auto object-contain" />
-                <img src="https://cdn.platinumlist.net/dist/v876/img/payment-systems/american-express.svg" alt="American Express" className="h-6 sm:h-8 w-auto object-contain" />
-                <img src="https://cdn.platinumlist.net/dist/v876/img/payment-systems/apple-pay.svg" alt="Apple Pay" className="h-6 sm:h-8 w-auto object-contain" />
+              <div className="flex justify-center">
+                <img
+                  src='/Red Simple Typographic 2026 Christmas Supplies Logo.png'
+                  alt="Payment Methods"
+                  className="h-8 sm:h-10 md:h-12 w-auto object-contain"
+                />
               </div>
             </div>
           </div>
@@ -133,7 +134,7 @@ const Platinumlist = () => {
                 <h3 className="text-lg md:text-xl font-semibold text-gray-900">
                   Do you have any questions?
                 </h3>
-                <p className="text-gray-600 text-sm md:text-base hover:text-[#c89c6b] cursor-pointer" onClick={()=>router.push('help')}>
+                <p className="text-gray-600 text-sm md:text-base hover:text-[#c89c6b] cursor-pointer" onClick={() => router.push('help')}>
                   Please contact us
                 </p>
               </div>
