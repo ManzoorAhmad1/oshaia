@@ -173,10 +173,10 @@ const EventsSection = () => {
                   />
 
                   {/* Date Badge */}
-                  <div className="absolute top-3 right-3 bg-white rounded shadow-lg overflow-hidden z-20 px-1">
+                  <div className="absolute top-3 right-3 bg-black/70 rounded shadow-lg overflow-hidden z-20 px-1">
                     <div className="flex items-center gap-2">
-                      <div className="text-lg sm:text-xl font-bold text-[#112b38] leading-none">{event.day}</div>
-                      <div className="text-sm sm:text-base font-bold text-[#112b38] uppercase">{event.month}</div>
+                      <div className="text-lg sm:text-xl font-bold text-white leading-none">{event.day}</div>
+                      <div className="text-sm sm:text-base font-bold text-white uppercase">{event.month}</div>
                     </div>
                   </div>
                 </div>

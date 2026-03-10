@@ -94,7 +94,7 @@ export default function AccountPage() {
                 <div className="w-full max-w-[1100px] mx-auto ">
                     <div className="relative w-full h-[200px] md:h-[300px] overflow-hidden">
                         <Image
-                            src="/ArtboardLandscrp.png"
+                            src="/Artboard 1 cover.png"
                             alt="Landscape"
                             fill
                             className="object-cover rounded-tl-2xl rounded-tr-2xl"
@@ -108,11 +108,11 @@ export default function AccountPage() {
                     <div className="flex-1 bg-white border border-gray-100 rounded-bl-2xl shadow-[0_8px_30px_rgba(17,43,56,0.12)] px-14 py-14 flex flex-col ">
                         <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">Log In</h2>
 
-                        <form onSubmit={handleLogin} className="flex flex-col gap-6 flex-1 justify-between">
+                        <form onSubmit={handleLogin} className="flex flex-col gap-6">
                             {/* Email */}
                             <input
                                 type="text"
-                                placeholder="Email / Username"
+                                placeholder="Email"
                                 value={loginEmail}
                                 onChange={e => setLoginEmail(e.target.value)}
                                 className="w-full h-[46px] px-4 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#112b38]"
@@ -157,7 +157,7 @@ export default function AccountPage() {
                             {/* LOGIN button */}
                             <button
                                 type="submit"
-                                className="w-full h-[46px] bg-transparent border-2 border-[#c89c6b] text-[#112b38] hover:bg-[#112b38] hover:text-white hover:border-[#112b38] font-bold rounded tracking-widest text-sm transition-all duration-300"
+                                className="w-full h-[46px] bg-[#112b38] border-2 border-[#112b38] text-[#c89c6b] hover:text-white font-bold rounded tracking-widest text-sm transition-all duration-300"
                             >
                                 LOGIN
                             </button>
@@ -198,11 +198,11 @@ export default function AccountPage() {
                     <div className="flex-1 bg-white border border-gray-100 rounded-br-2xl shadow-[0_8px_30px_rgba(200,156,107,0.15)] px-14 py-14 flex flex-col">
                         <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">Sign Up</h2>
 
-                        <form onSubmit={handleSignup} className="flex flex-col gap-6 flex-1 justify-between">
+                        <form onSubmit={handleSignup} className="flex flex-col gap-6">
                             {/* Email */}
                             <input
                                 type="email"
-                                placeholder="Email / Username"
+                                placeholder="Email"
                                 value={signupEmail}
                                 onChange={e => setSignupEmail(e.target.value)}
                                 className="w-full h-[46px] px-4 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#112b38]"
@@ -303,7 +303,7 @@ export default function AccountPage() {
                             {/* SIGN UP button */}
                             <button
                                 type="submit"
-                                className="w-full h-[46px] bg-transparent border-2 border-[#c89c6b] text-[#112b38] hover:bg-[#112b38] hover:text-white hover:border-[#112b38] font-bold rounded tracking-widest text-sm transition-all duration-300"
+                                className="w-full h-[46px] bg-[#c89c6b] border-2 border-[#c89c6b] text-[#112b38] hover:text-white font-bold rounded tracking-widest text-sm transition-all duration-300"
                             >
                                 SIGN UP
                             </button>
