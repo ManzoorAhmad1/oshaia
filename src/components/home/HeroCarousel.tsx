@@ -343,6 +343,9 @@ const HeroCarousel = () => {
                                                 <Link href="/account" className="block px-4 py-2 hover:bg-[#c89c6b] hover:text-white text-sm text-gray-700 transition-colors">
                                                     {t.myAccount}
                                                 </Link>
+                                                <Link href="/profile" className="block px-4 py-2 hover:bg-[#c89c6b] hover:text-white text-sm text-gray-700 transition-colors">
+                                                    Profile
+                                                </Link>
                                                 <button
                                                     onClick={() => {
                                                         setProfileDropdownOpen(false)

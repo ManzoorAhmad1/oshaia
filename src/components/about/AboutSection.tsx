@@ -20,7 +20,7 @@ export default function AboutSection() {
         </div>
         <div>
           <Image
-            src="/uploads/defaults/about-photo.jpg"
+            src="/about us small square.jpeg"
             alt="About"
             width={600}
             height={300}

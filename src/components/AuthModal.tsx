@@ -24,7 +24,7 @@ const countries: Country[] = [
     { code: '+1', name: 'United States', flag: 'https://flagcdn.com/us.svg', isoCode: 'us' },
     { code: '+1', name: 'Canada', flag: 'https://flagcdn.com/ca.svg', isoCode: 'ca' },
     { code: '+52', name: 'Mexico', flag: 'https://flagcdn.com/mx.svg', isoCode: 'mx' },
-    
+
     // Europe
     { code: '+44', name: 'United Kingdom', flag: 'https://flagcdn.com/gb.svg', isoCode: 'gb' },
     { code: '+33', name: 'France', flag: 'https://flagcdn.com/fr.svg', isoCode: 'fr' },
@@ -79,7 +79,7 @@ const countries: Country[] = [
     { code: '+47', name: 'Norway', flag: 'https://flagcdn.com/no.svg', isoCode: 'no' },
     { code: '+48', name: 'Poland', flag: 'https://flagcdn.com/pl.svg', isoCode: 'pl' },
     { code: '+49', name: 'Germany', flag: 'https://flagcdn.com/de.svg', isoCode: 'de' },
-    
+
     // Asia
     { code: '+86', name: 'China', flag: 'https://flagcdn.com/cn.svg', isoCode: 'cn' },
     { code: '+91', name: 'India', flag: 'https://flagcdn.com/in.svg', isoCode: 'in' },
@@ -129,7 +129,7 @@ const countries: Country[] = [
     { code: '+995', name: 'Georgia', flag: 'https://flagcdn.com/ge.svg', isoCode: 'ge' },
     { code: '+996', name: 'Kyrgyzstan', flag: 'https://flagcdn.com/kg.svg', isoCode: 'kg' },
     { code: '+998', name: 'Uzbekistan', flag: 'https://flagcdn.com/uz.svg', isoCode: 'uz' },
-    
+
     // Africa
     { code: '+20', name: 'Egypt', flag: 'https://flagcdn.com/eg.svg', isoCode: 'eg' },
     { code: '+27', name: 'South Africa', flag: 'https://flagcdn.com/za.svg', isoCode: 'za' },
@@ -187,7 +187,7 @@ const countries: Country[] = [
     { code: '+269', name: 'Comoros', flag: 'https://flagcdn.com/km.svg', isoCode: 'km' },
     { code: '+290', name: 'Saint Helena', flag: 'https://flagcdn.com/sh.svg', isoCode: 'sh' },
     { code: '+291', name: 'Eritrea', flag: 'https://flagcdn.com/er.svg', isoCode: 'er' },
-    
+
     // South America
     { code: '+54', name: 'Argentina', flag: 'https://flagcdn.com/ar.svg', isoCode: 'ar' },
     { code: '+55', name: 'Brazil', flag: 'https://flagcdn.com/br.svg', isoCode: 'br' },
@@ -202,7 +202,7 @@ const countries: Country[] = [
     { code: '+596', name: 'Martinique', flag: 'https://flagcdn.com/mq.svg', isoCode: 'mq' },
     { code: '+597', name: 'Suriname', flag: 'https://flagcdn.com/sr.svg', isoCode: 'sr' },
     { code: '+598', name: 'Uruguay', flag: 'https://flagcdn.com/uy.svg', isoCode: 'uy' },
-    
+
     // Oceania
     { code: '+61', name: 'Australia', flag: 'https://flagcdn.com/au.svg', isoCode: 'au' },
     { code: '+64', name: 'New Zealand', flag: 'https://flagcdn.com/nz.svg', isoCode: 'nz' },
@@ -223,7 +223,7 @@ const countries: Country[] = [
     { code: '+687', name: 'New Caledonia', flag: 'https://flagcdn.com/nc.svg', isoCode: 'nc' },
     { code: '+688', name: 'Tuvalu', flag: 'https://flagcdn.com/tv.svg', isoCode: 'tv' },
     { code: '+689', name: 'French Polynesia', flag: 'https://flagcdn.com/pf.svg', isoCode: 'pf' },
-    
+
     // Caribbean
     { code: '+1', name: 'Bahamas', flag: 'https://flagcdn.com/bs.svg', isoCode: 'bs' },
     { code: '+1', name: 'Barbados', flag: 'https://flagcdn.com/bb.svg', isoCode: 'bb' },
@@ -268,7 +268,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
     const [showPassword, setShowPassword] = useState(false);
     const [showCountryDropdown, setShowCountryDropdown] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-    
+
     const modalRef = useRef<HTMLDivElement>(null);
     const backdropRef = useRef<HTMLDivElement>(null);
     const countryDropdownRef = useRef<HTMLDivElement>(null);
@@ -294,7 +294,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (
-                modalRef.current && 
+                modalRef.current &&
                 !modalRef.current.contains(event.target as Node) &&
                 backdropRef.current &&
                 backdropRef.current.contains(event.target as Node)
@@ -384,12 +384,12 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
     const selectedCountry = sortedCountries.find(c => c.code === countryCode) || sortedCountries[0];
 
     return (
-        <div 
+        <div
             ref={backdropRef}
             className="fixed inset-0 z-50 flex items-center justify-center bg-[#112b38] bg-opacity-75 overflow-hidden p-4"
             style={{ touchAction: 'none' }}
         >
-            <div 
+            <div
                 ref={modalRef}
                 className="bg-white rounded-lg shadow-xl w-full max-w-[700px] overflow-hidden flex flex-col md:flex-row max-h-[85vh] md:max-h-[500px]"
                 style={{ touchAction: 'auto' }}
@@ -399,13 +399,13 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                     <img
                         src='/Artboard.png'
                         alt='Auth Banner'
-                        className='object-cover w-full h-full'
+                        className='object-cover w-full h-full rotate-180'
                     />
                 </div>
 
                 {/* Right Side - Form Content */}
                 <div className="w-full md:w-[62.5%] p-6 overflow-y-auto flex flex-col justify-center relative">
-                     <button
+                    <button
                         onClick={onClose}
                         className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition z-10"
                     >
@@ -510,159 +510,158 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
 
                             <form onSubmit={handleSubmit} className="space-y-3 flex flex-col overflow-hidden justify-center">
                                 <div className="space-y-3 overflow-hidden">
-                                {/* Email Input */}
-                                <div>
-                                    <input
-                                        type="email"
-                                        placeholder={t.email}
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        className="w-full h-[42px] px-3 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                        required
-                                    />
-                                </div>
-
-                                {/* Mobile Number with Country Code */}
-                                <div className="flex gap-2">
-                                    <div className="relative">
-                                        <button
-                                            ref={countryButtonRef}
-                                            type="button"
-                                            onClick={() => setShowCountryDropdown(!showCountryDropdown)}
-                                            className="h-[42px] px-3 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 flex items-center gap-2 bg-white min-w-[100px]"
-                                        >
-                                            <img 
-                                                src={selectedCountry.flag} 
-                                                alt={selectedCountry.name}
-                                                className="w-5 h-3.5 object-cover rounded"
-                                            />
-                                            <span>{selectedCountry.code}</span>
-                                        </button>
-
-                                        {showCountryDropdown && (
-                                            <div 
-                                                ref={countryDropdownRef}
-                                                className="absolute top-full left-0 mt-1 w-72 max-h-80 overflow-y-auto bg-white border border-gray-300 rounded shadow-lg z-10"
-                                            >
-                                                {/* Search Input */}
-                                                <div className="sticky top-0 bg-white p-2 border-b">
-                                                    <input
-                                                        type="text"
-                                                        placeholder={t.searchCountry}
-                                                        value={searchTerm}
-                                                        onChange={(e) => setSearchTerm(e.target.value)}
-                                                        className="w-full h-8 px-3 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-purple-500"
-                                                        autoFocus
-                                                    />
-                                                </div>
-
-                                                {/* Country List */}
-                                                <div className="max-h-64 overflow-y-auto">
-                                                    {filteredCountries.length > 0 ? (
-                                                        filteredCountries.map((country) => (
-                                                            <button
-                                                                key={`${country.isoCode}-${country.code}`}
-                                                                type="button"
-                                                                onClick={() => {
-                                                                    setCountryCode(country.code);
-                                                                    setShowCountryDropdown(false);
-                                                                    setSearchTerm('');
-                                                                }}
-                                                                className={`w-full px-2 py-1 text-left hover:bg-gray-100 flex items-center gap-3 text-xs ${
-                                                                    country.code === countryCode ? 'bg-purple-50' : ''
-                                                                }`}
-                                                            >
-                                                                <img 
-                                                                    src={country.flag} 
-                                                                    alt={country.name}
-                                                                    className="w-6 h-4 object-cover rounded"
-                                                                />
-                                                                <span className="flex-1 text-left">{country.name}</span>
-                                                                <span className="text-gray-600 font-medium">{country.code}</span>
-                                                            </button>
-                                                        ))
-                                                    ) : (
-                                                        <div className="px-3 py-4 text-center text-gray-500 text-sm">
-                                                            {t.noCountriesFound}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        )}
+                                    {/* Email Input */}
+                                    <div>
+                                        <input
+                                            type="email"
+                                            placeholder={t.email}
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            className="w-full h-[42px] px-3 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                            required
+                                        />
                                     </div>
 
-                                    <input
-                                        type="tel"
-                                        placeholder={t.mobileNumber}
-                                        value={mobileNumber}
-                                        onChange={(e) => setMobileNumber(e.target.value.replace(/\D/g, ''))}
-                                        className="flex-1 h-[42px] px-3 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                        required
-                                        maxLength={15}
-                                    />
-                                </div>
+                                    {/* Mobile Number with Country Code */}
+                                    <div className="flex gap-2">
+                                        <div className="relative">
+                                            <button
+                                                ref={countryButtonRef}
+                                                type="button"
+                                                onClick={() => setShowCountryDropdown(!showCountryDropdown)}
+                                                className="h-[42px] px-3 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 flex items-center gap-2 bg-white min-w-[100px]"
+                                            >
+                                                <img
+                                                    src={selectedCountry.flag}
+                                                    alt={selectedCountry.name}
+                                                    className="w-5 h-3.5 object-cover rounded"
+                                                />
+                                                <span>{selectedCountry.code}</span>
+                                            </button>
 
-                                {/* Full Name Input */}
-                                <div>
-                                    <input
-                                        type="text"
-                                        placeholder={t.fullName}
-                                        value={fullName}
-                                        onChange={(e) => setFullName(e.target.value)}
-                                        className="w-full h-[42px] px-3 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                        required
-                                    />
-                                </div>
+                                            {showCountryDropdown && (
+                                                <div
+                                                    ref={countryDropdownRef}
+                                                    className="absolute top-full left-0 mt-1 w-72 max-h-80 overflow-y-auto bg-white border border-gray-300 rounded shadow-lg z-10"
+                                                >
+                                                    {/* Search Input */}
+                                                    <div className="sticky top-0 bg-white p-2 border-b">
+                                                        <input
+                                                            type="text"
+                                                            placeholder={t.searchCountry}
+                                                            value={searchTerm}
+                                                            onChange={(e) => setSearchTerm(e.target.value)}
+                                                            className="w-full h-8 px-3 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-purple-500"
+                                                            autoFocus
+                                                        />
+                                                    </div>
 
-                                {/* Password Input */}
-                                <div className="relative">
-                                    <input
-                                        type={showPassword ? 'text' : 'password'}
-                                        placeholder={t.password}
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        className="w-full h-[42px] px-3 pr-10 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                        required
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
-                                    >
-                                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                                    </button>
-                                </div>
+                                                    {/* Country List */}
+                                                    <div className="max-h-64 overflow-y-auto">
+                                                        {filteredCountries.length > 0 ? (
+                                                            filteredCountries.map((country) => (
+                                                                <button
+                                                                    key={`${country.isoCode}-${country.code}`}
+                                                                    type="button"
+                                                                    onClick={() => {
+                                                                        setCountryCode(country.code);
+                                                                        setShowCountryDropdown(false);
+                                                                        setSearchTerm('');
+                                                                    }}
+                                                                    className={`w-full px-2 py-1 text-left hover:bg-gray-100 flex items-center gap-3 text-xs ${country.code === countryCode ? 'bg-purple-50' : ''
+                                                                        }`}
+                                                                >
+                                                                    <img
+                                                                        src={country.flag}
+                                                                        alt={country.name}
+                                                                        className="w-6 h-4 object-cover rounded"
+                                                                    />
+                                                                    <span className="flex-1 text-left">{country.name}</span>
+                                                                    <span className="text-gray-600 font-medium">{country.code}</span>
+                                                                </button>
+                                                            ))
+                                                        ) : (
+                                                            <div className="px-3 py-4 text-center text-gray-500 text-sm">
+                                                                {t.noCountriesFound}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
 
-                                {/* Sign in with Google */}
-                                <div className="flex items-center justify-center gap-2 text-sm text-gray-700">
-                                    <span>{t.signInWith}</span>
-                                    <button type="button" className="flex items-center justify-center">
-                                        <FcGoogle size={24} />
-                                    </button>
-                                </div>
+                                        <input
+                                            type="tel"
+                                            placeholder={t.mobileNumber}
+                                            value={mobileNumber}
+                                            onChange={(e) => setMobileNumber(e.target.value.replace(/\D/g, ''))}
+                                            className="flex-1 h-[42px] px-3 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                            required
+                                            maxLength={15}
+                                        />
+                                    </div>
 
-                                {/* Login Link */}
-                                <div className="text-center text-sm">
-                                    <span className="text-gray-600">{t.alreadyHaveAccount} </span>
-                                    <button
-                                        type="button"
-                                        onClick={() => setMode('login')}
-                                        className="text-blue-500 hover:underline font-medium"
-                                    >
-                                        {t.loginHere}
-                                    </button>
-                                </div>
+                                    {/* Full Name Input */}
+                                    <div>
+                                        <input
+                                            type="text"
+                                            placeholder={t.fullName}
+                                            value={fullName}
+                                            onChange={(e) => setFullName(e.target.value)}
+                                            className="w-full h-[42px] px-3 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                            required
+                                        />
+                                    </div>
 
-                                {/* Verification Code Input */}
-                                <div>
-                                    <input
-                                        type="text"
-                                        placeholder={t.verificationCode}
-                                        className="w-full h-[42px] px-3 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                        maxLength={6}
-                                    />
-                                    <p className="text-xs text-gray-500 mt-1">{t.verificationCodeSent}</p>
-                                </div>
+                                    {/* Password Input */}
+                                    <div className="relative">
+                                        <input
+                                            type={showPassword ? 'text' : 'password'}
+                                            placeholder={t.password}
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            className="w-full h-[42px] px-3 pr-10 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                            required
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                                        >
+                                            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                        </button>
+                                    </div>
+
+                                    {/* Sign in with Google */}
+                                    <div className="flex items-center justify-center gap-2 text-sm text-gray-700">
+                                        <span>{t.signInWith}</span>
+                                        <button type="button" className="flex items-center justify-center">
+                                            <FcGoogle size={24} />
+                                        </button>
+                                    </div>
+
+                                    {/* Login Link */}
+                                    <div className="text-center text-sm">
+                                        <span className="text-gray-600">{t.alreadyHaveAccount} </span>
+                                        <button
+                                            type="button"
+                                            onClick={() => setMode('login')}
+                                            className="text-blue-500 hover:underline font-medium"
+                                        >
+                                            {t.loginHere}
+                                        </button>
+                                    </div>
+
+                                    {/* Verification Code Input */}
+                                    <div>
+                                        <input
+                                            type="text"
+                                            placeholder={t.verificationCode}
+                                            className="w-full h-[42px] px-3 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                            maxLength={6}
+                                        />
+                                        <p className="text-xs text-gray-500 mt-1">{t.verificationCodeSent}</p>
+                                    </div>
                                 </div>
 
                                 {/* Continue Button */}
