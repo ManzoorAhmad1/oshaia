@@ -76,7 +76,7 @@ const Footer = () => {
             <div className="mt-3 sm:mt-4 md:mt-5">
               <ul className="flex items-center justify-center gap-2 sm:gap-3 list-none text-xs sm:text-sm">
                 <li>
-                  <p className="text-gray-600 hover:text-[#c89c6b] transition-colors cursor-pointer"  onClick={()=>router.push('help')}>
+                  <p className="text-gray-600 hover:text-[#c89c6b] transition-colors cursor-pointer"  onClick={()=>router.push('/terms')}>
                     Terms &amp; condition
                   </p>
                 </li>
