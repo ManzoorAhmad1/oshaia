@@ -257,11 +257,132 @@ export default function ProfilePage() {
     const [showNew, setShowNew] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
 
+    const [activeTab, setActiveTab] = useState<'profile' | 'bookings' | 'tickets'>('profile');
+    const [editMode, setEditMode] = useState(false);
+
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen ">
             <HeroCarousel />
 
-            <div className="w-full max-w-2xl mx-auto px-4 py-10 mt-20">
+            {/* Wrapper: banner + card share the same max-width and padding */}
+            <div className="max-w-7xl mx-auto px-4 mt-16 sm:mt-24 md:mt-28">
+
+                {/* Welcome Banner */}
+                <div className="bg-[#112b38] text-white px-8 py-8 rounded-t-2xl">
+                    <h1 className="text-2xl md:text-3xl font-bold">Welcome, Havish!</h1>
+                    <p className="text-gray-300 text-sm mt-1">Manage your profile, bookings, and tickets</p>
+                </div>
+
+                {/* Main card — no top rounding so it connects flush with banner */}
+                <div className="bg-white rounded-b-2xl shadow-sm border border-gray-200 border-t-0 overflow-hidden flex flex-col md:flex-row min-h-[500px] mb-8">
+
+                    {/* Sidebar */}
+                    <aside className="w-full md:w-60 flex-shrink-0 bg-gray-50 border-b md:border-b-0 md:border-r border-gray-200 p-4 flex flex-col gap-1">
+                        <button
+                            onClick={() => { setActiveTab('profile'); setEditMode(false); }}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold transition-all w-full text-left ${
+                                activeTab === 'profile' ? 'bg-[#112b38] text-white' : 'text-gray-600 hover:bg-gray-100'
+                            }`}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="8" r="4" strokeWidth="2"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                            My Profile
+                        </button>
+                        <button
+                            onClick={() => { setActiveTab('bookings'); setEditMode(false); }}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold transition-all w-full text-left ${
+                                activeTab === 'bookings' ? 'bg-[#112b38] text-white' : 'text-gray-600 hover:bg-gray-100'
+                            }`}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" strokeWidth="2"/><path strokeLinecap="round" strokeWidth="2" d="M16 2v4M8 2v4M3 10h18"/><path strokeLinecap="round" strokeWidth="2" d="M9 16l2 2 4-4"/></svg>
+                            Booking History
+                        </button>
+                        <button
+                            onClick={() => { setActiveTab('tickets'); setEditMode(false); }}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold transition-all w-full text-left ${
+                                activeTab === 'tickets' ? 'bg-[#112b38] text-white' : 'text-gray-600 hover:bg-gray-100'
+                            }`}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>
+                            My Tickets
+                        </button>
+                        <button
+                            className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold text-red-500 hover:bg-red-50 transition-all w-full text-left"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1"/></svg>
+                            Logout
+                        </button>
+                    </aside>
+
+                    {/* Right content */}
+                    <div className="flex-1 min-w-0 p-6 md:p-8">
+
+                    {/* ── BOOKING HISTORY ── */}
+                    {activeTab === 'bookings' && (
+                        <div className="flex flex-col items-center justify-center">
+                            <h2 className="text-xl font-bold text-gray-800 mb-6 self-start">Booking History</h2>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="w-16 h-16 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" strokeWidth="1.5"/><path strokeLinecap="round" strokeWidth="1.5" d="M16 2v4M8 2v4M3 10h18"/><line x1="9" y1="15" x2="15" y2="15" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                            <p className="text-gray-400 text-sm mb-4">No bookings found</p>
+                            <a href="/event" className="text-[#c89c6b] hover:underline text-sm font-medium">Browse Events</a>
+                        </div>
+                    )}
+
+                    {/* ── MY TICKETS ── */}
+                    {activeTab === 'tickets' && (
+                        <div className="flex flex-col items-center justify-center">
+                            <h2 className="text-xl font-bold text-gray-800 mb-6 self-start">My Tickets</h2>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="w-16 h-16 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>
+                            <p className="text-gray-400 text-sm mb-4">No tickets found</p>
+                            <a href="/event" className="text-[#c89c6b] hover:underline text-sm font-medium">Browse Events</a>
+                        </div>
+                    )}
+
+                    {/* ── MY PROFILE: view mode ── */}
+                    {activeTab === 'profile' && !editMode && (
+                        <div>
+                            <h2 className="text-xl font-bold text-gray-800 mb-5">My Profile</h2>
+                            {/* Summary row */}
+                            <div className="bg-gray-50 rounded-xl p-5 mb-5 flex items-center justify-between">
+                                <div>
+                                    <p className="font-bold text-gray-800 text-base">{firstName} {lastName}</p>
+                                    <p className="text-gray-500 text-sm mt-0.5">{email}</p>
+                                </div>
+                                <button
+                                    onClick={() => setEditMode(true)}
+                                    className="flex items-center gap-2 bg-[#c89c6b] hover:bg-[#112b38] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-all"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 112.828 2.828L11.828 15.828a2 2 0 01-1.414.586H9v-2.414a2 2 0 01.586-1.414z"/></svg>
+                                    Edit Profile
+                                </button>
+                            </div>
+                            {/* Info grid */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 border border-gray-200 rounded-xl overflow-hidden">
+                                <div className="p-5 border-b sm:border-r border-gray-200">
+                                    <p className="text-xs text-gray-400 mb-1">Full Name</p>
+                                    <p className="font-bold text-gray-800 text-sm">{firstName} {lastName}</p>
+                                </div>
+                                <div className="p-5 border-b border-gray-200">
+                                    <p className="text-xs text-gray-400 mb-1">Email</p>
+                                    <p className="font-bold text-gray-800 text-sm">{email}</p>
+                                </div>
+                                <div className="p-5 sm:border-r border-gray-200">
+                                    <p className="text-xs text-gray-400 mb-1">Phone</p>
+                                    <p className="font-bold text-gray-800 text-sm">{phone || '—'}</p>
+                                </div>
+                                <div className="p-5">
+                                    <p className="text-xs text-gray-400 mb-1">Member Since</p>
+                                    <p className="font-bold text-gray-800 text-sm">March 2026</p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* ── MY PROFILE: edit mode ── */}
+                    {activeTab === 'profile' && editMode && (
+                    <div>
+                        <div className="flex items-center justify-between mb-5">
+                            <h2 className="text-xl font-bold text-gray-800">Edit Profile</h2>
+                            <button onClick={() => setEditMode(false)} className="text-sm text-[#112b38] hover:text-[#c89c6b] font-semibold transition-colors">← Back</button>
+                        </div>
 
                 {/* ── CUSTOMER DETAILS ── */}
                 <Section title="Customer Details" open={openSections.customer} onToggle={() => toggle('customer')}>
@@ -588,6 +709,11 @@ export default function ProfilePage() {
                     </div>
                 </Section>
 
+                    </div>
+                    )}
+
+                    </div>{/* end right content */}
+                </div>
             </div>
 
             <Footer />

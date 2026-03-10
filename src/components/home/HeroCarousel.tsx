@@ -339,24 +339,32 @@ const HeroCarousel = () => {
                                         </div>
 
                                         {profileDropdownOpen && (
-                                            <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 z-50 py-2">
-                                                <Link href="/account" className="block px-4 py-2 hover:bg-[#c89c6b] hover:text-white text-sm text-gray-700 transition-colors">
-                                                    {t.myAccount}
+                                            <div className="absolute top-full right-0 mt-2 w-52 bg-white rounded-lg shadow-xl border border-gray-200 z-50 py-2">
+                                                <Link href="/profile" onClick={() => setProfileDropdownOpen(false)} className="flex items-center gap-2 px-4 py-2 hover:bg-[#112b38] hover:text-white text-sm text-gray-700 transition-colors">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="8" r="4" strokeWidth="2"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                                                    My Profile
                                                 </Link>
-                                                <Link href="/profile" className="block px-4 py-2 hover:bg-[#c89c6b] hover:text-white text-sm text-gray-700 transition-colors">
-                                                    Profile
+                                                <Link href="/profile?tab=bookings" onClick={() => setProfileDropdownOpen(false)} className="flex items-center gap-2 px-4 py-2 hover:bg-[#112b38] hover:text-white text-sm text-gray-700 transition-colors">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" strokeWidth="2"/><path strokeLinecap="round" strokeWidth="2" d="M16 2v4M8 2v4M3 10h18"/><path strokeLinecap="round" strokeWidth="2" d="M9 16l2 2 4-4"/></svg>
+                                                    Booking History
                                                 </Link>
+                                                <Link href="/profile?tab=tickets" onClick={() => setProfileDropdownOpen(false)} className="flex items-center gap-2 px-4 py-2 hover:bg-[#112b38] hover:text-white text-sm text-gray-700 transition-colors">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>
+                                                    My Tickets
+                                                </Link>
+                                                <div className="border-t border-gray-100 mt-1 pt-1">
                                                 <button
                                                     onClick={() => {
                                                         setProfileDropdownOpen(false)
                                                         setAuthMode('login')
                                                         setIsAuthModalOpen(true)
                                                     }}
-                                                    className="w-full text-left px-4 py-2 hover:bg-[#c89c6b] hover:text-white text-sm text-gray-700 transition-colors flex items-center gap-2"
+                                                    className="w-full text-left px-4 py-2 hover:bg-red-50 text-sm text-red-500 transition-colors flex items-center gap-2"
                                                 >
                                                     <LogOut className="w-4 h-4" />
-                                                    {t.login} / {t.signUp}
+                                                    Logout
                                                 </button>
+                                                </div>
                                             </div>
                                         )}
                                     </div>

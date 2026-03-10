@@ -101,37 +101,27 @@ const Platinumlist = () => {
         </div>
 
         {/* Footer-like Info */}
-        <div className="w-full bg-white border-t border-gray-200 py-8 sm:py-10 md:py-12">
+        <div className="w-full bg-white border-t border-gray-200 py-4 sm:py-5 md:py-6">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center">
 
               {/* Left - Brand Section */}
-              <div className="md:col-span-5 flex flex-col items-center md:items-start space-y-3">
-                <div className="flex items-center gap-3">
-                  <div className="flex-shrink-0">
-                    <img
-                      src='Main Oshaia.com.png'
-                      alt="Platinumlist Logo"
-                      className="h-12 w-auto md:h-14 object-contain"
-                    />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
-                    Platinumlist
-                  </h2>
-                </div>
-                <p className="text-gray-600 text-sm md:text-base leading-relaxed max-w-md text-center md:text-left">
-                  Entertainment discovery and monetisation platform.
-                </p>
+              <div className="md:col-span-4 flex items-center justify-center md:justify-start h-20">
+                <img
+                  src='Main Oshaia.com.png'
+                  alt="Platinumlist Logo"
+                  className="w-auto h-auto object-contain"
+                />
               </div>
 
-              {/* Divider - Hidden on mobile */}
+              {/* Divider 1 */}
               <div className="hidden md:block md:col-span-1">
                 <div className="h-12 w-px bg-gray-300 mx-auto"></div>
               </div>
 
               {/* Middle - Contact Section */}
               <div className="md:col-span-3 flex flex-col items-center space-y-2">
-                <h3 className="text-lg md:text-xl font-semibold text-gray-900">
+                <h3 className="text-lg md:text-xl font-semibold text-gray-900 text-center">
                   Do you have any questions?
                 </h3>
                 <p className="text-gray-600 text-sm md:text-base hover:text-[#c89c6b] cursor-pointer" onClick={() => router.push('help')}>
@@ -139,13 +129,13 @@ const Platinumlist = () => {
                 </p>
               </div>
 
-              {/* Divider - Hidden on mobile */}
+              {/* Divider 2 */}
               <div className="hidden md:block md:col-span-1">
                 <div className="h-12 w-px bg-gray-300 mx-auto"></div>
               </div>
 
-              {/* Right - Original Size WhatsApp Image */}
-              <div className="md:col-span-2 flex justify-center md:justify-start">
+              {/* Right - WhatsApp Section */}
+              <div className="md:col-span-3 flex justify-center md:justify-start">
                 <img
                   src='/whatsapp12.png'
                   alt="WhatsApp"
