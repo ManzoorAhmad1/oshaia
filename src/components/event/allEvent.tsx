@@ -140,21 +140,33 @@ const AllEvents = () => {
                     {/* Progress Loader */}
                     <div className="absolute top-2 right-2 sm:top-3 sm:right-3 z-20">
                         <div className="relative w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12">
-                            <svg className="loader-circle" viewBox="0 0 48 48" onClick={nextSlide}>
-                                <g transform="translate(24, 24)">
-                                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((index) => (
-                                        <rect
-                                            key={index}
-                                            fill={index > (currentSlideData.duration - timeLeft) * (10 / currentSlideData.duration) ? 'white' : 'rgba(255, 255, 255, 0.3)'}
-                                            x="-1.5"
-                                            y="-22"
-                                            width="4.5"
-                                            height="9"
-                                            rx="2"
-                                            transform={`rotate(${(index - 1) * 36})`}
+                            <svg
+                                className="loader-spinner w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 cursor-pointer rotating"
+                                viewBox="0 0 30 28"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                                onClick={nextSlide}
+                            >
+                                {[
+                                    "M27.5005 6.38885L25.7058 7.56105C23.524 4.41549 20.0528 2.42183 16.1824 2.09124L16.3721 1.95767e-05C20.8962 0.386322 24.9522 2.71505 27.5005 6.38885Z",
+                                    "M26.5002 19.1499C27.2222 17.5683 27.5882 15.8801 27.5882 14.1325C27.5882 12.3849 27.2222 10.6968 26.5002 9.11519L28.4783 8.26504C29.3233 10.1161 29.7517 12.0901 29.7517 14.1325C29.7517 16.1749 29.3233 18.149 28.4783 20L26.5002 19.1499Z",
+                                    "M16.5 28L16.3103 25.9088C20.1808 25.5782 23.652 23.5845 25.8338 20.439L27.6284 21.6112C25.0801 25.285 21.0241 27.6136 16.5 28Z",
+                                    "M3.03551 21.6112L4.83017 20.439C7.01195 23.5845 10.4831 25.5782 14.3536 25.9088L14.1639 28C9.63983 27.6137 5.58377 25.285 3.03551 21.6112Z",
+                                    "M4.00009 9.1017C3.27807 10.6833 2.912 12.3714 2.912 14.119C2.912 15.8666 3.27807 17.5547 4.00009 19.1363L2.02196 19.9865C1.17691 18.1355 0.748535 16.1614 0.748535 14.119C0.748535 12.0767 1.17691 10.1026 2.02196 8.25156L4.00009 9.1017Z",
+                                    "M14.1287 -3.79799e-06L14.3184 2.09121C10.4479 2.42181 6.97673 4.41547 4.79495 7.56104L3.00028 6.38883C5.54855 2.71503 9.60461 0.386439 14.1287 -3.79799e-06Z"
+                                ].map((pathData, i) => {
+                                    const filledSegments = Math.floor((currentSlideData.duration - timeLeft) * (6 / currentSlideData.duration));
+                                    const isFilled = i < filledSegments;
+
+                                    return (
+                                        <path
+                                            key={i}
+                                            d={pathData}
+                                            fill={isFilled ? '#112b38' : '#e5e7eb'}
+                                            className="transition-colors duration-300"
                                         />
-                                    ))}
-                                </g>
+                                    );
+                                })}
                             </svg>
                         </div>
                     </div>

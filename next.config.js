@@ -49,6 +49,11 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'otayo.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'source.unsplash.com',
         pathname: '/**',
       },
