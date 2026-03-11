@@ -8,7 +8,7 @@ const Platinumlist = () => {
   const { t } = useLanguage();
   const router = useRouter()
   return (
-    <section className="w-full sm:w-[85%] mx-auto py-6 sm:py-8 md:py-10 px-0 mt-6 sm:mt-8 md:mt-10">
+    <section className="w-full sm:w-[85%] mx-auto py-6 sm:py-8 md:py-10 px-4 sm:px-0 mt-6 sm:mt-8 md:mt-10">
 
       <div className="w-full mx-auto">
         <div className="md:w-1/2">

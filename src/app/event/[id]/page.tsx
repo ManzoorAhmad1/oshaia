@@ -108,7 +108,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                 <div className="w-full h-auto event-card group relative overflow-visible">
 
                                     {/* Badge Image at Top Left - matches home screen event card badge style */}
-                                    <div className="absolute -top-[57px] -left-[115px] w-[820px] h-auto z-50 pointer-events-none">
+                                    <div className="hidden sm:block absolute -top-[57px] -left-[115px] w-[820px] h-auto z-50 pointer-events-none">
                                         <img
                                             src={`/images/LOGO TAG/1.png`}
                                             alt="Event Badge"
@@ -127,7 +127,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                 </div>
 
                 {/* Main Content */}
-                <div className="relative z-10 max-w-[89%] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 pb-6 sm:pb-8 md:pb-10">
+                <div className="relative z-10 max-w-[89%] mx-auto px-3 sm:px-6 md:px-8 lg:px-16 pb-6 sm:pb-8 md:pb-10">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
                         {/* Left Column - Main Content */}
                         <div className="lg:col-span-2 space-y-6">
@@ -212,8 +212,8 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             </div>
 
                             {/* Tabs Navigation */}
-                            <div className="w-full flex items-center justify-between ">
-                                <div className="flex items-center gap-8 px-4 sm:px-6">
+                            <div className="w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
+                                <div className="flex items-center gap-4 sm:gap-8 px-4 sm:px-6 overflow-x-auto w-full sm:w-auto">
                                     <button
                                         onClick={() => setActiveTab('tickets')}
                                         className={`py-2 text-sm sm:text-base font-bold relative transition-colors ${activeTab === 'tickets'
@@ -251,7 +251,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         )}
                                     </button>
                                 </div>
-                                <div className='flex gap-2 items-center'>
+                                <div className='flex gap-2 items-center px-4 sm:px-6 pb-2 sm:pb-0'>
                                     <HeartCrack />
                                     <Text>{t.addToFavourites}</Text>
                                 </div>
@@ -265,7 +265,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         {event.tickets.map((ticket) => (
                                             <div
                                                 key={ticket.id}
-                                                className="bg-gray-100 rounded-lg px-4 py-2 flex items-center justify-between gap-4"
+                                                className="bg-gray-100 rounded-lg px-4 py-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4"
                                             >
                                                 <Text className="font-bold text-sm text-[#112b38] min-w-[100px]">{ticket.name}</Text>
 
@@ -597,7 +597,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
             <div className="w-full sm:w-[85%] mx-auto my-12 px-6 sm:px-0">
                 <h2 className="text-2xl font-bold mb-6 text-gray-800">{t.relatedEvents || "Related Events"}</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-20 py-8 overflow-visible justify-items-center">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 sm:gap-14 md:gap-16 lg:gap-20 py-8 overflow-visible justify-items-center">
                     {[
                         {
                             id: 1,

@@ -111,20 +111,20 @@ const EventsSection = () => {
     : events.filter(event => event.category.toLowerCase() === activeCategory)
 
   return (
-    <section className="mt-6 sm:mt-8 md:mt-10 pb-6 sm:pb-8 md:pb-10">
+    <section className="mt-10 sm:mt-8 md:mt-10 pb-8 sm:pb-8 md:pb-10">
       {/* Section Title - 85% centered */}
-      <div className="w-full sm:w-[85%] mx-auto">
+      <div className="w-full sm:w-[85%] mx-auto px-4 sm:px-0">
         <h2 className="section-title text-black my-4 mb-8">{t.allEvent}</h2>
       </div>
 
       {/* Category Tabs - full width */}
-      <div className="w-full overflow-x-auto mb-6 sm:mb-8 border-gray-200 bg-[#112b38] py-2">
-        <div className="flex justify-start sm:justify-center items-center gap-0 min-w-max sm:min-w-0">
+      <div className="w-full mb-6 sm:mb-8 border-gray-200 bg-[#112b38] py-2">
+        <div className="flex flex-wrap justify-center items-center gap-0">
           {categoryKeys.map((category, idx) => (
             <React.Fragment key={category}>
               <button
                 onClick={() => setActiveCategory(category)}
-                className={`px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 text-[1.3rem] font-extrabold uppercase tracking-[0.02em] cursor-pointer relative whitespace-nowrap
+                className={`px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 text-sm sm:text-base md:text-[1.3rem] font-extrabold uppercase tracking-[0.02em] cursor-pointer relative whitespace-nowrap
                         ${activeCategory === category
                     ? 'text-[#c89c6b]'
                     : 'text-white'}
@@ -141,9 +141,8 @@ const EventsSection = () => {
       </div>
 
       {/* Cards + Button - 85% centered */}
-      <div className="w-full sm:w-[85%] mx-auto">
-        {/* Event Cards Grid - Fixed for last row centering */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-20 py-8 overflow-visible justify-items-center px-4">
+      <div className="w-full sm:w-[85%] mx-auto px-4 sm:px-0">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 sm:gap-14 md:gap-16 lg:gap-20 py-8 overflow-visible justify-items-center">
           {filteredEvents.map((event, index) => (
             <Link
               key={event.id}
@@ -151,7 +150,7 @@ const EventsSection = () => {
               className="w-full max-w-[340px] h-auto event-card relative overflow-visible block cursor-pointer"
             >
               {/* Badge Image at Top Left - Z-index high but with pointer-events-none */}
-              <div className="absolute -top-[28px] -left-[59px] w-[420px] h-auto z-50 pointer-events-none">
+              <div className="hidden sm:block absolute -top-[28px] -left-[59px] w-[420px] h-auto z-50 pointer-events-none">
                 <img
                   src={`/images/LOGO TAG/${index + 1}.png`}
                   alt="Badge"

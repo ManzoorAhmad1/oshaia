@@ -157,7 +157,7 @@ export default function TermsPage() {
         style={{ backgroundImage: 'url("/About%20Us.jpeg")' }}
       >
         <div className="absolute inset-0 bg-black/50 flex flex-col justify-center items-center text-center text-white px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-3">Terms &amp; Conditions</h1>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3">Terms &amp; Conditions</h1>
           <p className="text-lg text-gray-200 max-w-xl">
             Please read these terms carefully before purchasing tickets on Oshaia.
           </p>

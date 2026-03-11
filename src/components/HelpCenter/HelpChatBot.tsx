@@ -86,7 +86,7 @@ export default function HelpChatBot() {
   };
 
   return (
-    <section className="w-full sm:w-[85%] mx-auto px-0 mt-6 sm:mt-8 md:mt-10 mb-6 sm:mb-8 md:mb-10">
+    <section className="w-full sm:w-[85%] mx-auto px-4 sm:px-0 mt-6 sm:mt-8 md:mt-10 mb-6 sm:mb-8 md:mb-10">
       <div className="grid md:grid-cols-2 gap-10 items-start">
         {/* Left Column – FAQ / Template Questions */}
         <div>

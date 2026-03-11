@@ -146,7 +146,7 @@ const BestOfSessassonSlider = () => {
     const currentSlideData = slides[currentSlide]
 
     return (
-        <div className="w-full sm:w-[85%] h-auto mx-auto mb-6 sm:mb-8 md:mb-10 px-2 sm:px-4 mt-16 sm:mt-24 md:mt-28">
+        <div className="w-full sm:w-[85%] h-auto mx-auto mb-6 sm:mb-8 md:mb-10 px-4 sm:px-4 mt-60 sm:mt-48 md:mt-40 lg:mt-28">
             <h2 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1 sm:mb-2 lg:mb-3 tracking-tight uppercase">
                 {t.bestOfSeason}
             </h2>
@@ -230,7 +230,6 @@ const BestOfSessassonSlider = () => {
                                 alt={currentSlideData.alt}
                                 className="w-full h-full object-cover"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
                         </Link>
                     )}
 

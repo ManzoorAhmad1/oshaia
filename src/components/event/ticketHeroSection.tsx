@@ -193,7 +193,6 @@ const TicketHeroSection = () => {
                                 alt={currentSlideData.alt}
                                 className="w-full h-full object-cover rounded-xl"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
                         </div>
                     )}
 

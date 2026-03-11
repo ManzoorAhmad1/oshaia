@@ -29,9 +29,9 @@ export default function WhyChooseUs() {
   ];
 
   return (
-    <section className="w-full sm:w-[85%] mx-auto px-0 mt-6 sm:mt-8 md:mt-10 mb-6 sm:mb-8 md:mb-10">
-      <h2 className="text-3xl font-bold text-center text-[#c89c6b] mb-6">{t.whyChooseUs}</h2>
-      <div className="grid md:grid-cols-3 gap-8 text-center">
+    <section className="w-full sm:w-[85%] mx-auto px-4 sm:px-0 mt-6 sm:mt-8 md:mt-10 mb-6 sm:mb-8 md:mb-10">
+      <h2 className="text-2xl sm:text-3xl font-bold text-center text-[#c89c6b] mb-6">{t.whyChooseUs}</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 text-center">
         {reasons.map((reason, index) => (
           <div key={index} className="bg-white rounded-2xl p-6 border shadow-sm flex items-center justify-center flex-col">
             {reason.icon}

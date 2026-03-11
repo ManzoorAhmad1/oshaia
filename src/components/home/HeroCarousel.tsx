@@ -169,7 +169,7 @@ const HeroCarousel = () => {
             <div className="bg-white">
 
                 {/* HERO CARD */}
-                <div className="relative max-w-full sm:max-w-[1400.1px] h-[240px] sm:h-[300px] md:h-[340px] lg:h-[354.6px] mx-auto px-3 sm:px-4 lg:px-8 xl:px-12 2xl:px-16 pt-4 sm:pt-6">
+                <div className="relative max-w-full sm:max-w-[1400.1px] h-[240px] sm:h-[300px] md:h-[340px] lg:h-[354.6px] mx-auto px-4 lg:px-8 xl:px-12 2xl:px-16 pt-4 sm:pt-6">
                     <div className="relative w-full h-full rounded-xl sm:rounded-xl lg:rounded-3xl overflow-hidden shadow-lg sm:shadow-xl lg:shadow-2xl">
                         <Image
                             src="/Coveer Web-01-01.png"
@@ -178,23 +178,10 @@ const HeroCarousel = () => {
                             className="object-cover"
                             priority
                         />
-
-                        {/* Center Text Container with Logo */}
-                        <div className="absolute inset-0 flex items-center justify-center z-10 px-4 pointer-events-none">
-                            <div className="relative w-[240px] h-[57px] xs:w-[280px] xs:h-[66px] sm:w-[400px] sm:h-[95px] md:w-[500px] md:h-[118px] lg:w-[594.4px] lg:h-[140.7px]">
-                                <Image
-                                    src="/images/Logo/white-01.png"
-                                    alt="Oshaia Logo"
-                                    fill
-                                    className="object-contain"
-                                    priority
-                                />
-                            </div>
-                        </div>
                     </div>
 
                     {/* FLOATING NAV */}
-                    <div className="relative -mt-6 sm:-mt-10 md:-mt-14 lg:-mt-4 xl:-mt-24 2xl:-mt-24 max-w-full sm:max-w-[1140.2px] h-auto sm:h-[56px] lg:h-[68.6px] mx-auto flex justify-center px-3 sm:px-4 z-10 mb-4 sm:mb-0">
+                    <div className="relative -mt-6 sm:-mt-10 md:-mt-14 lg:-mt-4 xl:-mt-24 2xl:-mt-24 max-w-full sm:max-w-[1140.2px] h-auto sm:h-[56px] lg:h-[68.6px] mx-auto flex justify-center px-4 z-10 mb-4 sm:mb-0">
                         <div className="bg-[#112b38] text-white w-full rounded-xl sm:rounded-xl lg:rounded-2xl px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-3 lg:py-5 shadow-lg sm:shadow-xl lg:shadow-2xl">
                             <div className="flex items-center justify-center gap-2 sm:gap-4 md:gap-6 lg:gap-10 xl:gap-12">
                                 <NavItem
@@ -227,9 +214,9 @@ const HeroCarousel = () => {
                     </div>
 
                     {/* SEARCH BAR SECTION */}
-                    <div className="relative mt-4 sm:-mt-6 md:-mt-8 box-border max-w-full sm:max-w-[1230.7px] h-[130px] mx-auto px-3 sm:px-4">
-                        <div className="!pt-12 bg-white rounded-xl sm:rounded-xl lg:rounded-2xl h-[123px] mt-2 w-full shadow-md sm:shadow-lg border border-gray-100 px-4 sm:px-4 md:px-6 lg:px-8 xl:px-10 py-4 sm:py-4 lg:py-6">
-                            <div className="h-full flex flex-col lg:flex-row items-center justify-center gap-3 sm:gap-4 lg:gap-6">
+                    <div className="relative mt-4 sm:-mt-6 md:-mt-8 box-border max-w-full sm:max-w-[1230.7px] h-auto lg:h-[130px] mx-auto px-4">
+                        <div className="!pt-4 sm:!pt-12 bg-white rounded-xl sm:rounded-xl lg:rounded-2xl h-auto lg:h-[123px] mt-2 w-full shadow-md sm:shadow-lg border border-gray-100 px-4 sm:px-4 md:px-6 lg:px-8 xl:px-10 py-4 sm:py-4 lg:py-6">
+                            <div className="flex flex-col lg:flex-row items-center justify-center gap-3 sm:gap-4 lg:gap-6">
                                 {/* Search Bar with Calendar Icon INSIDE */}
                                 <div className="relative w-full lg:w-[436px] flex-shrink-0" ref={calendarRef}>
                                     <div className={`flex items-center gap-2 sm:gap-2 lg:gap-3 border border-[#c89c6b] ${searchFocused ? 'border-orange-500' : 'border-orange-500'} rounded-full px-3 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-2 lg:py-3 h-[42px] sm:h-[44px] lg:h-[44.8px] transition-colors`}>

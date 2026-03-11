@@ -79,8 +79,8 @@ export default function EventCard() {
     };
 
     return (
-        <div className="w-full h-auto mx-auto mb-6 sm:mb-8 md:mb-10 px-2 sm:px-4 flex gap-2 flex-col gap:8 mt-6 sm:mt-8 md:mt-10">
-            <div className="flex w-[85%] flex-col mx-auto">
+        <div className="w-full h-auto mx-auto mb-6 sm:mb-8 md:mb-10 px-4 sm:px-4 flex gap-2 flex-col gap:8 mt-10 sm:mt-8 md:mt-10">
+            <div className="flex w-full sm:w-[85%] flex-col mx-auto">
                 <div className="py-2">
                     <p className="text-sm sm:text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 mb-2 sm:mb-4 tracking-tight uppercase">
                         {t.topSeller}
@@ -172,7 +172,7 @@ export default function EventCard() {
                     </div>
                 </div>
             </div>
-            <div className="w-[65%] mx-auto mt-20 flex flex-col relative">
+            <div className="w-full sm:w-[85%] mx-auto mt-8 sm:mt-12 md:mt-20 flex flex-col relative">
                 <div className="w-full h-[200px] rounded-lg overflow-hidden relative shadow-md">
                     {images.map((img, i) => (
                         <Link
