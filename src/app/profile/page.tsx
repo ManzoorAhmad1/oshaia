@@ -265,11 +265,11 @@ export default function ProfilePage() {
             <HeroCarousel />
 
             {/* Wrapper: banner + card share the same max-width and padding */}
-            <div className="max-w-7xl mx-auto px-4 mt-16 sm:mt-24 md:mt-28">
+            <div className="max-w-7xl mx-auto px-4 mt-60 sm:mt-48 md:mt-40 lg:mt-44 xl:mt-28">
 
                 {/* Welcome Banner */}
-                <div className="bg-[#112b38] text-white px-8 py-8 rounded-t-2xl">
-                    <h1 className="text-2xl md:text-3xl font-bold">Welcome, Havish!</h1>
+                <div className="bg-[#112b38] text-white px-4 sm:px-8 py-6 sm:py-8 rounded-t-2xl">
+                    <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">Welcome, Havish!</h1>
                     <p className="text-gray-300 text-sm mt-1">Manage your profile, bookings, and tickets</p>
                 </div>
 
@@ -341,7 +341,7 @@ export default function ProfilePage() {
                         <div>
                             <h2 className="text-xl font-bold text-gray-800 mb-5">My Profile</h2>
                             {/* Summary row */}
-                            <div className="bg-gray-50 rounded-xl p-5 mb-5 flex items-center justify-between">
+                            <div className="bg-gray-50 rounded-xl p-4 sm:p-5 mb-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
                                 <div>
                                     <p className="font-bold text-gray-800 text-base">{firstName} {lastName}</p>
                                     <p className="text-gray-500 text-sm mt-0.5">{email}</p>
@@ -388,7 +388,7 @@ export default function ProfilePage() {
                 <Section title="Customer Details" open={openSections.customer} onToggle={() => toggle('customer')}>
                     <div className="pt-4 space-y-4">
                         {/* Row 1: Title | First Name | Last Name */}
-                        <div className="grid grid-cols-[90px_1fr_1fr] gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-[90px_1fr_1fr] gap-3">
                             <div>
                                 <FieldLabel label="Title" />
                                 <select
@@ -426,8 +426,8 @@ export default function ProfilePage() {
                         </div>
 
                         {/* Row 2: Country Code | Phone */}
-                        <div className="flex items-end gap-3">
-                            <div className="w-[180px] flex-shrink-0">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-end gap-3">
+                            <div className="w-full sm:w-[180px] flex-shrink-0">
                                 <FieldLabel label="Country Code" />
                                 <div className="relative" ref={countryRef}>
                                     <button
@@ -512,7 +512,7 @@ export default function ProfilePage() {
                 <Section title="Additional Information" open={openSections.additional} onToggle={() => toggle('additional')}>
                     <div className="pt-4 space-y-4">
                         {/* Row: Gender | DOB */}
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <FieldLabel label="Gender" />
                                 <select
@@ -558,7 +558,7 @@ export default function ProfilePage() {
                         </div>
 
                         {/* Row: Region | Country */}
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <FieldLabel label="Region" />
                                 <select value={region} onChange={(e) => setRegion(e.target.value)} className={inputCls}>
@@ -571,29 +571,6 @@ export default function ProfilePage() {
                                 <select value={country} onChange={(e) => setCountry(e.target.value)} className={inputCls}>
                                     {countries.map((c) => <option key={c}>{c}</option>)}
                                 </select>
-                            </div>
-                        </div>
-
-                        {/* Interests */}
-                        <div>
-                            <p className="text-[11px] font-bold tracking-widest text-gray-700 uppercase mb-1">
-                                What are you most interested in?
-                            </p>
-                            <p className="text-[11px] text-gray-400 mb-3">
-                                Let us know in which deals you are interested so we can send details on special offers, last minute deals and flash sales.
-                            </p>
-                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2">
-                                {interests.map((item) => (
-                                    <label key={item} className="flex items-center gap-2 cursor-pointer text-xs text-gray-600">
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedInterests.includes(item)}
-                                            onChange={() => toggleInterest(item)}
-                                            className="w-3.5 h-3.5 accent-[#c89c6b] flex-shrink-0"
-                                        />
-                                        {item}
-                                    </label>
-                                ))}
                             </div>
                         </div>
 
@@ -632,7 +609,7 @@ export default function ProfilePage() {
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <FieldLabel label="New Password" />
                                 <div className="relative">

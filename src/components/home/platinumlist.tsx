@@ -11,12 +11,12 @@ const Platinumlist = () => {
     <section className="w-full sm:w-[85%] mx-auto py-6 sm:py-8 md:py-10 px-4 sm:px-0 mt-6 sm:mt-8 md:mt-10">
 
       <div className="w-full mx-auto">
-        <div className="md:w-1/2">
+        <div className="md:w-3/4">
           {/* Why buy with Platinumlist */}
           <h2 className='text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 md:mb-8 text-gray-900'>
             {t.whyBuyWithUs}
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 md:gap-6 mb-6 sm:mb-8 md:mb-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 sm:gap-12 md:gap-2 mb-6 sm:mb-8 md:mb-10">
             {[
               {
                 icon: "https://cdn.platinumlist.net/dist/v876/img/why-buy-with-us/secure-checkout.svg",
@@ -54,10 +54,10 @@ const Platinumlist = () => {
                     className="w-8 h-8 "
                   />
                 </div>
-                <h3 className="font-bold text-base sm:text-lg md:text-xl mb-1 sm:mb-2 text-gray-900">
+                <h3 className="font-bold text-base sm:text-lg md:text-xl mb-1 sm:mb-2 text-gray-900 whitespace-nowrap">
                   {feature.title}
                 </h3>
-                <p className="text-sm sm:text-base text-gray-500">
+                <p className="text-sm sm:text-base text-gray-500 whitespace-nowrap">
                   {feature.desc}
                 </p>
               </div>
@@ -101,7 +101,7 @@ const Platinumlist = () => {
         </div>
 
         {/* Footer-like Info */}
-        <div className="w-full bg-white border-t border-gray-200 py-4 sm:py-5 md:py-6">
+        <div className="w-full bg-white border-t border-b border-gray-200 py-4 sm:py-5 md:py-6">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center">
 

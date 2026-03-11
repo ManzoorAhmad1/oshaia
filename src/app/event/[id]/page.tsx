@@ -127,7 +127,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                 </div>
 
                 {/* Main Content */}
-                <div className="relative z-10 max-w-[89%] mx-auto px-3 sm:px-6 md:px-8 lg:px-16 pb-6 sm:pb-8 md:pb-10">
+                <div className="relative z-10 max-w-[89%] mx-auto px-4 sm:px-6 md:px-8 lg:px-16 pb-6 sm:pb-8 md:pb-10">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
                         {/* Left Column - Main Content */}
                         <div className="lg:col-span-2 space-y-6">
@@ -565,7 +565,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                 </div>
             </div>
             {/* Artist Slider & Portrait Section */}
-            <div className="w-full sm:w-[85%] mx-auto mt-12 mb-2 px-6 sm:px-0">
+            <div className="w-full sm:w-[85%] mx-auto mt-12 mb-2 px-4 sm:px-0">
                 <div className="flex flex-col lg:flex-row gap-4">
                     {/* Artists Slider */}
                     <div className="flex-1 overflow-visible">
@@ -595,7 +595,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                 </div>
             </div>
 
-            <div className="w-full sm:w-[85%] mx-auto my-12 px-6 sm:px-0">
+            <div className="w-full sm:w-[85%] mx-auto my-12 px-4 sm:px-0">
                 <h2 className="text-2xl font-bold mb-6 text-gray-800">{t.relatedEvents || "Related Events"}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 sm:gap-14 md:gap-16 lg:gap-20 py-8 overflow-visible justify-items-center">
                     {[
@@ -633,7 +633,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             className="w-full max-w-[340px] h-auto event-card relative overflow-visible block cursor-pointer"
                         >
                             {/* Badge Image at Top Left */}
-                            <div className="absolute -top-[28px] -left-[59px] w-[420px] h-auto z-50 pointer-events-none">
+                            <div className="hidden sm:block absolute -top-[28px] -left-[59px] w-[420px] h-auto z-50 pointer-events-none">
                                 <img
                                     src={`/images/LOGO TAG/${index + 1}.png`}
                                     alt="Badge"

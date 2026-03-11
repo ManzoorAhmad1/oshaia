@@ -89,7 +89,7 @@ export default function AccountPage() {
             <HeroCarousel />
 
             {/* Login / Signup Section */}
-            <div className="w-full bg-white px-4 mt-6 sm:mt-16 md:mt-28 ">
+            <div className="w-full bg-white px-4  mt-60 sm:mt-48 md:mt-40 lg:mt-44 xl:mt-28 ">
                 {/* Image above the cards - no bottom margin/padding */}
                 <div className="w-full max-w-[1100px] mx-auto ">
                     <div className="relative w-full h-[200px] md:h-[300px] overflow-hidden">
@@ -105,7 +105,7 @@ export default function AccountPage() {
 
                 <div className="w-full max-w-[1100px] mx-auto flex flex-col md:flex-row items-stretch justify-evenly ">
                     {/* ── LOGIN CARD ── */}
-                    <div className="flex-1 bg-white border border-gray-100 rounded-bl-2xl shadow-[0_8px_30px_rgba(17,43,56,0.12)] px-4 sm:px-8 md:px-14 py-8 sm:py-10 md:py-14 flex flex-col ">
+                    <div className="flex-1 bg-white border border-gray-100 rounded-bl-none md:rounded-bl-2xl shadow-[0_8px_30px_rgba(17,43,56,0.12)] px-4 sm:px-8 md:px-14 py-8 sm:py-10 md:py-14 flex flex-col ">
                         <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">Log In</h2>
 
                         <form onSubmit={handleLogin} className="flex flex-col gap-6">
@@ -195,7 +195,7 @@ export default function AccountPage() {
                     </div>
 
                     {/* ── SIGN UP CARD ── */}
-                    <div className="flex-1 bg-white border border-gray-100 rounded-br-2xl shadow-[0_8px_30px_rgba(200,156,107,0.15)] px-4 sm:px-8 md:px-14 py-8 sm:py-10 md:py-14 flex flex-col">
+                    <div className="flex-1 bg-white border border-gray-100 rounded-b-2xl md:rounded-bl-none md:rounded-br-2xl shadow-[0_8px_30px_rgba(200,156,107,0.15)] px-4 sm:px-8 md:px-14 py-8 sm:py-10 md:py-14 flex flex-col">
                         <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">Sign Up</h2>
 
                         <form onSubmit={handleSignup} className="flex flex-col gap-6">
@@ -230,12 +230,12 @@ export default function AccountPage() {
                             />
 
                             {/* Phone Number with country code */}
-                            <div className="flex gap-2">
-                                <div className="relative" ref={countryDropdownRef}>
+                            <div className="flex gap-2 w-full">
+                                <div className="relative flex-shrink-0" ref={countryDropdownRef}>
                                     <button
                                         type="button"
                                         onClick={() => setShowCountryDropdown(!showCountryDropdown)}
-                                        className="h-[46px] px-3 border border-gray-300 rounded text-sm focus:outline-none flex items-center gap-1.5 bg-white min-w-[100px] justify-between"
+                                        className="h-[46px] px-3 border border-gray-300 rounded text-sm focus:outline-none flex items-center gap-1.5 bg-white w-[110px] justify-between"
                                     >
                                         <div className="flex items-center gap-1.5">
                                             <img
@@ -284,7 +284,7 @@ export default function AccountPage() {
                                     placeholder="Phone Number"
                                     value={signupPhone}
                                     onChange={e => setSignupPhone(e.target.value.replace(/\D/g, ''))}
-                                    className="flex-1 h-[46px] px-4 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#112b38]"
+                                    className="flex-1 min-w-0 h-[46px] px-4 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#112b38]"
                                     maxLength={15}
                                 />
                             </div>
