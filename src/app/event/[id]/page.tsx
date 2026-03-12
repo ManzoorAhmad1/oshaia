@@ -302,10 +302,10 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-[#112b38] mb-2">
                                             {event.title}
                                         </h2>
-                                        <Text className="text-sm sm:text-base text-[#c89c6b] mb-3">
+                                        <Text className="text-sm sm:text-base text-[#112b38] mb-3">
                                             {t.by} {event.organizer}
                                         </Text>
-                                        <Text className="text-xs sm:text-sm text-[#c89c6b] leading-relaxed line-clamp-2">
+                                        <Text className="text-xs sm:text-sm text-[#112b38] leading-relaxed line-clamp-2">
                                             {event.description}
                                         </Text>
                                     </div>
@@ -314,15 +314,15 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         <div className="space-y-3">
                                             <div className="flex items-center gap-2 text-sm">
                                                 <Clock className="w-4 h-4 text-[#112b38] flex-shrink-0" />
-                                                <span className="text-[#c89c6b]">{event.fullDate}</span>
+                                                <span className="text-[#112b38]">{event.fullDate}</span>
                                             </div>
                                             <div className="flex items-center gap-2 text-sm">
                                                 <MapPin className="w-4 h-4 text-[#112b38] flex-shrink-0" />
-                                                <span className="text-[#c89c6b]">{event.location}</span>
+                                                <span className="text-[#112b38]">{event.location}</span>
                                             </div>
                                             <div className="flex items-center gap-2 text-sm">
                                                 <TicketIcon className="w-4 h-4 text-[#112b38] flex-shrink-0" />
-                                                <span className="text-[#c89c6b]">{t.from} <span className="font-bold text-[#112b38]">Rs 1,000</span></span>
+                                                <span className="text-[#112b38]">{t.from} <span className="font-bold text-[#112b38]">Rs 1,000</span></span>
                                             </div>
                                             <div className="flex gap-2 mt-4">
                                                 <div className='flex flex-col items-center justify-center'>
@@ -354,19 +354,19 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                 <div className="flex items-center gap-4 sm:gap-8 px-4 sm:px-6 overflow-x-auto w-full sm:w-auto">
                                     <button
                                         onClick={() => scrollToSection(ticketsRef)}
-                                        className="py-2 text-sm sm:text-base font-bold text-gray-400 hover:text-[#c89c6b] transition-colors"
+                                        className="py-2 text-sm sm:text-base font-bold text-gray-400 hover:text-[#112b38] transition-colors"
                                     >
                                         {t.tickets}
                                     </button>
                                     <button
                                         onClick={() => scrollToSection(descriptionRef)}
-                                        className="py-2 text-sm sm:text-base font-bold text-gray-400 hover:text-[#c89c6b] transition-colors"
+                                        className="py-2 text-sm sm:text-base font-bold text-gray-400 hover:text-[#112b38] transition-colors"
                                     >
                                         {t.description}
                                     </button>
                                     <button
                                         onClick={() => scrollToSection(moreInfoRef)}
-                                        className="py-2 text-sm sm:text-base font-bold text-gray-400 hover:text-[#c89c6b] transition-colors"
+                                        className="py-2 text-sm sm:text-base font-bold text-gray-400 hover:text-[#112b38] transition-colors"
                                     >
                                         {t.moreInfo}
                                     </button>
@@ -397,7 +397,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                     </div>
 
                                                     {/* Offer Text */}
-                                                    <div className="text-[#c89c6b] font-semibold text-sm min-w-[140px] max-w-[140px]">
+                                                    <div className="text-[#112b38] font-semibold text-sm min-w-[140px] max-w-[140px]">
                                                         <span className="truncate block" title={`${ticket.offerEndsIn} 8 ${ticket.days.toLowerCase()}`}>
                                                             {ticket.offerEndsIn} 8 {ticket.days.toLowerCase()}
                                                         </span>
@@ -434,7 +434,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                             <button
                                                                 className={`w-6 h-6 border-2 border-[#c89c6b] rounded flex items-center justify-center transition-all duration-300 font-bold text-base ${ticketQuantities[ticket.id] === Math.min(20, ticket.available)
                                                                         ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400 border-gray-300'
-                                                                        : 'text-[#c89c6b] hover:bg-[#c89c6b] hover:text-white'
+                                                                        : 'text-[#112b38] hover:bg-[#c89c6b] hover:text-white'
                                                                     }`}
                                                                 onClick={() => incrementQuantity(ticket.id, ticket.available)}
                                                                 disabled={ticketQuantities[ticket.id] === Math.min(20, ticket.available)}
@@ -451,7 +451,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                         <p className="text-sm text-gray-600">
                                                             {ticket.description}
                                                         </p>
-                                                        <p className="text-xs text-[#c89c6b] mt-2">
+                                                        <p className="text-xs text-[#112b38] mt-2">
                                                             Only {ticket.available} tickets available (Max 20 per person)
                                                         </p>
                                                     </div>
@@ -466,7 +466,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             <div ref={descriptionRef} id="description-section">
                                 <div className="bg-white rounded-b-xl p-4 sm:p-6 shadow-md border border-t-0 border-gray-200">
                                     <h2 className="text-xl sm:text-2xl font-bold mb-4 text-[#112b38]">{t.eventDescription}</h2>
-                                    <div className="prose max-w-none text-[#c89c6b] text-sm sm:text-base">
+                                    <div className="prose max-w-none text-[#112b38] text-sm sm:text-base">
                                         <Text>{event.description}</Text>
                                         <Text className="mt-4">Join us for an unforgettable experience at {event.title}. This event promises to be one of the most exciting gatherings of the year.</Text>
                                     </div>
@@ -477,7 +477,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             <div ref={moreInfoRef} id="moreInfo-section">
                                 <div className="bg-white rounded-b-xl p-4 sm:p-6 shadow-md border border-t-0 border-gray-200">
                                     <h2 className="text-xl sm:text-2xl font-bold mb-4 text-[#112b38]">{t.moreInformation}</h2>
-                                    <div className="space-y-4 text-sm sm:text-base text-[#c89c6b]">
+                                    <div className="space-y-4 text-sm sm:text-base text-[#112b38]">
                                         <div>
                                             <h3 className="font-bold text-lg mb-2">{t.ageRestriction}</h3>
                                             <Text>{t.ageRestrictionDesc}</Text>
@@ -499,9 +499,9 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                 <div className="space-y-4">
                                     <div className="flex items-start gap-3 bg-white rounded-xl p-4 sm:p-6 shadow-md border border-gray-200">
                                         <div className='flex flex-col items-center justify-center px-2 rounded-lg shadow-md'>
-                                            <MapPin className="w-5 h-5 text-[#c89c6b] flex-shrink-0 mt-1" />
+                                            <MapPin className="w-5 h-5 text-[#112b38] flex-shrink-0 mt-1" />
                                             <div className="font-semibold text-sm sm:text-base">{event.location}</div>
-                                            <div className="text-xs sm:text-sm text-[#c89c6b]">{t.location}</div>
+                                            <div className="text-xs sm:text-sm text-[#112b38]">{t.location}</div>
                                         </div>
                                         <div>
                                             <Text>Etihad Park</Text>
@@ -589,10 +589,10 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                 </div>
 
                                 <div className="flex justify-center gap-10 mt-6 text-sm text-gray-600">
-                                    <button className="flex items-center gap-2 hover:text-[#c89c6b] transition-all duration-300">
+                                    <button className="flex items-center gap-2 hover:text-[#112b38] transition-all duration-300">
                                         <Calendar className="w-4 h-4" /> {t.addToCalendar}
                                     </button>
-                                    <button className="flex items-center gap-2 hover:text-[#c89c6b] transition-all duration-300">
+                                    <button className="flex items-center gap-2 hover:text-[#112b38] transition-all duration-300">
                                         <Link2 className="w-4 h-4" /> {t.shareEvent}
                                     </button>
                                 </div>
@@ -624,7 +624,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-3">
-                                        <button className="text-gray-400 hover:text-[#c89c6b] hover:scale-110 transition-all duration-300">
+                                        <button className="text-gray-400 hover:text-[#112b38] hover:scale-110 transition-all duration-300">
                                             <Heart className="w-4 h-4" />
                                         </button>
                                         <button
