@@ -252,7 +252,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                         backgroundImage: `url(${currentSlideData.url})`,
                         backgroundSize: '100% auto'
                     }} />
-                
+
                 {/* Hero Section with Event Card Design */}
                 <div className="relative z-10 w-full overflow-visible flex flex-col justify-end">
                     <div className="w-full pt-32 pb-6">
@@ -267,11 +267,11 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         />
                                     </div>
                                     <div className="relative z-10 overflow-hidden">
-                                        <TicketHeroSection 
-                                            currentSlide={currentSlide} 
-                                            slides={slides} 
-                                            setCurrentSlide={setCurrentSlide} 
-                                            currentSlideData={currentSlideData} 
+                                        <TicketHeroSection
+                                            currentSlide={currentSlide}
+                                            slides={slides}
+                                            setCurrentSlide={setCurrentSlide}
+                                            currentSlideData={currentSlideData}
                                         />
                                     </div>
                                 </div>
@@ -416,28 +416,26 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
                                                         {/* Quantity Selector with Counter */}
                                                         <div className="flex items-center gap-2">
-                                                            <button 
-                                                                className={`w-6 h-6 border-2 border-gray-300 rounded flex items-center justify-center transition-all duration-300 font-bold text-base ${
-                                                                    ticketQuantities[ticket.id] === 0 
-                                                                        ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400' 
+                                                            <button
+                                                                className={`w-6 h-6 border-2 border-gray-300 rounded flex items-center justify-center transition-all duration-300 font-bold text-base ${ticketQuantities[ticket.id] === 0
+                                                                        ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400'
                                                                         : 'hover:bg-[#112b38] hover:text-white hover:border-[#112b38] text-gray-700'
-                                                                }`}
+                                                                    }`}
                                                                 onClick={() => decrementQuantity(ticket.id)}
                                                                 disabled={ticketQuantities[ticket.id] === 0}
                                                             >
                                                                 -
                                                             </button>
-                                                            
+
                                                             <div className="w-12 text-center font-semibold text-lg">
                                                                 {ticketQuantities[ticket.id] !== undefined ? ticketQuantities[ticket.id] : 0}
                                                             </div>
-                                                            
-                                                            <button 
-                                                                className={`w-6 h-6 border-2 border-[#c89c6b] rounded flex items-center justify-center transition-all duration-300 font-bold text-base ${
-                                                                    ticketQuantities[ticket.id] === Math.min(20, ticket.available)
-                                                                        ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400 border-gray-300' 
+
+                                                            <button
+                                                                className={`w-6 h-6 border-2 border-[#c89c6b] rounded flex items-center justify-center transition-all duration-300 font-bold text-base ${ticketQuantities[ticket.id] === Math.min(20, ticket.available)
+                                                                        ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400 border-gray-300'
                                                                         : 'text-[#c89c6b] hover:bg-[#c89c6b] hover:text-white'
-                                                                }`}
+                                                                    }`}
                                                                 onClick={() => incrementQuantity(ticket.id, ticket.available)}
                                                                 disabled={ticketQuantities[ticket.id] === Math.min(20, ticket.available)}
                                                             >
