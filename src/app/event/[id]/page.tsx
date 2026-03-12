@@ -58,10 +58,22 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [playingSongId, setPlayingSongId] = useState<number | null>(null);
     const [songProgress, setSongProgress] = useState<{ [key: number]: number }>({});
+    const [relatedCarouselIndex, setRelatedCarouselIndex] = useState(0);
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
     // State for ticket quantities - Initialize properly
     const [ticketQuantities, setTicketQuantities] = useState<{ [key: number]: number }>({});
+
+    const relatedEvents = [
+        { id: 1, title: "EN TOUTE INTIMITÉ", location: "Le Suffren Hotel & Spa", price: "RS 450", image: "https://otayo.com/wp-content/uploads/2026/01/zulu-new-grid.jpg", day: "18", month: "Oct", badge: 1 },
+        { id: 2, title: "Summer Music Festival", location: "Grand Bay", price: "RS 600", image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&auto=format&fit=crop", day: "19", month: "Oct", badge: 2 },
+        { id: 3, title: "Jazz Night Live", location: "Caudan Waterfront", price: "RS 800", image: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=400&auto=format&fit=crop", day: "24", month: "Oct", badge: 3 },
+        { id: 4, title: "Afrobeats Night", location: "Bagatelle Mall", price: "RS 500", image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&auto=format&fit=crop", day: "28", month: "Oct", badge: 1 },
+        { id: 5, title: "Tropical Vibes", location: "Flic en Flac", price: "RS 350", image: "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=400&auto=format&fit=crop", day: "02", month: "Nov", badge: 2 },
+        { id: 6, title: "Rock The Night", location: "Trianon Arena", price: "RS 750", image: "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=400&auto=format&fit=crop", day: "08", month: "Nov", badge: 3 },
+    ];
+    const cardsPerPage = 3;
+    const totalPages = Math.ceil(relatedEvents.length / cardsPerPage);
 
     const mockSongs = [
         {
@@ -232,6 +244,14 @@ export default function EventDetailPage({ params }: EventDetailProps) {
             };
         }
     };
+
+    // Auto-advance related events carousel every 3 seconds
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setRelatedCarouselIndex(prev => (prev + 1) % totalPages);
+        }, 3000);
+        return () => clearInterval(timer);
+    }, [totalPages]);
 
     // Scroll function
     const scrollToSection = (sectionRef: React.RefObject<HTMLDivElement>) => {
@@ -704,78 +724,92 @@ export default function EventDetailPage({ params }: EventDetailProps) {
             </div>
 
             <div className="w-full sm:w-[85%] mx-auto my-12 px-4 sm:px-0">
-                <h2 className="text-2xl font-bold mb-6 text-gray-800">{t.relatedEvents || "Related Events"}</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 sm:gap-14 md:gap-16 lg:gap-20 py-8 overflow-visible justify-items-center">
-                    {[
-                        {
-                            id: 1,
-                            title: "EN TOUTE INTIMITÉ",
-                            location: "Le Suffren Hotel & Spa",
-                            price: "RS 450",
-                            image: "https://otayo.com/wp-content/uploads/2026/01/zulu-new-grid.jpg",
-                            day: "18",
-                            month: "Oct"
-                        },
-                        {
-                            id: 2,
-                            title: "Summer Music Festival",
-                            location: "Grand Bay",
-                            price: "RS 600",
-                            image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&auto=format&fit=crop",
-                            day: "19",
-                            month: "Oct"
-                        },
-                        {
-                            id: 3,
-                            title: "Jazz Night Live",
-                            location: "Caudan Waterfront",
-                            price: "RS 800",
-                            image: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=400&auto=format&fit=crop",
-                            day: "24",
-                            month: "Oct"
-                        }
-                    ].map((event, index) => (
-                        <Link
-                            key={event.id}
-                            href={`/event/${event.id}`}
-                            className="w-full max-w-[340px] h-auto event-card relative overflow-visible block cursor-pointer"
+                <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-2xl font-bold text-gray-800">{t.relatedEvents || "Related Events"}</h2>
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={() => setRelatedCarouselIndex(prev => (prev - 1 + totalPages) % totalPages)}
+                            className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-[#112b38] hover:text-white hover:border-[#112b38] transition-all duration-300"
                         >
-                            <div className="hidden sm:block absolute -top-[28px] -left-[59px] w-[420px] h-auto z-50 pointer-events-none">
-                                <img
-                                    src={`/images/LOGO TAG/${index + 1}.png`}
-                                    alt="Badge"
-                                    className="w-full h-auto object-contain scale-110"
-                                />
-                            </div>
-                            <div className="relative z-10 overflow-hidden rounded-tr-2xl rounded-br-2xl rounded-bl-2xl shadow-xl bg-white">
-                                <div className="relative w-full h-[340px] overflow-hidden">
-                                    <Image
-                                        src={event.image}
-                                        alt={event.title}
-                                        fill
-                                        className="object-cover"
-                                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                                    />
-                                    <div className="absolute top-3 right-3 bg-black/70 rounded shadow-lg overflow-hidden z-20 px-1">
-                                        <div className="flex items-center gap-2">
-                                            <div className="text-lg sm:text-xl font-bold text-white leading-none">{event.day}</div>
-                                            <div className="text-sm sm:text-base font-bold text-white uppercase">{event.month}</div>
+                            <ChevronLeft className="w-4 h-4" />
+                        </button>
+                        <button
+                            onClick={() => setRelatedCarouselIndex(prev => (prev + 1) % totalPages)}
+                            className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-[#112b38] hover:text-white hover:border-[#112b38] transition-all duration-300"
+                        >
+                            <ChevronRight className="w-4 h-4" />
+                        </button>
+                    </div>
+                </div>
+
+                <div className="relative overflow-hidden">
+                    <div
+                        className="flex transition-transform duration-500 ease-in-out"
+                        style={{ transform: `translateX(-${relatedCarouselIndex * 100}%)` }}
+                    >
+                        {Array.from({ length: totalPages }).map((_, pageIdx) => (
+                            <div key={pageIdx} className="w-full flex-shrink-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 sm:gap-14 md:gap-16 lg:gap-20 py-8 overflow-visible justify-items-center">
+                                {relatedEvents.slice(pageIdx * cardsPerPage, pageIdx * cardsPerPage + cardsPerPage).map((ev) => (
+                                    <Link
+                                        key={ev.id}
+                                        href={`/event/${ev.id}`}
+                                        className="w-full max-w-[340px] h-auto event-card relative overflow-visible block cursor-pointer"
+                                    >
+                                        <div className="hidden sm:block absolute -top-[28px] -left-[59px] w-[420px] h-auto z-50 pointer-events-none">
+                                            <img
+                                                src={`/images/LOGO TAG/${ev.badge}.png`}
+                                                alt="Badge"
+                                                className="w-full h-auto object-contain scale-110"
+                                            />
                                         </div>
-                                    </div>
-                                </div>
-                                <div className="w-full bg-white flex items-stretch justify-between border border-[#7e7b7b] border-t-0 rounded-bl-2xl rounded-br-lg overflow-hidden">
-                                    <div className='flex flex-col justify-center pl-3 sm:pl-4 py-2 sm:py-3'>
-                                        <p className="text-xs sm:text-sm font-bold whitespace-nowrap text-gray-900">{event.title}</p>
-                                        <p className="text-[10px] sm:text-xs text-[#112b38]">{event.location}</p>
-                                    </div>
-                                    <div className='w-[135px] bg-[#112b38] hover:bg-[#c89c6b] flex-shrink-0 flex flex-col items-center justify-center py-2 sm:py-3 px-4 sm:px-6 text-white rounded-bl-3xl transition-colors duration-300 relative z-10'>
-                                        <p className="mr-1 sm:mr-2 text-[8px] sm:text-[9.9px]">{t.asFrom}</p>
-                                        <p className="text-xs sm:text-[15.9px]">{event.price}</p>
-                                    </div>
-                                </div>
+                                        <div className="relative z-10 overflow-hidden rounded-tr-2xl rounded-br-2xl rounded-bl-2xl shadow-xl bg-white">
+                                            <div className="relative w-full h-[340px] overflow-hidden">
+                                                <Image
+                                                    src={ev.image}
+                                                    alt={ev.title}
+                                                    fill
+                                                    className="object-cover"
+                                                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                                />
+                                                <div className="absolute top-3 right-3 bg-black/70 rounded shadow-lg overflow-hidden z-20 px-1">
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="text-lg sm:text-xl font-bold text-white leading-none">{ev.day}</div>
+                                                        <div className="text-sm sm:text-base font-bold text-white uppercase">{ev.month}</div>
+                                                    </div>
+                                                </div>
+                                                {/* White dot indicators overlaid on image */}
+                                                {pageIdx === 0 && (
+                                                    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
+                                                        {Array.from({ length: totalPages }).map((_, i) => (
+                                                            <button
+                                                                key={i}
+                                                                onClick={(e) => { e.preventDefault(); setRelatedCarouselIndex(i); }}
+                                                                className={`rounded-full transition-all duration-300 ${
+                                                                    i === relatedCarouselIndex
+                                                                        ? 'w-5 h-2 bg-white'
+                                                                        : 'w-2 h-2 bg-white/50 hover:bg-white/80'
+                                                                }`}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="w-full bg-white flex items-stretch justify-between border border-[#7e7b7b] border-t-0 rounded-bl-2xl rounded-br-lg overflow-hidden">
+                                                <div className='flex flex-col justify-center pl-3 sm:pl-4 py-2 sm:py-3'>
+                                                    <p className="text-xs sm:text-sm font-bold whitespace-nowrap text-gray-900">{ev.title}</p>
+                                                    <p className="text-[10px] sm:text-xs text-[#112b38]">{ev.location}</p>
+                                                </div>
+                                                <div className='w-[135px] bg-[#112b38] hover:bg-[#c89c6b] flex-shrink-0 flex flex-col items-center justify-center py-2 sm:py-3 px-4 sm:px-6 text-white rounded-bl-3xl transition-colors duration-300 relative z-10'>
+                                                    <p className="mr-1 sm:mr-2 text-[8px] sm:text-[9.9px]">{t.asFrom}</p>
+                                                    <p className="text-xs sm:text-[15.9px]">{ev.price}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                ))}
                             </div>
-                        </Link>
-                    ))}
+                        ))}
+                    </div>
                 </div>
             </div>
             <Footer />
