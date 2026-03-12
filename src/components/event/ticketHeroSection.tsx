@@ -9,38 +9,16 @@ import { FaHome } from "react-icons/fa"
 import { Divider, NavItem } from "../home/HeroCarousel"
 
 // Mock data array with images and videos
-const slides = [
-    {
-        id: 1,
-        type: "image",
-        url: "/Cover%20-/rishab_rikhiram_sharma_3764-orig1758879457.jpeg",
-        alt: "Rishab Rikhiram Sharma",
-        duration: 5,
-    },
-    {
-        id: 2,
-        type: "image",
-        url: "/Cover%20-/59069_upload68daa2739f40c_1759158899-0-en1759158912.jpg.jpeg",
-        alt: "Event Cover 2",
-        duration: 5,
-    },
-    {
-        id: 3,
-        type: "image",
-        url: "/Cover%20-/65370_upload6982ed73b2de6_1770188147-0-en1770188167.jpg.jpeg",
-        alt: "Event Cover 3",
-        duration: 5,
-    },
-]
 
-const TicketHeroSection = () => {
+
+const TicketHeroSection = ({currentSlide,slides,setCurrentSlide,currentSlideData}:any) => {
     const { t } = useLanguage()
-    const [currentSlide, setCurrentSlide] = useState(0)
-    const [timeLeft, setTimeLeft] = useState(slides[0].duration)
+
     const [isMuted, setIsMuted] = useState(true)
     const [isPlaying, setIsPlaying] = useState(true)
     const videoRef = useRef<HTMLVideoElement>(null)
     const intervalRef = useRef<NodeJS.Timeout | null>(null)
+    const [timeLeft, setTimeLeft] = useState(slides[0].duration)
     const progressIntervalRef = useRef<NodeJS.Timeout | null>(null)
 
     // Auto-slide functionality
@@ -66,7 +44,7 @@ const TicketHeroSection = () => {
 
         // Progress timer (countdown)
         progressIntervalRef.current = setInterval(() => {
-            setTimeLeft(prev => {
+            setTimeLeft((prev:any) => {
                 if (prev <= 1) {
                     clearProgressTimer()
                     return 0
@@ -96,11 +74,11 @@ const TicketHeroSection = () => {
     }
 
     const nextSlide = () => {
-        setCurrentSlide((prev) => (prev + 1) % slides.length)
+        setCurrentSlide((prev:any) => (prev + 1) % slides.length)
     }
 
     const prevSlide = () => {
-        setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)
+        setCurrentSlide((prev:any) => (prev - 1 + slides.length) % slides.length)
     }
 
     const goToSlide = (index: number) => {
@@ -125,7 +103,6 @@ const TicketHeroSection = () => {
         }
     }
 
-    const currentSlideData = slides[currentSlide]
     const { language, setLanguage }: any = useLanguage()
     const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false)
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false)
@@ -375,7 +352,7 @@ const TicketHeroSection = () => {
 
                         {/* Dotted Navigation - Bottom Center */}
                         <div className="absolute bottom-2 sm:bottom-3 md:bottom-4 left-1/2 transform -translate-x-1/2 flex items-center space-x-1 sm:space-x-2 z-10">
-                            {slides.map((_, index) => (
+                            {slides.map((_:any, index:any) => (
                                 <button
                                     key={index}
                                     onClick={() => goToSlide(index)}

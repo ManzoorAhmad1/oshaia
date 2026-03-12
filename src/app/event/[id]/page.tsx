@@ -22,13 +22,35 @@ interface EventDetailProps {
         id: string;
     };
 }
-
+const slides = [
+    {
+        id: 1,
+        type: "image",
+        url: "/Cover%20-/rishab_rikhiram_sharma_3764-orig1758879457.jpeg",
+        alt: "Rishab Rikhiram Sharma",
+        duration: 5,
+    },
+    {
+        id: 2,
+        type: "image",
+        url: "/Cover%20-/59069_upload68daa2739f40c_1759158899-0-en1759158912.jpg.jpeg",
+        alt: "Event Cover 2",
+        duration: 5,
+    },
+    {
+        id: 3,
+        type: "image",
+        url: "/Cover%20-/65370_upload6982ed73b2de6_1770188147-0-en1770188167.jpg.jpeg",
+        alt: "Event Cover 3",
+        duration: 5,
+    },
+]
 export default function EventDetailPage({ params }: EventDetailProps) {
     const { t }: any = useLanguage();
     const [selectedTicket, setSelectedTicket] = useState<number | null>(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [activeTab, setActiveTab] = useState<'tickets' | 'description' | 'moreInfo'>('tickets');
-
+    const [currentSlide, setCurrentSlide] = useState(0)
     // Mock event data - Replace with actual API call based on params.id
     const event = {
         id: params.id,
@@ -89,15 +111,18 @@ export default function EventDetailPage({ params }: EventDetailProps) {
             }
         ]
     };
+    const currentSlideData = slides[currentSlide]
 
     return (
         <>
             <div className="relative min-h-screen bg-gray-50">
                 {/* Background image - Top section only (approx 135vh) */}
                 <div
-                    className="absolute top-0 left-0 right-0 h-[135vh] bg-top bg-no-repeat scale-105 blur-sm z-0"
-                    style={{ backgroundImage: "url('/Cover%20-/59069_upload68daa2739f40c_1759158899-0-en1759158912.jpg.jpeg')", backgroundSize: '100% auto' }}
-                />
+                    className="absolute top-0 left-0 right-0 h-[195vh] bg-top bg-no-repeat scale-105 blur-sm z-0"
+                    style={{
+                        backgroundImage: `url(${currentSlideData.url})`,
+                        backgroundSize: '100% auto'
+                    }} />
                 {/* Hero Section with Event Card Design */}
                 <div className="relative z-10 w-full overflow-visible flex flex-col justify-end">
                     {/* Content wrapper */}
@@ -118,7 +143,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                     {/* Main Content */}
                                     <div className="relative z-10 overflow-hidden">
                                         {/* Event Image */}
-                                        <TicketHeroSection />
+                                        <TicketHeroSection currentSlide={currentSlide} slides={slides} setCurrentSlide={setCurrentSlide} currentSlideData={currentSlideData} />
                                     </div>
                                 </div>
                             </div>
