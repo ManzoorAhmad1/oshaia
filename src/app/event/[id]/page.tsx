@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState } from 'react';
 import Image from 'next/image';
@@ -102,13 +102,13 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                 <div className="relative z-10 w-full overflow-visible flex flex-col justify-end">
                     {/* Content wrapper */}
                     <div className="w-full pt-32 pb-6">
-                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="w-full sm:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
                             <div className="flex justify-center items-center">
                                 {/* Event Card */}
                                 <div className="w-full h-auto event-card group relative overflow-visible">
 
                                     {/* Badge Image at Top Left - matches home screen event card badge style */}
-                                    <div className="hidden sm:block absolute -top-[57px] -left-[115px] w-[820px] h-auto z-50 pointer-events-none">
+                                    <div className="hidden sm:block absolute -top-[12px] left-[26px] w-[520px] h-auto z-50 pointer-events-none">
                                         <img
                                             src={`/images/LOGO TAG/1.png`}
                                             alt="Event Badge"

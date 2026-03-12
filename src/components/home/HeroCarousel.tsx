@@ -455,7 +455,7 @@ const HeroCarousel = () => {
 
 export default HeroCarousel
 
-const NavItem = ({ label, active = false, icon, path, showIcon = false }: any) => {
+export const NavItem = ({ label, active = false, icon, path, showIcon = false }: any) => {
     const Icon = icon
     return (
         <Link
@@ -469,4 +469,4 @@ const NavItem = ({ label, active = false, icon, path, showIcon = false }: any) =
     )
 }
 
-const Divider = ({ className }: any) => <span className={`text-white/20 text-base sm:text-lg hidden md:inline ${className}`}>|</span>
+export const Divider = ({ className }: any) => <span className={`text-white/20 text-base sm:text-lg hidden md:inline ${className}`}>|</span>

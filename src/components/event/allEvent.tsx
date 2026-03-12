@@ -183,7 +183,6 @@ const AllEvents = () => {
                                 loop
                                 playsInline
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
 
                             {/* Mute Button - Only for videos */}
                             <button
