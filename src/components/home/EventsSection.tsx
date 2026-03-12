@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Calendar, MapPin, Clock } from 'lucide-react'
+import { Calendar } from 'lucide-react'
 import { useLanguage } from '@/context/LanguageContext'
 
 const EventsSection = () => {
@@ -173,7 +173,8 @@ const EventsSection = () => {
 
                   {/* Date Badge */}
                   <div className="absolute top-3 right-3 bg-black/70 rounded shadow-lg overflow-hidden z-20 px-1">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1">
+                      <Calendar className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                       <div className="text-lg sm:text-xl font-bold text-white leading-none">{event.day}</div>
                       <div className="text-sm sm:text-base font-bold text-white uppercase">{event.month}</div>
                     </div>
