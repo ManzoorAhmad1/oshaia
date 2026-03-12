@@ -8,7 +8,11 @@ import {
     ChevronLeft, ChevronRight, User, Shield, CreditCard,
     Zap, Ticket as TicketIcon, Check, Info,
     HeartCrack,
-    Ticket
+    Ticket,
+    Play,
+    Pause,
+    Timer,
+    Link2
 } from 'lucide-react';
 import { FaFacebook, FaTwitter, FaWhatsapp, FaInstagram, FaGreaterThan } from 'react-icons/fa';
 import TicketHeroSection from '@/components/event/ticketHeroSection';
@@ -52,9 +56,36 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     const [selectedTicket, setSelectedTicket] = useState<number | null>(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [currentSlide, setCurrentSlide] = useState(0);
-    
+    const [playingSongId, setPlayingSongId] = useState<number | null>(null);
+    const [songProgress, setSongProgress] = useState<{ [key: number]: number }>({});
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+
     // State for ticket quantities - Initialize properly
     const [ticketQuantities, setTicketQuantities] = useState<{ [key: number]: number }>({});
+
+    const mockSongs = [
+        {
+            id: 1,
+            artist: "Maroon 5",
+            title: "Sugar",
+            image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&auto=format&fit=crop",
+            audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+        },
+        {
+            id: 2,
+            artist: "Coldplay",
+            title: "Yellow",
+            image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1200&auto=format&fit=crop",
+            audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+        },
+        {
+            id: 3,
+            artist: "Ed Sheeran",
+            title: "Shape of You",
+            image: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=1200&auto=format&fit=crop",
+            audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+        },
+    ];
 
     // Refs for each section
     const ticketsRef = useRef<HTMLDivElement>(null);
@@ -173,6 +204,33 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     // Check if any ticket is selected (quantity > 0)
     const hasSelectedTickets = () => {
         return Object.values(ticketQuantities).some(quantity => quantity > 0);
+    };
+
+    const togglePlay = (song: typeof mockSongs[0]) => {
+        if (playingSongId === song.id) {
+            audioRef.current?.pause();
+            setPlayingSongId(null);
+        } else {
+            if (audioRef.current) {
+                audioRef.current.pause();
+            }
+            const audio = new Audio(song.audioUrl);
+            audioRef.current = audio;
+            audio.play();
+            setPlayingSongId(song.id);
+            audio.ontimeupdate = () => {
+                if (audio.duration) {
+                    setSongProgress(prev => ({
+                        ...prev,
+                        [song.id]: (audio.currentTime / audio.duration) * 100,
+                    }));
+                }
+            };
+            audio.onended = () => {
+                setPlayingSongId(null);
+                setSongProgress(prev => ({ ...prev, [song.id]: 0 }));
+            };
+        }
     };
 
     // Scroll function
@@ -389,7 +447,17 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                     </div>
                                                 </div>
 
-                                              
+                                                {/* Accordion Content */}
+                                                {selectedTicket === ticket.id && (
+                                                    <div className="px-4 py-3 bg-white border-t border-gray-200">
+                                                        <p className="text-sm text-gray-600">
+                                                            {ticket.description}
+                                                        </p>
+                                                        <p className="text-xs text-[#c89c6b] mt-2">
+                                                            Only {ticket.available} tickets available (Max 20 per person)
+                                                        </p>
+                                                    </div>
+                                                )}
                                             </div>
                                         ))}
                                     </div>
@@ -476,11 +544,11 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             <div className="max-w-lg mx-auto bg-white rounded-xl p-6 shadow-lg border border-gray-100">
                                 <div className="flex items-center justify-between text-sm text-gray-600">
                                     <div className="flex items-center gap-2">
-                                        <span className="text-blue-500">📅</span>
+                                        <Calendar className="w-4 h-4 text-blue-500" />
                                         <span className="font-medium">Sat 18 Oct</span>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <span className="text-blue-500">🕒</span>
+                                        <Clock className="w-4 h-4 text-blue-500" />
                                         <span>{t.doors}: 20:00</span>
                                         <span>{t.start}: 20:00</span>
                                     </div>
@@ -489,7 +557,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                 <div className="flex items-center justify-between bg-blue-50 rounded-lg p-4 mt-4">
                                     <div className="flex items-center gap-3">
                                         <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500">
-                                            ⏱
+                                            <Timer className="w-5 h-5" />
                                         </div>
                                         <div>
                                             <p className="text-blue-600 font-semibold">{t.buyNow}</p>
@@ -524,36 +592,59 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
                                 <div className="flex justify-center gap-10 mt-6 text-sm text-gray-600">
                                     <button className="flex items-center gap-2 hover:text-[#c89c6b] transition-all duration-300">
-                                        📅 {t.addToCalendar}
+                                        <Calendar className="w-4 h-4" /> {t.addToCalendar}
                                     </button>
                                     <button className="flex items-center gap-2 hover:text-[#c89c6b] transition-all duration-300">
-                                        🔗 {t.shareEvent}
+                                        <Link2 className="w-4 h-4" /> {t.shareEvent}
                                     </button>
                                 </div>
                             </div>
 
-                            {/* Related Events */}
-                            {[1, 2, 3].map((item) => (
-                                <div key={item} className="max-w-xl mx-auto bg-white rounded-xl shadow-sm px-4 py-3 flex items-center justify-between">
+                            {/* Related Events - Song Player */}
+                            {mockSongs.map((song) => (
+                                <div key={song.id} className="relative max-w-xl mx-auto bg-white rounded-xl shadow-sm px-4 py-3 flex items-center justify-between overflow-hidden">
                                     <div className="flex items-center gap-4">
-                                        <img
-                                            src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&auto=format&fit=crop"
-                                            alt="Maroon 5"
-                                            className="w-12 h-12 rounded-lg object-cover"
-                                        />
+                                        <div className="relative w-12 h-12 flex-shrink-0">
+                                            <img
+                                                src={song.image}
+                                                alt={song.artist}
+                                                className="w-12 h-12 rounded-lg object-cover"
+                                            />
+                                            {playingSongId === song.id && (
+                                                <div className="absolute inset-0 rounded-lg bg-black/20 flex items-center justify-center">
+                                                    <div className="flex gap-[2px] items-end h-4">
+                                                        <span className="w-[3px] bg-white rounded animate-bounce" style={{ height: '60%', animationDelay: '0ms' }} />
+                                                        <span className="w-[3px] bg-white rounded animate-bounce" style={{ height: '100%', animationDelay: '150ms' }} />
+                                                        <span className="w-[3px] bg-white rounded animate-bounce" style={{ height: '40%', animationDelay: '300ms' }} />
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
                                         <div>
-                                            <p className="font-semibold text-gray-800">Maroon 5</p>
-                                            <p className="text-sm text-gray-500">Sugar</p>
+                                            <p className="font-semibold text-gray-800">{song.artist}</p>
+                                            <p className="text-sm text-gray-500">{song.title}</p>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-4">
+                                    <div className="flex items-center gap-3">
                                         <button className="text-gray-400 hover:text-[#c89c6b] hover:scale-110 transition-all duration-300">
-                                            ❤️
+                                            <Heart className="w-4 h-4" />
                                         </button>
-                                        <button className="w-5 h-5 rounded-full border border-gray-200 flex items-center justify-center hover:bg-[#c89c6b] hover:text-white hover:border-[#c89c6b] transition-all duration-300">
-                                            ▶
+                                        <button
+                                            onClick={() => togglePlay(song)}
+                                            className="w-8 h-8 rounded-full bg-[#112b38] flex items-center justify-center hover:bg-[#c89c6b] transition-all duration-300 hover:scale-110"
+                                        >
+                                            {playingSongId === song.id
+                                                ? <Pause className="w-4 h-4 text-white" />
+                                                : <Play className="w-4 h-4 text-white" />
+                                            }
                                         </button>
                                     </div>
+
+                                    {/* Progress fill - full div background */}
+                                    <div
+                                        className="absolute inset-0 bg-blue-100/50 transition-all duration-300 pointer-events-none rounded-xl"
+                                        style={{ width: `${songProgress[song.id] || 0}%` }}
+                                    />
                                 </div>
                             ))}
 
