@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -22,6 +22,7 @@ interface EventDetailProps {
         id: string;
     };
 }
+
 const slides = [
     {
         id: 1,
@@ -44,13 +45,22 @@ const slides = [
         alt: "Event Cover 3",
         duration: 5,
     },
-]
+];
+
 export default function EventDetailPage({ params }: EventDetailProps) {
     const { t }: any = useLanguage();
     const [selectedTicket, setSelectedTicket] = useState<number | null>(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [activeTab, setActiveTab] = useState<'tickets' | 'description' | 'moreInfo'>('tickets');
-    const [currentSlide, setCurrentSlide] = useState(0)
+    const [currentSlide, setCurrentSlide] = useState(0);
+    
+    // State for ticket quantities - Initialize properly
+    const [ticketQuantities, setTicketQuantities] = useState<{ [key: number]: number }>({});
+
+    // Refs for each section
+    const ticketsRef = useRef<HTMLDivElement>(null);
+    const descriptionRef = useRef<HTMLDivElement>(null);
+    const moreInfoRef = useRef<HTMLDivElement>(null);
+
     // Mock event data - Replace with actual API call based on params.id
     const event = {
         id: params.id,
@@ -79,21 +89,27 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                 name: "General Admission",
                 price: 2500,
                 available: 45,
-                description: "Standing area access"
+                description: "Standing area access",
+                offerEndsIn: "Limited time",
+                days: "Days"
             },
             {
                 id: 2,
                 name: "VIP Package",
                 price: 5000,
                 available: 12,
-                description: "Front row seating + Meet & Greet"
+                description: "Front row seating + Meet & Greet",
+                offerEndsIn: "Flash sale",
+                days: "Days"
             },
             {
                 id: 3,
                 name: "Premium Table",
                 price: 15000,
                 available: 3,
-                description: "Table for 4 + Bottle service"
+                description: "Table for 4 + Bottle service",
+                offerEndsIn: "Last chance",
+                days: "Days"
             }
         ],
         relatedEvents: [
@@ -111,28 +127,80 @@ export default function EventDetailPage({ params }: EventDetailProps) {
             }
         ]
     };
-    const currentSlideData = slides[currentSlide]
+
+    const currentSlideData = slides[currentSlide];
+
+    // Initialize quantities for tickets on mount only
+    useEffect(() => {
+        const initialQuantities: { [key: number]: number } = {};
+        event.tickets.forEach((ticket) => {
+            initialQuantities[ticket.id] = 0;
+        });
+        setTicketQuantities(initialQuantities);
+    }, []);
+
+    // Increment quantity function - Fixed to ensure state updates properly
+    const incrementQuantity = (ticketId: number, maxAvailable: number) => {
+        setTicketQuantities(prev => {
+            const currentQty = prev[ticketId] || 0;
+            const newQty = Math.min(currentQty + 1, Math.min(20, maxAvailable));
+            return {
+                ...prev,
+                [ticketId]: newQty
+            };
+        });
+    };
+
+    // Decrement quantity function - Fixed to ensure state updates properly
+    const decrementQuantity = (ticketId: number) => {
+        setTicketQuantities(prev => {
+            const currentQty = prev[ticketId] || 0;
+            const newQty = Math.max(currentQty - 1, 0);
+            return {
+                ...prev,
+                [ticketId]: newQty
+            };
+        });
+    };
+
+    // Calculate total amount
+    const calculateTotal = () => {
+        return event.tickets.reduce((total, ticket) => {
+            return total + (ticketQuantities[ticket.id] || 0) * ticket.price;
+        }, 0);
+    };
+
+    // Check if any ticket is selected (quantity > 0)
+    const hasSelectedTickets = () => {
+        return Object.values(ticketQuantities).some(quantity => quantity > 0);
+    };
+
+    // Scroll function
+    const scrollToSection = (sectionRef: React.RefObject<HTMLDivElement>) => {
+        if (sectionRef.current) {
+            const yOffset = -100;
+            const y = sectionRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+    };
 
     return (
         <>
             <div className="relative min-h-screen bg-gray-50">
-                {/* Background image - Top section only (approx 135vh) */}
+                {/* Background image - Top section only */}
                 <div
                     className="absolute top-0 left-0 right-0 h-[195vh] bg-top bg-no-repeat scale-105 blur-sm z-0"
                     style={{
                         backgroundImage: `url(${currentSlideData.url})`,
                         backgroundSize: '100% auto'
                     }} />
+                
                 {/* Hero Section with Event Card Design */}
                 <div className="relative z-10 w-full overflow-visible flex flex-col justify-end">
-                    {/* Content wrapper */}
                     <div className="w-full pt-32 pb-6">
                         <div className="w-full sm:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
                             <div className="flex justify-center items-center">
-                                {/* Event Card */}
                                 <div className="w-full h-auto event-card group relative overflow-visible">
-
-                                    {/* Badge Image at Top Left - matches home screen event card badge style */}
                                     <div className="hidden sm:block absolute -top-[12px] left-[26px] w-[520px] h-auto z-50 pointer-events-none">
                                         <img
                                             src={`/images/LOGO TAG/1.png`}
@@ -140,10 +208,13 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                             className="w-full h-auto object-contain scale-110"
                                         />
                                     </div>
-                                    {/* Main Content */}
                                     <div className="relative z-10 overflow-hidden">
-                                        {/* Event Image */}
-                                        <TicketHeroSection currentSlide={currentSlide} slides={slides} setCurrentSlide={setCurrentSlide} currentSlideData={currentSlideData} />
+                                        <TicketHeroSection 
+                                            currentSlide={currentSlide} 
+                                            slides={slides} 
+                                            setCurrentSlide={setCurrentSlide} 
+                                            currentSlideData={currentSlideData} 
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -159,7 +230,6 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             {/* Event Info Bar - Horizontal Layout */}
                             <div className="bg-[#f6f6f6] rounded-xl p-4 sm:p-6 shadow-[10px_0_30px_-5px_rgba(0,0,0,0.08)]">
                                 <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
-                                    {/* Left - Event Logo/Icon */}
                                     <div className="flex-shrink-0">
                                         <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-[#112b38] rounded-lg flex items-center justify-center">
                                             <img
@@ -170,7 +240,6 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         </div>
                                     </div>
 
-                                    {/* Middle - Event Details */}
                                     <div className="flex-1 min-w-0">
                                         <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-[#112b38] mb-2">
                                             {event.title}
@@ -183,53 +252,39 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         </Text>
                                     </div>
 
-                                    {/* Right - Time, Location, Price & Countdown */}
                                     <div className="flex-shrink-0 lg:w-[280px] xl:w-[320px]">
                                         <div className="space-y-3">
-                                            {/* Time */}
                                             <div className="flex items-center gap-2 text-sm">
                                                 <Clock className="w-4 h-4 text-[#112b38] flex-shrink-0" />
                                                 <span className="text-[#c89c6b]">{event.fullDate}</span>
                                             </div>
-
-                                            {/* Location */}
                                             <div className="flex items-center gap-2 text-sm">
                                                 <MapPin className="w-4 h-4 text-[#112b38] flex-shrink-0" />
                                                 <span className="text-[#c89c6b]">{event.location}</span>
                                             </div>
-
-                                            {/* Price */}
                                             <div className="flex items-center gap-2 text-sm">
                                                 <TicketIcon className="w-4 h-4 text-[#112b38] flex-shrink-0" />
                                                 <span className="text-[#c89c6b]">{t.from} <span className="font-bold text-[#112b38]">Rs 1,000</span></span>
                                             </div>
-
-                                            {/* Countdown Timer */}
-                                            <div className="flex gap-2 mt-4 ">
+                                            <div className="flex gap-2 mt-4">
                                                 <div className='flex flex-col items-center justify-center'>
-
                                                     <div className="flex-1 bg-[#D24428] w-14 rounded p-1 text-center shadow-sm">
                                                         <div className="text-2xl sm:text-3xl font-bold text-white leading-none">5</div>
                                                     </div>
                                                     <div className="text-[11px] sm:text-xs text-[#112b38] font-medium">{t.days}</div>
                                                 </div>
-
                                                 <div className='flex flex-col items-center justify-center'>
-
                                                     <div className="flex-1 bg-[#D24428] w-14 rounded p-1 text-center shadow-sm">
                                                         <div className="text-2xl sm:text-3xl font-bold text-white leading-none">19</div>
                                                     </div>
                                                     <div className="text-[11px] sm:text-xs text-[#112b38] font-medium">{t.hours}</div>
                                                 </div>
-
                                                 <div className='flex flex-col items-center justify-center'>
-
                                                     <div className="flex-1 bg-[#D24428] w-14 rounded p-1 text-center shadow-sm">
                                                         <div className="text-2xl sm:text-3xl font-bold text-white leading-none">55</div>
                                                     </div>
                                                     <div className="text-[11px] sm:text-xs text-[#112b38] font-medium">{t.minutes}</div>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
@@ -240,40 +295,22 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             <div className="w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
                                 <div className="flex items-center gap-4 sm:gap-8 px-4 sm:px-6 overflow-x-auto w-full sm:w-auto">
                                     <button
-                                        onClick={() => setActiveTab('tickets')}
-                                        className={`py-2 text-sm sm:text-base font-bold relative transition-colors ${activeTab === 'tickets'
-                                            ? 'text-[#112b38]'
-                                            : 'text-gray-400 hover:text-[#c89c6b]'
-                                            }`}
+                                        onClick={() => scrollToSection(ticketsRef)}
+                                        className="py-2 text-sm sm:text-base font-bold text-gray-400 hover:text-[#c89c6b] transition-colors"
                                     >
                                         {t.tickets}
-                                        {activeTab === 'tickets' && (
-                                            <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-600 rounded-t"></div>
-                                        )}
                                     </button>
                                     <button
-                                        onClick={() => setActiveTab('description')}
-                                        className={`py-2 text-sm sm:text-base relative transition-colors ${activeTab === 'description'
-                                            ? 'text-[#112b38]'
-                                            : 'text-gray-400 hover:text-[#c89c6b]'
-                                            }`}
+                                        onClick={() => scrollToSection(descriptionRef)}
+                                        className="py-2 text-sm sm:text-base font-bold text-gray-400 hover:text-[#c89c6b] transition-colors"
                                     >
                                         {t.description}
-                                        {activeTab === 'description' && (
-                                            <div className="absolute bottom-0 left-0 right-0 h-1 bg-[#112b38] rounded-t"></div>
-                                        )}
                                     </button>
                                     <button
-                                        onClick={() => setActiveTab('moreInfo')}
-                                        className={`py-2 text-sm sm:text-base font-bold relative transition-colors ${activeTab === 'moreInfo'
-                                            ? 'text-[#112b38]'
-                                            : 'text-gray-400 hover:text-[#c89c6b]'
-                                            }`}
+                                        onClick={() => scrollToSection(moreInfoRef)}
+                                        className="py-2 text-sm sm:text-base font-bold text-gray-400 hover:text-[#c89c6b] transition-colors"
                                     >
                                         {t.moreInfo}
-                                        {activeTab === 'moreInfo' && (
-                                            <div className="absolute bottom-0 left-0 right-0 h-1 bg-[#112b38] rounded-t"></div>
-                                        )}
                                     </button>
                                 </div>
                                 <div className='flex gap-2 items-center px-4 sm:px-6 pb-2 sm:pb-0'>
@@ -282,57 +319,85 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                 </div>
                             </div>
 
-                            {/* Ticket Selection */}
-                            {activeTab === 'tickets' && (
-                                <div className="p-4 sm:p-6 ">
+                            {/* Ticket Selection - with ref */}
+                            <div ref={ticketsRef} id="tickets-section">
+                                <div className="p-4 sm:p-6">
                                     <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-[#112b38]">{t.chooseYourTickets}</h2>
                                     <div className="space-y-4">
                                         {event.tickets.map((ticket) => (
-                                            <div
-                                                key={ticket.id}
-                                                className="bg-gray-100 rounded-lg px-4 py-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4"
-                                            >
-                                                <Text className="font-bold text-sm text-[#112b38] min-w-[100px]">{ticket.name}</Text>
+                                            <div key={ticket.id} className="bg-gray-100 rounded-lg overflow-hidden">
+                                                {/* Main Ticket Row */}
+                                                <div className="px-4 py-2 flex flex-col sm:flex-row items-start sm:items-center justify-between">
+                                                    {/* Ticket Name */}
+                                                    <Text className="font-bold text-sm text-[#112b38] min-w-[120px] max-w-[120px] whitespace-nowrap" title={ticket.name}>
+                                                        {ticket.name.length > 20 ? ticket.name.substring(0, 18) + '...' : ticket.name}
+                                                    </Text>
 
-                                                <div className="font-bold text-lg text-[#112b38]">Rs{ticket.price.toLocaleString()}</div>
+                                                    {/* Price */}
+                                                    <div className="font-bold text-lg text-[#112b38] min-w-[90px] text-left">
+                                                        Rs{ticket.price.toLocaleString()}
+                                                    </div>
 
-                                                <div className="text-[#c89c6b] font-semibold text-sm flex-1">
-                                                    {t.offerEndsIn} 8 {t.days.toLowerCase()}
-                                                </div>
+                                                    {/* Offer Text */}
+                                                    <div className="text-[#c89c6b] font-semibold text-sm min-w-[140px] max-w-[140px]">
+                                                        <span className="truncate block" title={`${ticket.offerEndsIn} 8 ${ticket.days.toLowerCase()}`}>
+                                                            {ticket.offerEndsIn} 8 {ticket.days.toLowerCase()}
+                                                        </span>
+                                                    </div>
 
-                                                <div className="flex items-center gap-3">
-                                                    <button className="w-6 h-6 rounded-full bg-[#112b38] flex items-center justify-center hover:bg-[#c89c6b] hover:scale-110 transition-all duration-300">
-                                                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                                                        </svg>
-                                                    </button>
-
-                                                    <div className="flex items-center gap-2">
-                                                        <button className="w-6 h-6 border-2 border-gray-300 rounded flex items-center justify-center hover:bg-[#112b38] hover:text-white hover:border-[#112b38] transition-all duration-300 text-gray-700 font-bold text-base">
-                                                            -
+                                                    <div className="flex items-center gap-3">
+                                                        {/* Accordion Toggle Button */}
+                                                        <button
+                                                            onClick={() => setSelectedTicket(selectedTicket === ticket.id ? null : ticket.id)}
+                                                            className="w-6 h-6 rounded-full bg-[#112b38] flex items-center justify-center hover:bg-[#c89c6b] hover:scale-110 transition-all duration-300"
+                                                        >
+                                                            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                                                            </svg>
                                                         </button>
-                                                        <div className="w-12 text-center font-semibold text-lg">
-                                                            0
+
+                                                        {/* Quantity Selector with Counter */}
+                                                        <div className="flex items-center gap-2">
+                                                            <button 
+                                                                className={`w-6 h-6 border-2 border-gray-300 rounded flex items-center justify-center transition-all duration-300 font-bold text-base ${
+                                                                    ticketQuantities[ticket.id] === 0 
+                                                                        ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400' 
+                                                                        : 'hover:bg-[#112b38] hover:text-white hover:border-[#112b38] text-gray-700'
+                                                                }`}
+                                                                onClick={() => decrementQuantity(ticket.id)}
+                                                                disabled={ticketQuantities[ticket.id] === 0}
+                                                            >
+                                                                -
+                                                            </button>
+                                                            
+                                                            <div className="w-12 text-center font-semibold text-lg">
+                                                                {ticketQuantities[ticket.id] !== undefined ? ticketQuantities[ticket.id] : 0}
+                                                            </div>
+                                                            
+                                                            <button 
+                                                                className={`w-6 h-6 border-2 border-[#c89c6b] rounded flex items-center justify-center transition-all duration-300 font-bold text-base ${
+                                                                    ticketQuantities[ticket.id] === Math.min(20, ticket.available)
+                                                                        ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400 border-gray-300' 
+                                                                        : 'text-[#c89c6b] hover:bg-[#c89c6b] hover:text-white'
+                                                                }`}
+                                                                onClick={() => incrementQuantity(ticket.id, ticket.available)}
+                                                                disabled={ticketQuantities[ticket.id] === Math.min(20, ticket.available)}
+                                                            >
+                                                                +
+                                                            </button>
                                                         </div>
-                                                        <button className="w-6 h-6 border-2 border-[#c89c6b] text-[#c89c6b] rounded flex items-center justify-center hover:bg-[#c89c6b] hover:text-white transition-all duration-300 font-bold text-base">
-                                                            +
-                                                        </button>
                                                     </div>
                                                 </div>
+
+                                              
                                             </div>
                                         ))}
                                     </div>
-
-                                    {selectedTicket && (
-                                        <button className="w-full mt-6 bg-[#112b38] hover:bg-[#c89c6b] text-white py-2.5 rounded-xl font-bold text-sm sm:text-base transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl">
-                                            {t.bookNow}
-                                        </button>
-                                    )}
                                 </div>
-                            )}
+                            </div>
 
-                            {/* Description Tab */}
-                            {activeTab === 'description' && (
+                            {/* Description Section */}
+                            <div ref={descriptionRef} id="description-section">
                                 <div className="bg-white rounded-b-xl p-4 sm:p-6 shadow-md border border-t-0 border-gray-200">
                                     <h2 className="text-xl sm:text-2xl font-bold mb-4 text-[#112b38]">{t.eventDescription}</h2>
                                     <div className="prose max-w-none text-[#c89c6b] text-sm sm:text-base">
@@ -340,10 +405,10 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         <Text className="mt-4">Join us for an unforgettable experience at {event.title}. This event promises to be one of the most exciting gatherings of the year.</Text>
                                     </div>
                                 </div>
-                            )}
+                            </div>
 
-                            {/* More Info Tab */}
-                            {activeTab === 'moreInfo' && (
+                            {/* More Info Section */}
+                            <div ref={moreInfoRef} id="moreInfo-section">
                                 <div className="bg-white rounded-b-xl p-4 sm:p-6 shadow-md border border-t-0 border-gray-200">
                                     <h2 className="text-xl sm:text-2xl font-bold mb-4 text-[#112b38]">{t.moreInformation}</h2>
                                     <div className="space-y-4 text-sm sm:text-base text-[#c89c6b]">
@@ -361,24 +426,20 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         </div>
                                     </div>
                                 </div>
-                            )}
+                            </div>
 
                             {/* Location Map */}
                             <div className="">
-                                <div className="space-y-4 ">
+                                <div className="space-y-4">
                                     <div className="flex items-start gap-3 bg-white rounded-xl p-4 sm:p-6 shadow-md border border-gray-200">
-                                        <div className='flex flex-col items-center justify-center  px-2 rounded-lg shadow-md'>
+                                        <div className='flex flex-col items-center justify-center px-2 rounded-lg shadow-md'>
                                             <MapPin className="w-5 h-5 text-[#c89c6b] flex-shrink-0 mt-1" />
                                             <div className="font-semibold text-sm sm:text-base">{event.location}</div>
                                             <div className="text-xs sm:text-sm text-[#c89c6b]">{t.location}</div>
                                         </div>
                                         <div>
-                                            <Text>
-                                                Etihad Park
-                                            </Text>
-                                            <Text>
-                                                {event.fullAddress}
-                                            </Text>
+                                            <Text>Etihad Park</Text>
+                                            <Text>{event.fullAddress}</Text>
                                             <Text className='flex gap-2 items-center '>{t.viewDirection} <FaGreaterThan /></Text>
                                         </div>
                                     </div>
@@ -402,24 +463,22 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                 <div className="relative w-full h-[250px] sm:h-[300px] bg-gradient-to-br from-green-50 to-blue-50 rounded-xl overflow-hidden border border-gray-200">
                                     <img
                                         src='/images/mapImage.png'
-                                        className='w-full h-full'
+                                        className='w-full h-full object-cover'
+                                        alt="Site Plan"
                                     />
                                 </div>
                             </div>
                         </div>
 
                         {/* Right Column - Sidebar */}
-                        <div className="space-y-6 ">
+                        <div className="space-y-6">
                             {/* Share on Social */}
                             <div className="max-w-lg mx-auto bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-
-                                {/* Top row */}
                                 <div className="flex items-center justify-between text-sm text-gray-600">
                                     <div className="flex items-center gap-2">
                                         <span className="text-blue-500">📅</span>
                                         <span className="font-medium">Sat 18 Oct</span>
                                     </div>
-
                                     <div className="flex items-center gap-2">
                                         <span className="text-blue-500">🕒</span>
                                         <span>{t.doors}: 20:00</span>
@@ -427,10 +486,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                     </div>
                                 </div>
 
-                                {/* Divider */}
-
-                                {/* Sale + Countdown */}
-                                <div className="flex items-center justify-between bg-blue-50 rounded-lg p-4">
+                                <div className="flex items-center justify-between bg-blue-50 rounded-lg p-4 mt-4">
                                     <div className="flex items-center gap-3">
                                         <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500">
                                             ⏱
@@ -441,7 +497,6 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         </div>
                                     </div>
 
-                                    {/* Countdown */}
                                     <div className="flex gap-4 text-center">
                                         {[
                                             { value: "03", label: t.days },
@@ -457,19 +512,16 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                     </div>
                                 </div>
 
-                                {/* Total + Button */}
                                 <div className="flex items-center justify-between mt-6">
                                     <div>
                                         <p className="text-sm text-gray-500">{t.totalAmount}</p>
-                                        <p className="text-xl font-bold text-red-500">Rs 0</p>
+                                        <p className="text-xl font-bold text-red-500">Rs {calculateTotal().toLocaleString()}</p>
                                     </div>
-
                                     <button className="bg-[#c89c6b] hover:bg-[#b8885a] text-white font-semibold px-4 py-1.5 rounded-md transition-all duration-300 hover:scale-105 shadow-md hover:shadow-lg">
                                         {t.bookNow}
                                     </button>
                                 </div>
 
-                                {/* Bottom actions */}
                                 <div className="flex justify-center gap-10 mt-6 text-sm text-gray-600">
                                     <button className="flex items-center gap-2 hover:text-[#c89c6b] transition-all duration-300">
                                         📅 {t.addToCalendar}
@@ -481,87 +533,29 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             </div>
 
                             {/* Related Events */}
-                            <div className="max-w-xl mx-auto bg-white rounded-xl shadow-sm px-4 py-3 flex items-center justify-between">
-
-                                {/* Left: Image + Text */}
-                                <div className="flex items-center gap-4">
-                                    <img
-                                        src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&auto=format&fit=crop"
-                                        alt="Maroon 5"
-                                        className="w-12 h-12 rounded-lg object-cover"
-                                    />
-
-                                    <div>
-                                        <p className="font-semibold text-gray-800">Maroon 5</p>
-                                        <p className="text-sm text-gray-500">Sugar</p>
+                            {[1, 2, 3].map((item) => (
+                                <div key={item} className="max-w-xl mx-auto bg-white rounded-xl shadow-sm px-4 py-3 flex items-center justify-between">
+                                    <div className="flex items-center gap-4">
+                                        <img
+                                            src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&auto=format&fit=crop"
+                                            alt="Maroon 5"
+                                            className="w-12 h-12 rounded-lg object-cover"
+                                        />
+                                        <div>
+                                            <p className="font-semibold text-gray-800">Maroon 5</p>
+                                            <p className="text-sm text-gray-500">Sugar</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-4">
+                                        <button className="text-gray-400 hover:text-[#c89c6b] hover:scale-110 transition-all duration-300">
+                                            ❤️
+                                        </button>
+                                        <button className="w-5 h-5 rounded-full border border-gray-200 flex items-center justify-center hover:bg-[#c89c6b] hover:text-white hover:border-[#c89c6b] transition-all duration-300">
+                                            ▶
+                                        </button>
                                     </div>
                                 </div>
-
-                                {/* Right: Icons */}
-                                <div className="flex items-center gap-4">
-                                    <button className="text-gray-400 hover:text-[#c89c6b] hover:scale-110 transition-all duration-300">
-                                        ❤️
-                                    </button>
-
-                                    <button className="w-5 h-5 rounded-full border border-gray-200 flex items-center justify-center hover:bg-[#c89c6b] hover:text-white hover:border-[#c89c6b] transition-all duration-300">
-                                        ▶
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="max-w-xl mx-auto bg-white rounded-xl shadow-sm px-4 py-3 flex items-center justify-between">
-
-                                {/* Left: Image + Text */}
-                                <div className="flex items-center gap-4">
-                                    <img
-                                        src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&auto=format&fit=crop"
-                                        alt="Maroon 5"
-                                        className="w-12 h-12 rounded-lg object-cover"
-                                    />
-
-                                    <div>
-                                        <p className="font-semibold text-gray-800">Maroon 5</p>
-                                        <p className="text-sm text-gray-500">Sugar</p>
-                                    </div>
-                                </div>
-
-                                {/* Right: Icons */}
-                                <div className="flex items-center gap-4">
-                                    <button className="text-gray-400 hover:text-[#c89c6b] hover:scale-110 transition-all duration-300">
-                                        ❤️
-                                    </button>
-
-                                    <button className="w-5 h-5 rounded-full border border-gray-200 flex items-center justify-center hover:bg-[#c89c6b] hover:text-white hover:border-[#c89c6b] transition-all duration-300">
-                                        ▶
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="max-w-xl mx-auto bg-white rounded-xl shadow-sm px-4 py-3 flex items-center justify-between">
-
-                                {/* Left: Image + Text */}
-                                <div className="flex items-center gap-4">
-                                    <img
-                                        src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&auto=format&fit=crop"
-                                        alt="Maroon 5"
-                                        className="w-12 h-12 rounded-lg object-cover"
-                                    />
-
-                                    <div>
-                                        <p className="font-semibold text-gray-800">Maroon 5</p>
-                                        <p className="text-sm text-gray-500">Sugar</p>
-                                    </div>
-                                </div>
-
-                                {/* Right: Icons */}
-                                <div className="flex items-center gap-4">
-                                    <button className="text-gray-400 hover:text-[#c89c6b] hover:scale-110 transition-all duration-300">
-                                        ❤️
-                                    </button>
-
-                                    <button className="w-5 h-5 rounded-full border border-gray-200 flex items-center justify-center hover:bg-[#c89c6b] hover:text-white hover:border-[#c89c6b] transition-all duration-300">
-                                        ▶
-                                    </button>
-                                </div>
-                            </div>
+                            ))}
 
                             {/* Advertisement */}
                             <div className="bg-gray-200 rounded-xl p-8 sm:p-12 shadow-md border border-gray-300 flex items-center justify-center min-h-[300px] sm:min-h-[400px]">
@@ -589,10 +583,10 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                     </div>
                 </div>
             </div>
+
             {/* Artist Slider & Portrait Section */}
             <div className="w-full sm:w-[85%] mx-auto mt-12 mb-2 px-4 sm:px-0">
                 <div className="flex flex-col lg:flex-row gap-4">
-                    {/* Artists Slider */}
                     <div className="flex-1 overflow-visible">
                         <div className="flex gap-3 sm:gap-4 overflow-x-auto pb-4 scrollbar-hide pt-2 px-1">
                             {[
@@ -657,7 +651,6 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             href={`/event/${event.id}`}
                             className="w-full max-w-[340px] h-auto event-card relative overflow-visible block cursor-pointer"
                         >
-                            {/* Badge Image at Top Left */}
                             <div className="hidden sm:block absolute -top-[28px] -left-[59px] w-[420px] h-auto z-50 pointer-events-none">
                                 <img
                                     src={`/images/LOGO TAG/${index + 1}.png`}
@@ -665,10 +658,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                     className="w-full h-auto object-contain scale-110"
                                 />
                             </div>
-
-                            {/* Main Content */}
                             <div className="relative z-10 overflow-hidden rounded-tr-2xl rounded-br-2xl rounded-bl-2xl shadow-xl bg-white">
-                                {/* Event Image */}
                                 <div className="relative w-full h-[340px] overflow-hidden">
                                     <Image
                                         src={event.image}
@@ -677,8 +667,6 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         className="object-cover"
                                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                     />
-
-                                    {/* Date Badge */}
                                     <div className="absolute top-3 right-3 bg-black/70 rounded shadow-lg overflow-hidden z-20 px-1">
                                         <div className="flex items-center gap-2">
                                             <div className="text-lg sm:text-xl font-bold text-white leading-none">{event.day}</div>
@@ -686,8 +674,6 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         </div>
                                     </div>
                                 </div>
-
-                                {/* Event Info */}
                                 <div className="w-full bg-white flex items-stretch justify-between border border-[#7e7b7b] border-t-0 rounded-bl-2xl rounded-br-lg overflow-hidden">
                                     <div className='flex flex-col justify-center pl-3 sm:pl-4 py-2 sm:py-3'>
                                         <p className="text-xs sm:text-sm font-bold whitespace-nowrap text-gray-900">{event.title}</p>
@@ -705,6 +691,5 @@ export default function EventDetailPage({ params }: EventDetailProps) {
             </div>
             <Footer />
         </>
-
     );
 }
