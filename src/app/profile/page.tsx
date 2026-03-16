@@ -573,16 +573,6 @@ export default function ProfilePage() {
                                 </select>
                             </div>
                         </div>
-
-                        {/* Booking Frequency */}
-                        <div>
-                            <FieldLabel label="How often do you book for overnight stay or leisure related packages?" />
-                            <select value={bookingFreq} onChange={(e) => setBookingFreq(e.target.value)} className={`${inputCls} w-48`}>
-                                <option value="">Select</option>
-                                {bookingFrequencies.map((f) => <option key={f}>{f}</option>)}
-                            </select>
-                        </div>
-
                         <button type="button" className={saveBtnCls}>Save</button>
                     </div>
                 </Section>
