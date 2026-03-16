@@ -101,7 +101,7 @@ const Platinumlist = () => {
         </div>
 
         {/* Footer-like Info */}
-        <div className="w-full bg-white border-t border-b border-gray-200 py-4 sm:py-5 md:py-6">
+        <div className="w-full bg-white border-gray-200 py-4 sm:py-5 md:py-6 ">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center">
 
@@ -134,13 +134,28 @@ const Platinumlist = () => {
                 <div className="h-12 w-px bg-gray-300 mx-auto"></div>
               </div>
 
-              {/* Right - WhatsApp Section */}
-              <div className="md:col-span-3 flex justify-center md:justify-start">
-                <img
-                  src='/whatsapp12.png'
-                  alt="WhatsApp"
-                  className="w-auto h-auto max-w-full object-contain cursor-pointer"
-                />
+              {/* Right - WhatsApp Chat Online */}
+              <div className="md:col-span-3 flex items-center justify-center gap-3">
+                {/* Green WhatsApp circle */}
+                <div className="w-12 h-12 sm:w-14 sm:h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-md flex-shrink-0">
+                  <svg viewBox="0 0 32 32" className="w-7 h-7 sm:w-8 sm:h-8 fill-white" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 2C8.268 2 2 8.268 2 16c0 2.444.658 4.733 1.806 6.7L2 30l7.494-1.778A13.94 13.94 0 0016 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.6a11.56 11.56 0 01-5.897-1.61l-.423-.252-4.452 1.056 1.09-4.33-.276-.444A11.56 11.56 0 014.4 16C4.4 9.593 9.593 4.4 16 4.4S27.6 9.593 27.6 16 22.407 27.6 16 27.6zm6.34-8.64c-.347-.174-2.055-1.014-2.374-1.13-.319-.116-.551-.174-.784.174-.232.347-.9 1.13-1.103 1.362-.203.232-.406.26-.753.087-.347-.174-1.465-.54-2.79-1.72-1.031-.92-1.727-2.055-1.93-2.402-.203-.347-.022-.535.152-.708.156-.155.347-.406.52-.609.174-.203.232-.347.347-.58.116-.232.058-.435-.029-.609-.087-.174-.784-1.89-1.074-2.588-.283-.68-.57-.587-.784-.598l-.668-.012c-.232 0-.609.087-.928.435-.319.347-1.218 1.19-1.218 2.9s1.247 3.365 1.42 3.597c.174.232 2.453 3.747 5.944 5.254.831.359 1.48.573 1.985.733.834.265 1.594.228 2.194.138.669-.1 2.055-.84 2.345-1.652.29-.812.29-1.508.203-1.652-.087-.145-.319-.232-.667-.406z"/>
+                  </svg>
+                </div>
+                {/* Chat online pill */}
+                <a
+                  href="https://wa.me/1234567890"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-5 py-3 border-2 border-gray-900 rounded-full hover:bg-gray-900 hover:text-white transition-all duration-300 group"
+                >
+                  <svg viewBox="0 0 24 24" className="w-5 h-5 fill-gray-900 group-hover:fill-white transition-colors flex-shrink-0" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+                  </svg>
+                  <span className="text-base sm:text-lg font-bold text-gray-900 group-hover:text-white transition-colors whitespace-nowrap">
+                    Chat online
+                  </span>
+                </a>
               </div>
 
             </div>
