@@ -133,11 +133,11 @@ const Footer = () => {
             <li key={social.name}>
               <Link
                 href={social.url}
-                className="text-black hover:text-[#c89c6b] transition-colors inline-block"
+                className="text-[#c89c6b] hover:text-[#112b38] transition-colors inline-block group"
                 aria-label={social.name}
                 target="_blank"
               >
-                <social.icon className="w-5 h-5" />
+                <social.icon className="w-5 h-5 text-[#c89c6b] group-hover:text-[#112b38] transition-colors" />
               </Link>
             </li>
           ))}

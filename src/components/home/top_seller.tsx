@@ -5,11 +5,27 @@ import { useRouter } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
 import Link from "next/link";
 
-const images = [
-    "/TOP%20SLLER/22054_9834dd51a16eba240c0c6c97a5237e74-0-en1771488562.jpg",
-    "/TOP%20SLLER/22078_75ef9ba7a61c8303513ef023de00195d-0-en1771489174.jpg",
-    "/TOP%20SLLER/22099_3899b925d49dbee2814e0c1278a6dc64-0-en1771579388.jpg",
+const slideData = [
+    {
+        image: "/TOP%20SLLER/22054_9834dd51a16eba240c0c6c97a5237e74-0-en1771488562.jpg",
+        title: "Bel Suono: Three Pianos World Hits Gala at Zabeel Theatre, Dubai",
+        date: "FEB 21 NOV",
+        price: "500",
+    },
+    {
+        image: "/TOP%20SLLER/22078_75ef9ba7a61c8303513ef023de00195d-0-en1771489174.jpg",
+        title: "Big 5 Concert: Stars of Arabic Music Live in Abu Dhabi",
+        date: "MAR 15 DEC",
+        price: "350",
+    },
+    {
+        image: "/TOP%20SLLER/22099_3899b925d49dbee2814e0c1278a6dc64-0-en1771579388.jpg",
+        title: "Sessions: The Ultimate Live Music Experience, Dubai",
+        date: "APR 20 JAN",
+        price: "450",
+    },
 ];
+const images = slideData.map(s => s.image);
 
 export default function EventCard() {
     const { t } = useLanguage();
@@ -132,8 +148,8 @@ export default function EventCard() {
                         {/* Main Content */}
                         <div className="flex flex-col gap-2 sm:gap-3 md:gap-4 mt-2 sm:mt-3 md:mt-4">
                             {/* Event Titles */}
-                            <p className="text-black text-xs sm:text-sm md:text-base lg:text-lg font-medium">
-                                Bel Suono: Three Pianos World Hits Gala <br className="hidden sm:block" /> at Zabeel Theatre, Dubai
+                            <p className="text-black text-xs sm:text-sm md:text-base lg:text-lg font-medium transition-all duration-500">
+                                {slideData[index].title}
                             </p>
                             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
                                 <div className="flex gap-2 items-center flex-wrap">
@@ -141,7 +157,7 @@ export default function EventCard() {
                                     <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-gray-600">
                                         <div className="flex items-center gap-1">
                                             <Calendar size={14} className="text-gray-500 sm:w-4 sm:h-4" />
-                                            <span className="font-medium text-xs sm:text-sm">FEB 21 NOV</span>
+                                            <span className="font-medium text-xs sm:text-sm">{slideData[index].date}</span>
                                         </div>
 
                                     </div>
@@ -149,7 +165,7 @@ export default function EventCard() {
                                     {/* Venue */}
                                     <div className="flex items-center gap-1 text-gray-600">
                                         <MapPin size={14} className="text-gray-500 sm:w-4 sm:h-4" />
-                                        <p className="text-xs sm:text-sm">{t.asFrom} <span>500</span></p>
+                                        <p className="text-xs sm:text-sm">{t.asFrom} <span>{slideData[index].price}</span></p>
                                     </div>
                                 </div>
                                 <div className="flex items-center justify-end">

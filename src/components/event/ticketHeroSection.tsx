@@ -431,40 +431,40 @@ const TicketHeroSection = ({currentSlide,slides,setCurrentSlide,currentSlideData
 
                             {/* Custom Calendar Popup */}
                             {calendarOpen && (
-                                <div className="absolute top-[calc(100%+8px)] right-[-180px] z-50 bg-white rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.18)] p-5 w-[230px] select-none">
+                                <div className="absolute top-[calc(100%+6px)] right-[-180px] z-50 bg-white rounded-xl shadow-[0_8px_40px_rgba(0,0,0,0.18)] px-2 pt-2 pb-1 w-[210px] select-none">
                                     {/* Header */}
-                                    <div className="flex items-center justify-between mb-4">
+                                    <div className="flex items-center justify-between mb-1">
                                         <button
                                             type="button"
                                             onClick={prevMonth}
-                                            className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 transition-colors text-lg font-light"
+                                            className="w-5 h-5 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 transition-colors text-sm"
                                         >
                                             &#8249;
                                         </button>
-                                        <span className="text-base font-semibold text-gray-900">
+                                        <span className="text-xs font-semibold text-gray-900">
                                             {MONTHS[calendarView.month]} {calendarView.year}
                                         </span>
                                         <button
                                             type="button"
                                             onClick={nextMonth}
-                                            className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 transition-colors text-lg font-light"
+                                            className="w-5 h-5 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 transition-colors text-sm"
                                         >
                                             &#8250;
                                         </button>
                                     </div>
 
                                     {/* Day labels */}
-                                    <div className="grid grid-cols-7 mb-2">
+                                    <div className="grid grid-cols-7">
                                         {DAYS.map(d => (
-                                            <div key={d} className="text-center text-xs font-medium text-gray-400 py-1">{d}</div>
+                                            <div key={d} className="text-center text-[9px] font-medium text-gray-400 py-0.5">{d}</div>
                                         ))}
                                     </div>
 
                                     {/* Date grid */}
-                                    <div className="grid grid-cols-7 gap-y-1">
+                                    <div className="grid grid-cols-7">
                                         {buildCalendarDays().map((cell, i) => {
                                             if (cell.type !== 'cur') {
-                                                return <div key={i} className="text-center text-sm py-1.5 text-gray-300">{cell.day}</div>
+                                                return <div key={i} className="text-center text-[10px] py-0.5 text-gray-300">{cell.day}</div>
                                             }
                                             const past = isPast(cell.day)
                                             const selected = isSelected(cell.day)
@@ -474,12 +474,12 @@ const TicketHeroSection = ({currentSlide,slides,setCurrentSlide,currentSlideData
                                                     key={i}
                                                     type="button"
                                                     onClick={() => !past && handleDateSelect(cell.day)}
-                                                    className={`text-center text-sm py-1.5 rounded-full transition-colors w-9 mx-auto
-                                                                                                    ${selected ? 'font-bold text-gray-900' : ''}
-                                                                                                    ${!selected && today ? 'font-bold text-gray-900' : ''}
-                                                                                                    ${!selected && past ? 'text-gray-300 cursor-default' : ''}
-                                                                                                    ${!selected && !past ? 'text-gray-700 hover:bg-gray-100 cursor-pointer font-medium' : ''}
-                                                                                                `}
+                                                    className={`text-center text-[10px] py-0.5 rounded-full transition-colors w-6 mx-auto
+                                                        ${selected ? 'bg-[#112b38] text-white font-bold' : ''}
+                                                        ${!selected && today ? 'font-bold text-[#112b38]' : ''}
+                                                        ${!selected && past ? 'text-gray-300 cursor-default' : ''}
+                                                        ${!selected && !past ? 'text-gray-700 hover:bg-gray-100 cursor-pointer' : ''}
+                                                    `}
                                                 >
                                                     {cell.day}
                                                 </button>
