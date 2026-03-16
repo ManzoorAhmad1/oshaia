@@ -24,88 +24,162 @@ const Footer = () => {
   return (
     <footer className="w-full bg-white">
       <PartnersSection />
-              <NewsletterSection />
-              <Platinumlist />
-      <div className='w-full text-center '>
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
+      <NewsletterSection />
+      <Platinumlist />
 
-            {/* Payment Methods Section */}
-            <div className="my-4">
-              <h4 className="text-base sm:text-lg md:text-xl font-bold uppercase mb-3 sm:mb-4 md:mb-5 text-black">
-                OUR PAYMENT METHODS
-              </h4>
-              <div className="flex justify-center">
-                <img
-                  src='/Red Simple Typographic 2026 Christmas Supplies Logo.png'
-                  alt="Payment Methods"
-                  className="h-8 sm:h-10 md:h-12 w-auto object-contain"
-                />
-              </div>
-            </div>
+      {/* Dark columns section */}
+      <div className="w-full bg-[#112b38] py-10 sm:py-12">
+        <div className="max-w-6xl mx-auto px-6 sm:px-10 md:px-16 grid grid-cols-2 md:grid-cols-4 gap-8">
 
-            {/* Keep in Touch Section */}
-            <div className="">
-              <h4 className="text-base sm:text-lg md:text-xl font-bold uppercase mb-4 sm:mb-4 md:mb-4 text-black">
-                KEEP IN TOUCH
-              </h4>
-              <ul className="flex items-center justify-center gap-3 sm:gap-4 md:gap-5 list-none mb-4 sm:mb-5 md:mb-6">
-                {socialLinks.map((social) => (
-                  <li key={social.name}>
-                    <Link
-                      href={social.url}
-                      className="text-black hover:text-[#c89c6b] transition-colors inline-block"
-                      aria-label={social.name}
-                      target="_blank"
-                    >
-                      <social.icon className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-4 md:h-4" />
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Copyright Section */}
-            <div className="">
-              <p className="text-gray-700 text-xs sm:text-sm md:text-base mb-0">
-             Copyright ©️ 2026 Oshaia.com, Aventure Agency LTD. All rights reserved.
-              </p>
-            </div>
-
-            {/* Terms Links */}
-            <div className="mt-3 sm:mt-4 md:mt-5">
-              <ul className="flex items-center justify-center gap-2 sm:gap-3 list-none text-xs sm:text-sm">
-                <li>
-                  <p className="text-gray-600 hover:text-[#c89c6b] transition-colors cursor-pointer"  onClick={()=>router.push('/terms')}>
-                    Terms &amp; condition
-                  </p>
+          {/* About Us */}
+          <div>
+            <h4 className="text-[#c89c6b] font-bold text-sm sm:text-base mb-4 uppercase">About us</h4>
+            <ul className="space-y-2">
+              {[
+                { label: 'Who We Are ?', href: '/about' },
+                { label: 'Home', href: '/' },
+                { label: 'Events', href: '/event' },
+                { label: 'Help Center', href: '/help' },
+                { label: 'We are hiring', href: '#' },
+                { label: 'Latest News', href: '#' },
+                { label: 'Terms & Conditions', href: '/terms' },
+              ].map(item => (
+                <li key={item.label}>
+                  <Link href={item.href} className="text-white text-xs sm:text-sm hover:text-[#c89c6b] transition-colors">
+                    {item.label}
+                  </Link>
                 </li>
-                <li className="text-gray-400">|</li>
-                <li>
-                  <p className="text-gray-600 hover:text-[#c89c6b] transition-colors cursor-pointer"  onClick={()=>router.push('help')}>
-                    Cookie terms
-                  </p>
+              ))}
+            </ul>
+          </div>
+
+          {/* Categories */}
+          <div>
+            <h4 className="text-[#c89c6b] font-bold text-sm sm:text-base mb-4 uppercase">Categories</h4>
+            <ul className="space-y-2">
+              {[
+                { label: 'All', href: '/event' },
+                { label: 'Concerts', href: '/event' },
+                { label: 'Festivals', href: '/event' },
+                { label: 'Conferences', href: '/event' },
+                { label: 'Shows', href: '/event' },
+                { label: 'Sports', href: '/event' },
+                { label: 'Top Seller', href: '/event' },
+              ].map(item => (
+                <li key={item.label}>
+                  <Link href={item.href} className="text-white text-xs sm:text-sm hover:text-[#c89c6b] transition-colors">
+                    {item.label}
+                  </Link>
                 </li>
-              </ul>
-            </div>
+              ))}
+            </ul>
           </div>
-        </div>
-        {/* Contact Info Bar */}
-        <div className='mt-4 w-full flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-8 py-4 sm:py-6 lg:py-8 bg-[#112b38]  text-white px-4 sm:px-8 md:px-16 lg:px-28 xl:px-44 justify-evenly'>
-          <div className='flex gap-2 sm:gap-3 items-center justify-center sm:justify-start'>
-            <FaLocationDot className='text-orange-500 flex-shrink-0 text-base sm:text-lg' />
-            <Text className='text-xs sm:text-sm md:text-base'>Maxuel street, Frankfurt 2589 Germany</Text>
+
+          {/* Services */}
+          <div>
+            <h4 className="text-[#c89c6b] font-bold text-sm sm:text-base mb-4 uppercase">Services</h4>
+            <ul className="space-y-2">
+              {[
+                { label: 'Event services', href: '/about' },
+                { label: 'Marketing services', href: '/about' },
+                { label: 'Event staffing', href: '/about' },
+                { label: 'Ticket printing', href: '/about' },
+                { label: 'Venue ticketing', href: '/about' },
+                { label: 'System features', href: '/about' },
+                { label: "Organisers' Guide", href: '/help' },
+                { label: 'Advertise with us', href: '/about' },
+              ].map(item => (
+                <li key={item.label}>
+                  <Link href={item.href} className="text-white text-xs sm:text-sm hover:text-[#c89c6b] transition-colors">
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
-          <div className='flex gap-2 sm:gap-3 items-center justify-center sm:justify-start'>
-            <FaPhoneAlt className='text-orange-500 flex-shrink-0 text-base sm:text-lg' />
-            <Text className='text-xs sm:text-sm md:text-base'>(022) 666 888 0000</Text>
+
+          {/* Customer */}
+          <div>
+            <h4 className="text-[#c89c6b] font-bold text-sm sm:text-base mb-4 uppercase">Customer</h4>
+            <ul className="space-y-2">
+              {[
+                { label: 'My Profile', href: '/profile' },
+                { label: 'My Bookings', href: '/account' },
+                { label: 'Chat with Us on WhatsApp', href: '#' },
+                { label: 'How to Buy Tickets', href: '/help' },
+                { label: 'Terms & Conditions', href: '/terms' },
+                { label: 'Help & Support', href: '/help' },
+                { label: 'Contact Us', href: '/help' },
+              ].map(item => (
+                <li key={item.label}>
+                  <Link href={item.href} className="text-white text-xs sm:text-sm hover:text-[#c89c6b] transition-colors">
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
-          <div className='flex gap-2 sm:gap-3 items-center justify-center sm:justify-start'>
-            <TfiEmail className='text-orange-500 flex-shrink-0 text-base sm:text-lg' />
-            <Text className='text-xs sm:text-sm md:text-base'>needhelp@gmail.com</Text>
-          </div>
+
         </div>
       </div>
+
+      {/* Keep in Touch - white section */}
+      <div className="w-full bg-white py-6 text-center border-b border-gray-100">
+        <h4 className="text-sm sm:text-base font-bold uppercase mb-3 text-black tracking-widest">
+          KEEP IN TOUCH
+        </h4>
+        <ul className="flex items-center justify-center gap-5 list-none">
+          {socialLinks.map((social) => (
+            <li key={social.name}>
+              <Link
+                href={social.url}
+                className="text-black hover:text-[#c89c6b] transition-colors inline-block"
+                aria-label={social.name}
+                target="_blank"
+              >
+                <social.icon className="w-5 h-5" />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Contact Info Bar */}
+      <div className="w-full flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-8 py-4 sm:py-5 bg-[#112b38] text-white px-4 sm:px-8 md:px-16 lg:px-28 xl:px-44 justify-evenly">
+        <div className="flex gap-2 sm:gap-3 items-center justify-center sm:justify-start">
+          <FaLocationDot className="text-orange-500 flex-shrink-0 text-base sm:text-lg" />
+          <Text className="text-xs sm:text-sm md:text-base">Maxuel street, Frankfurt 2589 Germany</Text>
+        </div>
+        <div className="flex gap-2 sm:gap-3 items-center justify-center sm:justify-start">
+          <FaPhoneAlt className="text-orange-500 flex-shrink-0 text-base sm:text-lg" />
+          <Text className="text-xs sm:text-sm md:text-base">(022) 666 888 0000</Text>
+        </div>
+        <div className="flex gap-2 sm:gap-3 items-center justify-center sm:justify-start">
+          <TfiEmail className="text-orange-500 flex-shrink-0 text-base sm:text-lg" />
+          <Text className="text-xs sm:text-sm md:text-base">needhelp@gmail.com</Text>
+        </div>
+      </div>
+
+      {/* Copyright + Terms */}
+      <div className="w-full bg-white py-4 text-center">
+        <p className="text-gray-700 text-xs sm:text-sm mb-2">
+          Copyright © 2026 Oshaia.com, Aventure Agency LTD. All rights reserved.
+        </p>
+        <ul className="flex items-center justify-center gap-2 sm:gap-3 list-none text-xs sm:text-sm">
+          <li>
+            <p className="text-gray-600 hover:text-[#c89c6b] transition-colors cursor-pointer" onClick={() => router.push('/terms')}>
+              Terms &amp; condition
+            </p>
+          </li>
+          <li className="text-gray-400">|</li>
+          <li>
+            <p className="text-gray-600 hover:text-[#c89c6b] transition-colors cursor-pointer" onClick={() => router.push('/help')}>
+              Cookie terms
+            </p>
+          </li>
+        </ul>
+      </div>
+
     </footer>
   )
 }
