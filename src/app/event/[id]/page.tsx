@@ -302,7 +302,8 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                 alt={event.organizer}
                                                 className="w-full h-full object-contain p-2"
                                             />
-                                        </div>
+                                        </div>Choose Your Tickets
+
                                     </div>
 
                                     <div className="flex-1 min-w-0">
@@ -361,19 +362,19 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                 <div className="flex items-center gap-4 sm:gap-8 px-4 sm:px-6 overflow-x-auto w-full sm:w-auto">
                                     <button
                                         onClick={() => scrollToSection(ticketsRef)}
-                                        className="py-2 text-sm sm:text-base font-bold text-gray-400 hover:text-[#112b38] transition-colors"
+                                        className="py-2 text-sm sm:text-base font-bold text-white hover:text-[#112b38] transition-colors"
                                     >
                                         {t.tickets}
                                     </button>
                                     <button
                                         onClick={() => scrollToSection(descriptionRef)}
-                                        className="py-2 text-sm sm:text-base font-bold text-gray-400 hover:text-[#112b38] transition-colors"
+                                        className="py-2 text-sm sm:text-base font-bold text-white hover:text-[#112b38] transition-colors"
                                     >
                                         {t.description}
                                     </button>
                                     <button
                                         onClick={() => scrollToSection(moreInfoRef)}
-                                        className="py-2 text-sm sm:text-base font-bold text-gray-400 hover:text-[#112b38] transition-colors"
+                                        className="py-2 text-sm sm:text-base font-bold text-white hover:text-[#112b38] transition-colors"
                                     >
                                         {t.moreInfo}
                                     </button>
@@ -387,7 +388,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             {/* Ticket Selection - with ref */}
                             <div ref={ticketsRef} id="tickets-section">
                                 <div className="p-4 sm:p-6">
-                                    <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-[#112b38]">{t.chooseYourTickets}</h2>
+                                    <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-white">{t.chooseYourTickets}</h2>
                                     <div className="space-y-4">
                                         {event.tickets.map((ticket) => (
                                             <div key={ticket.id} className="bg-gray-100 rounded-lg overflow-hidden">
