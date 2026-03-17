@@ -55,6 +55,7 @@ const slides = [
 export default function EventDetailPage({ params }: EventDetailProps) {
     const { t }: any = useLanguage();
     const [selectedTicket, setSelectedTicket] = useState<number | null>(null);
+    const [activeTab, setActiveTab] = useState<'tickets' | 'description' | 'moreInfo'>('tickets');
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [currentSlide, setCurrentSlide] = useState(0);
     const [playingSongId, setPlayingSongId] = useState<number | null>(null);
@@ -361,20 +362,32 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             <div className="w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
                                 <div className="flex items-center gap-4 sm:gap-8 px-4 sm:px-6 overflow-x-auto w-full sm:w-auto">
                                     <button
-                                        onClick={() => scrollToSection(ticketsRef)}
-                                        className="py-2 text-sm sm:text-base font-bold text-white hover:text-[#112b38] transition-colors"
+                                        onClick={() => setActiveTab('tickets')}
+                                        className={`py-2 text-sm sm:text-base font-bold transition-colors border-b-2 ${
+                                            activeTab === 'tickets'
+                                                ? 'text-[#c89c6b] border-[#c89c6b]'
+                                                : 'text-white border-transparent hover:text-[#c89c6b]'
+                                        }`}
                                     >
                                         {t.tickets}
                                     </button>
                                     <button
-                                        onClick={() => scrollToSection(descriptionRef)}
-                                        className="py-2 text-sm sm:text-base font-bold text-white hover:text-[#112b38] transition-colors"
+                                        onClick={() => setActiveTab('description')}
+                                        className={`py-2 text-sm sm:text-base font-bold transition-colors border-b-2 ${
+                                            activeTab === 'description'
+                                                ? 'text-[#c89c6b] border-[#c89c6b]'
+                                                : 'text-white border-transparent hover:text-[#c89c6b]'
+                                        }`}
                                     >
                                         {t.description}
                                     </button>
                                     <button
-                                        onClick={() => scrollToSection(moreInfoRef)}
-                                        className="py-2 text-sm sm:text-base font-bold text-white hover:text-[#112b38] transition-colors"
+                                        onClick={() => setActiveTab('moreInfo')}
+                                        className={`py-2 text-sm sm:text-base font-bold transition-colors border-b-2 ${
+                                            activeTab === 'moreInfo'
+                                                ? 'text-[#c89c6b] border-[#c89c6b]'
+                                                : 'text-white border-transparent hover:text-[#c89c6b]'
+                                        }`}
                                     >
                                         {t.moreInfo}
                                     </button>
@@ -384,9 +397,9 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                     <Text>{t.addToFavourites}</Text>
                                 </div>
                             </div>
-
-                            {/* Ticket Selection - with ref */}
-                            <div ref={ticketsRef} id="tickets-section">
+                            {/* Tab Content */}
+                            <div key={activeTab} className="animate-slide-up">                            {/* Ticket Selection - with ref */}
+                            {activeTab === 'tickets' && <div ref={ticketsRef} id="tickets-section">
                                 <div className="p-4 sm:p-6">
                                     <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-white">{t.chooseYourTickets}</h2>
                                     <div className="space-y-4">
@@ -468,10 +481,10 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         ))}
                                     </div>
                                 </div>
-                            </div>
+                            </div>}
 
                             {/* Description Section */}
-                            <div ref={descriptionRef} id="description-section">
+                            {activeTab === 'description' && <div ref={descriptionRef} id="description-section">
                                 <div className="bg-white rounded-b-xl p-4 sm:p-6 shadow-md border border-t-0 border-gray-200">
                                     <h2 className="text-xl sm:text-2xl font-bold mb-4 text-[#112b38]">{t.eventDescription}</h2>
                                     <div className="prose max-w-none text-[#112b38] text-sm sm:text-base">
@@ -479,10 +492,10 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         <Text className="mt-4">Join us for an unforgettable experience at {event.title}. This event promises to be one of the most exciting gatherings of the year.</Text>
                                     </div>
                                 </div>
-                            </div>
+                            </div>}
 
                             {/* More Info Section */}
-                            <div ref={moreInfoRef} id="moreInfo-section">
+                            {activeTab === 'moreInfo' && <div ref={moreInfoRef} id="moreInfo-section">
                                 <div className="bg-white rounded-b-xl p-4 sm:p-6 shadow-md border border-t-0 border-gray-200">
                                     <h2 className="text-xl sm:text-2xl font-bold mb-4 text-[#112b38]">{t.moreInformation}</h2>
                                     <div className="space-y-4 text-sm sm:text-base text-[#112b38]">
@@ -500,7 +513,9 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>}
+
+                            </div> {/* end animate-slide-up */}
 
                             {/* Location Map */}
                             <div className="">
