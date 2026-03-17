@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { FaFacebook, FaTwitter, FaWhatsapp, FaInstagram, FaGreaterThan } from 'react-icons/fa';
 import TicketHeroSection from '@/components/event/ticketHeroSection';
+import NavSearchHeader from '@/components/event/NavSearchHeader';
 import { Text } from 'rizzui/typography';
 import { Footer } from '@/components/home';
 import { useLanguage } from '@/context/LanguageContext';
@@ -263,50 +264,36 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     };
 
     return (
-        <>
-            <div className="relative min-h-screen bg-gray-50">
-                {/* Background image - Top section only */}
-                <div
-                    className="absolute top-0 left-0 right-0 h-[195vh] bg-top bg-no-repeat scale-105 blur-sm z-0"
-                    style={{
-                        backgroundImage: `url(${currentSlideData.url})`,
-                        backgroundSize: '100% auto'
-                    }} />
+        <div className="relative">
 
-                {/* Hero Section with Event Card Design */}
-                <div className="relative z-10 w-full overflow-visible flex flex-col justify-end">
-                    <div className="w-full pt-32 pb-6">
-                        <div className="w-full sm:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-                            <div className="flex justify-center items-center">
-                                <div className="w-full h-auto event-card group relative overflow-visible">
-                                    <div className="hidden sm:block absolute -top-[12px] left-[26px] w-[520px] h-auto z-50 pointer-events-none">
-                                        <img
-                                            src={`/images/LOGO TAG/1.png`}
-                                            alt="Event Badge"
-                                            className="w-full h-auto object-contain scale-110"
-                                        />
-                                    </div>
-                                    <div className="relative z-10 overflow-hidden">
-                                        <TicketHeroSection
-                                            currentSlide={currentSlide}
-                                            slides={slides}
-                                            setCurrentSlide={setCurrentSlide}
-                                            currentSlideData={currentSlideData}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            {/* Background image - from top, not sticky */}
+            <div
+                className="absolute top-0 left-0 right-0 h-[135vh] blur-sm -z-10 pointer-events-none"
+                style={{
+                    backgroundImage: `url(${currentSlideData.url})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'top center',
+                    backgroundRepeat: 'no-repeat'
+                }} />
 
+            <NavSearchHeader />
+
+            {/* Hero Carousel Slider */}
+            <TicketHeroSection
+                slides={slides}
+                currentSlide={currentSlide}
+                setCurrentSlide={setCurrentSlide}
+                currentSlideData={currentSlideData}
+            />
+
+            <div className="relative min-h-screen mt-8">
                 {/* Main Content */}
                 <div className="relative z-10 max-w-[89%] mx-auto px-4 sm:px-6 md:px-8 lg:px-16 pb-6 sm:pb-8 md:pb-10">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
                         {/* Left Column - Main Content */}
                         <div className="lg:col-span-2 space-y-6">
                             {/* Event Info Bar - Horizontal Layout */}
-                            <div className="bg-[#f6f6f6] rounded-xl p-4 sm:p-6 shadow-[10px_0_30px_-5px_rgba(0,0,0,0.08)]">
+                            <div className="bg-[#f6f6f6] rounded-xl p-4 sm:p-6 shadow-[10px_0_30px_-5px_rgba(0,0,0,0.08)] border border-white/30">
                                 <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
                                     <div className="flex-shrink-0">
                                         <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-[#112b38] rounded-lg flex items-center justify-center">
@@ -438,8 +425,8 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                         <div className="flex items-center gap-2">
                                                             <button
                                                                 className={`w-6 h-6 border-2 border-gray-300 rounded flex items-center justify-center transition-all duration-300 font-bold text-base ${ticketQuantities[ticket.id] === 0
-                                                                        ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400'
-                                                                        : 'hover:bg-[#112b38] hover:text-white hover:border-[#112b38] text-gray-700'
+                                                                    ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400'
+                                                                    : 'hover:bg-[#112b38] hover:text-white hover:border-[#112b38] text-gray-700'
                                                                     }`}
                                                                 onClick={() => decrementQuantity(ticket.id)}
                                                                 disabled={ticketQuantities[ticket.id] === 0}
@@ -453,8 +440,8 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
                                                             <button
                                                                 className={`w-6 h-6 border-2 border-[#c89c6b] rounded flex items-center justify-center transition-all duration-300 font-bold text-base ${ticketQuantities[ticket.id] === Math.min(20, ticket.available)
-                                                                        ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400 border-gray-300'
-                                                                        : 'text-[#112b38] hover:bg-[#c89c6b] hover:text-white'
+                                                                    ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400 border-gray-300'
+                                                                    : 'text-[#112b38] hover:bg-[#c89c6b] hover:text-white'
                                                                     }`}
                                                                 onClick={() => incrementQuantity(ticket.id, ticket.available)}
                                                                 disabled={ticketQuantities[ticket.id] === Math.min(20, ticket.available)}
@@ -559,7 +546,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                         {/* Right Column - Sidebar */}
                         <div className="space-y-6">
                             {/* Share on Social */}
-                            <div className="max-w-lg mx-auto bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+                            <div className="max-w-lg mx-auto bg-white rounded-xl p-6 shadow-lg border border-gray-100/40">
                                 <div className="flex items-center justify-between text-sm text-gray-600">
                                     <div className="flex items-center gap-2">
                                         <Calendar className="w-4 h-4 text-blue-500" />
@@ -784,11 +771,10 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                             <button
                                                                 key={i}
                                                                 onClick={(e) => { e.preventDefault(); setRelatedCarouselIndex(i); }}
-                                                                className={`rounded-full transition-all duration-300 ${
-                                                                    i === relatedCarouselIndex
+                                                                className={`rounded-full transition-all duration-300 ${i === relatedCarouselIndex
                                                                         ? 'w-5 h-2 bg-white'
                                                                         : 'w-2 h-2 bg-white/50 hover:bg-white/80'
-                                                                }`}
+                                                                    }`}
                                                             />
                                                         ))}
                                                     </div>
@@ -813,6 +799,6 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                 </div>
             </div>
             <Footer />
-        </>
+        </div>
     );
 }
