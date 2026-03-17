@@ -736,7 +736,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                         style={{ transform: `translateX(-${relatedCarouselIndex * 100}%)` }}
                     >
                         {Array.from({ length: totalPages }).map((_, pageIdx) => (
-                            <div key={pageIdx} className="w-full flex-shrink-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 sm:gap-14 md:gap-16 lg:gap-20 py-8 overflow-visible justify-items-center">
+                            <div key={pageIdx} className="w-full flex-shrink-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 sm:gap-14  py-8 overflow-visible justify-items-center">
                                 {relatedEvents.slice(pageIdx * cardsPerPage, pageIdx * cardsPerPage + cardsPerPage).map((ev) => (
                                     <Link
                                         key={ev.id}
