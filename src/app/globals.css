@@ -5,7 +5,7 @@
 @keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(80px);
   }
   to {
     opacity: 1;
@@ -14,7 +14,7 @@
 }
 
 .animate-slide-up {
-  animation: slideUp 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: slideUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 /* Event Website Color Scheme */

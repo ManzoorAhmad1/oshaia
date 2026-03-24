@@ -88,6 +88,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
     // State for ticket quantities - Initialize properly
     const [ticketQuantities, setTicketQuantities] = useState<{ [key: number]: number }>({});
+    const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0 });
 
     const relatedEvents = [
         { id: 1, title: "EN TOUTE INTIMITÉ", location: "Le Suffren Hotel & Spa", price: "RS 450", image: "https://otayo.com/wp-content/uploads/2026/01/zulu-new-grid.jpg", day: "18", month: "Oct", badge: 1 },
@@ -128,6 +129,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     const ticketsRef = useRef<HTMLDivElement>(null);
     const descriptionRef = useRef<HTMLDivElement>(null);
     const moreInfoRef = useRef<HTMLDivElement>(null);
+    const tabContentRef = useRef<HTMLDivElement>(null);
 
     // Mock event data - Replace with actual API call based on params.id
     const event = {
@@ -135,7 +137,8 @@ export default function EventDetailPage({ params }: EventDetailProps) {
         title: "Star for Mental Health",
         subtitle: "ISSA NOEL KAREEMA OKAYLA BEN",
         date: "28 JAN",
-        fullDate: "Tuesday, 28 Jan 2025 at 06:00 pm",
+        startDate: "2026-04-29T18:00:00",
+        fullDate: "Tuesday, 29 Apr 2026 at 06:00 pm",
         endDate: "11:59 pm",
         location: "Venue",
         fullAddress: "123A University Street, Dubai, UAE",
@@ -197,6 +200,23 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     };
 
     const currentSlideData = slides[currentSlide];
+
+    // Live countdown from event.startDate
+    useEffect(() => {
+        const target = new Date(event.startDate).getTime();
+        const tick = () => {
+            const diff = target - Date.now();
+            if (diff <= 0) { setCountdown({ days: 0, hours: 0, minutes: 0 }); return; }
+            setCountdown({
+                days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+                hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+                minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+            });
+        };
+        tick();
+        const interval = setInterval(tick, 60000);
+        return () => clearInterval(interval);
+    }, []);
 
     // Initialize quantities for tickets on mount only
     useEffect(() => {
@@ -287,14 +307,18 @@ export default function EventDetailPage({ params }: EventDetailProps) {
         }
     };
 
+    const handleTabClick = (tab: 'tickets' | 'description' | 'moreInfo') => {
+        setActiveTab(tab);
+    };
+
     return (
         <div className="relative">
 
             {/* Background image - from top, not sticky */}
             <div
-                className="absolute top-0 left-0 right-0 h-[135vh] blur-sm -z-10 pointer-events-none"
+                className="absolute top-0 left-0 right-0 h-[100vh] blur-sm -z-10 pointer-events-none"
                 style={{
-                    backgroundImage: `url(${currentSlideData.url})`,
+                    backgroundImage: `url(${currentSlideData.type === 'video' ? currentSlideData.bgImage : currentSlideData.url})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'top center',
                     backgroundRepeat: 'no-repeat'
@@ -357,23 +381,26 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                 <span className="text-[#112b38]">{t.from} <span className="font-bold text-[#112b38]">Rs 1,000</span></span>
                                             </div>
                                             <div className="flex gap-2 mt-4">
-                                                <div className='flex flex-col items-center justify-center'>
-                                                    <div className="flex-1 bg-[#D24428] w-14 rounded p-1 text-center shadow-sm">
-                                                        <div className="text-2xl sm:text-3xl font-bold text-white leading-none">5</div>
+                                                <div className='flex flex-col items-center'>
+                                                    <div className="relative bg-[#D24428] w-14 rounded pt-2 pb-1 text-center shadow-sm overflow-hidden">
+                                                        <img src="https://imagedelivery.net/eRmbR7weNG-2WY_X8bscGg/b1fd3378-511e-40bc-8156-fda282c5fe00/public" alt="bar" className="absolute top-0 left-0 w-full h-[5px] object-cover" />
+                                                        <span className="text-2xl sm:text-3xl font-bold text-white leading-none block">{countdown.days}</span>
                                                     </div>
-                                                    <div className="text-[11px] sm:text-xs text-[#112b38] font-medium">{t.days}</div>
+                                                    <span className="text-[11px] sm:text-xs text-[#112b38] font-medium mt-0.5">{t.days}</span>
                                                 </div>
-                                                <div className='flex flex-col items-center justify-center'>
-                                                    <div className="flex-1 bg-[#D24428] w-14 rounded p-1 text-center shadow-sm">
-                                                        <div className="text-2xl sm:text-3xl font-bold text-white leading-none">19</div>
+                                                <div className='flex flex-col items-center'>
+                                                    <div className="relative bg-[#D24428] w-14 rounded pt-2 pb-1 text-center shadow-sm overflow-hidden">
+                                                        <img src="https://imagedelivery.net/eRmbR7weNG-2WY_X8bscGg/b1fd3378-511e-40bc-8156-fda282c5fe00/public" alt="bar" className="absolute top-0 left-0 w-full h-[5px] object-cover" />
+                                                        <span className="text-2xl sm:text-3xl font-bold text-white leading-none block">{countdown.hours}</span>
                                                     </div>
-                                                    <div className="text-[11px] sm:text-xs text-[#112b38] font-medium">{t.hours}</div>
+                                                    <span className="text-[11px] sm:text-xs text-[#112b38] font-medium mt-0.5">{t.hours}</span>
                                                 </div>
-                                                <div className='flex flex-col items-center justify-center'>
-                                                    <div className="flex-1 bg-[#D24428] w-14 rounded p-1 text-center shadow-sm">
-                                                        <div className="text-2xl sm:text-3xl font-bold text-white leading-none">55</div>
+                                                <div className='flex flex-col items-center'>
+                                                    <div className="relative bg-[#D24428] w-14 rounded pt-2 pb-1 text-center shadow-sm overflow-hidden">
+                                                        <img src="https://imagedelivery.net/eRmbR7weNG-2WY_X8bscGg/b1fd3378-511e-40bc-8156-fda282c5fe00/public" alt="bar" className="absolute top-0 left-0 w-full h-[5px] object-cover" />
+                                                        <span className="text-2xl sm:text-3xl font-bold text-white leading-none block">{countdown.minutes}</span>
                                                     </div>
-                                                    <div className="text-[11px] sm:text-xs text-[#112b38] font-medium">{t.minutes}</div>
+                                                    <span className="text-[11px] sm:text-xs text-[#112b38] font-medium mt-0.5">{t.minutes}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -382,47 +409,43 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             </div>
 
                             {/* Tabs Navigation */}
-                            <div className="w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
-                                <div className="flex items-center gap-4 sm:gap-8 px-4 sm:px-6 overflow-x-auto w-full sm:w-auto">
+                            <div className="w-full bg-white rounded-t-xl shadow-sm border border-gray-100 sticky top-0 z-30">
+                                <div className="flex items-center">
                                     <button
-                                        onClick={() => setActiveTab('tickets')}
-                                        className={`py-2 text-sm sm:text-base font-bold transition-colors border-b-2 ${
+                                        onClick={() => handleTabClick('tickets')}
+                                        className={`px-6 py-3.5 text-sm sm:text-base font-semibold transition-all border-b-[3px] whitespace-nowrap ${
                                             activeTab === 'tickets'
                                                 ? 'text-[#c89c6b] border-[#c89c6b]'
-                                                : 'text-white border-transparent hover:text-[#c89c6b]'
+                                                : 'text-gray-500 border-transparent hover:text-gray-800'
                                         }`}
                                     >
                                         {t.tickets}
                                     </button>
                                     <button
-                                        onClick={() => setActiveTab('description')}
-                                        className={`py-2 text-sm sm:text-base font-bold transition-colors border-b-2 ${
+                                        onClick={() => handleTabClick('description')}
+                                        className={`px-6 py-3.5 text-sm sm:text-base font-semibold transition-all border-b-[3px] whitespace-nowrap ${
                                             activeTab === 'description'
                                                 ? 'text-[#c89c6b] border-[#c89c6b]'
-                                                : 'text-white border-transparent hover:text-[#c89c6b]'
+                                                : 'text-gray-500 border-transparent hover:text-gray-800'
                                         }`}
                                     >
                                         {t.description}
                                     </button>
                                     <button
-                                        onClick={() => setActiveTab('moreInfo')}
-                                        className={`py-2 text-sm sm:text-base font-bold transition-colors border-b-2 ${
+                                        onClick={() => handleTabClick('moreInfo')}
+                                        className={`px-6 py-3.5 text-sm sm:text-base font-semibold transition-all border-b-[3px] whitespace-nowrap ${
                                             activeTab === 'moreInfo'
                                                 ? 'text-[#c89c6b] border-[#c89c6b]'
-                                                : 'text-white border-transparent hover:text-[#c89c6b]'
+                                                : 'text-gray-500 border-transparent hover:text-gray-800'
                                         }`}
                                     >
                                         {t.moreInfo}
                                     </button>
                                 </div>
-                                <div className='flex gap-2 items-center px-4 sm:px-6 pb-2 sm:pb-0'>
-                                    <HeartCrack />
-                                    <Text>{t.addToFavourites}</Text>
-                                </div>
                             </div>
-                            {/* Tab Content */}
-                            <div key={activeTab} className="animate-slide-up">                            {/* Ticket Selection - with ref */}
-                            {activeTab === 'tickets' && <div ref={ticketsRef} id="tickets-section">
+                            {/* Tab Content - one panel at a time, slides up on switch */}
+                            <div key={activeTab} className="animate-slide-up">
+                            {activeTab === 'tickets' && <div id="tickets-section">
                                 <div className="px-0 py-4">
                                     <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-white">{t.chooseYourTickets}</h2>
                                     <div className="space-y-3">
@@ -500,8 +523,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                 </div>
                             </div>}
 
-                            {/* Description Section */}
-                            {activeTab === 'description' && <div ref={descriptionRef} id="description-section">
+                            {activeTab === 'description' && <div id="description-section">
                                 <div className="bg-white rounded-b-xl p-4 sm:p-6 shadow-md border border-t-0 border-gray-200">
                                     <h2 className="text-xl sm:text-2xl font-bold mb-4 text-[#112b38]">{t.eventDescription}</h2>
                                     <div className="prose max-w-none text-[#112b38] text-sm sm:text-base">
@@ -511,8 +533,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                 </div>
                             </div>}
 
-                            {/* More Info Section */}
-                            {activeTab === 'moreInfo' && <div ref={moreInfoRef} id="moreInfo-section">
+                            {activeTab === 'moreInfo' && <div id="moreInfo-section">
                                 <div className="bg-white rounded-b-xl p-4 sm:p-6 shadow-md border border-t-0 border-gray-200">
                                     <h2 className="text-xl sm:text-2xl font-bold mb-4 text-[#112b38]">{t.moreInformation}</h2>
                                     <div className="space-y-4 text-sm sm:text-base text-[#112b38]">
@@ -532,7 +553,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                 </div>
                             </div>}
 
-                            </div> {/* end animate-slide-up */}
+                            </div> {/* end tab content */}
 
                             {/* Location Map */}
                             <div className="">
@@ -628,12 +649,15 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                     </button>
                                 </div>
 
-                                <div className="flex justify-center gap-10 mt-6 text-sm text-gray-600">
+                                <div className="flex flex-wrap justify-center gap-6 mt-6 text-sm text-gray-600">
                                     <button className="flex items-center gap-2 hover:text-[#112b38] transition-all duration-300">
                                         <Calendar className="w-4 h-4" /> {t.addToCalendar}
                                     </button>
                                     <button className="flex items-center gap-2 hover:text-[#112b38] transition-all duration-300">
                                         <Link2 className="w-4 h-4" /> {t.shareEvent}
+                                    </button>
+                                    <button className="flex items-center gap-2 hover:text-[#112b38] transition-all duration-300">
+                                        <HeartCrack className="w-4 h-4" /> {t.addToFavourites}
                                     </button>
                                 </div>
                             </div>

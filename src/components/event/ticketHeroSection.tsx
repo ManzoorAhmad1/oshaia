@@ -178,7 +178,7 @@ const TicketHeroSection = ({currentSlide,slides,setCurrentSlide,currentSlideData
                                     loop
                                     muted={isMuted}
                                     playsInline
-                                    className="relative w-full h-full object-contain z-10"
+                                    className="relative w-full h-full object-cover z-10"
                                 />
 
                                 {/* Mute Button - Only for videos */}
