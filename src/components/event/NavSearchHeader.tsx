@@ -118,11 +118,11 @@ const NavSearchHeader = () => {
     return (
         <div className="w-full bg-transparent relative">
             {/* Background Blue Strip - sits behind nav and search */}
-            <div className="absolute top-0 left-0 right-0 z-0 w-full max-w-7xl mx-auto rounded-bl-2xl rounded-br-2xl bg-[#112b38] h-20" />
+            <div className="absolute top-0 left-0 right-0 z-0 w-full bg-[#112b38] h-20" />
 
             {/* Nav Bar */}
-            <div className="relative z-50 max-w-full sm:max-w-[1140.2px] h-auto sm:h-[56px] lg:h-[68.6px] mx-auto flex justify-center px-4 pt-3 mb-0">
-                <div className="bg-[#112b38] text-white w-full rounded-xl sm:rounded-xl lg:rounded-2xl px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-3 lg:py-5 shadow-lg sm:shadow-xl lg:shadow-2xl">
+            <div className="relative z-50 w-full h-auto sm:h-[56px] lg:h-[68.6px] flex justify-center px-0 pt-3 mb-0">
+                <div className="bg-[#112b38] text-white w-full px-4 sm:px-6 lg:px-10 py-3 sm:py-3 lg:py-4">
 
                     {/* Desktop Nav */}
                     <div className="hidden sm:flex items-center justify-center gap-2 sm:gap-4 md:gap-6 lg:gap-10 xl:gap-12">
@@ -201,18 +201,18 @@ const NavSearchHeader = () => {
             {/* Blue Strip */}
 
             {/* Search Bar */}
-            <div className="relative z-40 mt-2 sm:-mt-6 md:-mt-8 box-border max-w-full sm:max-w-[1230.7px] h-auto lg:h-[130px] mx-auto px-4">
-                <div className="!pt-3 sm:!pt-12 bg-white rounded-xl sm:rounded-xl lg:rounded-2xl h-auto lg:h-[123px] mt-2 w-full shadow-md sm:shadow-lg border border-gray-100 px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10 py-3 sm:py-4 lg:py-6">
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 lg:gap-6">
+            <div className="relative z-40  w-full px-0">
+                <div className="bg-white w-full shadow-md sm:shadow-lg border-b border-gray-200 ">
+                    <div className="sm:max-w-[75%] mx-auto w-full bg-[#eef0f2] py-4  px-4 sm:px-6 lg:px-8  flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 lg:gap-6">
                         {/* Search input with calendar */}
-                        <div className="relative w-full lg:w-[436px] flex-shrink-0" ref={calendarRef}>
+                        <div className="relative w-full flex-1" ref={calendarRef}>
                             <div className={`flex items-center gap-2 sm:gap-2 lg:gap-3 border border-[#c89c6b] rounded-full px-3 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-2 lg:py-3 h-[42px] sm:h-[44px] lg:h-[44.8px] transition-colors`}>
                                 <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-[#c89c6b] flex-shrink-0" />
                                 <input
                                     ref={searchRef}
                                     type="text"
                                     placeholder={selectedDate ? selectedDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : typingPlaceholder}
-                                    className="w-full outline-none border-none focus:outline-none focus:ring-0 text-[11px] sm:text-xs lg:text-sm text-gray-700 placeholder:text-gray-400"
+                                    className="w-full bg-[#eef0f2] outline-none border-none focus:outline-none focus:ring-0 text-[11px] sm:text-xs lg:text-sm text-gray-700 placeholder:text-gray-400"
                                     onFocus={() => setSearchFocused(true)}
                                     onBlur={() => setSearchFocused(false)}
                                 />
