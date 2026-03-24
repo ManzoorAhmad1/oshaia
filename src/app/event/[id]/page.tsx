@@ -480,7 +480,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                     </div>
 
                                     <div className="flex-1 min-w-0 text-center lg:text-left">
-                                        <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-2 text-[#c89c6b]">
+                                        <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-2 ">
                                             {event.title}
                                         </h2>
                                         <Text className="text-sm sm:text-base text-[#c89c6b] mb-3">
