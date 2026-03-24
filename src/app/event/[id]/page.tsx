@@ -400,6 +400,24 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
     const handleTabClick = (tab: 'tickets' | 'description' | 'moreInfo') => {
         setActiveTab(tab);
+        
+        // Get the target ref based on tab
+        let targetRef: React.RefObject<HTMLDivElement> | null = null;
+        if (tab === 'tickets') targetRef = ticketsRef;
+        else if (tab === 'description') targetRef = descriptionRef;
+        else if (tab === 'moreInfo') targetRef = moreInfoRef;
+        
+        if (targetRef?.current && tabContentRef.current) {
+            // Scroll within the tab content container
+            const containerTop = tabContentRef.current.offsetTop;
+            const elementTop = targetRef.current.offsetTop;
+            const scrollPosition = elementTop - containerTop;
+            
+            tabContentRef.current.scrollTo({
+                top: scrollPosition,
+                behavior: 'smooth'
+            });
+        }
     };
 
     return (
@@ -413,7 +431,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                     backgroundSize: 'cover',
                     backgroundPosition: 'top center',
                     backgroundRepeat: 'no-repeat',
-                    filter: 'blur(4px)',
+                    filter: 'blur(2px)',
                     transform: 'scale(1.05)',
                 }}
             >
@@ -422,7 +440,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                 {/* gradient below – fade to white */}
                 <div
                     className="absolute bottom-0 left-0 right-0 h-[160px]"
-                    style={{ background: 'linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.85) 75%, #ffffff 100%)' }}
+                    style={{ background: 'linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.92) 70%, #ffffff 100%)' }}
                 />
             </div>
 
@@ -511,7 +529,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             </div>
 
                             {/* Tabs Navigation */}
-                            <div className="w-full bg-white rounded-t-xl shadow-sm border border-gray-100 sticky top-0 z-30">
+                            <div className="w-full bg-white rounded-t-xl shadow-sm border border-gray-100 z-30">
                                 <div className="flex items-center">
                                     <button
                                         onClick={() => handleTabClick('tickets')}
@@ -545,9 +563,10 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                     </button>
                                 </div>
                             </div>
-                            {/* Tab Content - one panel at a time, slides up on switch */}
-                            <div key={activeTab} className="animate-slide-up">
-                            {activeTab === 'tickets' && <div id="tickets-section">
+                            {/* Tab Content - All sections visible in scrollable container */}
+                            <div ref={tabContentRef} className="space-y-8 max-h-[600px] overflow-y-auto scroll-smooth px-1">
+                            {/* Tickets Section */}
+                            <div ref={ticketsRef} id="tickets-section">
                                 <div className="px-0 py-4">
                                     <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-white">{t.chooseYourTickets}</h2>
                                     <div className="space-y-3">
@@ -623,37 +642,145 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         ))}
                                     </div>
                                 </div>
-                            </div>}
+                            </div>
 
-                            {activeTab === 'description' && <div id="description-section">
-                                <div className="bg-white rounded-b-xl p-4 sm:p-6 shadow-md border border-t-0 border-gray-200">
+                            {/* Description Section */}
+                            <div ref={descriptionRef} id="description-section">
+                                <div className="bg-white rounded-xl p-4 sm:p-6 shadow-md border border-gray-200 mt-4">
                                     <h2 className="text-xl sm:text-2xl font-bold mb-4 text-[#112b38]">{t.eventDescription}</h2>
-                                    <div className="prose max-w-none text-[#112b38] text-sm sm:text-base">
+                                    <div className="prose max-w-none text-[#112b38] text-sm sm:text-base space-y-4">
                                         <Text>{event.description}</Text>
-                                        <Text className="mt-4">Join us for an unforgettable experience at {event.title}. This event promises to be one of the most exciting gatherings of the year.</Text>
-                                    </div>
-                                </div>
-                            </div>}
 
-                            {activeTab === 'moreInfo' && <div id="moreInfo-section">
-                                <div className="bg-white rounded-b-xl p-4 sm:p-6 shadow-md border border-t-0 border-gray-200">
-                                    <h2 className="text-xl sm:text-2xl font-bold mb-4 text-[#112b38]">{t.moreInformation}</h2>
-                                    <div className="space-y-4 text-sm sm:text-base text-[#112b38]">
-                                        <div>
-                                            <h3 className="font-bold text-lg mb-2">{t.ageRestriction}</h3>
-                                            <Text>{t.ageRestrictionDesc}</Text>
+                                        {/* What To Expect */}
+                                        <div className="mt-6">
+                                            <h3 className="font-bold text-lg text-[#112b38] mb-3">⭕️ WHAT TO EXPECT</h3>
+                                            <ul className="space-y-2">
+                                                {[
+                                                    'International Artists headlining the event',
+                                                    'More than 6 local support artists',
+                                                    'Music Genre: Afro-House / Afro-Tech / Electronic',
+                                                    'Open-Air garden & beach venue at a 5★ resort',
+                                                    'Exclusive 2hr headliner set recorded LIVE',
+                                                    'Signature stage design with giant LED screens',
+                                                    'New sitting areas & lounges for ALL zones',
+                                                    'Exclusive Backstage access for VIPs & VVIPs',
+                                                    'Exclusive Meet & Greet Area for VVIPs',
+                                                    'Dedicated washrooms per zone',
+                                                    'Multiple food & beverage corners',
+                                                    'Fire Breathers, Laser Show & more surprises',
+                                                ].map((item, i) => (
+                                                    <li key={i} className="flex items-start gap-2 text-[#112b38] text-sm">
+                                                        <span className="mt-1 w-3 h-3 rounded-sm bg-[#112b38] flex-shrink-0 inline-block" />
+                                                        <span>{item}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
                                         </div>
-                                        <div>
-                                            <h3 className="font-bold text-lg mb-2">{t.parking}</h3>
-                                            <Text>{t.parkingDesc}</Text>
+
+                                        {/* Artist Biographies */}
+                                        <div className="mt-6">
+                                            <h3 className="font-bold text-lg text-[#112b38] mb-4">⭕️ ARTIST BIOGRAPHY</h3>
+                                            <div className="space-y-6">
+                                                {artists.map((artist) => (
+                                                    <div key={artist.name} className="flex gap-4 items-start bg-gray-50 rounded-xl p-4 border border-gray-100">
+                                                        <img
+                                                            src={artist.img}
+                                                            alt={artist.name}
+                                                            className="w-16 h-16 rounded-full object-cover flex-shrink-0 border-2 border-[#c89c6b]"
+                                                        />
+                                                        <div>
+                                                            <h4 className="font-bold text-[#112b38] text-base">{artist.name}</h4>
+                                                            <p className="text-xs text-[#c89c6b] font-semibold mb-1">{artist.role}</p>
+                                                            <p className="text-sm text-gray-600 leading-relaxed">{artist.bio}</p>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
-                                        <div>
-                                            <h3 className="font-bold text-lg mb-2">{t.whatToBring}</h3>
-                                            <Text>{t.whatToBringDesc}</Text>
+
+                                        {/* Ticket Pricing */}
+                                        <div className="mt-6">
+                                            <h3 className="font-bold text-lg text-[#112b38] mb-3">🎟 TICKET PRICING</h3>
+                                            <div className="space-y-3">
+                                                {event.tickets.map((ticket) => (
+                                                    <div key={ticket.id} className="flex items-center justify-between bg-gray-50 rounded-lg px-4 py-3 border border-gray-100">
+                                                        <div>
+                                                            <span className="font-bold text-[#112b38] text-sm">{ticket.name}</span>
+                                                            <p className="text-xs text-gray-500 mt-0.5">{ticket.description}</p>
+                                                        </div>
+                                                        <span className="font-bold text-[#c89c6b] text-base">Rs {ticket.price.toLocaleString()}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>}
+                            </div>
+
+                            {/* More Info Section */}
+                            <div ref={moreInfoRef} id="moreInfo-section">
+                                <div className="bg-white rounded-xl p-4 sm:p-6 shadow-md border border-gray-200 mt-4">
+                                    <h2 className="text-xl sm:text-2xl font-bold mb-4 text-[#112b38]">{t.moreInformation}</h2>
+                                    <div className="space-y-6 text-sm sm:text-base text-[#112b38]">
+
+                                        {/* Warning */}
+                                        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                                            <h3 className="font-bold text-base mb-3 text-amber-700">⚠ WARNING</h3>
+                                            <ul className="space-y-2 list-disc list-inside text-gray-700 text-sm">
+                                                <li>This is a LIMITED capacity event — do not wait to buy your tickets.</li>
+                                                <li>LIMITED PARKING. We request you to book a taxi, driver, or car-pool to avoid traffic and parking issues.</li>
+                                                <li>This is an 18+ event. Minors will not be allowed unless accompanied by a parent or responsible party.</li>
+                                                <li>By attending you accept to be photographed and filmed by our crew.</li>
+                                                <li>You are not allowed to bring food or drinks inside the venue premises.</li>
+                                                <li>Tickets once bought are NOT refundable.</li>
+                                                <li>The event organiser shall not be held liable for cancellation or disruption due to force majeure events.</li>
+                                            </ul>
+                                        </div>
+
+                                        {/* Terms & Conditions */}
+                                        <div>
+                                            <h3 className="font-bold text-lg mb-3">{t.ageRestriction} & Terms</h3>
+                                            <ul className="space-y-2 list-disc list-inside text-gray-700 text-sm">
+                                                <li>The Event starts at 15:00 and ends at 23:30. Doors open at 15:00 and close at 17:00.</li>
+                                                <li>This is strictly an 18+ event.</li>
+                                                <li>Food & drinks from outside will not be permitted.</li>
+                                                <li>The organiser reserves the right to amend the venue in case of unforeseeable circumstances.</li>
+                                                <li>Photography and filming is prohibited during the show.</li>
+                                                <li>No Show: If customer does not attend, 100% Cancellation Fee applies.</li>
+                                                <li>No cancellation or exchange available once ticket is confirmed and issued.</li>
+                                                <li>Security checks of bags will be conducted.</li>
+                                                <li>Failure to present your ticket at the event will entitle the organiser to deny access.</li>
+                                                <li>You can print your e-ticket or have it ready to scan from your smartphone. Make sure the QR code and booking ref is visible.</li>
+                                            </ul>
+                                        </div>
+
+                                        {/* Lockdown & Cyclone Protocol */}
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+                                                <h3 className="font-bold text-base mb-2 text-blue-800">🔒 Lockdown Protocol</h3>
+                                                <p className="text-sm text-gray-600 mb-2">If an event coincides with a lockdown or government-imposed restrictions, it may be cancelled or postponed.</p>
+                                                <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                                    <li><strong>Postponement:</strong> Tickets remain valid for the rescheduled date.</li>
+                                                    <li><strong>Cancellation:</strong> A full refund will be provided per cancellation terms.</li>
+                                                </ul>
+                                            </div>
+                                            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+                                                <h3 className="font-bold text-base mb-2 text-blue-800">🌀 Cyclone Protocol</h3>
+                                                <p className="text-sm text-gray-600 mb-2">If a booking falls under Cyclone Class 2 or higher, the event may be postponed or cancelled.</p>
+                                                <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                                    <li><strong>Postponement:</strong> Tickets remain valid for the rescheduled date.</li>
+                                                    <li><strong>Cancellation:</strong> A full refund will be provided per cancellation terms.</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        {/* Contact */}
+                                        <div className="text-sm text-gray-600 border-t border-gray-100 pt-4">
+                                            If you have any queries, contact our customer hotline or chat with us via WhatsApp.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             </div> {/* end tab content */}
 
