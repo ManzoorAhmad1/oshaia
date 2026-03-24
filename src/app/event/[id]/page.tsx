@@ -570,7 +570,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                             <Text className='flex gap-2 items-center '>{t.viewDirection} <FaGreaterThan /></Text>
                                         </div>
                                     </div>
-                                    <div className="w-full h-[250px] sm:h-[300px] md:h-[350px] bg-gray-200 rounded-xl overflow-hidden">
+                                    <div className="w-full h-[250px] bg-gray-200 rounded-xl overflow-hidden">
                                         <iframe
                                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3610.163942789584!2d55.27103831501205!3d25.197196683887764!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f43496ad9c645%3A0xbde66e5084295162!2sDubai%20-%20United%20Arab%20Emirates!5e0!3m2!1sen!2s!4v1234567890123!5m2!1sen!2s"
                                             width="100%"
@@ -587,7 +587,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             {/* Site Plan */}
                             <div className="bg-white rounded-xl">
                                 <h2 className="text-xl sm:text-2xl font-bold mb-4 text-[#112b38]">{t.sitePlan}</h2>
-                                <div className="relative w-full h-[250px] sm:h-[300px] bg-gradient-to-br from-green-50 to-blue-50 rounded-xl overflow-hidden border border-gray-200">
+                                <div className="relative w-full h-[200px] bg-gradient-to-br from-green-50 to-blue-50 rounded-xl overflow-hidden border border-gray-200">
                                     <img
                                         src='/images/mapImage.png'
                                         className='w-full h-full object-cover'
@@ -719,19 +719,6 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             </div>
 
                             {/* Portrait Image */}
-                            <div className="relative w-full h-[400px] sm:h-[500px] rounded-xl overflow-hidden shadow-lg">
-                                <Image
-                                    src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600&h=800&fit=crop"
-                                    alt="Portrait Event Image"
-                                    fill
-                                    className="object-cover"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                                <div className="absolute bottom-6 left-6 right-6">
-                                    <h3 className="text-white text-2xl font-bold mb-2">Don't Miss Out</h3>
-                                    <p className="text-white/90 text-sm">Experience the night of your life</p>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
