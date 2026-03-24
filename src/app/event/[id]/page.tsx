@@ -138,7 +138,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     const [playingSongId, setPlayingSongId] = useState<number | null>(null);
     const [songProgress, setSongProgress] = useState<{ [key: number]: number }>({});
     const [relatedCarouselIndex, setRelatedCarouselIndex] = useState(0);
-    
+
     // Collapse states for each section
     const [isTicketsCollapsed, setIsTicketsCollapsed] = useState(false);
     const [isDescriptionCollapsed, setIsDescriptionCollapsed] = useState(false);
@@ -405,19 +405,19 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
     const handleTabClick = (tab: 'tickets' | 'description' | 'moreInfo') => {
         setActiveTab(tab);
-        
+
         // Get the target ref based on tab
         let targetRef: React.RefObject<HTMLDivElement> | null = null;
         if (tab === 'tickets') targetRef = ticketsRef;
         else if (tab === 'description') targetRef = descriptionRef;
         else if (tab === 'moreInfo') targetRef = moreInfoRef;
-        
+
         if (targetRef?.current && tabContentRef.current) {
             // Scroll within the tab content container
             const containerTop = tabContentRef.current.offsetTop;
             const elementTop = targetRef.current.offsetTop;
             const scrollPosition = elementTop - containerTop;
-            
+
             tabContentRef.current.scrollTo({
                 top: scrollPosition,
                 behavior: 'smooth'
@@ -445,7 +445,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                 {/* gradient below – fade to white */}
                 <div
                     className="absolute bottom-0 left-0 right-0 h-[160px]"
-                    style={{ background: 'linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.92) 70%, #ffffff 100%)' }}
+                    style={{ background: 'linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.6) 65%, rgba(255,255,255,0.92) 100%)' }}
                 />
             </div>
 
@@ -468,42 +468,42 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             {/* Event Info Bar - Horizontal Layout */}
                             <div className="bg-[#f6f6f6] rounded-xl p-4 sm:p-6 shadow-[10px_0_30px_-5px_rgba(0,0,0,0.08)] border border-white/30">
                                 <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
-                                    <div className="flex-shrink-0">
-                                        <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-[#112b38] rounded-lg flex items-center justify-center">
+                                    <div className="flex-shrink-0 mx-auto lg:mx-0">
+                                        <div className="w-32 h-32 sm:w-40 sm:h-40">
                                             <img
-                                                src="/images/LOGO TAG/1.png"
+                                                src="/images/Logo/ALL PNG-01.png"
                                                 alt={event.organizer}
-                                                className="w-full h-full object-contain p-2"
+                                                className="w-full h-full object-contain"
                                             />
-                                        </div>Choose Your Tickets
+                                        </div>
 
                                     </div>
 
-                                    <div className="flex-1 min-w-0">
-                                        <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-[#112b38] mb-2">
+                                    <div className="flex-1 min-w-0 text-center lg:text-left">
+                                        <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-2 text-[#c89c6b]">
                                             {event.title}
                                         </h2>
-                                        <Text className="text-sm sm:text-base text-[#112b38] mb-3">
+                                        <Text className="text-sm sm:text-base text-[#c89c6b] mb-3">
                                             {t.by} {event.organizer}
                                         </Text>
-                                        <Text className="text-xs sm:text-sm text-[#112b38] leading-relaxed line-clamp-2">
+                                        <Text className="text-xs sm:text-sm text-[#c89c6b] leading-relaxed line-clamp-2">
                                             {event.description}
                                         </Text>
                                     </div>
 
                                     <div className="flex-shrink-0 lg:w-[280px] xl:w-[320px]">
                                         <div className="space-y-3">
-                                            <div className="flex items-center gap-2 text-sm">
-                                                <Clock className="w-4 h-4 text-[#112b38] flex-shrink-0" />
-                                                <span className="text-[#112b38]">{event.fullDate}</span>
+                                            <div className="flex items-center gap-2 text-sm group">
+                                                <Clock className="w-4 h-4 text-[#c89c6b] group-hover:text-[#112b38] flex-shrink-0 transition-colors" />
+                                                <span className="text-[#c89c6b]">{event.fullDate}</span>
                                             </div>
-                                            <div className="flex items-center gap-2 text-sm">
-                                                <MapPin className="w-4 h-4 text-[#112b38] flex-shrink-0" />
-                                                <span className="text-[#112b38]">{event.location}</span>
+                                            <div className="flex items-center gap-2 text-sm group">
+                                                <MapPin className="w-4 h-4 text-[#c89c6b] group-hover:text-[#112b38] flex-shrink-0 transition-colors" />
+                                                <span className="text-[#c89c6b]">{event.location}</span>
                                             </div>
-                                            <div className="flex items-center gap-2 text-sm">
-                                                <TicketIcon className="w-4 h-4 text-[#112b38] flex-shrink-0" />
-                                                <span className="text-[#112b38]">{t.from} <span className="font-bold text-[#112b38]">Rs 1,000</span></span>
+                                            <div className="flex items-center gap-2 text-sm group">
+                                                <TicketIcon className="w-4 h-4 text-[#c89c6b] group-hover:text-[#112b38] flex-shrink-0 transition-colors" />
+                                                <span className="text-[#c89c6b]">{t.from} <span className="font-bold text-[#c89c6b]">Rs 1,000</span></span>
                                             </div>
                                             <div className="flex gap-2 mt-4">
                                                 <div className='flex flex-col items-center'>
@@ -511,21 +511,21 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                         <img src="https://imagedelivery.net/eRmbR7weNG-2WY_X8bscGg/b1fd3378-511e-40bc-8156-fda282c5fe00/public" alt="bar" className="absolute top-[23px] left-0 w-full h-[5px] object-cover" />
                                                         <span className="text-2xl sm:text-3xl font-bold text-white leading-none block">{countdown.days}</span>
                                                     </div>
-                                                    <span className="text-[11px] sm:text-xs text-[#112b38] font-medium mt-0.5">{t.days}</span>
+                                                    <span className="text-[11px] sm:text-xs text-[#c89c6b] font-medium mt-0.5">{t.days}</span>
                                                 </div>
                                                 <div className='flex flex-col items-center'>
                                                     <div className="relative bg-[#D24428] w-14 rounded pt-2 pb-1 text-center shadow-sm overflow-hidden">
                                                         <img src="https://imagedelivery.net/eRmbR7weNG-2WY_X8bscGg/b1fd3378-511e-40bc-8156-fda282c5fe00/public" alt="bar" className="absolute top-[23px] left-0 w-full h-[5px] object-cover" />
                                                         <span className="text-2xl sm:text-3xl font-bold text-white leading-none block">{countdown.hours}</span>
                                                     </div>
-                                                    <span className="text-[11px] sm:text-xs text-[#112b38] font-medium mt-0.5">{t.hours}</span>
+                                                    <span className="text-[11px] sm:text-xs text-[#c89c6b] font-medium mt-0.5">{t.hours}</span>
                                                 </div>
                                                 <div className='flex flex-col items-center'>
                                                     <div className="relative bg-[#D24428] w-14 rounded pt-2 pb-1 text-center shadow-sm overflow-hidden">
                                                         <img src="https://imagedelivery.net/eRmbR7weNG-2WY_X8bscGg/b1fd3378-511e-40bc-8156-fda282c5fe00/public" alt="bar" className="absolute top-[23px] left-0 w-full h-[5px] object-cover" />
                                                         <span className="text-2xl sm:text-3xl font-bold text-white leading-none block">{countdown.minutes}</span>
                                                     </div>
-                                                    <span className="text-[11px] sm:text-xs text-[#112b38] font-medium mt-0.5">{t.minutes}</span>
+                                                    <span className="text-[11px] sm:text-xs text-[#c89c6b] font-medium mt-0.5">{t.minutes}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -538,31 +538,28 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                 <div className="flex items-center">
                                     <button
                                         onClick={() => handleTabClick('tickets')}
-                                        className={`px-6 py-3.5 text-sm sm:text-base font-semibold transition-all border-b-[3px] whitespace-nowrap ${
-                                            activeTab === 'tickets'
-                                                ? 'text-[#c89c6b] border-[#c89c6b]'
-                                                : 'text-gray-500 border-transparent hover:text-gray-800'
-                                        }`}
+                                        className={`px-6 py-3.5 text-sm sm:text-base font-semibold transition-all border-b-[3px] whitespace-nowrap ${activeTab === 'tickets'
+                                            ? 'text-[#c89c6b] border-[#c89c6b]'
+                                            : 'text-gray-500 border-transparent hover:text-gray-800'
+                                            }`}
                                     >
                                         {t.tickets}
                                     </button>
                                     <button
                                         onClick={() => handleTabClick('description')}
-                                        className={`px-6 py-3.5 text-sm sm:text-base font-semibold transition-all border-b-[3px] whitespace-nowrap ${
-                                            activeTab === 'description'
-                                                ? 'text-[#c89c6b] border-[#c89c6b]'
-                                                : 'text-gray-500 border-transparent hover:text-gray-800'
-                                        }`}
+                                        className={`px-6 py-3.5 text-sm sm:text-base font-semibold transition-all border-b-[3px] whitespace-nowrap ${activeTab === 'description'
+                                            ? 'text-[#c89c6b] border-[#c89c6b]'
+                                            : 'text-gray-500 border-transparent hover:text-gray-800'
+                                            }`}
                                     >
                                         {t.description}
                                     </button>
                                     <button
                                         onClick={() => handleTabClick('moreInfo')}
-                                        className={`px-6 py-3.5 text-sm sm:text-base font-semibold transition-all border-b-[3px] whitespace-nowrap ${
-                                            activeTab === 'moreInfo'
-                                                ? 'text-[#c89c6b] border-[#c89c6b]'
-                                                : 'text-gray-500 border-transparent hover:text-gray-800'
-                                        }`}
+                                        className={`px-6 py-3.5 text-sm sm:text-base font-semibold transition-all border-b-[3px] whitespace-nowrap ${activeTab === 'moreInfo'
+                                            ? 'text-[#c89c6b] border-[#c89c6b]'
+                                            : 'text-gray-500 border-transparent hover:text-gray-800'
+                                            }`}
                                     >
                                         {t.moreInfo}
                                     </button>
@@ -570,283 +567,283 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             </div>
                             {/* Tab Content - All sections visible in scrollable container */}
                             <div ref={tabContentRef} className="space-y-8 max-h-[600px] overflow-y-auto scroll-smooth px-1">
-                            {/* Tickets Section */}
-                            <div ref={ticketsRef} id="tickets-section">
-                                {/* Collapsible Header */}
-                                <button
-                                    onClick={() => setIsTicketsCollapsed(!isTicketsCollapsed)}
-                                    className="w-full flex items-center justify-between py-4 px-2 hover:bg-gray-50 transition-colors"
-                                >
-                                    <div className="flex items-center gap-2">
-                                        <svg
-                                            className={`w-5 h-5 text-gray-600 transition-transform duration-200 ${isTicketsCollapsed ? '-rotate-90' : ''}`}
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                        </svg>
-                                        <h2 className="text-xl sm:text-2xl font-bold text-white">{t.chooseYourTickets}</h2>
-                                    </div>
-                                </button>
-                                
-                                {!isTicketsCollapsed && (
-                                <div className="px-0 py-4">
-                                    <div className="space-y-3">
-                                        {event.tickets.map((ticket) => (
-                                            <div key={ticket.id} className="bg-gray-100 rounded-lg overflow-hidden">
-                                                {/* Main Ticket Row - always horizontal */}
-                                                <div className="px-3 sm:px-4 py-2 flex flex-row items-center justify-between gap-2">
-                                                    {/* Ticket Name */}
-                                                    <Text className="font-bold text-xs sm:text-sm text-[#112b38] w-[80px] sm:w-[120px] flex-shrink-0 truncate" title={ticket.name}>
-                                                        {ticket.name}
-                                                    </Text>
+                                {/* Tickets Section */}
+                                <div ref={ticketsRef} id="tickets-section">
+                                    {/* Collapsible Header */}
+                                    <button
+                                        onClick={() => setIsTicketsCollapsed(!isTicketsCollapsed)}
+                                        className="w-full flex items-center justify-between py-4 px-2 hover:bg-gray-50 transition-colors"
+                                    >
+                                        <div className="flex items-center gap-2">
+                                            <svg
+                                                className={`w-5 h-5 text-gray-600 transition-transform duration-200 ${isTicketsCollapsed ? '-rotate-90' : ''}`}
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                            <h2 className="text-xl sm:text-2xl font-bold">{t.chooseYourTickets}</h2>
+                                        </div>
+                                    </button>
 
-                                                    {/* Price */}
-                                                    <div className="font-bold text-sm sm:text-lg text-[#112b38] w-[70px] sm:w-[90px] flex-shrink-0">
-                                                        Rs{ticket.price.toLocaleString()}
-                                                    </div>
+                                    {!isTicketsCollapsed && (
+                                        <div className="px-0 py-4">
+                                            <div className="space-y-3">
+                                                {event.tickets.map((ticket) => (
+                                                    <div key={ticket.id} className="bg-gray-100 rounded-lg overflow-hidden">
+                                                        {/* Main Ticket Row - always horizontal */}
+                                                        <div className="px-3 sm:px-4 py-2 flex flex-row items-center justify-between gap-2">
+                                                            {/* Ticket Name */}
+                                                            <Text className="font-bold text-xs sm:text-sm text-[#112b38] w-[80px] sm:w-[120px] flex-shrink-0 truncate" title={ticket.name}>
+                                                                {ticket.name}
+                                                            </Text>
 
-                                                    {/* Offer Text - hidden on xs, shown sm+ */}
-                                                    <div className="hidden sm:block text-[#112b38] font-semibold text-sm w-[140px] flex-shrink-0 truncate" title={`${ticket.offerEndsIn} 8 ${ticket.days.toLowerCase()}`}>
-                                                        {ticket.offerEndsIn} 8 {ticket.days.toLowerCase()}
-                                                    </div>
-
-                                                    <div className="flex items-center gap-2 flex-shrink-0 ml-auto">
-                                                        {/* Accordion Toggle Button */}
-                                                        <button
-                                                            onClick={() => setSelectedTicket(selectedTicket === ticket.id ? null : ticket.id)}
-                                                            className="w-6 h-6 rounded-full bg-[#112b38] flex items-center justify-center hover:bg-[#c89c6b] hover:scale-110 transition-all duration-300"
-                                                        >
-                                                            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                                                            </svg>
-                                                        </button>
-
-                                                        {/* Quantity Selector */}
-                                                        <div className="flex items-center gap-1 sm:gap-2">
-                                                            <button
-                                                                className={`w-5 h-5 sm:w-6 sm:h-6 border-2 border-gray-300 rounded flex items-center justify-center transition-all duration-300 font-bold text-sm sm:text-base ${ticketQuantities[ticket.id] === 0
-                                                                    ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400'
-                                                                    : 'hover:bg-[#112b38] hover:text-white hover:border-[#112b38] text-gray-700'
-                                                                    }`}
-                                                                onClick={() => decrementQuantity(ticket.id)}
-                                                                disabled={ticketQuantities[ticket.id] === 0}
-                                                            >
-                                                                -
-                                                            </button>
-
-                                                            <div className="w-8 sm:w-12 text-center font-semibold text-base sm:text-lg">
-                                                                {ticketQuantities[ticket.id] !== undefined ? ticketQuantities[ticket.id] : 0}
+                                                            {/* Price */}
+                                                            <div className="font-bold text-sm sm:text-lg text-[#112b38] w-[70px] sm:w-[90px] flex-shrink-0">
+                                                                Rs{ticket.price.toLocaleString()}
                                                             </div>
 
-                                                            <button
-                                                                className={`w-5 h-5 sm:w-6 sm:h-6 border-2 border-[#c89c6b] rounded flex items-center justify-center transition-all duration-300 font-bold text-sm sm:text-base ${ticketQuantities[ticket.id] === Math.min(20, ticket.available)
-                                                                    ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400 border-gray-300'
-                                                                    : 'text-[#112b38] hover:bg-[#c89c6b] hover:text-white'
-                                                                    }`}
-                                                                onClick={() => incrementQuantity(ticket.id, ticket.available)}
-                                                                disabled={ticketQuantities[ticket.id] === Math.min(20, ticket.available)}
-                                                            >
-                                                                +
-                                                            </button>
+                                                            {/* Offer Text - hidden on xs, shown sm+ */}
+                                                            <div className="hidden sm:block text-[#112b38] font-semibold text-sm w-[140px] flex-shrink-0 truncate" title={`${ticket.offerEndsIn} 8 ${ticket.days.toLowerCase()}`}>
+                                                                {ticket.offerEndsIn} 8 {ticket.days.toLowerCase()}
+                                                            </div>
+
+                                                            <div className="flex items-center gap-2 flex-shrink-0 ml-auto">
+                                                                {/* Accordion Toggle Button */}
+                                                                <button
+                                                                    onClick={() => setSelectedTicket(selectedTicket === ticket.id ? null : ticket.id)}
+                                                                    className="w-6 h-6 rounded-full bg-[#112b38] flex items-center justify-center hover:bg-[#c89c6b] hover:scale-110 transition-all duration-300"
+                                                                >
+                                                                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                                                                    </svg>
+                                                                </button>
+
+                                                                {/* Quantity Selector */}
+                                                                <div className="flex items-center gap-1 sm:gap-2">
+                                                                    <button
+                                                                        className={`w-5 h-5 sm:w-6 sm:h-6 border-2 border-gray-300 rounded flex items-center justify-center transition-all duration-300 font-bold text-sm sm:text-base ${ticketQuantities[ticket.id] === 0
+                                                                            ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400'
+                                                                            : 'hover:bg-[#112b38] hover:text-white hover:border-[#112b38] text-gray-700'
+                                                                            }`}
+                                                                        onClick={() => decrementQuantity(ticket.id)}
+                                                                        disabled={ticketQuantities[ticket.id] === 0}
+                                                                    >
+                                                                        -
+                                                                    </button>
+
+                                                                    <div className="w-8 sm:w-12 text-center font-semibold text-base sm:text-lg">
+                                                                        {ticketQuantities[ticket.id] !== undefined ? ticketQuantities[ticket.id] : 0}
+                                                                    </div>
+
+                                                                    <button
+                                                                        className={`w-5 h-5 sm:w-6 sm:h-6 border-2 border-[#c89c6b] rounded flex items-center justify-center transition-all duration-300 font-bold text-sm sm:text-base ${ticketQuantities[ticket.id] === Math.min(20, ticket.available)
+                                                                            ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400 border-gray-300'
+                                                                            : 'text-[#112b38] hover:bg-[#c89c6b] hover:text-white'
+                                                                            }`}
+                                                                        onClick={() => incrementQuantity(ticket.id, ticket.available)}
+                                                                        disabled={ticketQuantities[ticket.id] === Math.min(20, ticket.available)}
+                                                                    >
+                                                                        +
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Accordion Content */}
+                                                        {selectedTicket === ticket.id && (
+                                                            <div className="px-3 sm:px-4 py-3 bg-white border-t border-gray-200">
+                                                                <p className="text-sm text-gray-600">{ticket.description}</p>
+                                                                <p className="text-xs text-[#112b38] mt-2">Only {ticket.available} tickets available (Max 20 per person)</p>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Description Section */}
+                                <div ref={descriptionRef} id="description-section">
+                                    <div className="bg-white border-t border-b border-gray-200 mt-4">
+                                        {/* Collapsible Header */}
+                                        <button
+                                            onClick={() => setIsDescriptionCollapsed(!isDescriptionCollapsed)}
+                                            className="w-full flex items-center justify-between p-4 sm:p-6 hover:bg-gray-50 transition-colors"
+                                        >
+                                            <div className="flex items-center gap-2">
+                                                <svg
+                                                    className={`w-5 h-5 text-gray-600 transition-transform duration-200 ${isDescriptionCollapsed ? '-rotate-90' : ''}`}
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                </svg>
+                                                <h2 className="text-xl sm:text-2xl font-bold text-[#112b38]">{t.eventDescription}</h2>
+                                            </div>
+                                        </button>
+
+                                        {!isDescriptionCollapsed && (
+                                            <div className="px-4 sm:px-6 pb-4 sm:pb-6">
+                                                <div className="prose max-w-none text-[#112b38] text-sm sm:text-base space-y-4">
+                                                    <Text>{event.description}</Text>
+
+                                                    {/* What To Expect */}
+                                                    <div className="mt-6">
+                                                        <h3 className="font-bold text-lg text-[#112b38] mb-3">⭕️ WHAT TO EXPECT</h3>
+                                                        <ul className="space-y-2">
+                                                            {[
+                                                                'International Artists headlining the event',
+                                                                'More than 6 local support artists',
+                                                                'Music Genre: Afro-House / Afro-Tech / Electronic',
+                                                                'Open-Air garden & beach venue at a 5★ resort',
+                                                                'Exclusive 2hr headliner set recorded LIVE',
+                                                                'Signature stage design with giant LED screens',
+                                                                'New sitting areas & lounges for ALL zones',
+                                                                'Exclusive Backstage access for VIPs & VVIPs',
+                                                                'Exclusive Meet & Greet Area for VVIPs',
+                                                                'Dedicated washrooms per zone',
+                                                                'Multiple food & beverage corners',
+                                                                'Fire Breathers, Laser Show & more surprises',
+                                                            ].map((item, i) => (
+                                                                <li key={i} className="flex items-start gap-2 text-[#112b38] text-sm">
+                                                                    <span className="mt-1 w-3 h-3 rounded-sm bg-[#112b38] flex-shrink-0 inline-block" />
+                                                                    <span>{item}</span>
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+
+                                                    {/* Artist Biographies */}
+                                                    <div className="mt-6">
+                                                        <h3 className="font-bold text-lg text-[#112b38] mb-4">⭕️ ARTIST BIOGRAPHY</h3>
+                                                        <div className="space-y-6">
+                                                            {artists.map((artist) => (
+                                                                <div key={artist.name} className="flex gap-4 items-start bg-gray-50 rounded-xl p-4 border border-gray-100">
+                                                                    <img
+                                                                        src={artist.img}
+                                                                        alt={artist.name}
+                                                                        className="w-16 h-16 rounded-full object-cover flex-shrink-0 border-2 border-[#c89c6b]"
+                                                                    />
+                                                                    <div>
+                                                                        <h4 className="font-bold text-[#112b38] text-base">{artist.name}</h4>
+                                                                        <p className="text-xs text-[#c89c6b] font-semibold mb-1">{artist.role}</p>
+                                                                        <p className="text-sm text-gray-600 leading-relaxed">{artist.bio}</p>
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Ticket Pricing */}
+                                                    <div className="mt-6">
+                                                        <h3 className="font-bold text-lg text-[#112b38] mb-3">🎟 TICKET PRICING</h3>
+                                                        <div className="space-y-3">
+                                                            {event.tickets.map((ticket) => (
+                                                                <div key={ticket.id} className="flex items-center justify-between bg-gray-50 rounded-lg px-4 py-3 border border-gray-100">
+                                                                    <div>
+                                                                        <span className="font-bold text-[#112b38] text-sm">{ticket.name}</span>
+                                                                        <p className="text-xs text-gray-500 mt-0.5">{ticket.description}</p>
+                                                                    </div>
+                                                                    <span className="font-bold text-[#c89c6b] text-base">Rs {ticket.price.toLocaleString()}</span>
+                                                                </div>
+                                                            ))}
                                                         </div>
                                                     </div>
                                                 </div>
-
-                                                {/* Accordion Content */}
-                                                {selectedTicket === ticket.id && (
-                                                    <div className="px-3 sm:px-4 py-3 bg-white border-t border-gray-200">
-                                                        <p className="text-sm text-gray-600">{ticket.description}</p>
-                                                        <p className="text-xs text-[#112b38] mt-2">Only {ticket.available} tickets available (Max 20 per person)</p>
-                                                    </div>
-                                                )}
                                             </div>
-                                        ))}
+                                        )}
                                     </div>
                                 </div>
-                                )}
-                            </div>
 
-                            {/* Description Section */}
-                            <div ref={descriptionRef} id="description-section">
-                                <div className="bg-white border-t border-b border-gray-200 mt-4">
-                                    {/* Collapsible Header */}
-                                    <button
-                                        onClick={() => setIsDescriptionCollapsed(!isDescriptionCollapsed)}
-                                        className="w-full flex items-center justify-between p-4 sm:p-6 hover:bg-gray-50 transition-colors"
-                                    >
-                                        <div className="flex items-center gap-2">
-                                            <svg
-                                                className={`w-5 h-5 text-gray-600 transition-transform duration-200 ${isDescriptionCollapsed ? '-rotate-90' : ''}`}
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 24 24"
-                                            >
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                            </svg>
-                                            <h2 className="text-xl sm:text-2xl font-bold text-[#112b38]">{t.eventDescription}</h2>
-                                        </div>
-                                    </button>
-                                    
-                                    {!isDescriptionCollapsed && (
-                                    <div className="px-4 sm:px-6 pb-4 sm:pb-6">
-                                        <div className="prose max-w-none text-[#112b38] text-sm sm:text-base space-y-4">
-                                        <Text>{event.description}</Text>
+                                {/* More Info Section */}
+                                <div ref={moreInfoRef} id="moreInfo-section">
+                                    <div className="bg-white border-t border-b border-gray-200 mt-4">
+                                        {/* Collapsible Header */}
+                                        <button
+                                            onClick={() => setIsMoreInfoCollapsed(!isMoreInfoCollapsed)}
+                                            className="w-full flex items-center justify-between p-4 sm:p-6 hover:bg-gray-50 transition-colors"
+                                        >
+                                            <div className="flex items-center gap-2">
+                                                <svg
+                                                    className={`w-5 h-5 text-gray-600 transition-transform duration-200 ${isMoreInfoCollapsed ? '-rotate-90' : ''}`}
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                </svg>
+                                                <h2 className="text-xl sm:text-2xl font-bold text-[#112b38]">{t.moreInformation}</h2>
+                                            </div>
+                                        </button>
 
-                                        {/* What To Expect */}
-                                        <div className="mt-6">
-                                            <h3 className="font-bold text-lg text-[#112b38] mb-3">⭕️ WHAT TO EXPECT</h3>
-                                            <ul className="space-y-2">
-                                                {[
-                                                    'International Artists headlining the event',
-                                                    'More than 6 local support artists',
-                                                    'Music Genre: Afro-House / Afro-Tech / Electronic',
-                                                    'Open-Air garden & beach venue at a 5★ resort',
-                                                    'Exclusive 2hr headliner set recorded LIVE',
-                                                    'Signature stage design with giant LED screens',
-                                                    'New sitting areas & lounges for ALL zones',
-                                                    'Exclusive Backstage access for VIPs & VVIPs',
-                                                    'Exclusive Meet & Greet Area for VVIPs',
-                                                    'Dedicated washrooms per zone',
-                                                    'Multiple food & beverage corners',
-                                                    'Fire Breathers, Laser Show & more surprises',
-                                                ].map((item, i) => (
-                                                    <li key={i} className="flex items-start gap-2 text-[#112b38] text-sm">
-                                                        <span className="mt-1 w-3 h-3 rounded-sm bg-[#112b38] flex-shrink-0 inline-block" />
-                                                        <span>{item}</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
+                                        {!isMoreInfoCollapsed && (
+                                            <div className="px-4 sm:px-6 pb-4 sm:pb-6">
+                                                <div className="space-y-6 text-sm sm:text-base text-[#112b38]">
 
-                                        {/* Artist Biographies */}
-                                        <div className="mt-6">
-                                            <h3 className="font-bold text-lg text-[#112b38] mb-4">⭕️ ARTIST BIOGRAPHY</h3>
-                                            <div className="space-y-6">
-                                                {artists.map((artist) => (
-                                                    <div key={artist.name} className="flex gap-4 items-start bg-gray-50 rounded-xl p-4 border border-gray-100">
-                                                        <img
-                                                            src={artist.img}
-                                                            alt={artist.name}
-                                                            className="w-16 h-16 rounded-full object-cover flex-shrink-0 border-2 border-[#c89c6b]"
-                                                        />
-                                                        <div>
-                                                            <h4 className="font-bold text-[#112b38] text-base">{artist.name}</h4>
-                                                            <p className="text-xs text-[#c89c6b] font-semibold mb-1">{artist.role}</p>
-                                                            <p className="text-sm text-gray-600 leading-relaxed">{artist.bio}</p>
+                                                    {/* Warning */}
+                                                    <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                                                        <h3 className="font-bold text-base mb-3 text-amber-700">⚠ WARNING</h3>
+                                                        <ul className="space-y-2 list-disc list-inside text-gray-700 text-sm">
+                                                            <li>This is a LIMITED capacity event — do not wait to buy your tickets.</li>
+                                                            <li>LIMITED PARKING. We request you to book a taxi, driver, or car-pool to avoid traffic and parking issues.</li>
+                                                            <li>This is an 18+ event. Minors will not be allowed unless accompanied by a parent or responsible party.</li>
+                                                            <li>By attending you accept to be photographed and filmed by our crew.</li>
+                                                            <li>You are not allowed to bring food or drinks inside the venue premises.</li>
+                                                            <li>Tickets once bought are NOT refundable.</li>
+                                                            <li>The event organiser shall not be held liable for cancellation or disruption due to force majeure events.</li>
+                                                        </ul>
+                                                    </div>
+
+                                                    {/* Terms & Conditions */}
+                                                    <div>
+                                                        <h3 className="font-bold text-lg mb-3">{t.ageRestriction} & Terms</h3>
+                                                        <ul className="space-y-2 list-disc list-inside text-gray-700 text-sm">
+                                                            <li>The Event starts at 15:00 and ends at 23:30. Doors open at 15:00 and close at 17:00.</li>
+                                                            <li>This is strictly an 18+ event.</li>
+                                                            <li>Food & drinks from outside will not be permitted.</li>
+                                                            <li>The organiser reserves the right to amend the venue in case of unforeseeable circumstances.</li>
+                                                            <li>Photography and filming is prohibited during the show.</li>
+                                                            <li>No Show: If customer does not attend, 100% Cancellation Fee applies.</li>
+                                                            <li>No cancellation or exchange available once ticket is confirmed and issued.</li>
+                                                            <li>Security checks of bags will be conducted.</li>
+                                                            <li>Failure to present your ticket at the event will entitle the organiser to deny access.</li>
+                                                            <li>You can print your e-ticket or have it ready to scan from your smartphone. Make sure the QR code and booking ref is visible.</li>
+                                                        </ul>
+                                                    </div>
+
+                                                    {/* Lockdown & Cyclone Protocol */}
+                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                        <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+                                                            <h3 className="font-bold text-base mb-2 text-blue-800">🔒 Lockdown Protocol</h3>
+                                                            <p className="text-sm text-gray-600 mb-2">If an event coincides with a lockdown or government-imposed restrictions, it may be cancelled or postponed.</p>
+                                                            <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                                                <li><strong>Postponement:</strong> Tickets remain valid for the rescheduled date.</li>
+                                                                <li><strong>Cancellation:</strong> A full refund will be provided per cancellation terms.</li>
+                                                            </ul>
+                                                        </div>
+                                                        <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+                                                            <h3 className="font-bold text-base mb-2 text-blue-800">🌀 Cyclone Protocol</h3>
+                                                            <p className="text-sm text-gray-600 mb-2">If a booking falls under Cyclone Class 2 or higher, the event may be postponed or cancelled.</p>
+                                                            <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                                                <li><strong>Postponement:</strong> Tickets remain valid for the rescheduled date.</li>
+                                                                <li><strong>Cancellation:</strong> A full refund will be provided per cancellation terms.</li>
+                                                            </ul>
                                                         </div>
                                                     </div>
-                                                ))}
-                                            </div>
-                                        </div>
 
-                                        {/* Ticket Pricing */}
-                                        <div className="mt-6">
-                                            <h3 className="font-bold text-lg text-[#112b38] mb-3">🎟 TICKET PRICING</h3>
-                                            <div className="space-y-3">
-                                                {event.tickets.map((ticket) => (
-                                                    <div key={ticket.id} className="flex items-center justify-between bg-gray-50 rounded-lg px-4 py-3 border border-gray-100">
-                                                        <div>
-                                                            <span className="font-bold text-[#112b38] text-sm">{ticket.name}</span>
-                                                            <p className="text-xs text-gray-500 mt-0.5">{ticket.description}</p>
-                                                        </div>
-                                                        <span className="font-bold text-[#c89c6b] text-base">Rs {ticket.price.toLocaleString()}</span>
+                                                    {/* Contact */}
+                                                    <div className="text-sm text-gray-600 border-t border-gray-100 pt-4">
+                                                        If you have any queries, contact our customer hotline or chat with us via WhatsApp.
                                                     </div>
-                                                ))}
+                                                </div>
                                             </div>
-                                        </div>
-                                        </div>
+                                        )}
                                     </div>
-                                    )}
                                 </div>
-                            </div>
-
-                            {/* More Info Section */}
-                            <div ref={moreInfoRef} id="moreInfo-section">
-                                <div className="bg-white border-t border-b border-gray-200 mt-4">
-                                    {/* Collapsible Header */}
-                                    <button
-                                        onClick={() => setIsMoreInfoCollapsed(!isMoreInfoCollapsed)}
-                                        className="w-full flex items-center justify-between p-4 sm:p-6 hover:bg-gray-50 transition-colors"
-                                    >
-                                        <div className="flex items-center gap-2">
-                                            <svg
-                                                className={`w-5 h-5 text-gray-600 transition-transform duration-200 ${isMoreInfoCollapsed ? '-rotate-90' : ''}`}
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 24 24"
-                                            >
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                            </svg>
-                                            <h2 className="text-xl sm:text-2xl font-bold text-[#112b38]">{t.moreInformation}</h2>
-                                        </div>
-                                    </button>
-                                    
-                                    {!isMoreInfoCollapsed && (
-                                    <div className="px-4 sm:px-6 pb-4 sm:pb-6">
-                                        <div className="space-y-6 text-sm sm:text-base text-[#112b38]">
-
-                                        {/* Warning */}
-                                        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-                                            <h3 className="font-bold text-base mb-3 text-amber-700">⚠ WARNING</h3>
-                                            <ul className="space-y-2 list-disc list-inside text-gray-700 text-sm">
-                                                <li>This is a LIMITED capacity event — do not wait to buy your tickets.</li>
-                                                <li>LIMITED PARKING. We request you to book a taxi, driver, or car-pool to avoid traffic and parking issues.</li>
-                                                <li>This is an 18+ event. Minors will not be allowed unless accompanied by a parent or responsible party.</li>
-                                                <li>By attending you accept to be photographed and filmed by our crew.</li>
-                                                <li>You are not allowed to bring food or drinks inside the venue premises.</li>
-                                                <li>Tickets once bought are NOT refundable.</li>
-                                                <li>The event organiser shall not be held liable for cancellation or disruption due to force majeure events.</li>
-                                            </ul>
-                                        </div>
-
-                                        {/* Terms & Conditions */}
-                                        <div>
-                                            <h3 className="font-bold text-lg mb-3">{t.ageRestriction} & Terms</h3>
-                                            <ul className="space-y-2 list-disc list-inside text-gray-700 text-sm">
-                                                <li>The Event starts at 15:00 and ends at 23:30. Doors open at 15:00 and close at 17:00.</li>
-                                                <li>This is strictly an 18+ event.</li>
-                                                <li>Food & drinks from outside will not be permitted.</li>
-                                                <li>The organiser reserves the right to amend the venue in case of unforeseeable circumstances.</li>
-                                                <li>Photography and filming is prohibited during the show.</li>
-                                                <li>No Show: If customer does not attend, 100% Cancellation Fee applies.</li>
-                                                <li>No cancellation or exchange available once ticket is confirmed and issued.</li>
-                                                <li>Security checks of bags will be conducted.</li>
-                                                <li>Failure to present your ticket at the event will entitle the organiser to deny access.</li>
-                                                <li>You can print your e-ticket or have it ready to scan from your smartphone. Make sure the QR code and booking ref is visible.</li>
-                                            </ul>
-                                        </div>
-
-                                        {/* Lockdown & Cyclone Protocol */}
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
-                                                <h3 className="font-bold text-base mb-2 text-blue-800">🔒 Lockdown Protocol</h3>
-                                                <p className="text-sm text-gray-600 mb-2">If an event coincides with a lockdown or government-imposed restrictions, it may be cancelled or postponed.</p>
-                                                <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
-                                                    <li><strong>Postponement:</strong> Tickets remain valid for the rescheduled date.</li>
-                                                    <li><strong>Cancellation:</strong> A full refund will be provided per cancellation terms.</li>
-                                                </ul>
-                                            </div>
-                                            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
-                                                <h3 className="font-bold text-base mb-2 text-blue-800">🌀 Cyclone Protocol</h3>
-                                                <p className="text-sm text-gray-600 mb-2">If a booking falls under Cyclone Class 2 or higher, the event may be postponed or cancelled.</p>
-                                                <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
-                                                    <li><strong>Postponement:</strong> Tickets remain valid for the rescheduled date.</li>
-                                                    <li><strong>Cancellation:</strong> A full refund will be provided per cancellation terms.</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-
-                                        {/* Contact */}
-                                        <div className="text-sm text-gray-600 border-t border-gray-100 pt-4">
-                                            If you have any queries, contact our customer hotline or chat with us via WhatsApp.
-                                        </div>
-                                        </div>
-                                    </div>
-                                    )}
-                                </div>
-                            </div>
 
                             </div> {/* end tab content */}
 
@@ -895,31 +892,33 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                         {/* Right Column - Sidebar */}
                         <div className="space-y-6">
                             {/* Share on Social */}
-                            <div className="max-w-lg mx-auto bg-white rounded-xl p-6 shadow-lg border border-gray-100/40">
-                                <div className="flex items-center justify-between text-sm text-gray-600">
+                            <div className="max-w-lg mx-auto bg-white rounded-xl p-4 sm:p-5 shadow-lg border border-gray-100/40">
+                                {/* Date and Time Header */}
+                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 text-xs sm:text-sm text-gray-600">
                                     <div className="flex items-center gap-2">
-                                        <Calendar className="w-4 h-4 text-blue-500" />
-                                        <span className="font-medium">Sat 18 Oct</span>
+                                        <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500" />
+                                        <span className="font-medium whitespace-nowrap">Sat 18 Oct</span>
                                     </div>
-                                    <div className="flex items-center gap-2">
-                                        <Clock className="w-4 h-4 text-blue-500" />
-                                        <span>{t.doors}: 20:00</span>
-                                        <span>{t.start}: 20:00</span>
+                                    <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm">
+                                        <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500 flex-shrink-0" />
+                                        <span className="whitespace-nowrap">{t.doors}: 20:00</span>
+                                        <span className="whitespace-nowrap">{t.start}: 20:00</span>
                                     </div>
                                 </div>
 
-                                <div className="flex items-center justify-between bg-blue-50 rounded-lg p-4 mt-4">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500">
-                                            <Timer className="w-5 h-5" />
+                                {/* Countdown Timer Section */}
+                                <div className="flex flex-col sm:flex-row items-center justify-between bg-blue-50 rounded-lg p-3 mt-3 sm:mt-4 gap-3 sm:gap-0">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 flex-shrink-0">
+                                            <Timer className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                         </div>
                                         <div>
-                                            <p className="text-blue-600 font-semibold">{t.buyNow}</p>
-                                            <p className="text-xs text-gray-500">{t.saleEndsIn}</p>
+                                            <p className="text-blue-600 font-semibold text-xs sm:text-sm whitespace-nowrap">{t.buyNow}</p>
+                                            <p className="text-[10px] sm:text-xs text-gray-500 whitespace-nowrap">{t.saleEndsIn}</p>
                                         </div>
                                     </div>
 
-                                    <div className="flex gap-4 text-center">
+                                    <div className="flex gap-2 sm:gap-3 text-center">
                                         {[
                                             { value: "03", label: t.days },
                                             { value: "22", label: t.hours },
@@ -927,45 +926,53 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                             { value: "17", label: t.seconds },
                                         ].map((item, index) => (
                                             <div key={index}>
-                                                <p className="text-lg font-bold text-gray-700">{item.value}</p>
-                                                <p className="text-xs text-gray-500">{item.label}</p>
+                                                <p className="text-base sm:text-lg font-bold text-gray-800">{item.value}</p>
+                                                <p className="text-[10px] sm:text-xs text-gray-500 whitespace-nowrap">{item.label}</p>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
 
-                                <div className="flex items-center justify-between mt-6">
-                                    <div>
-                                        <p className="text-sm text-gray-500">{t.totalAmount}</p>
-                                        <p className="text-xl font-bold text-red-500">Rs {calculateTotal().toLocaleString()}</p>
+                                {/* Total Amount and Book Now Button */}
+                                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0 mt-4 sm:mt-5">
+                                    <div className="text-center sm:text-left">
+                                        <p className="text-xs sm:text-sm text-gray-500 whitespace-nowrap">{t.totalAmount}</p>
+                                        <p className="text-lg sm:text-xl font-bold text-red-500 whitespace-nowrap">Rs {calculateTotal().toLocaleString()}</p>
                                     </div>
-                                    <button className="bg-[#c89c6b] hover:bg-[#b8885a] text-white font-semibold px-4 py-1.5 rounded-md transition-all duration-300 hover:scale-105 shadow-md hover:shadow-lg">
+                                    <button className="w-full sm:w-auto bg-[#c89c6b] hover:bg-[#b8885a] text-white font-semibold px-6 py-2 sm:py-2.5 rounded-lg transition-all duration-300 hover:scale-105 shadow-md hover:shadow-lg whitespace-nowrap">
                                         {t.bookNow}
                                     </button>
                                 </div>
 
-                                <div className="flex items-center justify-center gap-6 mt-6 text-sm text-gray-600">
-                                    <button className="flex items-center gap-2 hover:text-[#112b38] transition-all duration-300">
-                                        <FaCalendarAlt className="w-4 h-4" /> {t.addToCalendar}
+                                {/* Action Buttons */}
+                                <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 mt-4 pt-4 border-t border-gray-100">
+                                    <button className="flex items-center gap-1 sm:gap-1.5 hover:text-[#112b38] transition-all duration-300 text-xs sm:text-sm text-gray-600">
+                                        <FaCalendarAlt className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                                        <span className="whitespace-nowrap hidden sm:inline">{t.addToCalendar}</span>
+                                        <span className="whitespace-nowrap sm:hidden">Calendar</span>
                                     </button>
-                                    <button className="flex items-center gap-2 hover:text-[#112b38] transition-all duration-300">
-                                        <FaShareAlt className="w-4 h-4" /> {t.shareEvent}
+                                    <button className="flex items-center gap-1 sm:gap-1.5 hover:text-[#112b38] transition-all duration-300 text-xs sm:text-sm text-gray-600">
+                                        <FaShareAlt className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                                        <span className="whitespace-nowrap hidden sm:inline">{t.shareEvent}</span>
+                                        <span className="whitespace-nowrap sm:hidden">Share</span>
                                     </button>
-                                    <button className="flex items-center gap-2 hover:text-[#112b38] transition-all duration-300">
-                                        <FaHeart className="w-4 h-4" /> {t.addToFavourites}
+                                    <button className="flex items-center gap-1 sm:gap-1.5 hover:text-[#112b38] transition-all duration-300 text-xs sm:text-sm text-gray-600">
+                                        <FaHeart className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                                        <span className="whitespace-nowrap hidden sm:inline">{t.addToFavourites}</span>
+                                        <span className="whitespace-nowrap sm:hidden">Favorites</span>
                                     </button>
                                 </div>
                             </div>
 
                             {/* Related Events - Song Player */}
                             {mockSongs.map((song) => (
-                                <div key={song.id} className="relative max-w-xl mx-auto bg-white rounded-xl shadow-sm px-4 py-3 flex items-center justify-between overflow-hidden">
-                                    <div className="flex items-center gap-4">
-                                        <div className="relative w-12 h-12 flex-shrink-0">
+                                <div key={song.id} className="relative mx-auto bg-white rounded-xl shadow-sm px-3 sm:px-4 py-2 sm:py-3 flex items-center justify-between overflow-hidden gap-2 sm:gap-0">
+                                    <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
+                                        <div className="relative w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0">
                                             <img
                                                 src={song.image}
                                                 alt={song.artist}
-                                                className="w-12 h-12 rounded-lg object-cover"
+                                                className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg object-cover"
                                             />
                                             {playingSongId === song.id && (
                                                 <div className="absolute inset-0 rounded-lg bg-black/20 flex items-center justify-center">
@@ -977,22 +984,22 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                 </div>
                                             )}
                                         </div>
-                                        <div>
-                                            <p className="font-semibold text-gray-800">{song.artist}</p>
-                                            <p className="text-sm text-gray-500">{song.title}</p>
+                                        <div className="min-w-0 flex-1">
+                                            <p className="font-semibold text-sm sm:text-base text-gray-800 truncate">{song.artist}</p>
+                                            <p className="text-xs sm:text-sm text-gray-500 truncate">{song.title}</p>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-3">
+                                    <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
                                         <button className="text-gray-400 hover:text-[#112b38] hover:scale-110 transition-all duration-300">
-                                            <Heart className="w-4 h-4" />
+                                            <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                         </button>
                                         <button
                                             onClick={() => togglePlay(song)}
-                                            className="w-8 h-8 rounded-full bg-[#112b38] flex items-center justify-center hover:bg-[#c89c6b] transition-all duration-300 hover:scale-110"
+                                            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#112b38] flex items-center justify-center hover:bg-[#c89c6b] transition-all duration-300 hover:scale-110"
                                         >
                                             {playingSongId === song.id
-                                                ? <Pause className="w-4 h-4 text-white" />
-                                                : <Play className="w-4 h-4 text-white" />
+                                                ? <Pause className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
+                                                : <Play className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                                             }
                                         </button>
                                     </div>
@@ -1006,9 +1013,9 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             ))}
 
                             {/* Advertisement */}
-                            <div className="bg-gray-200 rounded-xl p-8 sm:p-12 shadow-md border border-gray-300 flex items-center justify-center min-h-[570px]">
+                            <div className="bg-gray-200 rounded-xl p-6 sm:p-8 lg:p-12 shadow-md border border-gray-300 flex items-center justify-center min-h-[300px] sm:min-h-[400px] lg:min-h-[570px]">
                                 <div className="text-center">
-                                    <div className="text-4xl sm:text-6xl font-bold text-gray-400 mb-2">{t.ads}</div>
+                                    <div className="text-3xl sm:text-4xl lg:text-6xl font-bold text-gray-400 mb-2">{t.ads}</div>
                                     <div className="text-xs sm:text-sm text-gray-500">{t.advertisementSpace}</div>
                                 </div>
                             </div>
@@ -1020,9 +1027,9 @@ export default function EventDetailPage({ params }: EventDetailProps) {
             </div>
 
             {/* Artist Slider & Portrait Section */}
-            <div className="w-full bg-white ">
-                <div className="max-w-[1230px] mx-auto px-4 sm:px-6 lg:px-8">
-                    <span className="block text-gray-400 text-xs font-bold uppercase tracking-widest mb-4">Performers</span>
+            <div className="w-full bg-[#112b38]">
+                <div className="max-w-[1230px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                    <span className="block text-[#c89c6b] text-xs font-bold uppercase tracking-widest mb-4">Performers</span>
 
                     {/* Cards */}
                     <div
@@ -1083,9 +1090,9 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                             )}
                                             {/* Social icons */}
                                             <div className="flex gap-2 flex-wrap">
-                                                {artist.socials.instagram && <a href={artist.socials.instagram} onClick={e => e.stopPropagation()} target="_blank" rel="noopener noreferrer"><FaInstagram className="w-5 h-5 text-white/60 hover:text-white transition-colors" /></a>}
-                                                {artist.socials.facebook && <a href={artist.socials.facebook} onClick={e => e.stopPropagation()} target="_blank" rel="noopener noreferrer"><FaFacebook className="w-5 h-5 text-white/60 hover:text-white transition-colors" /></a>}
-                                                {artist.socials.tiktok && <a href={artist.socials.tiktok} onClick={e => e.stopPropagation()} target="_blank" rel="noopener noreferrer" className="text-white/60 hover:text-white transition-colors text-sm font-bold">TT</a>}
+                                                {artist.socials.instagram && <a href={artist.socials.instagram} onClick={e => e.stopPropagation()} target="_blank" rel="noopener noreferrer"><FaInstagram className="w-5 h-5 text-[#c89c6b] hover:text-white transition-colors" /></a>}
+                                                {artist.socials.facebook && <a href={artist.socials.facebook} onClick={e => e.stopPropagation()} target="_blank" rel="noopener noreferrer"><FaFacebook className="w-5 h-5 text-[#c89c6b] hover:text-white transition-colors" /></a>}
+                                                {artist.socials.tiktok && <a href={artist.socials.tiktok} onClick={e => e.stopPropagation()} target="_blank" rel="noopener noreferrer" className="text-[#c89c6b] hover:text-white transition-colors text-sm font-bold">TT</a>}
                                             </div>
                                         </div>
                                     </div>
@@ -1101,9 +1108,9 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             <div className="flex items-center justify-between mt-5 gap-3">
                                 <button
                                     onClick={() => setArtistCarouselIndex(p => p - 1)}
-                                    className="w-10 h-10 rounded-full border border-gray-300 bg-white hover:bg-gray-100 flex items-center justify-center transition-all shadow-sm flex-shrink-0"
+                                    className="w-10 h-10 rounded-full border border-[#c89c6b]/30 bg-[#c89c6b]/10 hover:bg-[#c89c6b]/20 flex items-center justify-center transition-all shadow-sm flex-shrink-0"
                                 >
-                                    <ChevronLeft className="w-5 h-5 text-gray-700" />
+                                    <ChevronLeft className="w-5 h-5 text-[#c89c6b]" />
                                 </button>
 
                                 <div className="flex items-center justify-center gap-1.5 flex-1">
@@ -1115,7 +1122,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                             style={{
                                                 width: i === artistRealIndex ? '24px' : '8px',
                                                 height: '8px',
-                                                background: i === artistRealIndex ? '#1a1a1a' : 'rgba(0,0,0,0.2)',
+                                                background: i === artistRealIndex ? '#c89c6b' : 'rgba(200,156,107,0.2)',
                                             }}
                                         />
                                     ))}
@@ -1123,9 +1130,9 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
                                 <button
                                     onClick={() => setArtistCarouselIndex(p => p + 1)}
-                                    className="w-10 h-10 rounded-full border border-gray-300 bg-white hover:bg-gray-100 flex items-center justify-center transition-all shadow-sm flex-shrink-0"
+                                    className="w-10 h-10 rounded-full border border-[#c89c6b]/30 bg-[#c89c6b]/10 hover:bg-[#c89c6b]/20 flex items-center justify-center transition-all shadow-sm flex-shrink-0"
                                 >
-                                    <ChevronRight className="w-5 h-5 text-gray-700" />
+                                    <ChevronRight className="w-5 h-5 text-[#c89c6b]" />
                                 </button>
                             </div>
                         );
@@ -1136,17 +1143,17 @@ export default function EventDetailPage({ params }: EventDetailProps) {
             {/* Artist Modal */}
             {selectedArtist && (
                 <div
-                    className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 backdrop-blur-md px-4"
+                    className="fixed inset-0 z-[200] flex items-center justify-center bg-[#112b38]/75 backdrop-blur-md px-4"
                     onClick={() => setSelectedArtist(null)}
                 >
                     <div
-                        className="relative bg-[#0d0d0d] rounded-3xl overflow-hidden max-w-lg w-full shadow-[0_32px_64px_rgba(0,0,0,0.8)]"
+                        className="relative bg-[#112b38] rounded-3xl overflow-hidden max-w-lg w-full shadow-[0_32px_64px_rgba(17,43,56,0.8)] border border-[#c89c6b]/20"
                         onClick={e => e.stopPropagation()}
                     >
                         {/* Image */}
                         <div className="relative h-80 w-full">
                             <img src={selectedArtist.img} alt={selectedArtist.name} className="w-full h-full object-cover" />
-                            <div className="absolute inset-0" style={{ background: 'linear-gradient(0deg, #0d0d0d 0%, rgba(0,0,0,0.3) 60%, transparent 100%)' }} />
+                            <div className="absolute inset-0" style={{ background: 'linear-gradient(0deg, #112b38 0%, rgba(17,43,56,0.5) 60%, transparent 100%)' }} />
                             <div className="absolute bottom-5 left-6">
                                 <h2 className="text-white font-extrabold text-2xl leading-tight mb-1">{selectedArtist.name}</h2>
                                 <span className="text-[#c89c6b] text-sm font-semibold tracking-wide uppercase">{selectedArtist.role}</span>
@@ -1159,9 +1166,9 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                 <>
                                     <p className="text-white/40 text-xs font-bold uppercase tracking-widest mb-3">Socials</p>
                                     <div className="flex gap-4">
-                                        {selectedArtist.socials.instagram && <a href={selectedArtist.socials.instagram} target="_blank" rel="noopener noreferrer"><FaInstagram className="w-6 h-6 text-white/50 hover:text-white transition-colors" /></a>}
-                                        {selectedArtist.socials.facebook && <a href={selectedArtist.socials.facebook} target="_blank" rel="noopener noreferrer"><FaFacebook className="w-6 h-6 text-white/50 hover:text-white transition-colors" /></a>}
-                                        {selectedArtist.socials.tiktok && <a href={selectedArtist.socials.tiktok} target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white transition-colors text-[11px] font-bold self-center border border-white/20 px-2 py-0.5 rounded">TT</a>}
+                                        {selectedArtist.socials.instagram && <a href={selectedArtist.socials.instagram} target="_blank" rel="noopener noreferrer"><FaInstagram className="w-6 h-6 text-[#c89c6b] hover:text-[#112b38] transition-colors" /></a>}
+                                        {selectedArtist.socials.facebook && <a href={selectedArtist.socials.facebook} target="_blank" rel="noopener noreferrer"><FaFacebook className="w-6 h-6 text-[#c89c6b] hover:text-[#112b38] transition-colors" /></a>}
+                                        {selectedArtist.socials.tiktok && <a href={selectedArtist.socials.tiktok} target="_blank" rel="noopener noreferrer" className="text-[#c89c6b] hover:text-[#112b38] transition-colors text-[11px] font-bold self-center border border-[#c89c6b]/30 px-2 py-0.5 rounded">TT</a>}
                                     </div>
                                 </>
                             )}
@@ -1219,12 +1226,15 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                     className="object-cover"
                                                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                                 />
+
                                                 <div className="absolute top-3 right-3 bg-black/70 rounded shadow-lg overflow-hidden z-20 px-1">
-                                                    <div className="flex items-center gap-2">
+                                                    <div className="flex items-center gap-1">
+                                                        <Calendar className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                                                         <div className="text-lg sm:text-xl font-bold text-white leading-none">{ev.day}</div>
                                                         <div className="text-sm sm:text-base font-bold text-white uppercase">{ev.month}</div>
                                                     </div>
                                                 </div>
+
                                                 {/* White dot indicators overlaid on image */}
                                                 {pageIdx === 0 && (
                                                     <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
@@ -1233,8 +1243,8 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                                 key={i}
                                                                 onClick={(e) => { e.preventDefault(); setRelatedCarouselIndex(i); }}
                                                                 className={`rounded-full transition-all duration-300 ${i === relatedCarouselIndex
-                                                                        ? 'w-5 h-2 bg-white'
-                                                                        : 'w-2 h-2 bg-white/50 hover:bg-white/80'
+                                                                    ? 'w-5 h-2 bg-white'
+                                                                    : 'w-2 h-2 bg-white/50 hover:bg-white/80'
                                                                     }`}
                                                             />
                                                         ))}
