@@ -12,21 +12,33 @@ const TicketHeroSection = ({currentSlide,slides,setCurrentSlide,currentSlideData
     const videoRef = useRef<HTMLVideoElement>(null)
     const intervalRef = useRef<NodeJS.Timeout | null>(null)
     const [timeLeft, setTimeLeft] = useState(6)
+    const [isHovered, setIsHovered] = useState(false)
     const progressIntervalRef = useRef<NodeJS.Timeout | null>(null)
 
-    // Auto-slide functionality
+    // Auto-slide functionality — pauses loader when hovering over a video slide
     useEffect(() => {
-        if (isPlaying) {
-            startAutoSlide()
-        } else {
+        const isVideo = currentSlideData?.type === 'video'
+
+        if (!isPlaying) {
             clearAutoSlide()
+            clearProgressTimer()
+            return
         }
+
+        if (isHovered && isVideo) {
+            // Loader freezes; video keeps playing (loop attribute handles that)
+            clearAutoSlide()
+            clearProgressTimer()
+            return
+        }
+
+        startAutoSlide()
 
         return () => {
             clearAutoSlide()
             clearProgressTimer()
         }
-    }, [currentSlide, isPlaying])
+    }, [currentSlide, isPlaying, isHovered])
 
     const startAutoSlide = () => {
         clearAutoSlide()
@@ -85,6 +97,14 @@ const TicketHeroSection = ({currentSlide,slides,setCurrentSlide,currentSlideData
         }
     }
 
+    const handleMouseEnter = () => {
+        if (currentSlideData?.type === 'video') setIsHovered(true)
+    }
+
+    const handleMouseLeave = () => {
+        setIsHovered(false)
+    }
+
     const togglePlayPause = () => {
         setIsPlaying(!isPlaying)
         if (videoRef.current) {
@@ -97,7 +117,7 @@ const TicketHeroSection = ({currentSlide,slides,setCurrentSlide,currentSlideData
     }
 
     return (
-        <div className="max-w-full h-auto mx-auto">
+        <div className="max-w-full h-auto mx-auto" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             <div className="relative max-w-full sm:max-w-[1400.1px] h-[200px] sm:h-[280px] md:h-[320px] lg:h-[357.5px] mx-auto px-4 lg:px-8 xl:px-12 2xl:px-16 pt-4 sm:pt-6">
                 <div className="relative w-full h-full rounded-xl sm:rounded-xl lg:rounded-3xl overflow-hidden shadow-lg sm:shadow-xl lg:shadow-2xl">
                     <div className="relative w-full h-full">
@@ -137,7 +157,20 @@ const TicketHeroSection = ({currentSlide,slides,setCurrentSlide,currentSlideData
 
                         {/* Slide Content */}
                         {currentSlideData.type === "video" ? (
-                            <div className="relative w-full h-full">
+                            <div className="relative w-full h-full bg-black">
+                                {/* Blurred background image behind video */}
+                                {currentSlideData.bgImage && (
+                                    <div
+                                        className="absolute inset-0 w-full h-full scale-110"
+                                        style={{
+                                            backgroundImage: `url(${currentSlideData.bgImage})`,
+                                            backgroundSize: 'cover',
+                                            backgroundPosition: 'center',
+                                            filter: 'blur(14px)',
+                                            opacity: 0.65,
+                                        }}
+                                    />
+                                )}
                                 <video
                                     ref={videoRef}
                                     src={currentSlideData.url}
@@ -145,7 +178,7 @@ const TicketHeroSection = ({currentSlide,slides,setCurrentSlide,currentSlideData
                                     loop
                                     muted={isMuted}
                                     playsInline
-                                    className="w-full h-full object-cover"
+                                    className="relative w-full h-full object-contain z-10"
                                 />
 
                                 {/* Mute Button - Only for videos */}

@@ -28,27 +28,50 @@ interface EventDetailProps {
     };
 }
 
+const VIDEO_BG = "/Cover%20-/59069_upload68daa2739f40c_1759158899-0-en1759158912.jpg.jpeg";
+
 const slides = [
+    // 1. First image (always bg for videos too)
     {
         id: 1,
         type: "image",
-        url: "/Cover%20-/rishab_rikhiram_sharma_3764-orig1758879457.jpeg",
-        alt: "Rishab Rikhiram Sharma",
-        duration: 5,
+        url: "/Cover%20-/59069_upload68daa2739f40c_1759158899-0-en1759158912.jpg.jpeg",
+        alt: "Event Cover",
+        duration: 6,
     },
+    // 2. Video 1
     {
         id: 2,
-        type: "image",
-        url: "/Cover%20-/59069_upload68daa2739f40c_1759158899-0-en1759158912.jpg.jpeg",
-        alt: "Event Cover 2",
-        duration: 5,
+        type: "video",
+        url: "/22193_398acba9ebf32f60d280ccecab409d04-1-en1772118332.mp4",
+        alt: "Event Video 1",
+        bgImage: VIDEO_BG,
+        duration: 6,
     },
+    // 3. Image
     {
         id: 3,
         type: "image",
+        url: "/Cover%20-/rishab_rikhiram_sharma_3764-orig1758879457.jpeg",
+        alt: "Rishab Rikhiram Sharma",
+        duration: 6,
+    },
+    // 4. Video 2
+    {
+        id: 4,
+        type: "video",
+        url: "/21971_cb42a1d4c3a2dd327fcce42ba642f04c-1-en1771248482.mp4",
+        alt: "Event Video 2",
+        bgImage: VIDEO_BG,
+        duration: 6,
+    },
+    // 5. Image
+    {
+        id: 5,
+        type: "image",
         url: "/Cover%20-/65370_upload6982ed73b2de6_1770188147-0-en1770188167.jpg.jpeg",
         alt: "Event Cover 3",
-        duration: 5,
+        duration: 6,
     },
 ];
 
