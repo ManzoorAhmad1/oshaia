@@ -138,6 +138,11 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     const [playingSongId, setPlayingSongId] = useState<number | null>(null);
     const [songProgress, setSongProgress] = useState<{ [key: number]: number }>({});
     const [relatedCarouselIndex, setRelatedCarouselIndex] = useState(0);
+    
+    // Collapse states for each section
+    const [isTicketsCollapsed, setIsTicketsCollapsed] = useState(false);
+    const [isDescriptionCollapsed, setIsDescriptionCollapsed] = useState(false);
+    const [isMoreInfoCollapsed, setIsMoreInfoCollapsed] = useState(false);
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
     // State for ticket quantities - Initialize properly
@@ -529,7 +534,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             </div>
 
                             {/* Tabs Navigation */}
-                            <div className="w-full bg-white rounded-t-xl shadow-sm border border-gray-100 z-30">
+                            <div className="w-full bg-white z-30">
                                 <div className="flex items-center">
                                     <button
                                         onClick={() => handleTabClick('tickets')}
@@ -567,6 +572,25 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             <div ref={tabContentRef} className="space-y-8 max-h-[600px] overflow-y-auto scroll-smooth px-1">
                             {/* Tickets Section */}
                             <div ref={ticketsRef} id="tickets-section">
+                                {/* Collapsible Header */}
+                                <button
+                                    onClick={() => setIsTicketsCollapsed(!isTicketsCollapsed)}
+                                    className="w-full flex items-center justify-between py-4 px-2 hover:bg-gray-50 transition-colors"
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <svg
+                                            className={`w-5 h-5 text-gray-600 transition-transform duration-200 ${isTicketsCollapsed ? '-rotate-90' : ''}`}
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                        <h2 className="text-xl sm:text-2xl font-bold text-white">{t.chooseYourTickets}</h2>
+                                    </div>
+                                </button>
+                                
+                                {!isTicketsCollapsed && (
                                 <div className="px-0 py-4">
                                     <div className="space-y-3">
                                         {event.tickets.map((ticket) => (
@@ -641,13 +665,33 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         ))}
                                     </div>
                                 </div>
+                                )}
                             </div>
 
                             {/* Description Section */}
                             <div ref={descriptionRef} id="description-section">
-                                <div className="bg-white rounded-xl p-4 sm:p-6 shadow-md border border-gray-200 mt-4">
-                                    <h2 className="text-xl sm:text-2xl font-bold mb-4 text-[#112b38]">{t.eventDescription}</h2>
-                                    <div className="prose max-w-none text-[#112b38] text-sm sm:text-base space-y-4">
+                                <div className="bg-white border-t border-b border-gray-200 mt-4">
+                                    {/* Collapsible Header */}
+                                    <button
+                                        onClick={() => setIsDescriptionCollapsed(!isDescriptionCollapsed)}
+                                        className="w-full flex items-center justify-between p-4 sm:p-6 hover:bg-gray-50 transition-colors"
+                                    >
+                                        <div className="flex items-center gap-2">
+                                            <svg
+                                                className={`w-5 h-5 text-gray-600 transition-transform duration-200 ${isDescriptionCollapsed ? '-rotate-90' : ''}`}
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                            <h2 className="text-xl sm:text-2xl font-bold text-[#112b38]">{t.eventDescription}</h2>
+                                        </div>
+                                    </button>
+                                    
+                                    {!isDescriptionCollapsed && (
+                                    <div className="px-4 sm:px-6 pb-4 sm:pb-6">
+                                        <div className="prose max-w-none text-[#112b38] text-sm sm:text-base space-y-4">
                                         <Text>{event.description}</Text>
 
                                         {/* What To Expect */}
@@ -712,15 +756,36 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                 ))}
                                             </div>
                                         </div>
+                                        </div>
                                     </div>
+                                    )}
                                 </div>
                             </div>
 
                             {/* More Info Section */}
                             <div ref={moreInfoRef} id="moreInfo-section">
-                                <div className="bg-white rounded-xl p-4 sm:p-6 shadow-md border border-gray-200 mt-4">
-                                    <h2 className="text-xl sm:text-2xl font-bold mb-4 text-[#112b38]">{t.moreInformation}</h2>
-                                    <div className="space-y-6 text-sm sm:text-base text-[#112b38]">
+                                <div className="bg-white border-t border-b border-gray-200 mt-4">
+                                    {/* Collapsible Header */}
+                                    <button
+                                        onClick={() => setIsMoreInfoCollapsed(!isMoreInfoCollapsed)}
+                                        className="w-full flex items-center justify-between p-4 sm:p-6 hover:bg-gray-50 transition-colors"
+                                    >
+                                        <div className="flex items-center gap-2">
+                                            <svg
+                                                className={`w-5 h-5 text-gray-600 transition-transform duration-200 ${isMoreInfoCollapsed ? '-rotate-90' : ''}`}
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                            <h2 className="text-xl sm:text-2xl font-bold text-[#112b38]">{t.moreInformation}</h2>
+                                        </div>
+                                    </button>
+                                    
+                                    {!isMoreInfoCollapsed && (
+                                    <div className="px-4 sm:px-6 pb-4 sm:pb-6">
+                                        <div className="space-y-6 text-sm sm:text-base text-[#112b38]">
 
                                         {/* Warning */}
                                         <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
@@ -777,7 +842,9 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         <div className="text-sm text-gray-600 border-t border-gray-100 pt-4">
                                             If you have any queries, contact our customer hotline or chat with us via WhatsApp.
                                         </div>
+                                        </div>
                                     </div>
+                                    )}
                                 </div>
                             </div>
 
