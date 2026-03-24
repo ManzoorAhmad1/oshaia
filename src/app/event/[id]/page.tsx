@@ -568,7 +568,6 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             {/* Tickets Section */}
                             <div ref={ticketsRef} id="tickets-section">
                                 <div className="px-0 py-4">
-                                    <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-white">{t.chooseYourTickets}</h2>
                                     <div className="space-y-3">
                                         {event.tickets.map((ticket) => (
                                             <div key={ticket.id} className="bg-gray-100 rounded-lg overflow-hidden">
