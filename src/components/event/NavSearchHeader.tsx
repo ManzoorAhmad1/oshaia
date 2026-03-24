@@ -157,38 +157,43 @@ const NavSearchHeader = () => {
 
             {/* Mobile Dropdown Menu */}
             {mobileMenuOpen && (
-                <div className="relative z-50 sm:hidden mx-4 mt-1 bg-[#112b38] rounded-xl shadow-xl overflow-hidden">
-                    {[
-                        { label: t.home, path: '/', active: pathname === '/' },
-                        { label: t.events, path: '/event', active: pathname === '/event' || pathname?.startsWith('/event/') },
-                        { label: t.aboutUs, path: '/about', active: pathname === '/about' },
-                        { label: t.helpCenter, path: '/help', active: pathname === '/help' },
-                    ].map((item, i) => (
-                        <Link
-                            key={i}
-                            href={item.path}
-                            onClick={() => setMobileMenuOpen(false)}
-                            className={`block px-5 py-3 text-sm font-semibold border-b border-white/10 last:border-0 transition-colors ${
-                                item.active ? 'text-[#c89c6b]' : 'text-white hover:text-[#c89c6b] hover:bg-white/5'
-                            }`}
-                        >
-                            {item.label}
-                        </Link>
-                    ))}
-                    {/* Mobile auth buttons */}
-                    <div className="flex gap-2 px-4 py-3">
-                        <button
-                            className="flex-1 bg-transparent border border-[#c89c6b] text-[#c89c6b] rounded-lg py-2 text-xs font-semibold"
-                            onClick={() => { setAuthMode('login'); setIsAuthModalOpen(true); setMobileMenuOpen(false) }}
-                        >
-                            {t.login}
-                        </button>
-                        <button
-                            className="flex-1 bg-[#c89c6b] text-[#112b38] rounded-lg py-2 text-xs font-semibold"
-                            onClick={() => { setAuthMode('signup'); setIsAuthModalOpen(true); setMobileMenuOpen(false) }}
-                        >
-                            {t.signUp}
-                        </button>
+                <div className="fixed inset-x-0 top-0 z-[100] sm:hidden pt-[60px]">
+                    {/* Backdrop */}
+                    <div className="absolute inset-0 bg-black/40" onClick={() => setMobileMenuOpen(false)} />
+                    {/* Menu panel */}
+                    <div className="relative mx-3 bg-[#112b38] rounded-2xl shadow-2xl overflow-hidden">
+                        {[
+                            { label: t.home, path: '/', active: pathname === '/' },
+                            { label: t.events, path: '/event', active: pathname === '/event' || pathname?.startsWith('/event/') },
+                            { label: t.aboutUs, path: '/about', active: pathname === '/about' },
+                            { label: t.helpCenter, path: '/help', active: pathname === '/help' },
+                        ].map((item, i) => (
+                            <Link
+                                key={i}
+                                href={item.path}
+                                onClick={() => setMobileMenuOpen(false)}
+                                className={`flex items-center px-6 py-4 text-sm font-semibold border-b border-white/10 last:border-0 transition-colors ${
+                                    item.active ? 'text-[#c89c6b] bg-white/5' : 'text-white hover:text-[#c89c6b] hover:bg-white/5'
+                                }`}
+                            >
+                                {item.label}
+                            </Link>
+                        ))}
+                        {/* Mobile auth buttons */}
+                        <div className="flex gap-3 px-6 py-4 bg-white/5">
+                            <button
+                                className="flex-1 bg-transparent border-2 border-[#c89c6b] text-[#c89c6b] rounded-xl py-2.5 text-sm font-semibold"
+                                onClick={() => { setAuthMode('login'); setIsAuthModalOpen(true); setMobileMenuOpen(false) }}
+                            >
+                                {t.login}
+                            </button>
+                            <button
+                                className="flex-1 bg-[#c89c6b] text-[#112b38] rounded-xl py-2.5 text-sm font-semibold"
+                                onClick={() => { setAuthMode('signup'); setIsAuthModalOpen(true); setMobileMenuOpen(false) }}
+                            >
+                                {t.signUp}
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
@@ -198,7 +203,7 @@ const NavSearchHeader = () => {
             {/* Search Bar */}
             <div className="relative z-40 mt-2 sm:-mt-6 md:-mt-8 box-border max-w-full sm:max-w-[1230.7px] h-auto lg:h-[130px] mx-auto px-4">
                 <div className="!pt-3 sm:!pt-12 bg-white rounded-xl sm:rounded-xl lg:rounded-2xl h-auto lg:h-[123px] mt-2 w-full shadow-md sm:shadow-lg border border-gray-100 px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10 py-3 sm:py-4 lg:py-6">
-                    <div className="flex flex-col lg:flex-row items-center justify-center gap-2 sm:gap-4 lg:gap-6">
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 lg:gap-6">
                         {/* Search input with calendar */}
                         <div className="relative w-full lg:w-[436px] flex-shrink-0" ref={calendarRef}>
                             <div className={`flex items-center gap-2 sm:gap-2 lg:gap-3 border border-[#c89c6b] rounded-full px-3 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-2 lg:py-3 h-[42px] sm:h-[44px] lg:h-[44.8px] transition-colors`}>
@@ -216,9 +221,9 @@ const NavSearchHeader = () => {
                                 </button>
                             </div>
 
-                            {/* Calendar Popup */}
+            {/* Calendar Popup */}
                             {calendarOpen && (
-                                <div className="absolute top-[calc(100%+6px)] right-[-180px] z-50 bg-white rounded-xl shadow-[0_8px_40px_rgba(0,0,0,0.18)] px-2 pt-2 pb-1 w-[210px] select-none">
+                                <div className="absolute top-[calc(100%+6px)] left-0 sm:left-auto sm:right-[-180px] z-50 bg-white rounded-xl shadow-[0_8px_40px_rgba(0,0,0,0.18)] px-2 pt-2 pb-1 w-[210px] select-none">
                                     <div className="flex items-center justify-between mb-1">
                                         <button type="button" onClick={prevMonth} className="w-5 h-5 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 transition-colors text-sm">&#8249;</button>
                                         <span className="text-xs font-semibold text-gray-900">{MONTHS[calendarView.month]} {calendarView.year}</span>
@@ -250,9 +255,9 @@ const NavSearchHeader = () => {
                         </div>
 
                         {/* Right Actions */}
-                        <div className="flex items-center justify-between lg:justify-end gap-1.5 sm:gap-2 lg:gap-3 flex-shrink-0 w-full lg:w-auto">
-                            {/* My Account - hidden on mobile */}
-                            <div className="relative hidden sm:block" ref={profileRef}>
+                        <div className="flex items-center justify-end gap-1.5 sm:gap-2 lg:gap-3 flex-shrink-0 w-full sm:w-auto">
+                            {/* My Account - visible on all screens */}
+                            <div className="relative" ref={profileRef}>
                                 <div className="flex items-center h-[42px] sm:h-[44px] lg:h-[44.8px] gap-0">
                                     <Link href="/account" className="flex items-center gap-1 text-xs sm:text-xs lg:text-sm text-gray-700 hover:text-[#c89c6b] transition-colors pl-2 py-1.5 h-full whitespace-nowrap">
                                         <User className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -298,10 +303,7 @@ const NavSearchHeader = () => {
                                 </button>
                             </div>
 
-                            {/* Menu */}
-                            <button onClick={removeSearchFocus} className="hover:bg-[#c89c6b] rounded-lg transition-all duration-300 hover:scale-110 w-[38px] sm:w-[40px] lg:w-[44.8px] h-[42px] sm:h-[44px] lg:h-[44.8px] flex items-center justify-center">
-                                <Menu className="w-4 h-4 sm:w-4 sm:h-4 lg:w-5 lg:h-5" />
-                            </button>
+                            {/* Menu - hidden, menu now in hamburger only */}
 
                             {/* Cart */}
                             <button onClick={removeSearchFocus} className="relative hover:bg-[#c89c6b] rounded-lg transition-all duration-300 hover:scale-110 w-[38px] sm:w-[40px] lg:w-[44.8px] h-[42px] sm:h-[44px] lg:h-[44.8px] flex items-center justify-center">
