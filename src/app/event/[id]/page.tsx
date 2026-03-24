@@ -821,7 +821,10 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                     <span className="block text-gray-400 text-xs font-bold uppercase tracking-widest mb-4">Performers</span>
 
                     {/* Cards */}
-                    <div className="overflow-hidden">
+                    <div
+                        className="overflow-hidden relative"
+                        style={{ maskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)' }}
+                    >
                         <div
                             className="flex"
                             style={{
@@ -929,33 +932,37 @@ export default function EventDetailPage({ params }: EventDetailProps) {
             {/* Artist Modal */}
             {selectedArtist && (
                 <div
-                    className="fixed inset-0 z-[200] flex items-center justify-center bg-black/70 backdrop-blur-sm px-4"
+                    className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 backdrop-blur-md px-4"
                     onClick={() => setSelectedArtist(null)}
                 >
                     <div
-                        className="relative bg-[#111] rounded-2xl overflow-hidden max-w-sm w-full shadow-2xl"
+                        className="relative bg-[#0d0d0d] rounded-3xl overflow-hidden max-w-lg w-full shadow-[0_32px_64px_rgba(0,0,0,0.8)]"
                         onClick={e => e.stopPropagation()}
                     >
                         {/* Image */}
-                        <div className="relative h-64 w-full">
+                        <div className="relative h-80 w-full">
                             <img src={selectedArtist.img} alt={selectedArtist.name} className="w-full h-full object-cover" />
-                            <div className="absolute inset-0" style={{ background: 'linear-gradient(0deg, #111 0%, transparent 60%)' }} />
-                            <div className="absolute bottom-4 left-5">
-                                <h2 className="text-white font-extrabold text-xl leading-tight">{selectedArtist.name}</h2>
-                                <span className="text-white/70 text-sm font-bold">{selectedArtist.role}</span>
+                            <div className="absolute inset-0" style={{ background: 'linear-gradient(0deg, #0d0d0d 0%, rgba(0,0,0,0.3) 60%, transparent 100%)' }} />
+                            <div className="absolute bottom-5 left-6">
+                                <h2 className="text-white font-extrabold text-2xl leading-tight mb-1">{selectedArtist.name}</h2>
+                                <span className="text-white/60 text-sm font-semibold tracking-wide uppercase">{selectedArtist.role}</span>
                             </div>
                         </div>
                         {/* Bio */}
-                        <div className="p-5">
-                            <p className="text-white/80 text-sm leading-relaxed mb-4">{selectedArtist.bio}</p>
-                            <p className="text-white font-bold mb-2">Socials</p>
-                            <div className="flex gap-3">
-                                {selectedArtist.socials.instagram && <a href={selectedArtist.socials.instagram} target="_blank" rel="noopener noreferrer"><FaInstagram className="w-6 h-6 text-white/60 hover:text-white transition-colors" /></a>}
-                                {selectedArtist.socials.facebook && <a href={selectedArtist.socials.facebook} target="_blank" rel="noopener noreferrer"><FaFacebook className="w-6 h-6 text-white/60 hover:text-white transition-colors" /></a>}
-                                {selectedArtist.socials.tiktok && <a href={selectedArtist.socials.tiktok} target="_blank" rel="noopener noreferrer" className="text-white/60 hover:text-white transition-colors text-sm font-bold self-center">TT</a>}
-                            </div>
+                        <div className="px-6 pt-4 pb-5">
+                            {selectedArtist.bio && <p className="text-white/70 text-sm leading-relaxed mb-5">{selectedArtist.bio}</p>}
+                            {Object.values(selectedArtist.socials).some(Boolean) && (
+                                <>
+                                    <p className="text-white/40 text-xs font-bold uppercase tracking-widest mb-3">Socials</p>
+                                    <div className="flex gap-4">
+                                        {selectedArtist.socials.instagram && <a href={selectedArtist.socials.instagram} target="_blank" rel="noopener noreferrer"><FaInstagram className="w-6 h-6 text-white/50 hover:text-white transition-colors" /></a>}
+                                        {selectedArtist.socials.facebook && <a href={selectedArtist.socials.facebook} target="_blank" rel="noopener noreferrer"><FaFacebook className="w-6 h-6 text-white/50 hover:text-white transition-colors" /></a>}
+                                        {selectedArtist.socials.tiktok && <a href={selectedArtist.socials.tiktok} target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white transition-colors text-[11px] font-bold self-center border border-white/20 px-2 py-0.5 rounded">TT</a>}
+                                    </div>
+                                </>
+                            )}
                         </div>
-                        <p className="text-center text-white/30 text-xs pb-4">Click or tap anywhere else to dismiss.</p>
+                        <p className="text-center text-white/20 text-[11px] pb-4 tracking-wide">Tap anywhere outside to dismiss</p>
                     </div>
                 </div>
             )}
