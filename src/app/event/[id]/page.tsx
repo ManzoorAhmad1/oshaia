@@ -383,21 +383,21 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                             <div className="flex gap-2 mt-4">
                                                 <div className='flex flex-col items-center'>
                                                     <div className="relative bg-[#D24428] w-14 rounded pt-2 pb-1 text-center shadow-sm overflow-hidden">
-                                                        <img src="https://imagedelivery.net/eRmbR7weNG-2WY_X8bscGg/b1fd3378-511e-40bc-8156-fda282c5fe00/public" alt="bar" className="absolute top-0 left-0 w-full h-[5px] object-cover" />
+                                                        <img src="https://imagedelivery.net/eRmbR7weNG-2WY_X8bscGg/b1fd3378-511e-40bc-8156-fda282c5fe00/public" alt="bar" className="absolute top-[23px] left-0 w-full h-[5px] object-cover" />
                                                         <span className="text-2xl sm:text-3xl font-bold text-white leading-none block">{countdown.days}</span>
                                                     </div>
                                                     <span className="text-[11px] sm:text-xs text-[#112b38] font-medium mt-0.5">{t.days}</span>
                                                 </div>
                                                 <div className='flex flex-col items-center'>
                                                     <div className="relative bg-[#D24428] w-14 rounded pt-2 pb-1 text-center shadow-sm overflow-hidden">
-                                                        <img src="https://imagedelivery.net/eRmbR7weNG-2WY_X8bscGg/b1fd3378-511e-40bc-8156-fda282c5fe00/public" alt="bar" className="absolute top-0 left-0 w-full h-[5px] object-cover" />
+                                                        <img src="https://imagedelivery.net/eRmbR7weNG-2WY_X8bscGg/b1fd3378-511e-40bc-8156-fda282c5fe00/public" alt="bar" className="absolute top-[23px] left-0 w-full h-[5px] object-cover" />
                                                         <span className="text-2xl sm:text-3xl font-bold text-white leading-none block">{countdown.hours}</span>
                                                     </div>
                                                     <span className="text-[11px] sm:text-xs text-[#112b38] font-medium mt-0.5">{t.hours}</span>
                                                 </div>
                                                 <div className='flex flex-col items-center'>
                                                     <div className="relative bg-[#D24428] w-14 rounded pt-2 pb-1 text-center shadow-sm overflow-hidden">
-                                                        <img src="https://imagedelivery.net/eRmbR7weNG-2WY_X8bscGg/b1fd3378-511e-40bc-8156-fda282c5fe00/public" alt="bar" className="absolute top-0 left-0 w-full h-[5px] object-cover" />
+                                                        <img src="https://imagedelivery.net/eRmbR7weNG-2WY_X8bscGg/b1fd3378-511e-40bc-8156-fda282c5fe00/public" alt="bar" className="absolute top-[23px] left-0 w-full h-[5px] object-cover" />
                                                         <span className="text-2xl sm:text-3xl font-bold text-white leading-none block">{countdown.minutes}</span>
                                                     </div>
                                                     <span className="text-[11px] sm:text-xs text-[#112b38] font-medium mt-0.5">{t.minutes}</span>
