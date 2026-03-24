@@ -121,8 +121,8 @@ const NavSearchHeader = () => {
             <div className="absolute top-0 left-0 right-0 z-0 w-full bg-[#112b38] h-20" />
 
             {/* Nav Bar */}
-            <div className="relative z-50 w-full h-auto sm:h-[56px] lg:h-[68.6px] flex justify-center px-0 pt-3 mb-0">
-                <div className="bg-[#112b38] text-white w-full px-4 sm:px-6 lg:px-10 py-3 sm:py-3 lg:py-4">
+            <div className="relative z-50 w-full h-auto sm:h-[56px] lg:h-[68.6px] flex justify-center px-0 mb-0">
+                <div className="bg-[#112b38] text-white w-full px-4 sm:px-6 lg:px-10 py-3 sm:py-3 lg:py-4 flex items-center justify-center">
 
                     {/* Desktop Nav */}
                     <div className="hidden sm:flex items-center justify-center gap-2 sm:gap-4 md:gap-6 lg:gap-10 xl:gap-12">
@@ -212,7 +212,7 @@ const NavSearchHeader = () => {
                                     ref={searchRef}
                                     type="text"
                                     placeholder={selectedDate ? selectedDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : typingPlaceholder}
-                                    className="w-full outline-none border-none focus:outline-none focus:ring-0 text-[11px] sm:text-xs lg:text-sm text-gray-700 placeholder:text-gray-400"
+                                    className="w-full outline-none border-none focus:outline-none focus:ring-0 text-[11px] sm:text-xs text-gray-700 placeholder:text-gray-400 whitespace-nowrap"
                                     onFocus={() => setSearchFocused(true)}
                                     onBlur={() => setSearchFocused(false)}
                                 />
@@ -259,7 +259,7 @@ const NavSearchHeader = () => {
                             {/* My Account - visible on all screens */}
                             <div className="relative" ref={profileRef}>
                                 <div className="flex items-center h-[42px] sm:h-[44px] lg:h-[44.8px] gap-0">
-                                    <Link href="/account" className="flex items-center gap-1 text-xs sm:text-xs lg:text-sm text-gray-700 hover:text-[#c89c6b] transition-colors pl-2 py-1.5 h-full whitespace-nowrap">
+                                    <Link href="/account" className="flex items-center gap-1 text-xs text-gray-700 hover:text-[#c89c6b] transition-colors pl-2 py-1.5 h-full whitespace-nowrap">
                                         <User className="w-4 h-4 sm:w-5 sm:h-5" />
                                         <span className="hidden xl:inline">{t.myAccount}</span>
                                     </Link>
@@ -269,20 +269,20 @@ const NavSearchHeader = () => {
                                 </div>
                                 {profileDropdownOpen && (
                                     <div className="absolute top-full right-0 mt-2 w-52 bg-white rounded-lg shadow-xl border border-gray-200 z-50 py-2">
-                                        <Link href="/profile" onClick={() => setProfileDropdownOpen(false)} className="flex items-center gap-2 px-4 py-2 hover:bg-[#112b38] hover:text-white text-sm text-gray-700 transition-colors">
+                                        <Link href="/profile" onClick={() => setProfileDropdownOpen(false)} className="flex items-center gap-2 px-4 py-2 hover:bg-[#112b38] hover:text-white text-xs whitespace-nowrap text-gray-700 transition-colors">
                                             <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="8" r="4" strokeWidth="2" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 20c0-4 3.6-7 8-7s8 3 8 7" /></svg>
                                             My Profile
                                         </Link>
-                                        <Link href="/profile?tab=bookings" onClick={() => setProfileDropdownOpen(false)} className="flex items-center gap-2 px-4 py-2 hover:bg-[#112b38] hover:text-white text-sm text-gray-700 transition-colors">
+                                        <Link href="/profile?tab=bookings" onClick={() => setProfileDropdownOpen(false)} className="flex items-center gap-2 px-4 py-2 hover:bg-[#112b38] hover:text-white text-xs whitespace-nowrap text-gray-700 transition-colors">
                                             <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" strokeWidth="2" /><path strokeLinecap="round" strokeWidth="2" d="M16 2v4M8 2v4M3 10h18" /><path strokeLinecap="round" strokeWidth="2" d="M9 16l2 2 4-4" /></svg>
                                             Booking History
                                         </Link>
-                                        <Link href="/profile?tab=tickets" onClick={() => setProfileDropdownOpen(false)} className="flex items-center gap-2 px-4 py-2 hover:bg-[#112b38] hover:text-white text-sm text-gray-700 transition-colors">
+                                        <Link href="/profile?tab=tickets" onClick={() => setProfileDropdownOpen(false)} className="flex items-center gap-2 px-4 py-2 hover:bg-[#112b38] hover:text-white text-xs whitespace-nowrap text-gray-700 transition-colors">
                                             <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" /></svg>
                                             My Tickets
                                         </Link>
                                         <div className="border-t border-gray-100 mt-1 pt-1">
-                                            <button onClick={() => { setProfileDropdownOpen(false); setAuthMode('login'); setIsAuthModalOpen(true) }} className="w-full text-left px-4 py-2 hover:bg-red-50 text-sm text-red-500 transition-colors flex items-center gap-2">
+                                            <button onClick={() => { setProfileDropdownOpen(false); setAuthMode('login'); setIsAuthModalOpen(true) }} className="w-full text-left px-4 py-2 hover:bg-red-50 text-xs whitespace-nowrap text-red-500 transition-colors flex items-center gap-2">
                                                 <LogOut className="w-4 h-4" />
                                                 Logout
                                             </button>
@@ -293,11 +293,11 @@ const NavSearchHeader = () => {
 
                             {/* Login / Sign Up - hidden on mobile, shown in mobile menu */}
                             <div className="hidden sm:flex">
-                                <button className="bg-transparent border-2 border-[#112b38] text-[#112b38] hover:bg-[#112b38] hover:text-[#c89c6b] hover:border-[#112b38] px-3 sm:px-3 lg:px-5 rounded-l-lg text-xs sm:text-xs lg:text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg whitespace-nowrap h-[42px] sm:h-[44px] lg:h-[44.8px]"
+                                <button className="bg-transparent border-2 border-[#112b38] text-[#112b38] hover:bg-[#112b38] hover:text-[#c89c6b] hover:border-[#112b38] px-3 rounded-l-lg text-xs font-medium transition-all duration-300 shadow-md hover:shadow-lg whitespace-nowrap h-[42px] sm:h-[44px] lg:h-[44.8px]"
                                     onClick={() => { setAuthMode('login'); setIsAuthModalOpen(true) }}>
                                     {t.login}
                                 </button>
-                                <button className="bg-transparent border-2 border-[#112b38] text-[#112b38] hover:bg-[#c89c6b] hover:text-[#112b38] hover:border-[#c89c6b] px-3 sm:px-3 lg:px-5 rounded-r-lg text-xs sm:text-xs lg:text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg whitespace-nowrap h-[42px] sm:h-[44px] lg:h-[44.8px]"
+                                <button className="bg-transparent border-2 border-[#112b38] text-[#112b38] hover:bg-[#c89c6b] hover:text-[#112b38] hover:border-[#c89c6b] px-3 rounded-r-lg text-xs font-medium transition-all duration-300 shadow-md hover:shadow-lg whitespace-nowrap h-[42px] sm:h-[44px] lg:h-[44.8px]"
                                     onClick={() => { setAuthMode('signup'); setIsAuthModalOpen(true) }}>
                                     {t.signUp}
                                 </button>
@@ -313,18 +313,18 @@ const NavSearchHeader = () => {
 
                             {/* Language */}
                             <div className="relative" ref={languageRef}>
-                                <button onClick={() => setLanguageDropdownOpen(!languageDropdownOpen)} className="flex items-center gap-1 text-xs sm:text-xs lg:text-sm text-gray-700 hover:bg-[#c89c6b] hover:text-white px-2 sm:px-2 rounded-lg transition-all duration-300 h-[42px] sm:h-[44px] lg:h-[44.8px] whitespace-nowrap">
+                                <button onClick={() => setLanguageDropdownOpen(!languageDropdownOpen)} className="flex items-center gap-1 text-xs text-gray-700 hover:bg-[#c89c6b] hover:text-white px-2 rounded-lg transition-all duration-300 h-[42px] sm:h-[44px] lg:h-[44.8px] whitespace-nowrap">
                                     <img src={language === 'en' ? "https://flagcdn.com/gb.svg" : "https://flagcdn.com/fr.svg"} alt={language === 'en' ? "EN" : "FR"} className="w-5 h-3.5 object-cover rounded" />
                                     <span className="font-medium">{language === 'en' ? 'EN' : 'FR'}</span>
                                     <ChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform ${languageDropdownOpen ? 'rotate-180' : ''}`} />
                                 </button>
                                 {languageDropdownOpen && (
                                     <div className="absolute top-full right-0 mt-2 w-32 sm:w-36 bg-white rounded-lg shadow-xl border border-gray-200 z-50 py-2">
-                                        <button onClick={() => { setLanguage('en'); setLanguageDropdownOpen(false) }} className={`flex items-center gap-3 w-full px-2 py-1.5 hover:bg-[#c89c6b] hover:text-white transition-all duration-300 text-sm ${language === 'en' ? 'bg-[#c89c6b] text-white' : 'text-gray-700'}`}>
+                                        <button onClick={() => { setLanguage('en'); setLanguageDropdownOpen(false) }} className={`flex items-center gap-3 w-full px-2 py-1.5 hover:bg-[#c89c6b] hover:text-white transition-all duration-300 text-xs whitespace-nowrap ${language === 'en' ? 'bg-[#c89c6b] text-white' : 'text-gray-700'}`}>
                                             <img src="https://flagcdn.com/gb.svg" alt="EN" className="w-5 h-3.5 object-cover rounded" />
                                             <span className="font-medium">{t.english}</span>
                                         </button>
-                                        <button onClick={() => { setLanguage('fr'); setLanguageDropdownOpen(false) }} className={`flex items-center gap-3 w-full px-2 py-1.5 hover:bg-[#c89c6b] hover:text-white transition-all duration-300 text-sm ${language === 'fr' ? 'bg-[#c89c6b] text-white' : 'text-gray-700'}`}>
+                                        <button onClick={() => { setLanguage('fr'); setLanguageDropdownOpen(false) }} className={`flex items-center gap-3 w-full px-2 py-1.5 hover:bg-[#c89c6b] hover:text-white transition-all duration-300 text-xs whitespace-nowrap ${language === 'fr' ? 'bg-[#c89c6b] text-white' : 'text-gray-700'}`}>
                                             <img src="https://flagcdn.com/fr.svg" alt="FR" className="w-5 h-3.5 object-cover rounded" />
                                             <span className="font-medium">{t.french}</span>
                                         </button>

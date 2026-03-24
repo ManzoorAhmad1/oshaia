@@ -14,7 +14,7 @@ import {
     Timer,
     Link2
 } from 'lucide-react';
-import { FaFacebook, FaTwitter, FaWhatsapp, FaInstagram, FaGreaterThan } from 'react-icons/fa';
+import { FaFacebook, FaTwitter, FaWhatsapp, FaInstagram, FaGreaterThan, FaCalendarAlt, FaShareAlt, FaHeart } from 'react-icons/fa';
 import TicketHeroSection from '@/components/event/ticketHeroSection';
 import NavSearchHeader from '@/components/event/NavSearchHeader';
 import { Text } from 'rizzui/typography';
@@ -405,15 +405,26 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     return (
         <div className="relative">
 
-            {/* Background image - from top, not sticky */}
+            {/* Background image - matches reference: fixed height, dark inside overlay, gradient below */}
             <div
-                className="absolute top-0 left-0 right-0 h-[100vh] blur-sm -z-10 pointer-events-none"
+                className="absolute top-0 left-0 right-0 h-[700px] -z-10 pointer-events-none overflow-hidden"
                 style={{
                     backgroundImage: `url(${currentSlideData.type === 'video' ? currentSlideData.bgImage : currentSlideData.url})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'top center',
-                    backgroundRepeat: 'no-repeat'
-                }} />
+                    backgroundRepeat: 'no-repeat',
+                    filter: 'blur(4px)',
+                    transform: 'scale(1.05)',
+                }}
+            >
+                {/* inside overlay – ~55% black opacity */}
+                <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.55)' }} />
+                {/* gradient below – fade to white */}
+                <div
+                    className="absolute bottom-0 left-0 right-0 h-[160px]"
+                    style={{ background: 'linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.85) 75%, #ffffff 100%)' }}
+                />
+            </div>
 
             <NavSearchHeader />
 
@@ -740,15 +751,15 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                     </button>
                                 </div>
 
-                                <div className="flex flex-wrap justify-center gap-6 mt-6 text-sm text-gray-600">
+                                <div className="flex items-center justify-center gap-6 mt-6 text-sm text-gray-600">
                                     <button className="flex items-center gap-2 hover:text-[#112b38] transition-all duration-300">
-                                        <Calendar className="w-4 h-4" /> {t.addToCalendar}
+                                        <FaCalendarAlt className="w-4 h-4" /> {t.addToCalendar}
                                     </button>
                                     <button className="flex items-center gap-2 hover:text-[#112b38] transition-all duration-300">
-                                        <Link2 className="w-4 h-4" /> {t.shareEvent}
+                                        <FaShareAlt className="w-4 h-4" /> {t.shareEvent}
                                     </button>
                                     <button className="flex items-center gap-2 hover:text-[#112b38] transition-all duration-300">
-                                        <HeartCrack className="w-4 h-4" /> {t.addToFavourites}
+                                        <FaHeart className="w-4 h-4" /> {t.addToFavourites}
                                     </button>
                                 </div>
                             </div>
