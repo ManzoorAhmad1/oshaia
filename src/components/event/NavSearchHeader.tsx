@@ -203,7 +203,7 @@ const NavSearchHeader = () => {
             {/* Search Bar */}
             <div className="relative z-40  w-full px-0">
                 <div className="bg-white w-full shadow-md sm:shadow-lg border-b border-gray-200 ">
-                    <div className="sm:max-w-[75%] mx-auto w-full bg-[#eef0f2] py-4  px-4 sm:px-6 lg:px-8  flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 lg:gap-6">
+                    <div className="sm:max-w-[75%] mx-auto w-full  py-4  px-4 sm:px-6 lg:px-8  flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 lg:gap-6">
                         {/* Search input with calendar */}
                         <div className="relative w-full flex-1" ref={calendarRef}>
                             <div className={`flex items-center gap-2 sm:gap-2 lg:gap-3 border border-[#c89c6b] rounded-full px-3 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-2 lg:py-3 h-[42px] sm:h-[44px] lg:h-[44.8px] transition-colors`}>
@@ -212,7 +212,7 @@ const NavSearchHeader = () => {
                                     ref={searchRef}
                                     type="text"
                                     placeholder={selectedDate ? selectedDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : typingPlaceholder}
-                                    className="w-full bg-[#eef0f2] outline-none border-none focus:outline-none focus:ring-0 text-[11px] sm:text-xs lg:text-sm text-gray-700 placeholder:text-gray-400"
+                                    className="w-full outline-none border-none focus:outline-none focus:ring-0 text-[11px] sm:text-xs lg:text-sm text-gray-700 placeholder:text-gray-400"
                                     onFocus={() => setSearchFocused(true)}
                                     onBlur={() => setSearchFocused(false)}
                                 />

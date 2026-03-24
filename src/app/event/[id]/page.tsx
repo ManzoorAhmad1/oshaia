@@ -30,6 +30,60 @@ interface EventDetailProps {
 
 const VIDEO_BG = "/Cover%20-/59069_upload68daa2739f40c_1759158899-0-en1759158912.jpg.jpeg";
 
+const artists = [
+    {
+        name: "Daskill", role: "DJ",
+        img: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=400&h=400&fit=crop",
+        bio: "Daskill est un DJ, beatmaker et artiste musical. Il partage ses créations musicales avec une énergie incroyable sur scène, fusionnant plusieurs genres musicaux.",
+        socials: { instagram: "#", soundcloud: "#", youtube: "#", tiktok: "#" },
+    },
+    {
+        name: "DJ M'RICK", role: "DJ",
+        img: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&h=400&fit=crop",
+        bio: "DJ M'Rick est un DJ et producteur originaire de La Réunion. Actif sur la scène musicale depuis plus de 10 ans, il mixe avec passion et précision.",
+        socials: { instagram: "#", facebook: "#", youtube: "#" },
+    },
+    {
+        name: "AVLS", role: "DJ / Producer",
+        img: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=400&h=400&fit=crop",
+        bio: "AVLS est un producteur et DJ réputé pour ses sets électrisants et ses productions originales qui captivant les foules.",
+        socials: { instagram: "#" },
+    },
+    {
+        name: "Moon", role: "DJ",
+        img: "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=400&h=400&fit=crop",
+        bio: "Moon est un DJ talentueux qui mélange les genres avec aisance, créant des ambiances uniques qui font danser le public toute la nuit.",
+        socials: { instagram: "#", facebook: "#", tiktok: "#" },
+    },
+    {
+        name: "Mary Jane", role: "DJ",
+        img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop",
+        bio: "Mary Jane est une DJ dynamique connue pour ses sets énergiques et sa capacité à lire et enflammer la foule, quels que soient l'heure et le lieu.",
+        socials: { instagram: "#", facebook: "#" },
+    },
+    {
+        name: "DJ Luvlesh", role: "DJ",
+        img: "https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?w=400&h=400&fit=crop",
+        bio: "Originaire de l'Île Maurice, DJ Luvlesh (Luvlesh Désiré) est bien plus qu'un DJ : il est le tout premier à avoir introduit et popularisé l'Amapiano sur l'île.",
+        socials: {},
+    },
+    {
+        name: "DJ Darrel", role: "DJ",
+        img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
+        bio: "Darrell is a DJ & vibe creator from Mauritius. With more than 8 years behind the decks, he has built a reputation for delivering unforgettable sets.",
+        socials: { instagram: "#", facebook: "#", tiktok: "#" },
+    },
+    {
+        name: "DJ Ryan J", role: "DJ / Producer",
+        img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop",
+        bio: "DJ Ryan J is a DJ and producer known for his unique blend of Afrobeats, R&B, and electronic music that keeps crowds moving all night long.",
+        socials: { soundcloud: "#", instagram: "#" },
+    },
+];
+
+const ARTIST_CLONE = 3;
+const artistsExtended = [...artists.slice(-ARTIST_CLONE), ...artists, ...artists.slice(0, ARTIST_CLONE)];
+
 const slides = [
     // 1. First image (always bg for videos too)
     {
@@ -89,6 +143,10 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     // State for ticket quantities - Initialize properly
     const [ticketQuantities, setTicketQuantities] = useState<{ [key: number]: number }>({});
     const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0 });
+    const [artistCarouselIndex, setArtistCarouselIndex] = useState(ARTIST_CLONE);
+    const [artistProgress, setArtistProgress] = useState(0);
+    const [artistNoTransition, setArtistNoTransition] = useState(false);
+    const [selectedArtist, setSelectedArtist] = useState<typeof artists[0] | null>(null);
 
     const relatedEvents = [
         { id: 1, title: "EN TOUTE INTIMITÉ", location: "Le Suffren Hotel & Spa", price: "RS 450", image: "https://otayo.com/wp-content/uploads/2026/01/zulu-new-grid.jpg", day: "18", month: "Oct", badge: 1 },
@@ -217,6 +275,39 @@ export default function EventDetailPage({ params }: EventDetailProps) {
         const interval = setInterval(tick, 60000);
         return () => clearInterval(interval);
     }, []);
+
+    useEffect(() => {
+        setArtistProgress(0);
+        const step = 100 / (6000 / 50);
+        const timer = setInterval(() => {
+            setArtistProgress(p => {
+                if (p + step >= 100) {
+                    clearInterval(timer);
+                    setArtistCarouselIndex(idx => idx + 1);
+                    return 0;
+                }
+                return p + step;
+            });
+        }, 50);
+        return () => clearInterval(timer);
+    }, [artistCarouselIndex]);
+
+    useEffect(() => {
+        if (artistNoTransition) return;
+        const min = ARTIST_CLONE;
+        const max = ARTIST_CLONE + artists.length - 1;
+        if (artistCarouselIndex < min || artistCarouselIndex > max) {
+            const t = setTimeout(() => {
+                setArtistNoTransition(true);
+                const jumpTo = artistCarouselIndex < min
+                    ? artistCarouselIndex + artists.length
+                    : artistCarouselIndex - artists.length;
+                setArtistCarouselIndex(jumpTo);
+                requestAnimationFrame(() => requestAnimationFrame(() => setArtistNoTransition(false)));
+            }, 510);
+            return () => clearTimeout(t);
+        }
+    }, [artistCarouselIndex, artistNoTransition]);
 
     // Initialize quantities for tickets on mount only
     useEffect(() => {
@@ -725,34 +816,149 @@ export default function EventDetailPage({ params }: EventDetailProps) {
             </div>
 
             {/* Artist Slider & Portrait Section */}
-            <div className="w-full sm:w-[85%] mx-auto mt-12 mb-2 px-4 sm:px-0">
-                <div className="flex flex-col lg:flex-row gap-4">
-                    <div className="flex-1 overflow-visible">
-                        <div className="flex gap-3 sm:gap-4 overflow-x-auto pb-4 scrollbar-hide pt-2 px-1">
-                            {[
-                                { name: "Daskill", role: "DJ", img: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=400&h=400&fit=crop" },
-                                { name: "DJ M'RICK", role: "DJ", img: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&h=400&fit=crop" },
-                                { name: "AVLS", role: "Artist", img: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=400&h=400&fit=crop" },
-                                { name: "Moon", role: "Performer", img: "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=400&h=400&fit=crop" },
-                                { name: "Mary Jane", role: "Vocalist", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop" },
-                            ].map((artist, i) => (
-                                <div key={i} className="relative w-[130px] h-[170px] sm:w-[150px] sm:h-[190px] rounded-xl overflow-hidden flex-shrink-0 shadow-lg group cursor-pointer hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                                    <Image
-                                        src={artist.img}
-                                        alt={artist.name}
-                                        fill
-                                        className="object-cover transition-transform duration-500 group-hover:scale-110"
-                                    />
-                                    <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-3 flex flex-col justify-end">
-                                        <h4 className="text-white font-bold text-sm leading-tight">{artist.name}</h4>
-                                        <p className="text-gray-300 text-[10px] uppercase tracking-wider">{artist.role}</p>
+            <div className="w-full bg-white py-10">
+                <div className="max-w-[1230px] mx-auto px-4 sm:px-6 lg:px-8">
+                    <span className="block text-gray-400 text-xs font-bold uppercase tracking-widest mb-4">Performers</span>
+
+                    {/* Cards */}
+                    <div className="overflow-hidden">
+                        <div
+                            className="flex"
+                            style={{
+                                transform: `translateX(calc(-${artistCarouselIndex * 225}px + 50% - 112px))`,
+                                transition: artistNoTransition ? 'none' : 'transform 0.5s ease-in-out',
+                            }}
+                        >
+                            {artistsExtended.map((artist, i) => (
+                                <div
+                                    key={i}
+                                    onClick={() => setSelectedArtist(artist)}
+                                    className="flex-shrink-0 cursor-pointer transition-all duration-500 px-1"
+                                    style={{
+                                        width: '225px',
+                                        transform: i === artistCarouselIndex ? 'scale(1)' : 'scale(0.88)',
+                                        opacity: Math.abs(i - artistCarouselIndex) > 2 ? 0.15 : 1,
+                                    }}
+                                >
+                                    <div
+                                        className="relative rounded-xl overflow-hidden cursor-pointer"
+                                        style={{
+                                            height: '280px',
+                                            border: '1px solid rgba(0,0,0,0.08)',
+                                        }}
+                                    >
+                                        {/* Background image */}
+                                        <div
+                                            className="absolute inset-0 bg-cover bg-center transition-transform duration-500"
+                                            style={{
+                                                backgroundImage: `url(${artist.img})`,
+                                                transform: i === artistCarouselIndex ? 'scale(1)' : 'scale(1.15)',
+                                            }}
+                                        />
+                                        {/* Progress bar on active card */}
+                                        {i === artistCarouselIndex && (
+                                            <>
+                                                <div className="absolute bottom-0 left-0 h-[4px] bg-white/20 z-20 w-full" />
+                                                <div className="absolute bottom-0 left-0 h-[4px] bg-white/80 z-20" style={{ width: `${artistProgress}%`, transition: 'width 0.05s linear' }} />
+                                            </>
+                                        )}
+                                        {/* Overlay */}
+                                        <div
+                                            className="absolute inset-0"
+                                            style={{ background: 'linear-gradient(0deg, rgb(0,0,0) 25%, transparent 100%)' }}
+                                        />
+                                        {/* Content */}
+                                        <div className="absolute bottom-0 left-0 right-0 p-4">
+                                            <h2 className="text-white font-extrabold text-base mb-0.5 leading-tight">{artist.name}</h2>
+                                            <span className="text-white/80 text-xs font-bold block mb-2">{artist.role}</span>
+                                            {i === artistCarouselIndex && (
+                                                <p className="text-white/70 text-[11px] leading-snug line-clamp-2 mb-2">{artist.bio}</p>
+                                            )}
+                                            {/* Social icons */}
+                                            <div className="flex gap-2 flex-wrap">
+                                                {artist.socials.instagram && <a href={artist.socials.instagram} onClick={e => e.stopPropagation()} target="_blank" rel="noopener noreferrer"><FaInstagram className="w-5 h-5 text-white/60 hover:text-white transition-colors" /></a>}
+                                                {artist.socials.facebook && <a href={artist.socials.facebook} onClick={e => e.stopPropagation()} target="_blank" rel="noopener noreferrer"><FaFacebook className="w-5 h-5 text-white/60 hover:text-white transition-colors" /></a>}
+                                                {artist.socials.tiktok && <a href={artist.socials.tiktok} onClick={e => e.stopPropagation()} target="_blank" rel="noopener noreferrer" className="text-white/60 hover:text-white transition-colors text-sm font-bold">TT</a>}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             ))}
                         </div>
                     </div>
+
+                    {/* Controls: prev | dots | next */}
+                    {(() => {
+                        const artistRealIndex = (artistCarouselIndex - ARTIST_CLONE + artists.length * 100) % artists.length;
+                        return (
+                            <div className="flex items-center justify-between mt-5 gap-3">
+                                <button
+                                    onClick={() => setArtistCarouselIndex(p => p - 1)}
+                                    className="w-10 h-10 rounded-full border border-gray-300 bg-white hover:bg-gray-100 flex items-center justify-center transition-all shadow-sm flex-shrink-0"
+                                >
+                                    <ChevronLeft className="w-5 h-5 text-gray-700" />
+                                </button>
+
+                                <div className="flex items-center justify-center gap-1.5 flex-1">
+                                    {artists.map((_, i) => (
+                                        <button
+                                            key={i}
+                                            onClick={() => setArtistCarouselIndex(i + ARTIST_CLONE)}
+                                            className="rounded-full transition-all duration-300"
+                                            style={{
+                                                width: i === artistRealIndex ? '24px' : '8px',
+                                                height: '8px',
+                                                background: i === artistRealIndex ? '#1a1a1a' : 'rgba(0,0,0,0.2)',
+                                            }}
+                                        />
+                                    ))}
+                                </div>
+
+                                <button
+                                    onClick={() => setArtistCarouselIndex(p => p + 1)}
+                                    className="w-10 h-10 rounded-full border border-gray-300 bg-white hover:bg-gray-100 flex items-center justify-center transition-all shadow-sm flex-shrink-0"
+                                >
+                                    <ChevronRight className="w-5 h-5 text-gray-700" />
+                                </button>
+                            </div>
+                        );
+                    })()}
                 </div>
             </div>
+
+            {/* Artist Modal */}
+            {selectedArtist && (
+                <div
+                    className="fixed inset-0 z-[200] flex items-center justify-center bg-black/70 backdrop-blur-sm px-4"
+                    onClick={() => setSelectedArtist(null)}
+                >
+                    <div
+                        className="relative bg-[#111] rounded-2xl overflow-hidden max-w-sm w-full shadow-2xl"
+                        onClick={e => e.stopPropagation()}
+                    >
+                        {/* Image */}
+                        <div className="relative h-64 w-full">
+                            <img src={selectedArtist.img} alt={selectedArtist.name} className="w-full h-full object-cover" />
+                            <div className="absolute inset-0" style={{ background: 'linear-gradient(0deg, #111 0%, transparent 60%)' }} />
+                            <div className="absolute bottom-4 left-5">
+                                <h2 className="text-white font-extrabold text-xl leading-tight">{selectedArtist.name}</h2>
+                                <span className="text-white/70 text-sm font-bold">{selectedArtist.role}</span>
+                            </div>
+                        </div>
+                        {/* Bio */}
+                        <div className="p-5">
+                            <p className="text-white/80 text-sm leading-relaxed mb-4">{selectedArtist.bio}</p>
+                            <p className="text-white font-bold mb-2">Socials</p>
+                            <div className="flex gap-3">
+                                {selectedArtist.socials.instagram && <a href={selectedArtist.socials.instagram} target="_blank" rel="noopener noreferrer"><FaInstagram className="w-6 h-6 text-white/60 hover:text-white transition-colors" /></a>}
+                                {selectedArtist.socials.facebook && <a href={selectedArtist.socials.facebook} target="_blank" rel="noopener noreferrer"><FaFacebook className="w-6 h-6 text-white/60 hover:text-white transition-colors" /></a>}
+                                {selectedArtist.socials.tiktok && <a href={selectedArtist.socials.tiktok} target="_blank" rel="noopener noreferrer" className="text-white/60 hover:text-white transition-colors text-sm font-bold self-center">TT</a>}
+                            </div>
+                        </div>
+                        <p className="text-center text-white/30 text-xs pb-4">Click or tap anywhere else to dismiss.</p>
+                    </div>
+                </div>
+            )}
 
             <div className="w-full sm:w-[85%] mx-auto my-12 px-4 sm:px-0">
                 <div className="flex items-center justify-between mb-6">
