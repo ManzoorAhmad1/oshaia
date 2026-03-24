@@ -20,6 +20,7 @@ const NavSearchHeader = () => {
     const [calendarView, setCalendarView] = useState(() => { const d = new Date(); return { month: d.getMonth(), year: d.getFullYear() } })
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
     const [authMode, setAuthMode] = useState<'login' | 'signup'>('login')
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const [typingPlaceholder, setTypingPlaceholder] = useState(t.searchPlaceholder)
     const languageRef = useRef<HTMLDivElement>(null)
     const profileRef = useRef<HTMLDivElement>(null)
@@ -122,7 +123,9 @@ const NavSearchHeader = () => {
             {/* Nav Bar */}
             <div className="relative z-50 max-w-full sm:max-w-[1140.2px] h-auto sm:h-[56px] lg:h-[68.6px] mx-auto flex justify-center px-4 pt-3 mb-0">
                 <div className="bg-[#112b38] text-white w-full rounded-xl sm:rounded-xl lg:rounded-2xl px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-3 lg:py-5 shadow-lg sm:shadow-xl lg:shadow-2xl">
-                    <div className="flex items-center justify-center gap-2 sm:gap-4 md:gap-6 lg:gap-10 xl:gap-12">
+
+                    {/* Desktop Nav */}
+                    <div className="hidden sm:flex items-center justify-center gap-2 sm:gap-4 md:gap-6 lg:gap-10 xl:gap-12">
                         <NavItem label={t.home} active={pathname === '/'} icon={FaHome} path='/' showIcon={true} />
                         <Divider className='text-orange-500' />
                         <NavItem label={t.events} active={pathname === '/event' || pathname?.startsWith('/event/')} path='/event' />
@@ -131,15 +134,71 @@ const NavSearchHeader = () => {
                         <Divider className='text-orange-500' />
                         <NavItem label={t.helpCenter} active={pathname === '/help'} path='/help' />
                     </div>
+
+                    {/* Mobile Nav */}
+                    <div className="flex sm:hidden items-center justify-between">
+                        <Link href="/" className="text-white font-bold text-sm tracking-wide">
+                            Oshaia
+                        </Link>
+                        <button
+                            onClick={() => setMobileMenuOpen(prev => !prev)}
+                            className="text-white p-1 rounded-md hover:bg-white/10 transition-colors"
+                            aria-label="Toggle menu"
+                        >
+                            {mobileMenuOpen ? (
+                                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                            ) : (
+                            <Menu className="w-5 h-5" />
+                            )}
+                        </button>
+                    </div>
                 </div>
             </div>
+
+            {/* Mobile Dropdown Menu */}
+            {mobileMenuOpen && (
+                <div className="relative z-50 sm:hidden mx-4 mt-1 bg-[#112b38] rounded-xl shadow-xl overflow-hidden">
+                    {[
+                        { label: t.home, path: '/', active: pathname === '/' },
+                        { label: t.events, path: '/event', active: pathname === '/event' || pathname?.startsWith('/event/') },
+                        { label: t.aboutUs, path: '/about', active: pathname === '/about' },
+                        { label: t.helpCenter, path: '/help', active: pathname === '/help' },
+                    ].map((item, i) => (
+                        <Link
+                            key={i}
+                            href={item.path}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className={`block px-5 py-3 text-sm font-semibold border-b border-white/10 last:border-0 transition-colors ${
+                                item.active ? 'text-[#c89c6b]' : 'text-white hover:text-[#c89c6b] hover:bg-white/5'
+                            }`}
+                        >
+                            {item.label}
+                        </Link>
+                    ))}
+                    {/* Mobile auth buttons */}
+                    <div className="flex gap-2 px-4 py-3">
+                        <button
+                            className="flex-1 bg-transparent border border-[#c89c6b] text-[#c89c6b] rounded-lg py-2 text-xs font-semibold"
+                            onClick={() => { setAuthMode('login'); setIsAuthModalOpen(true); setMobileMenuOpen(false) }}
+                        >
+                            {t.login}
+                        </button>
+                        <button
+                            className="flex-1 bg-[#c89c6b] text-[#112b38] rounded-lg py-2 text-xs font-semibold"
+                            onClick={() => { setAuthMode('signup'); setIsAuthModalOpen(true); setMobileMenuOpen(false) }}
+                        >
+                            {t.signUp}
+                        </button>
+                    </div>
+                </div>
+            )}
 
             {/* Blue Strip */}
 
             {/* Search Bar */}
-            <div className="relative z-40 mt-4 sm:-mt-6 md:-mt-8 box-border max-w-full sm:max-w-[1230.7px] h-auto lg:h-[130px] mx-auto px-4">
-                <div className="!pt-4 sm:!pt-12 bg-white rounded-xl sm:rounded-xl lg:rounded-2xl h-auto lg:h-[123px] mt-2 w-full shadow-md sm:shadow-lg border border-gray-100 px-4 sm:px-4 md:px-6 lg:px-8 xl:px-10 py-4 sm:py-4 lg:py-6">
-                    <div className="flex flex-col lg:flex-row items-center justify-center gap-3 sm:gap-4 lg:gap-6">
+            <div className="relative z-40 mt-2 sm:-mt-6 md:-mt-8 box-border max-w-full sm:max-w-[1230.7px] h-auto lg:h-[130px] mx-auto px-4">
+                <div className="!pt-3 sm:!pt-12 bg-white rounded-xl sm:rounded-xl lg:rounded-2xl h-auto lg:h-[123px] mt-2 w-full shadow-md sm:shadow-lg border border-gray-100 px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10 py-3 sm:py-4 lg:py-6">
+                    <div className="flex flex-col lg:flex-row items-center justify-center gap-2 sm:gap-4 lg:gap-6">
                         {/* Search input with calendar */}
                         <div className="relative w-full lg:w-[436px] flex-shrink-0" ref={calendarRef}>
                             <div className={`flex items-center gap-2 sm:gap-2 lg:gap-3 border border-[#c89c6b] rounded-full px-3 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-2 lg:py-3 h-[42px] sm:h-[44px] lg:h-[44.8px] transition-colors`}>
@@ -191,9 +250,9 @@ const NavSearchHeader = () => {
                         </div>
 
                         {/* Right Actions */}
-                        <div className="flex items-center justify-between lg:justify-end gap-2 sm:gap-2 lg:gap-3 flex-shrink-0 flex-wrap sm:flex-nowrap w-full lg:w-auto">
-                            {/* My Account */}
-                            <div className="relative" ref={profileRef}>
+                        <div className="flex items-center justify-between lg:justify-end gap-1.5 sm:gap-2 lg:gap-3 flex-shrink-0 w-full lg:w-auto">
+                            {/* My Account - hidden on mobile */}
+                            <div className="relative hidden sm:block" ref={profileRef}>
                                 <div className="flex items-center h-[42px] sm:h-[44px] lg:h-[44.8px] gap-0">
                                     <Link href="/account" className="flex items-center gap-1 text-xs sm:text-xs lg:text-sm text-gray-700 hover:text-[#c89c6b] transition-colors pl-2 py-1.5 h-full whitespace-nowrap">
                                         <User className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -227,8 +286,8 @@ const NavSearchHeader = () => {
                                 )}
                             </div>
 
-                            {/* Login / Sign Up */}
-                            <div className="flex">
+                            {/* Login / Sign Up - hidden on mobile, shown in mobile menu */}
+                            <div className="hidden sm:flex">
                                 <button className="bg-transparent border-2 border-[#112b38] text-[#112b38] hover:bg-[#112b38] hover:text-[#c89c6b] hover:border-[#112b38] px-3 sm:px-3 lg:px-5 rounded-l-lg text-xs sm:text-xs lg:text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg whitespace-nowrap h-[42px] sm:h-[44px] lg:h-[44.8px]"
                                     onClick={() => { setAuthMode('login'); setIsAuthModalOpen(true) }}>
                                     {t.login}

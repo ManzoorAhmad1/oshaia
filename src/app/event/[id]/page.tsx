@@ -289,7 +289,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
             <div className="relative min-h-screen mt-8">
                 {/* Main Content */}
-                <div className="relative z-10 max-w-[89%] mx-auto px-4 sm:px-6 md:px-8 lg:px-16 pb-6 sm:pb-8 md:pb-10">
+                <div className="relative z-10 max-w-[1230px] mx-auto px-4 sm:px-6 lg:px-8 pb-6 sm:pb-8 md:pb-10">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
                         {/* Left Column - Main Content */}
                         <div className="lg:col-span-2 space-y-6">
@@ -400,31 +400,29 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             {/* Tab Content */}
                             <div key={activeTab} className="animate-slide-up">                            {/* Ticket Selection - with ref */}
                             {activeTab === 'tickets' && <div ref={ticketsRef} id="tickets-section">
-                                <div className="p-4 sm:p-6">
+                                <div className="px-0 py-4">
                                     <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-white">{t.chooseYourTickets}</h2>
-                                    <div className="space-y-4">
+                                    <div className="space-y-3">
                                         {event.tickets.map((ticket) => (
                                             <div key={ticket.id} className="bg-gray-100 rounded-lg overflow-hidden">
-                                                {/* Main Ticket Row */}
-                                                <div className="px-4 py-2 flex flex-col sm:flex-row items-start sm:items-center justify-between">
+                                                {/* Main Ticket Row - always horizontal */}
+                                                <div className="px-3 sm:px-4 py-2 flex flex-row items-center justify-between gap-2">
                                                     {/* Ticket Name */}
-                                                    <Text className="font-bold text-sm text-[#112b38] min-w-[120px] max-w-[120px] whitespace-nowrap" title={ticket.name}>
-                                                        {ticket.name.length > 20 ? ticket.name.substring(0, 18) + '...' : ticket.name}
+                                                    <Text className="font-bold text-xs sm:text-sm text-[#112b38] w-[80px] sm:w-[120px] flex-shrink-0 truncate" title={ticket.name}>
+                                                        {ticket.name}
                                                     </Text>
 
                                                     {/* Price */}
-                                                    <div className="font-bold text-lg text-[#112b38] min-w-[90px] text-left">
+                                                    <div className="font-bold text-sm sm:text-lg text-[#112b38] w-[70px] sm:w-[90px] flex-shrink-0">
                                                         Rs{ticket.price.toLocaleString()}
                                                     </div>
 
-                                                    {/* Offer Text */}
-                                                    <div className="text-[#112b38] font-semibold text-sm min-w-[140px] max-w-[140px]">
-                                                        <span className="truncate block" title={`${ticket.offerEndsIn} 8 ${ticket.days.toLowerCase()}`}>
-                                                            {ticket.offerEndsIn} 8 {ticket.days.toLowerCase()}
-                                                        </span>
+                                                    {/* Offer Text - hidden on xs, shown sm+ */}
+                                                    <div className="hidden sm:block text-[#112b38] font-semibold text-sm w-[140px] flex-shrink-0 truncate" title={`${ticket.offerEndsIn} 8 ${ticket.days.toLowerCase()}`}>
+                                                        {ticket.offerEndsIn} 8 {ticket.days.toLowerCase()}
                                                     </div>
 
-                                                    <div className="flex items-center gap-3">
+                                                    <div className="flex items-center gap-2 flex-shrink-0 ml-auto">
                                                         {/* Accordion Toggle Button */}
                                                         <button
                                                             onClick={() => setSelectedTicket(selectedTicket === ticket.id ? null : ticket.id)}
@@ -435,10 +433,10 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                             </svg>
                                                         </button>
 
-                                                        {/* Quantity Selector with Counter */}
-                                                        <div className="flex items-center gap-2">
+                                                        {/* Quantity Selector */}
+                                                        <div className="flex items-center gap-1 sm:gap-2">
                                                             <button
-                                                                className={`w-6 h-6 border-2 border-gray-300 rounded flex items-center justify-center transition-all duration-300 font-bold text-base ${ticketQuantities[ticket.id] === 0
+                                                                className={`w-5 h-5 sm:w-6 sm:h-6 border-2 border-gray-300 rounded flex items-center justify-center transition-all duration-300 font-bold text-sm sm:text-base ${ticketQuantities[ticket.id] === 0
                                                                     ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400'
                                                                     : 'hover:bg-[#112b38] hover:text-white hover:border-[#112b38] text-gray-700'
                                                                     }`}
@@ -448,12 +446,12 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                                 -
                                                             </button>
 
-                                                            <div className="w-12 text-center font-semibold text-lg">
+                                                            <div className="w-8 sm:w-12 text-center font-semibold text-base sm:text-lg">
                                                                 {ticketQuantities[ticket.id] !== undefined ? ticketQuantities[ticket.id] : 0}
                                                             </div>
 
                                                             <button
-                                                                className={`w-6 h-6 border-2 border-[#c89c6b] rounded flex items-center justify-center transition-all duration-300 font-bold text-base ${ticketQuantities[ticket.id] === Math.min(20, ticket.available)
+                                                                className={`w-5 h-5 sm:w-6 sm:h-6 border-2 border-[#c89c6b] rounded flex items-center justify-center transition-all duration-300 font-bold text-sm sm:text-base ${ticketQuantities[ticket.id] === Math.min(20, ticket.available)
                                                                     ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400 border-gray-300'
                                                                     : 'text-[#112b38] hover:bg-[#c89c6b] hover:text-white'
                                                                     }`}
@@ -468,13 +466,9 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
                                                 {/* Accordion Content */}
                                                 {selectedTicket === ticket.id && (
-                                                    <div className="px-4 py-3 bg-white border-t border-gray-200">
-                                                        <p className="text-sm text-gray-600">
-                                                            {ticket.description}
-                                                        </p>
-                                                        <p className="text-xs text-[#112b38] mt-2">
-                                                            Only {ticket.available} tickets available (Max 20 per person)
-                                                        </p>
+                                                    <div className="px-3 sm:px-4 py-3 bg-white border-t border-gray-200">
+                                                        <p className="text-sm text-gray-600">{ticket.description}</p>
+                                                        <p className="text-xs text-[#112b38] mt-2">Only {ticket.available} tickets available (Max 20 per person)</p>
                                                     </div>
                                                 )}
                                             </div>
