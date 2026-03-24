@@ -847,7 +847,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         className="relative rounded-xl overflow-hidden cursor-pointer"
                                         style={{
                                             height: '280px',
-                                            border: '1px solid rgba(0,0,0,0.08)',
+                                            border: i === artistCarouselIndex ? '1px solid rgba(200,156,107,0.35)' : '1px solid rgba(17,43,56,0.12)',
                                         }}
                                     >
                                         {/* Background image */}
@@ -861,19 +861,19 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         {/* Progress bar on active card */}
                                         {i === artistCarouselIndex && (
                                             <>
-                                                <div className="absolute bottom-0 left-0 h-[4px] bg-white/20 z-20 w-full" />
-                                                <div className="absolute bottom-0 left-0 h-[4px] bg-white/80 z-20" style={{ width: `${artistProgress}%`, transition: 'width 0.05s linear' }} />
+                                                <div className="absolute bottom-0 left-0 h-[4px] z-20 w-full" style={{ background: 'rgba(200,156,107,0.25)' }} />
+                                                <div className="absolute bottom-0 left-0 h-[4px] z-20" style={{ width: `${artistProgress}%`, background: '#c89c6b', transition: 'width 0.05s linear' }} />
                                             </>
                                         )}
                                         {/* Overlay */}
                                         <div
                                             className="absolute inset-0"
-                                            style={{ background: 'linear-gradient(0deg, rgb(0,0,0) 25%, transparent 100%)' }}
+                                            style={{ background: 'linear-gradient(0deg, rgba(17,43,56,0.82) 20%, rgba(17,43,56,0.25) 60%, transparent 100%)' }}
                                         />
                                         {/* Content */}
                                         <div className="absolute bottom-0 left-0 right-0 p-4">
                                             <h2 className="text-white font-extrabold text-base mb-0.5 leading-tight">{artist.name}</h2>
-                                            <span className="text-white/80 text-xs font-bold block mb-2">{artist.role}</span>
+                                            <span className="text-[#c89c6b] text-xs font-bold block mb-2">{artist.role}</span>
                                             {i === artistCarouselIndex && (
                                                 <p className="text-white/70 text-[11px] leading-snug line-clamp-2 mb-2">{artist.bio}</p>
                                             )}
@@ -945,7 +945,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             <div className="absolute inset-0" style={{ background: 'linear-gradient(0deg, #0d0d0d 0%, rgba(0,0,0,0.3) 60%, transparent 100%)' }} />
                             <div className="absolute bottom-5 left-6">
                                 <h2 className="text-white font-extrabold text-2xl leading-tight mb-1">{selectedArtist.name}</h2>
-                                <span className="text-white/60 text-sm font-semibold tracking-wide uppercase">{selectedArtist.role}</span>
+                                <span className="text-[#c89c6b] text-sm font-semibold tracking-wide uppercase">{selectedArtist.role}</span>
                             </div>
                         </div>
                         {/* Bio */}
