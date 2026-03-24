@@ -802,7 +802,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             ))}
 
                             {/* Advertisement */}
-                            <div className="bg-gray-200 rounded-xl p-8 sm:p-12 shadow-md border border-gray-300 flex items-center justify-center min-h-[300px] sm:min-h-[400px]">
+                            <div className="bg-gray-200 rounded-xl p-8 sm:p-12 shadow-md border border-gray-300 flex items-center justify-center min-h-[570px]">
                                 <div className="text-center">
                                     <div className="text-4xl sm:text-6xl font-bold text-gray-400 mb-2">{t.ads}</div>
                                     <div className="text-xs sm:text-sm text-gray-500">{t.advertisementSpace}</div>
@@ -816,7 +816,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
             </div>
 
             {/* Artist Slider & Portrait Section */}
-            <div className="w-full bg-white py-10">
+            <div className="w-full bg-white ">
                 <div className="max-w-[1230px] mx-auto px-4 sm:px-6 lg:px-8">
                     <span className="block text-gray-400 text-xs font-bold uppercase tracking-widest mb-4">Performers</span>
 
