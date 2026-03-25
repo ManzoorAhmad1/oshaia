@@ -430,14 +430,19 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
             {/* Background image - matches reference: fixed height, dark inside overlay, gradient below */}
             <div
-                className="absolute top-0 left-0 right-0 h-[700px] -z-10 pointer-events-none overflow-hidden"
+                className="absolute top-0 left-0 right-0 -z-10 pointer-events-none overflow-hidden"
                 style={{
                     backgroundImage: `url(${currentSlideData.type === 'video' ? currentSlideData.bgImage : currentSlideData.url})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'top center',
                     backgroundRepeat: 'no-repeat',
-                    filter: 'blur(2px)',
-                    transform: 'scale(1.05)',
+                    filter: 'blur(9px)',
+                    WebkitFilter: 'blur(9px)',
+                    transform: 'scale(1.1)',
+                    height: '717px',
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'flex-end',
                 }}
             >
                 {/* inside overlay – ~55% black opacity */}
