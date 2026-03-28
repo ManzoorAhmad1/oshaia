@@ -329,7 +329,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     const incrementQuantity = (ticketId: number, maxAvailable: number) => {
         setTicketQuantities(prev => {
             const currentQty = prev[ticketId] || 0;
-            const newQty = Math.min(currentQty + 1, Math.min(20, maxAvailable));
+            const newQty = Math.min(currentQty + 1, 20);
             return {
                 ...prev,
                 [ticketId]: newQty
@@ -605,19 +605,19 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                 {event.tickets.map((ticket) => (
                                                     <div key={ticket.id} className="bg-gray-100 rounded-lg overflow-hidden">
                                                         {/* Main Ticket Row - always horizontal */}
-                                                        <div className="px-3 sm:px-4 py-2 flex flex-row items-center justify-between gap-2">
+                                                        <div className="px-3 sm:px-4 py-2 flex flex-row items-center gap-3 sm:gap-4">
                                                             {/* Ticket Name */}
-                                                            <Text className="font-bold text-xs sm:text-sm text-[#112b38] w-[80px] sm:w-[120px] flex-shrink-0 truncate" title={ticket.name}>
+                                                            <Text className="font-bold text-xs sm:text-sm text-[#112b38] flex-shrink-0 whitespace-nowrap min-w-[110px] sm:min-w-[140px]">
                                                                 {ticket.name}
                                                             </Text>
 
                                                             {/* Price */}
-                                                            <div className="font-bold text-sm sm:text-lg text-[#112b38] w-[70px] sm:w-[90px] flex-shrink-0">
+                                                            <div className="font-bold text-sm sm:text-lg text-[#112b38] flex-shrink-0 whitespace-nowrap min-w-[70px] sm:min-w-[90px]">
                                                                 Rs{ticket.price.toLocaleString()}
                                                             </div>
 
                                                             {/* Offer Text - hidden on xs, shown sm+ */}
-                                                            <div className="hidden sm:block text-[#112b38] font-semibold text-sm w-[140px] flex-shrink-0 truncate" title={`${ticket.offerEndsIn} 8 ${ticket.days.toLowerCase()}`}>
+                                                            <div className="hidden sm:block font-semibold text-sm flex-shrink-0 whitespace-nowrap text-[#c89c6b] hover:text-[#112b38] transition-colors duration-200">
                                                                 {ticket.offerEndsIn} 8 {ticket.days.toLowerCase()}
                                                             </div>
 
@@ -627,7 +627,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                                     onClick={() => setSelectedTicket(selectedTicket === ticket.id ? null : ticket.id)}
                                                                     className="w-6 h-6 rounded-full bg-[#112b38] flex items-center justify-center hover:bg-[#c89c6b] hover:scale-110 transition-all duration-300"
                                                                 >
-                                                                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                                                                     </svg>
                                                                 </button>
@@ -650,12 +650,12 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                                     </div>
 
                                                                     <button
-                                                                        className={`w-5 h-5 sm:w-6 sm:h-6 border-2 border-[#c89c6b] rounded flex items-center justify-center transition-all duration-300 font-bold text-sm sm:text-base ${ticketQuantities[ticket.id] === Math.min(20, ticket.available)
+                                                                        className={`w-5 h-5 sm:w-6 sm:h-6 border-2 border-[#c89c6b] rounded flex items-center justify-center transition-all duration-300 font-bold text-sm sm:text-base ${ticketQuantities[ticket.id] === 20
                                                                             ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400 border-gray-300'
                                                                             : 'text-[#112b38] hover:bg-[#c89c6b] hover:text-white'
                                                                             }`}
                                                                         onClick={() => incrementQuantity(ticket.id, ticket.available)}
-                                                                        disabled={ticketQuantities[ticket.id] === Math.min(20, ticket.available)}
+                                                                        disabled={ticketQuantities[ticket.id] === 20}
                                                                     >
                                                                         +
                                                                     </button>
@@ -679,7 +679,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
                                 {/* Description Section */}
                                 <div ref={descriptionRef} id="description-section">
-                                    <div className="bg-white border-t border-b border-gray-200 mt-4">
+                                    <div className="bg-white mt-4">
                                         {/* Collapsible Header */}
                                         <button
                                             onClick={() => setIsDescriptionCollapsed(!isDescriptionCollapsed)}
@@ -773,7 +773,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
                                 {/* More Info Section */}
                                 <div ref={moreInfoRef} id="moreInfo-section">
-                                    <div className="bg-white border-t border-b border-gray-200 mt-4">
+                                    <div className="bg-white mt-4">
                                         {/* Collapsible Header */}
                                         <button
                                             onClick={() => setIsMoreInfoCollapsed(!isMoreInfoCollapsed)}
@@ -906,27 +906,27 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             {/* Share on Social */}
                             <div className="max-w-lg mx-auto bg-white rounded-xl p-4 sm:p-5 shadow-lg border border-gray-100/40">
                                 {/* Date and Time Header */}
-                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 text-xs sm:text-sm text-gray-600">
+                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 text-xs sm:text-sm text-[#c89c6b]">
                                     <div className="flex items-center gap-2">
-                                        <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500" />
+                                        <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#c89c6b]" />
                                         <span className="font-medium whitespace-nowrap">Sat 18 Oct</span>
                                     </div>
                                     <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm">
-                                        <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500 flex-shrink-0" />
+                                        <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#c89c6b] flex-shrink-0" />
                                         <span className="whitespace-nowrap">{t.doors}: 20:00</span>
                                         <span className="whitespace-nowrap">{t.start}: 20:00</span>
                                     </div>
                                 </div>
 
                                 {/* Countdown Timer Section */}
-                                <div className="flex flex-col sm:flex-row items-center justify-between bg-blue-50 rounded-lg p-3 mt-3 sm:mt-4 gap-3 sm:gap-0">
+                                <div className="flex flex-col sm:flex-row items-center justify-between rounded-lg p-3 mt-3 sm:mt-4 gap-3 sm:gap-0" style={{background:'rgba(200,156,107,0.10)'}}>
                                     <div className="flex items-center gap-2">
-                                        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 flex-shrink-0">
+                                        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center text-[#c89c6b] flex-shrink-0" style={{background:'rgba(200,156,107,0.18)'}}>
                                             <Timer className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                         </div>
                                         <div>
-                                            <p className="text-blue-600 font-semibold text-xs sm:text-sm whitespace-nowrap">{t.buyNow}</p>
-                                            <p className="text-[10px] sm:text-xs text-gray-500 whitespace-nowrap">{t.saleEndsIn}</p>
+                                            <p className="text-[#c89c6b] font-semibold text-xs sm:text-sm whitespace-nowrap">{t.buyNow}</p>
+                                            <p className="text-[10px] sm:text-xs text-[#c89c6b]/70 whitespace-nowrap">{t.saleEndsIn}</p>
                                         </div>
                                     </div>
 
@@ -938,8 +938,8 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                             { value: "17", label: t.seconds },
                                         ].map((item, index) => (
                                             <div key={index}>
-                                                <p className="text-base sm:text-lg font-bold text-gray-800">{item.value}</p>
-                                                <p className="text-[10px] sm:text-xs text-gray-500 whitespace-nowrap">{item.label}</p>
+                                                <p className="text-base sm:text-lg font-bold text-[#112b38]">{item.value}</p>
+                                                <p className="text-[10px] sm:text-xs text-[#c89c6b] whitespace-nowrap">{item.label}</p>
                                             </div>
                                         ))}
                                     </div>
@@ -948,7 +948,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                 {/* Total Amount and Book Now Button */}
                                 <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0 mt-4 sm:mt-5">
                                     <div className="text-center sm:text-left">
-                                        <p className="text-xs sm:text-sm text-gray-500 whitespace-nowrap">{t.totalAmount}</p>
+                                        <p className="text-xs sm:text-sm text-[#c89c6b] whitespace-nowrap">{t.totalAmount}</p>
                                         <p className="text-lg sm:text-xl font-bold text-red-500 whitespace-nowrap">Rs {calculateTotal().toLocaleString()}</p>
                                     </div>
                                     <button 
@@ -963,7 +963,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                 <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 mt-4 pt-4 border-t border-gray-100">
                                     <button 
                                         onClick={() => setIsAuthModalOpen(true)}
-                                        className="flex items-center gap-1 sm:gap-1.5 hover:text-[#112b38] transition-all duration-300 text-xs sm:text-sm text-gray-600"
+                                        className="flex items-center gap-1 sm:gap-1.5 hover:text-[#112b38] transition-all duration-300 text-xs sm:text-sm text-[#c89c6b]"
                                     >
                                         <FaCalendarAlt className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                         <span className="whitespace-nowrap hidden sm:inline">{t.addToCalendar}</span>
@@ -971,7 +971,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                     </button>
                                     <button 
                                         onClick={() => setIsAuthModalOpen(true)}
-                                        className="flex items-center gap-1 sm:gap-1.5 hover:text-[#112b38] transition-all duration-300 text-xs sm:text-sm text-gray-600"
+                                        className="flex items-center gap-1 sm:gap-1.5 hover:text-[#112b38] transition-all duration-300 text-xs sm:text-sm text-[#c89c6b]"
                                     >
                                         <FaShareAlt className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                         <span className="whitespace-nowrap hidden sm:inline">{t.shareEvent}</span>
