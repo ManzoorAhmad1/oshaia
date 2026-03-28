@@ -1,0 +1,404 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import {
+    ChevronLeft, ChevronDown, ChevronUp,
+    Calendar, Clock, MapPin, Mail, Phone,
+    CreditCard, Ticket, ShieldCheck, Timer
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import NavSearchHeader from '@/components/event/NavSearchHeader';
+
+const mockCheckout = {
+    eventImage: '/Cover%20-/59069_upload68daa2739f40c_1759158899-0-en1759158912.jpg.jpeg',
+    eventName: 'Star for Mental Health',
+    venue: 'Coca-Cola Arena in Dubai',
+    venueShort: 'Venue',
+    date: 'Thu 12 Feb',
+    time: '18:30',
+    ticketType: 'Lower Tier Gold',
+    row: 'J',
+    seat: '165',
+    quantity: 1,
+    ticketPrice: 98.90,
+    processingFee: 30,
+    currency: 'USD',
+    email: 'mugonhavish94@gmail.com',
+    phone: '+2305826 7091',
+};
+
+type PaymentMethod = 'card' | 'juice' | 'mytblink' | null;
+
+export default function CheckoutPage({ params }: { params: { id: string } }) {
+    const router = useRouter();
+    const [selectedPayment, setSelectedPayment] = useState<PaymentMethod>(null);
+    const [summaryOpen, setSummaryOpen] = useState(true);
+    const [timeLeft, setTimeLeft] = useState(13 * 60 - 1); // 12:59 in seconds
+    const [qty, setQty] = useState(mockCheckout.quantity);
+    const [agreed, setAgreed] = useState(false);
+
+    // Countdown timer
+    useEffect(() => {
+        if (timeLeft <= 0) return;
+        const timer = setInterval(() => setTimeLeft(prev => prev - 1), 1000);
+        return () => clearInterval(timer);
+    }, [timeLeft]);
+
+    const formatTime = (secs: number) => {
+        const m = Math.floor(secs / 60).toString().padStart(2, '0');
+        const s = (secs % 60).toString().padStart(2, '0');
+        return `${m}:${s}`;
+    };
+
+    const subtotal = mockCheckout.ticketPrice * qty;
+    const total = subtotal + mockCheckout.processingFee / 30; // convert Rs to USD approx
+
+    return (
+        <div className="min-h-screen bg-gray-50">
+            <NavSearchHeader />
+
+            <div className="max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+
+                {/* Back Button */}
+                <button
+                    onClick={() => router.back()}
+                    className="flex items-center gap-1 text-sm text-gray-600 hover:text-[#112b38] transition-colors mb-6 group"
+                >
+                    <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+                    <span className="font-medium">Check out</span>
+                </button>
+
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-10">
+
+                    {/* ===== LEFT COLUMN ===== */}
+                    <div className="lg:col-span-2 space-y-4">
+
+                        {/* Event Image Card */}
+                        <div className="rounded-xl overflow-hidden shadow-md border border-gray-200 bg-white">
+                            <div className="relative w-full h-[200px] sm:h-[230px]">
+                                <img
+                                    src={mockCheckout.eventImage}
+                                    alt={mockCheckout.eventName}
+                                    className="w-full h-full object-cover"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                            </div>
+
+                            {/* Event Info */}
+                            <div className="p-4 space-y-2">
+                                <h2 className="font-bold text-[#112b38] text-base sm:text-lg leading-tight">
+                                    {mockCheckout.eventName}
+                                </h2>
+                                <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                                    <MapPin className="w-3.5 h-3.5 text-[#c89c6b] flex-shrink-0" />
+                                    <span>{mockCheckout.venue}</span>
+                                </div>
+                                <div className="flex items-center gap-4 text-xs text-gray-500">
+                                    <div className="flex items-center gap-1.5">
+                                        <Calendar className="w-3.5 h-3.5 text-[#c89c6b] flex-shrink-0" />
+                                        <span>{mockCheckout.date}</span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                        <Clock className="w-3.5 h-3.5 text-[#c89c6b] flex-shrink-0" />
+                                        <span>{mockCheckout.time}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Divider */}
+                            <div className="border-t border-dashed border-gray-200 mx-4" />
+
+                            {/* Ticket Row */}
+                            <div className="px-4 py-3 flex items-center justify-between gap-3">
+                                <div className="flex items-start gap-2">
+                                    <Ticket className="w-4 h-4 text-[#c89c6b] mt-0.5 flex-shrink-0" />
+                                    <div>
+                                        <p className="font-semibold text-[#112b38] text-sm">
+                                            {mockCheckout.ticketType}
+                                        </p>
+                                        <p className="text-xs text-gray-500">
+                                            Row: {mockCheckout.row} &nbsp; Seat: {mockCheckout.seat}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Quantity control */}
+                                <div className="flex items-center gap-2 border border-gray-200 rounded-lg px-2 py-1 bg-gray-50">
+                                    <button
+                                        onClick={() => setQty(q => Math.max(1, q - 1))}
+                                        className="w-5 h-5 flex items-center justify-center text-gray-500 hover:text-[#112b38] font-bold text-base transition-colors"
+                                    >
+                                        -
+                                    </button>
+                                    <span className="text-sm font-semibold text-[#112b38] min-w-[20px] text-center">
+                                        x{qty}
+                                    </span>
+                                    <button
+                                        onClick={() => setQty(q => Math.min(20, q + 1))}
+                                        className="w-5 h-5 flex items-center justify-center text-gray-500 hover:text-[#112b38] font-bold text-base transition-colors"
+                                    >
+                                        +
+                                    </button>
+                                    <ChevronDown className="w-4 h-4 text-gray-400" />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Ticket Delivery Method */}
+                        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 space-y-2">
+                            <div className="flex items-center gap-2 mb-2">
+                                <Mail className="w-4 h-4 text-[#c89c6b]" />
+                                <h3 className="font-semibold text-[#112b38] text-sm">Ticket delivery method</h3>
+                            </div>
+                            <p className="text-xs text-gray-500 leading-relaxed">
+                                Once your purchase is complete, you will receive your tickets 24 hours before the event at:
+                            </p>
+                            <div className="flex flex-col sm:flex-row gap-1 sm:gap-3 text-xs text-gray-600 font-medium">
+                                <span className="flex items-center gap-1">
+                                    <Mail className="w-3 h-3 text-[#c89c6b]" />
+                                    {mockCheckout.email}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                    <Phone className="w-3 h-3 text-[#c89c6b]" />
+                                    {mockCheckout.phone}
+                                </span>
+                            </div>
+                            <p className="text-xs pt-1">
+                                <a href="/terms" className="text-[#c89c6b] hover:text-[#112b38] underline transition-colors">
+                                    the Rules and Regulations of the venue
+                                </a>
+                                <span className="text-gray-400"> of event for customers</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* ===== RIGHT COLUMN ===== */}
+                    <div className="lg:col-span-3 space-y-4">
+
+                        {/* Payment Methods */}
+                        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 sm:p-5">
+                            <h3 className="font-bold text-[#112b38] text-base sm:text-lg mb-4">
+                                Select Your Payment Methods
+                            </h3>
+
+                            <div className="space-y-3">
+
+                                {/* Card Option */}
+                                <label
+                                    className={`flex items-center justify-between gap-3 border rounded-xl px-4 py-3 cursor-pointer transition-all duration-200 ${selectedPayment === 'card'
+                                        ? 'border-[#c89c6b] bg-[#c89c6b]/5'
+                                        : 'border-gray-200 hover:border-[#c89c6b]/50'
+                                        }`}
+                                    onClick={() => setSelectedPayment('card')}
+                                >
+                                    <div className="flex items-center gap-3">
+                                        {/* Radio circle */}
+                                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${selectedPayment === 'card' ? 'border-[#c89c6b]' : 'border-gray-300'}`}>
+                                            {selectedPayment === 'card' && (
+                                                <div className="w-2.5 h-2.5 rounded-full bg-[#c89c6b]" />
+                                            )}
+                                        </div>
+
+                                        {/* Card brand icons */}
+                                        <div className="flex items-center gap-1.5">
+                                            {/* Visa */}
+                                            <div className="bg-[#1a1f71] text-white text-[9px] font-bold px-2 py-0.5 rounded italic tracking-wider">VISA</div>
+                                            {/* Mastercard */}
+                                            <div className="flex -space-x-1.5">
+                                                <div className="w-5 h-5 rounded-full bg-[#EB001B] opacity-90" />
+                                                <div className="w-5 h-5 rounded-full bg-[#F79E1B] opacity-90" />
+                                            </div>
+                                            {/* Amex */}
+                                            <div className="bg-[#2E77BC] text-white text-[8px] font-bold px-1.5 py-0.5 rounded tracking-tight">AMEX</div>
+                                        </div>
+
+                                        <span className="text-xs sm:text-sm text-gray-600">Add credit or debit cards</span>
+                                    </div>
+                                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${selectedPayment === 'card' ? 'rotate-180' : ''}`} />
+                                </label>
+
+                                {/* Card input fields - expanded */}
+                                {selectedPayment === 'card' && (
+                                    <div className="border border-[#c89c6b]/30 rounded-xl p-4 space-y-3 bg-[#c89c6b]/5">
+                                        <div>
+                                            <label className="block text-xs font-medium text-gray-600 mb-1">Card Number</label>
+                                            <div className="flex items-center border border-gray-300 rounded-lg px-3 py-2 bg-white gap-2">
+                                                <CreditCard className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                                                <input
+                                                    type="text"
+                                                    placeholder="0000 0000 0000 0000"
+                                                    className="flex-1 text-sm outline-none bg-transparent placeholder:text-gray-400"
+                                                    maxLength={19}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <div>
+                                                <label className="block text-xs font-medium text-gray-600 mb-1">Expiry Date</label>
+                                                <input
+                                                    type="text"
+                                                    placeholder="MM / YY"
+                                                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-[#c89c6b] bg-white"
+                                                    maxLength={7}
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-medium text-gray-600 mb-1">CVV</label>
+                                                <input
+                                                    type="text"
+                                                    placeholder="000"
+                                                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-[#c89c6b] bg-white"
+                                                    maxLength={4}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-medium text-gray-600 mb-1">Cardholder Name</label>
+                                            <input
+                                                type="text"
+                                                placeholder="Name on card"
+                                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-[#c89c6b] bg-white"
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Juice Option */}
+                                <label
+                                    className={`flex items-center justify-between gap-3 border rounded-xl px-4 py-3 cursor-pointer transition-all duration-200 ${selectedPayment === 'juice'
+                                        ? 'border-[#c89c6b] bg-[#c89c6b]/5'
+                                        : 'border-gray-200 hover:border-[#c89c6b]/50'
+                                        }`}
+                                    onClick={() => setSelectedPayment('juice')}
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${selectedPayment === 'juice' ? 'border-[#c89c6b]' : 'border-gray-300'}`}>
+                                            {selectedPayment === 'juice' && (
+                                                <div className="w-2.5 h-2.5 rounded-full bg-[#c89c6b]" />
+                                            )}
+                                        </div>
+                                        {/* Juice logo text */}
+                                        <div className="flex items-center gap-1">
+                                            <div className="bg-[#00A859] text-white text-xs font-black px-2.5 py-0.5 rounded-lg italic tracking-wide">juice</div>
+                                        </div>
+                                        <span className="text-xs sm:text-sm text-gray-600">Juice by MCB</span>
+                                    </div>
+                                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${selectedPayment === 'juice' ? 'rotate-180' : ''}`} />
+                                </label>
+
+                                {/* MyT / Blink / MauCAS Option */}
+                                <label
+                                    className={`flex items-center justify-between gap-3 border rounded-xl px-4 py-3 cursor-pointer transition-all duration-200 ${selectedPayment === 'mytblink'
+                                        ? 'border-[#c89c6b] bg-[#c89c6b]/5'
+                                        : 'border-gray-200 hover:border-[#c89c6b]/50'
+                                        }`}
+                                    onClick={() => setSelectedPayment('mytblink')}
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${selectedPayment === 'mytblink' ? 'border-[#c89c6b]' : 'border-gray-300'}`}>
+                                            {selectedPayment === 'mytblink' && (
+                                                <div className="w-2.5 h-2.5 rounded-full bg-[#c89c6b]" />
+                                            )}
+                                        </div>
+                                        <div className="flex items-center gap-1.5">
+                                            <div className="bg-[#D51E49] text-white text-[9px] font-black px-2 py-0.5 rounded tracking-tight">MyT</div>
+                                            <div className="bg-[#FF6B00] text-white text-[9px] font-black px-2 py-0.5 rounded tracking-tight">blink</div>
+                                            <div className="bg-[#112b38] text-white text-[9px] font-black px-1.5 py-0.5 rounded tracking-tight">Mau<span className="text-[#c89c6b]">CAS</span></div>
+                                        </div>
+                                    </div>
+                                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${selectedPayment === 'mytblink' ? 'rotate-180' : ''}`} />
+                                </label>
+                            </div>
+                        </div>
+
+                        {/* Order Summary */}
+                        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 sm:p-5">
+                            <h3 className="font-bold text-[#112b38] text-base sm:text-lg mb-1">
+                                {mockCheckout.eventName}
+                            </h3>
+
+                            {/* Summary Toggle */}
+                            <button
+                                onClick={() => setSummaryOpen(o => !o)}
+                                className="w-full flex items-center justify-between py-2 border-b border-gray-100 text-sm font-semibold text-gray-700 hover:text-[#112b38] transition-colors"
+                            >
+                                <span>Summary</span>
+                                {summaryOpen
+                                    ? <ChevronUp className="w-4 h-4 text-gray-400" />
+                                    : <ChevronDown className="w-4 h-4 text-gray-400" />
+                                }
+                            </button>
+
+                            {summaryOpen && (
+                                <div className="space-y-2 pt-3">
+                                    <div className="flex items-center justify-between text-sm">
+                                        <span className="text-gray-500">Tickets</span>
+                                        <span className="font-medium text-[#112b38]">
+                                            {subtotal.toFixed(2)} {mockCheckout.currency}
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center justify-between text-sm">
+                                        <span className="text-gray-500">Quantity</span>
+                                        <span className="font-medium text-[#112b38]">{qty}</span>
+                                    </div>
+                                    <div className="flex items-center justify-between text-sm">
+                                        <span className="text-gray-500">Processing Fee</span>
+                                        <span className="font-medium text-[#112b38]">Rs{mockCheckout.processingFee}</span>
+                                    </div>
+                                    <div className="border-t border-dashed border-gray-200 pt-2 mt-2 flex items-center justify-between">
+                                        <span className="text-sm font-semibold text-gray-700">Total excl. VAT</span>
+                                        <span className="font-bold text-[#112b38] text-base">
+                                            {(subtotal + 1).toFixed(2)} {mockCheckout.currency}
+                                        </span>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Security badge */}
+                        <div className="flex items-center gap-2 text-xs text-gray-400 px-1">
+                            <ShieldCheck className="w-4 h-4 text-green-500 flex-shrink-0" />
+                            <span>Your payment is secured with 256-bit SSL encryption</span>
+                        </div>
+
+                        {/* PAY NOW Button */}
+                        <button
+                            disabled={!selectedPayment || !agreed}
+                            className={`w-full py-4 rounded-xl font-bold text-base tracking-wide transition-all duration-300 ${selectedPayment && agreed
+                                ? 'bg-[#112b38] hover:bg-[#1a3e52] text-white shadow-lg hover:shadow-xl hover:-translate-y-0.5'
+                                : 'bg-gray-300 text-gray-400 cursor-not-allowed'
+                                }`}
+                        >
+                            PAY NOW
+                        </button>
+
+                        {/* Terms checkbox */}
+                        <label className="flex items-center gap-2.5 cursor-pointer px-1">
+                            <div
+                                onClick={() => setAgreed(a => !a)}
+                                className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors ${agreed ? 'bg-[#c89c6b] border-[#c89c6b]' : 'border-gray-300 bg-white'}`}
+                            >
+                                {agreed && (
+                                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                )}
+                            </div>
+                            <span className="text-xs text-gray-600 text-center">
+                                I have read and agreed to the terms and conditions.
+                            </span>
+                        </label>
+
+                        {/* Time Remaining */}
+                        <div className="flex items-center justify-center gap-2 py-1">
+                            <Timer className={`w-4 h-4 ${timeLeft < 60 ? 'text-red-500' : 'text-[#c89c6b]'}`} />
+                            <span className={`text-sm font-semibold ${timeLeft < 60 ? 'text-red-500' : 'text-gray-600'}`}>
+                                Time Remaining {formatTime(timeLeft)}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}

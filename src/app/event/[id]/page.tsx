@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
     Calendar, MapPin, Clock, Share2, Heart, Bell,
     ChevronLeft, ChevronRight, User, Shield, CreditCard,
@@ -132,6 +133,7 @@ const slides = [
 
 export default function EventDetailPage({ params }: EventDetailProps) {
     const { t }: any = useLanguage();
+    const router = useRouter();
     const [selectedTicket, setSelectedTicket] = useState<number | null>(null);
     const [activeTab, setActiveTab] = useState<'tickets' | 'description' | 'moreInfo'>('tickets');
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -285,16 +287,17 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
     useEffect(() => {
         setArtistProgress(0);
+        let progress = 0;
         const step = 100 / (6000 / 50);
         const timer = setInterval(() => {
-            setArtistProgress(p => {
-                if (p + step >= 100) {
-                    clearInterval(timer);
-                    setArtistCarouselIndex(idx => idx + 1);
-                    return 0;
-                }
-                return p + step;
-            });
+            progress += step;
+            if (progress >= 100) {
+                clearInterval(timer);
+                setArtistProgress(0);
+                setArtistCarouselIndex(idx => idx + 1);
+            } else {
+                setArtistProgress(progress);
+            }
         }, 50);
         return () => clearInterval(timer);
     }, [artistCarouselIndex]);
@@ -952,8 +955,9 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         <p className="text-lg sm:text-xl font-bold text-red-500 whitespace-nowrap">Rs {calculateTotal().toLocaleString()}</p>
                                     </div>
                                     <button 
-                                        onClick={() => setIsAuthModalOpen(true)}
-                                        className="w-full sm:w-auto bg-[#c89c6b] hover:bg-[#b8885a] text-white font-semibold px-6 py-2 sm:py-2.5 rounded-lg transition-all duration-300 hover:scale-105 shadow-md hover:shadow-lg whitespace-nowrap"
+                                        onClick={() => router.push(`/event/${params.id}/checkout`)}
+                                        disabled={calculateTotal() === 0}
+                                        className={`w-full sm:w-auto font-semibold px-6 py-2 sm:py-2.5 rounded-lg transition-all duration-300 shadow-md whitespace-nowrap ${calculateTotal() === 0 ? 'bg-gray-300 text-gray-400 cursor-not-allowed' : 'bg-[#c89c6b] hover:bg-[#b8885a] text-white hover:scale-105 hover:shadow-lg'}`}
                                     >
                                         {t.bookNow}
                                     </button>
