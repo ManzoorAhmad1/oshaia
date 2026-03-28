@@ -365,6 +365,30 @@
   background: #a1a1a1;
 }
 
+/* Tab section scrollbar - visible */
+.tab-scroll-visible::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tab-scroll-visible::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.tab-scroll-visible::-webkit-scrollbar-thumb {
+  background: #c89c6b;
+  border-radius: 10px;
+}
+
+.tab-scroll-visible::-webkit-scrollbar-thumb:hover {
+  background: #b8885a;
+}
+
+.tab-scroll-visible {
+  scrollbar-width: thin;
+  scrollbar-color: #c89c6b #f1f1f1;
+}
+
 /* Animation for sponsor carousel */
 @keyframes scrollSponsors {
   0% {

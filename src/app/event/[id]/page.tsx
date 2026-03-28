@@ -537,6 +537,11 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                     </div>
                                 </div>
                             </div>
+                            <button className=" w-full flex items-center justify-end gap-1 sm:gap-1.5 hover:text-[#112b38] transition-all duration-300 text-xs sm:text-sm text-gray-600">
+                                <FaHeart className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                                <span className="whitespace-nowrap hidden sm:inline">{t.addToFavourites}</span>
+                                <span className="whitespace-nowrap sm:hidden">Favorites</span>
+                            </button>
 
                             {/* Tabs Navigation */}
                             <div className="w-full bg-white z-30">
@@ -571,7 +576,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                 </div>
                             </div>
                             {/* Tab Content - All sections visible in scrollable container */}
-                            <div ref={tabContentRef} className="space-y-8 max-h-[600px] overflow-y-auto scroll-smooth px-1">
+                            <div ref={tabContentRef} className="space-y-8 max-h-[600px] overflow-y-auto scroll-smooth px-1 tab-scroll-visible">
                                 {/* Tickets Section */}
                                 <div ref={ticketsRef} id="tickets-section">
                                     {/* Collapsible Header */}
@@ -961,11 +966,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         <span className="whitespace-nowrap hidden sm:inline">{t.shareEvent}</span>
                                         <span className="whitespace-nowrap sm:hidden">Share</span>
                                     </button>
-                                    <button className="flex items-center gap-1 sm:gap-1.5 hover:text-[#112b38] transition-all duration-300 text-xs sm:text-sm text-gray-600">
-                                        <FaHeart className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                                        <span className="whitespace-nowrap hidden sm:inline">{t.addToFavourites}</span>
-                                        <span className="whitespace-nowrap sm:hidden">Favorites</span>
-                                    </button>
+                                  
                                 </div>
                             </div>
 
