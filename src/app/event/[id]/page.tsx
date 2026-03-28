@@ -21,6 +21,7 @@ import { Text } from 'rizzui/typography';
 import { Footer } from '@/components/home';
 import { useLanguage } from '@/context/LanguageContext';
 import EventCard from '@/components/event/eventCard';
+import AuthModal from '@/components/AuthModal';
 
 interface EventDetailProps {
     params: {
@@ -143,6 +144,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     const [isTicketsCollapsed, setIsTicketsCollapsed] = useState(false);
     const [isDescriptionCollapsed, setIsDescriptionCollapsed] = useState(false);
     const [isMoreInfoCollapsed, setIsMoreInfoCollapsed] = useState(false);
+    const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
     // State for ticket quantities - Initialize properly
@@ -949,19 +951,28 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         <p className="text-xs sm:text-sm text-gray-500 whitespace-nowrap">{t.totalAmount}</p>
                                         <p className="text-lg sm:text-xl font-bold text-red-500 whitespace-nowrap">Rs {calculateTotal().toLocaleString()}</p>
                                     </div>
-                                    <button className="w-full sm:w-auto bg-[#c89c6b] hover:bg-[#b8885a] text-white font-semibold px-6 py-2 sm:py-2.5 rounded-lg transition-all duration-300 hover:scale-105 shadow-md hover:shadow-lg whitespace-nowrap">
+                                    <button 
+                                        onClick={() => setIsAuthModalOpen(true)}
+                                        className="w-full sm:w-auto bg-[#c89c6b] hover:bg-[#b8885a] text-white font-semibold px-6 py-2 sm:py-2.5 rounded-lg transition-all duration-300 hover:scale-105 shadow-md hover:shadow-lg whitespace-nowrap"
+                                    >
                                         {t.bookNow}
                                     </button>
                                 </div>
 
                                 {/* Action Buttons */}
                                 <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 mt-4 pt-4 border-t border-gray-100">
-                                    <button className="flex items-center gap-1 sm:gap-1.5 hover:text-[#112b38] transition-all duration-300 text-xs sm:text-sm text-gray-600">
+                                    <button 
+                                        onClick={() => setIsAuthModalOpen(true)}
+                                        className="flex items-center gap-1 sm:gap-1.5 hover:text-[#112b38] transition-all duration-300 text-xs sm:text-sm text-gray-600"
+                                    >
                                         <FaCalendarAlt className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                         <span className="whitespace-nowrap hidden sm:inline">{t.addToCalendar}</span>
                                         <span className="whitespace-nowrap sm:hidden">Calendar</span>
                                     </button>
-                                    <button className="flex items-center gap-1 sm:gap-1.5 hover:text-[#112b38] transition-all duration-300 text-xs sm:text-sm text-gray-600">
+                                    <button 
+                                        onClick={() => setIsAuthModalOpen(true)}
+                                        className="flex items-center gap-1 sm:gap-1.5 hover:text-[#112b38] transition-all duration-300 text-xs sm:text-sm text-gray-600"
+                                    >
                                         <FaShareAlt className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                         <span className="whitespace-nowrap hidden sm:inline">{t.shareEvent}</span>
                                         <span className="whitespace-nowrap sm:hidden">Share</span>
@@ -1275,6 +1286,13 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                     </div>
                 </div>
             </div>
+
+            {/* Auth Modal */}
+            <AuthModal
+                isOpen={isAuthModalOpen}
+                onClose={() => setIsAuthModalOpen(false)}
+            />
+
             <Footer />
         </div>
     );

@@ -7,6 +7,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { FaHome } from "react-icons/fa"
 import { Divider, NavItem } from "../home/HeroCarousel"
+import AuthModal from "@/components/AuthModal"
 
 const NavSearchHeader = () => {
     const { t, language, setLanguage }: any = useLanguage()
@@ -116,6 +117,7 @@ const NavSearchHeader = () => {
     const isPast = (day: number) => { const today = new Date(); today.setHours(0, 0, 0, 0); return new Date(calendarView.year, calendarView.month, day) < today }
 
     return (
+        <>
         <div className="w-full bg-transparent relative">
             {/* Background Blue Strip - sits behind nav and search */}
             <div className="absolute top-0 left-0 right-0 z-0 w-full bg-[#112b38] h-20" />
@@ -336,6 +338,13 @@ const NavSearchHeader = () => {
                 </div>
             </div>
         </div>
+
+        <AuthModal
+            isOpen={isAuthModalOpen}
+            onClose={() => setIsAuthModalOpen(false)}
+            initialMode={authMode}
+        />
+        </>
     )
 }
 
