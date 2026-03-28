@@ -166,7 +166,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
         { id: 6, title: "Rock The Night", location: "Trianon Arena", price: "RS 750", image: "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=400&auto=format&fit=crop", day: "08", month: "Nov", badge: 3 },
     ];
     const cardsPerPage = 3;
-    const totalPages = Math.ceil(relatedEvents.length / cardsPerPage);
+    const totalSteps = relatedEvents.length - cardsPerPage; // slide 1 card at a time
 
     const mockSongs = [
         {
@@ -394,10 +394,10 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     // Auto-advance related events carousel every 3 seconds
     useEffect(() => {
         const timer = setInterval(() => {
-            setRelatedCarouselIndex(prev => (prev + 1) % totalPages);
+            setRelatedCarouselIndex(prev => (prev + 1) % (totalSteps + 1));
         }, 3000);
         return () => clearInterval(timer);
-    }, [totalPages]);
+    }, [totalSteps]);
 
     // Scroll function
     const scrollToSection = (sectionRef: React.RefObject<HTMLDivElement>) => {
@@ -1204,13 +1204,13 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                     <h2 className="text-2xl font-bold text-gray-800">{t.relatedEvents || "Related Events"}</h2>
                     <div className="flex items-center gap-2">
                         <button
-                            onClick={() => setRelatedCarouselIndex(prev => (prev - 1 + totalPages) % totalPages)}
+                            onClick={() => setRelatedCarouselIndex(prev => (prev - 1 + totalSteps + 1) % (totalSteps + 1))}
                             className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-[#112b38] hover:text-white hover:border-[#112b38] transition-all duration-300"
                         >
                             <ChevronLeft className="w-4 h-4" />
                         </button>
                         <button
-                            onClick={() => setRelatedCarouselIndex(prev => (prev + 1) % totalPages)}
+                            onClick={() => setRelatedCarouselIndex(prev => (prev + 1) % (totalSteps + 1))}
                             className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-[#112b38] hover:text-white hover:border-[#112b38] transition-all duration-300"
                         >
                             <ChevronRight className="w-4 h-4" />
@@ -1221,73 +1221,66 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                 <div className="relative overflow-hidden">
                     <div
                         className="flex transition-transform duration-500 ease-in-out"
-                        style={{ transform: `translateX(-${relatedCarouselIndex * 100}%)` }}
+                        style={{ transform: `translateX(-${relatedCarouselIndex * (100 / cardsPerPage)}%)` }}
                     >
-                        {Array.from({ length: totalPages }).map((_, pageIdx) => (
-                            <div key={pageIdx} className="w-full flex-shrink-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 sm:gap-14  py-8 overflow-visible justify-items-center">
-                                {relatedEvents.slice(pageIdx * cardsPerPage, pageIdx * cardsPerPage + cardsPerPage).map((ev) => (
-                                    <Link
-                                        key={ev.id}
-                                        href={`/event/${ev.id}`}
-                                        className="w-full max-w-[340px] h-auto event-card relative overflow-visible block cursor-pointer"
-                                    >
-                                        <div className="hidden sm:block absolute -top-[28px] -left-[59px] w-[420px] h-auto z-50 pointer-events-none">
-                                            <img
-                                                src={`/images/LOGO TAG/${ev.badge}.png`}
-                                                alt="Badge"
-                                                className="w-full h-auto object-contain scale-110"
+                        {relatedEvents.map((ev) => (
+                            <div key={ev.id} className="w-1/3 flex-shrink-0 px-5 sm:px-7 py-8 overflow-visible">
+                                <Link
+                                    href={`/event/${ev.id}`}
+                                    className="w-full max-w-[340px] h-auto event-card relative overflow-visible block cursor-pointer mx-auto"
+                                >
+                                    <div className="hidden sm:block absolute -top-[28px] -left-[59px] w-[420px] h-auto z-50 pointer-events-none">
+                                        <img
+                                            src={`/images/LOGO TAG/${ev.badge}.png`}
+                                            alt="Badge"
+                                            className="w-full h-auto object-contain scale-110"
+                                        />
+                                    </div>
+                                    <div className="relative z-10 overflow-hidden rounded-tr-2xl rounded-br-2xl rounded-bl-2xl shadow-xl bg-white">
+                                        <div className="relative w-full h-[340px] overflow-hidden">
+                                            <Image
+                                                src={ev.image}
+                                                alt={ev.title}
+                                                fill
+                                                className="object-cover"
+                                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                             />
-                                        </div>
-                                        <div className="relative z-10 overflow-hidden rounded-tr-2xl rounded-br-2xl rounded-bl-2xl shadow-xl bg-white">
-                                            <div className="relative w-full h-[340px] overflow-hidden">
-                                                <Image
-                                                    src={ev.image}
-                                                    alt={ev.title}
-                                                    fill
-                                                    className="object-cover"
-                                                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                                                />
-
-                                                <div className="absolute top-3 right-3 bg-black/70 rounded shadow-lg overflow-hidden z-20 px-1">
-                                                    <div className="flex items-center gap-1">
-                                                        <Calendar className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
-                                                        <div className="text-lg sm:text-xl font-bold text-white leading-none">{ev.day}</div>
-                                                        <div className="text-sm sm:text-base font-bold text-white uppercase">{ev.month}</div>
-                                                    </div>
-                                                </div>
-
-                                                {/* White dot indicators overlaid on image */}
-                                                {pageIdx === 0 && (
-                                                    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
-                                                        {Array.from({ length: totalPages }).map((_, i) => (
-                                                            <button
-                                                                key={i}
-                                                                onClick={(e) => { e.preventDefault(); setRelatedCarouselIndex(i); }}
-                                                                className={`rounded-full transition-all duration-300 ${i === relatedCarouselIndex
-                                                                    ? 'w-5 h-2 bg-white'
-                                                                    : 'w-2 h-2 bg-white/50 hover:bg-white/80'
-                                                                    }`}
-                                                            />
-                                                        ))}
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <div className="w-full bg-white flex items-stretch justify-between border border-[#7e7b7b] border-t-0 rounded-bl-2xl rounded-br-lg overflow-hidden">
-                                                <div className='flex flex-col justify-center pl-3 sm:pl-4 py-2 sm:py-3'>
-                                                    <p className="text-xs sm:text-sm font-bold whitespace-nowrap text-gray-900">{ev.title}</p>
-                                                    <p className="text-[10px] sm:text-xs text-[#112b38]">{ev.location}</p>
-                                                </div>
-                                                <div className='w-[135px] bg-[#112b38] hover:bg-[#c89c6b] flex-shrink-0 flex flex-col items-center justify-center py-2 sm:py-3 px-4 sm:px-6 text-white rounded-bl-3xl transition-colors duration-300 relative z-10'>
-                                                    <p className="mr-1 sm:mr-2 text-[8px] sm:text-[9.9px]">{t.asFrom}</p>
-                                                    <p className="text-xs sm:text-[15.9px]">{ev.price}</p>
+                                            <div className="absolute top-3 right-3 bg-black/70 rounded shadow-lg overflow-hidden z-20 px-1">
+                                                <div className="flex items-center gap-1">
+                                                    <Calendar className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
+                                                    <div className="text-lg sm:text-xl font-bold text-white leading-none">{ev.day}</div>
+                                                    <div className="text-sm sm:text-base font-bold text-white uppercase">{ev.month}</div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </Link>
-                                ))}
+                                        <div className="w-full bg-white flex items-stretch justify-between border border-[#7e7b7b] border-t-0 rounded-bl-2xl rounded-br-lg overflow-hidden">
+                                            <div className='flex flex-col justify-center pl-3 sm:pl-4 py-2 sm:py-3'>
+                                                <p className="text-xs sm:text-sm font-bold whitespace-nowrap text-gray-900">{ev.title}</p>
+                                                <p className="text-[10px] sm:text-xs text-[#112b38]">{ev.location}</p>
+                                            </div>
+                                            <div className='w-[135px] bg-[#112b38] hover:bg-[#c89c6b] flex-shrink-0 flex flex-col items-center justify-center py-2 sm:py-3 px-4 sm:px-6 text-white rounded-bl-3xl transition-colors duration-300 relative z-10'>
+                                                <p className="mr-1 sm:mr-2 text-[8px] sm:text-[9.9px]">{t.asFrom}</p>
+                                                <p className="text-xs sm:text-[15.9px]">{ev.price}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Link>
                             </div>
                         ))}
                     </div>
+                </div>
+                {/* Dot indicators */}
+                <div className="flex justify-center gap-2 mt-3">
+                    {Array.from({ length: totalSteps + 1 }).map((_, i) => (
+                        <button
+                            key={i}
+                            onClick={() => setRelatedCarouselIndex(i)}
+                            className={`rounded-full transition-all duration-300 ${i === relatedCarouselIndex
+                                ? 'w-5 h-2 bg-[#c89c6b]'
+                                : 'w-2 h-2 bg-gray-300 hover:bg-[#c89c6b]/60'
+                            }`}
+                        />
+                    ))}
                 </div>
             </div>
 
