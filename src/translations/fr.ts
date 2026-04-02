@@ -310,6 +310,7 @@ export const fr = {
     categoryConferences: 'CONFÉRENCES',
     categoryShow: 'SPECTACLE',
     categorySport: 'SPORT',
+    categoryInternational: 'INTERNATIONAL',
     
     // Event Detail Page
     by: 'Par',
@@ -373,5 +374,8 @@ export const fr = {
     dubaiDesc4: 'Notre mission est de fournir aux visiteurs les expériences les plus engageantes de Dubaï tout en offrant des prix compétitifs. Économisez temps, argent et efforts en réservant vos billets via Platinumlist.net.',
     doYouHaveQuestion: 'Avez-vous des questions?',
     pleaseContactUs: 'Contactez-nous',
+    loginSuccess: 'Bienvenue !',
+    registerSuccess: 'Compte créé avec succès !',
+    noEventsFound: 'Aucun événement trouvé.',
    
 };

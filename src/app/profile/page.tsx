@@ -6,6 +6,10 @@ import { FcGoogle } from 'react-icons/fc';
 import { FaFacebook } from 'react-icons/fa';
 import HeroCarousel from '@/components/home/HeroCarousel';
 import Footer from '@/components/home/Footer';
+import { useAuth } from '@/context/AuthContext';
+import api from '@/lib/api';
+import toast from 'react-hot-toast';
+import AuthGuard from '@/components/AuthGuard';
 
 const countryCodes = [
     // North America
@@ -194,6 +198,8 @@ const saveBtnCls =
     'px-6 h-[34px] bg-[#c89c6b] hover:bg-[#112b38] text-white text-xs font-bold tracking-widest rounded transition-all duration-300';
 
 export default function ProfilePage() {
+    const { user, refreshUser } = useAuth();
+
     // Section open/close states
     const [openSections, setOpenSections] = useState({
         customer: true,
@@ -207,11 +213,12 @@ export default function ProfilePage() {
 
     // Customer Details
     const [title, setTitle] = useState('');
-    const [firstName, setFirstName] = useState('Havish');
-    const [lastName, setLastName] = useState('ph');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [countryCode, setCountryCode] = useState('+230');
     const [phone, setPhone] = useState('');
-    const [email, setEmail] = useState('mugonhavish94@gmail.com');
+    const [email, setEmail] = useState('');
+    const [isSaving, setIsSaving] = useState(false);
     const [showCountryDrop, setShowCountryDrop] = useState(false);
     const [countrySearch, setCountrySearch] = useState('');
     const countryRef = useRef<HTMLDivElement>(null);
@@ -260,7 +267,57 @@ export default function ProfilePage() {
     const [activeTab, setActiveTab] = useState<'profile' | 'bookings' | 'tickets'>('profile');
     const [editMode, setEditMode] = useState(false);
 
+    // Populate from auth context
+    useEffect(() => {
+        if (user) {
+            const parts = user.name?.split(' ') ?? [];
+            setFirstName(parts[0] ?? '');
+            setLastName(parts.slice(1).join(' '));
+            setEmail(user.email ?? '');
+            setPhone(user.phone ?? '');
+            setCountryCode(user.countryCode ?? '+230');
+        }
+    }, [user]);
+
+    const handleSaveProfile = async () => {
+        setIsSaving(true);
+        try {
+            await api.patch('/auth/me', {
+                name: `${firstName} ${lastName}`.trim(),
+                email,
+                phone,
+                countryCode,
+            });
+            await refreshUser();
+            toast.success('Profile updated successfully!');
+            setEditMode(false);
+        } catch (err: unknown) {
+            const message = (err as { response?: { data?: { message?: string } } })?.response?.data?.message || 'Failed to save profile.';
+            toast.error(message);
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    const handleChangePassword = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (newPwd !== confirmPwd) { toast.error('Passwords do not match.'); return; }
+        if (newPwd.length < 8) { toast.error('Password must be at least 8 characters.'); return; }
+        setIsSaving(true);
+        try {
+            await api.patch('/auth/change-password', { currentPassword: currentPwd, newPassword: newPwd });
+            toast.success('Password changed successfully!');
+            setCurrentPwd(''); setNewPwd(''); setConfirmPwd('');
+        } catch (err: unknown) {
+            const message = (err as { response?: { data?: { message?: string } } })?.response?.data?.message || 'Failed to change password.';
+            toast.error(message);
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
     return (
+        <AuthGuard>
         <div className="min-h-screen ">
             <HeroCarousel />
 
@@ -269,7 +326,7 @@ export default function ProfilePage() {
 
                 {/* Welcome Banner */}
                 <div className="bg-[#112b38] text-white px-4 sm:px-8 py-6 sm:py-8 rounded-t-2xl">
-                    <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">Welcome, Havish!</h1>
+                    <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">Welcome, {user?.name?.split(' ')[0] || 'there'}!</h1>
                     <p className="text-gray-300 text-sm mt-1">Manage your profile, bookings, and tickets</p>
                 </div>
 
@@ -370,7 +427,11 @@ export default function ProfilePage() {
                                 </div>
                                 <div className="p-5">
                                     <p className="text-xs text-gray-400 mb-1">Member Since</p>
-                                    <p className="font-bold text-gray-800 text-sm">March 2026</p>
+                                    <p className="font-bold text-gray-800 text-sm">
+                                        {user?.createdAt
+                                            ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+                                            : '—'}
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -500,7 +561,7 @@ export default function ProfilePage() {
 
                         {/* Actions */}
                         <div className="flex items-center justify-between pt-1">
-                            <button type="button" className={saveBtnCls}>Save</button>
+                            <button type="button" onClick={handleSaveProfile} disabled={isSaving} className={saveBtnCls + ' disabled:opacity-60'}>{isSaving ? 'Saving...' : 'Save'}</button>
                             <button type="button" className="text-xs text-[#112b38] hover:text-[#c89c6b] hover:underline transition-colors">
                                 Enter Company Details (optional)
                             </button>
@@ -573,13 +634,13 @@ export default function ProfilePage() {
                                 </select>
                             </div>
                         </div>
-                        <button type="button" className={saveBtnCls}>Save</button>
+                        <button type="button" onClick={handleSaveProfile} disabled={isSaving} className={saveBtnCls + ' disabled:opacity-60'}>{isSaving ? 'Saving...' : 'Save'}</button>
                     </div>
                 </Section>
 
                 {/* ── CHANGE PASSWORD ── */}
                 <Section title="Change Password" open={openSections.password} onToggle={() => toggle('password')}>
-                    <div className="pt-4 space-y-4">
+                    <form onSubmit={handleChangePassword} className="pt-4 space-y-4">
                         <div>
                             <FieldLabel label="Current Password" />
                             <div className="relative">
@@ -638,11 +699,9 @@ export default function ProfilePage() {
                             </div>
                         </div>
 
-                        <button type="button" className={saveBtnCls}>Save</button>
-                    </div>
+                        <button type="submit" disabled={isSaving} className={saveBtnCls + ' disabled:opacity-60'}>{isSaving ? 'Saving...' : 'Save'}</button>
+                    </form>
                 </Section>
-
-                {/* ── MY SOCIAL LOGIN ACCOUNTS ── */}
                 <Section title="My Social Login Accounts" open={openSections.social} onToggle={() => toggle('social')}>
                     <div className="pt-4 space-y-2">
                         <p className="text-[11px] font-semibold tracking-widest text-gray-500 uppercase mb-3">
@@ -685,5 +744,6 @@ export default function ProfilePage() {
 
             <Footer />
         </div>
+        </AuthGuard>
     );
 }

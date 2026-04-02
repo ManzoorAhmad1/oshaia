@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import toast from 'react-hot-toast';
 import { 
   BsShieldCheck, 
   BsLightningCharge, 
@@ -18,17 +19,15 @@ import { useLanguage } from '@/context/LanguageContext';
 export default function Footer() {
   const { t } = useLanguage();
   const [email, setEmail] = useState('');
-  const [newsletterMessage, setNewsletterMessage] = useState('');
 
   const handleNewsletterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) {
-      setNewsletterMessage(t.pleaseEnterEmail);
+      toast.error(t.pleaseEnterEmail);
       return;
     }
-    setNewsletterMessage(t.thanksSubscribed);
+    toast.success(t.thanksSubscribed || 'Subscribed!');
     setEmail('');
-    setTimeout(() => setNewsletterMessage(''), 2500);
   };
 
   const features = [
@@ -70,11 +69,6 @@ export default function Footer() {
                 {t.submit}
               </button>
             </div>
-            {newsletterMessage && (
-              <p className={`text-xs mt-1 ${newsletterMessage.includes('Thanks') ? 'text-emerald-500' : 'text-red-500'}`}>
-                {newsletterMessage}
-              </p>
-            )}
           </form>
         </div>
       </section>

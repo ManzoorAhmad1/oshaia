@@ -8,9 +8,13 @@ import { FaHome, FaCalendarAlt, FaInfoCircle, FaQuestionCircle } from "react-ico
 import { useRouter, usePathname } from "next/navigation"
 import AuthModal from '@/components/AuthModal'
 import { useLanguage } from '@/context/LanguageContext'
+import { useAuth } from '@/context/AuthContext'
+import { useCms } from '@/lib/useCms'
 
 const HeroCarousel = () => {
     const { language, setLanguage, t } = useLanguage()
+    const { user, logout, isAuthenticated } = useAuth()
+    const { get: getCms } = useCms('home')
     const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false)
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false)
     const [searchFocused, setSearchFocused] = useState(false)
@@ -172,7 +176,7 @@ const HeroCarousel = () => {
                 <div className="relative max-w-full sm:max-w-[1400.1px] h-[240px] sm:h-[300px] md:h-[340px] lg:h-[354.6px] mx-auto px-4 lg:px-8 xl:px-12 2xl:px-16 pt-4 sm:pt-6">
                     <div className="relative w-full h-full rounded-xl sm:rounded-xl lg:rounded-3xl overflow-hidden shadow-lg sm:shadow-xl lg:shadow-2xl">
                         <Image
-                            src="/Coveer Web-01-01.png"
+                            src={getCms('hero').image || '/Coveer Web-01-01.png'}
                             alt="Oshaia - Beyond your Journey"
                             fill
                             className="object-cover"
@@ -327,6 +331,9 @@ const HeroCarousel = () => {
 
                                         {profileDropdownOpen && (
                                             <div className="absolute top-full right-0 mt-2 w-52 bg-white rounded-lg shadow-xl border border-gray-200 z-50 py-2">
+                                                {isAuthenticated ? (
+                                                <>
+                                                <div className="px-4 py-2 text-xs text-gray-400 font-semibold border-b border-gray-100">{user?.name}</div>
                                                 <Link href="/profile" onClick={() => setProfileDropdownOpen(false)} className="flex items-center gap-2 px-4 py-2 hover:bg-[#112b38] hover:text-white text-sm text-gray-700 transition-colors">
                                                     <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="8" r="4" strokeWidth="2"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
                                                     My Profile
@@ -341,10 +348,9 @@ const HeroCarousel = () => {
                                                 </Link>
                                                 <div className="border-t border-gray-100 mt-1 pt-1">
                                                 <button
-                                                    onClick={() => {
+                                                    onClick={async () => {
                                                         setProfileDropdownOpen(false)
-                                                        setAuthMode('login')
-                                                        setIsAuthModalOpen(true)
+                                                        await logout()
                                                     }}
                                                     className="w-full text-left px-4 py-2 hover:bg-red-50 text-sm text-red-500 transition-colors flex items-center gap-2"
                                                 >
@@ -352,10 +358,21 @@ const HeroCarousel = () => {
                                                     Logout
                                                 </button>
                                                 </div>
+                                                </>
+                                                ) : (
+                                                <button
+                                                    onClick={() => { setProfileDropdownOpen(false); setAuthMode('login'); setIsAuthModalOpen(true); }}
+                                                    className="w-full text-left px-4 py-2 hover:bg-[#112b38] hover:text-white text-sm text-gray-700 transition-colors flex items-center gap-2"
+                                                >
+                                                    <User className="w-4 h-4" />
+                                                    {t.login}
+                                                </button>
+                                                )}
                                             </div>
                                         )}
                                     </div>
 
+                                    {!isAuthenticated && (
                                     <div className="flex">
                                         <button
                                             className="bg-transparent border-2 border-[#112b38] text-[#112b38] hover:bg-[#112b38] hover:text-[#c89c6b] hover:border-[#112b38] px-3 sm:px-3 lg:px-5 rounded-l-lg text-xs sm:text-xs lg:text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg whitespace-nowrap h-[42px] sm:h-[44px] lg:h-[44.8px]"
@@ -376,6 +393,7 @@ const HeroCarousel = () => {
                                             {t.signUp}
                                         </button>
                                     </div>
+                                    )}
 
                                     <button
                                         onClick={removeSearchFocus}

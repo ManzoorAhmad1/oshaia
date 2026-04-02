@@ -8,8 +8,9 @@ import { Navigation, Autoplay } from 'swiper/modules'
 import type { Swiper as SwiperType } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/navigation'
+import { useCms } from '@/lib/useCms'
 
-const partners = [
+const DEFAULT_PARTNERS = [
   { id: 1, name: 'Partner 1', logo: '/images/image-1768921181363.png' },
   { id: 2, name: 'Partner 2', logo: '/images/image-1768921181363.png' },
   { id: 3, name: 'Partner 3', logo: '/images/image-1768921181363.png' },
@@ -32,6 +33,12 @@ function getCurrentSpv(): number {
 }
 
 const PartnersSection = () => {
+  const { get: getCms } = useCms('home');
+  const cmsImages: string[] = getCms('partners').images || [];
+  const partners = cmsImages.length > 0
+    ? cmsImages.map((logo, i) => ({ id: i + 1, name: `Partner ${i + 1}`, logo }))
+    : DEFAULT_PARTNERS;
+
   // realIndex of the card that should appear in the visual center
   const [centerRealIndex, setCenterRealIndex] = useState(0)
   const swiperRef = useRef<SwiperType | null>(null)

@@ -310,6 +310,7 @@ export const en = {
     categoryConferences: 'CONFERENCES',
     categoryShow: 'SHOW',
     categorySport: 'SPORT',
+    categoryInternational: 'INTERNATIONAL',
     
     // Event Detail Page
     by: 'By',
@@ -373,5 +374,8 @@ export const en = {
     dubaiDesc4: 'Our mission is to connect people with the most exciting events across Mauritius while offering a convenient, secure, and eco-friendly digital ticketing solution. With Oshaia.com, discovering and booking event experiences becomes simple, efficient, and enjoyable.',
     doYouHaveQuestion: 'Do you have any question?',
     pleaseContactUs: 'Please contact us',
+    loginSuccess: 'Welcome back!',
+    registerSuccess: 'Account created successfully!',
+    noEventsFound: 'No events found.',
  
 };

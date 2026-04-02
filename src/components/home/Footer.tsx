@@ -11,16 +11,25 @@ import PartnersSection from './PartnersSection';
 import NewsletterSection from './NewsletterSection';
 import Platinumlist from './platinumlist';
 import { useRouter } from 'next/navigation';
+import { useCms } from '@/lib/useCms';
 
 const Footer = () => {
+  const { get: getCms } = useCms('footer');
+  const router=useRouter()
+
+  const footerSocial = getCms('social');
+  const footerContact = getCms('contact');
 
   const socialLinks = [
-    { name: 'Facebook', icon: FaFacebook, url: '#' },
-    { name: 'Instagram', icon: FaInstagram, url: '#' },
-    { name: 'WhatsApp', icon: FaWhatsapp, url: '#' },
-    { name: 'TikTok', icon: FaTiktok, url: '#' },
+    { name: 'Facebook', icon: FaFacebook, url: footerSocial.extra?.facebook || '#' },
+    { name: 'Instagram', icon: FaInstagram, url: footerSocial.extra?.instagram || '#' },
+    { name: 'WhatsApp', icon: FaWhatsapp, url: footerSocial.extra?.whatsapp || '#' },
+    { name: 'TikTok', icon: FaTiktok, url: footerSocial.extra?.tiktok || '#' },
   ]
- const router=useRouter()
+
+  const address = footerContact.extra?.address || 'Maxuel street, Frankfurt 2589 Germany';
+  const phone = footerContact.extra?.phone || '(022) 666 888 0000';
+  const email = footerContact.extra?.email || 'needhelp@gmail.com';
   return (
     <footer className="w-full bg-white">
       <PartnersSection />
@@ -148,15 +157,15 @@ const Footer = () => {
       <div className="w-full flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-8 py-4 sm:py-5 bg-[#112b38] text-white px-4 sm:px-8 md:px-16 lg:px-28 xl:px-44 justify-evenly">
         <div className="flex gap-2 sm:gap-3 items-center justify-center sm:justify-start">
           <FaLocationDot className="text-orange-500 flex-shrink-0 text-base sm:text-lg" />
-          <Text className="text-xs sm:text-sm md:text-base">Maxuel street, Frankfurt 2589 Germany</Text>
+          <Text className="text-xs sm:text-sm md:text-base">{address}</Text>
         </div>
         <div className="flex gap-2 sm:gap-3 items-center justify-center sm:justify-start">
           <FaPhoneAlt className="text-orange-500 flex-shrink-0 text-base sm:text-lg" />
-          <Text className="text-xs sm:text-sm md:text-base">(022) 666 888 0000</Text>
+          <Text className="text-xs sm:text-sm md:text-base">{phone}</Text>
         </div>
         <div className="flex gap-2 sm:gap-3 items-center justify-center sm:justify-start">
           <TfiEmail className="text-orange-500 flex-shrink-0 text-base sm:text-lg" />
-          <Text className="text-xs sm:text-sm md:text-base">needhelp@gmail.com</Text>
+          <Text className="text-xs sm:text-sm md:text-base">{email}</Text>
         </div>
       </div>
 

@@ -9,6 +9,9 @@ import { FaFacebook } from 'react-icons/fa';
 import HeroCarousel from '@/components/home/HeroCarousel';
 import Footer from '@/components/home/Footer';
 import { useLanguage } from '@/context/LanguageContext';
+import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 interface Country {
     code: string;
@@ -38,6 +41,14 @@ const countries: Country[] = [
 
 export default function AccountPage() {
     const { t } = useLanguage();
+    const { login, register, isAuthenticated } = useAuth();
+    const router = useRouter();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Redirect if already logged in
+    useEffect(() => {
+        if (isAuthenticated) router.replace('/profile');
+    }, [isAuthenticated, router]);
 
     // Login state
     const [loginEmail, setLoginEmail] = useState('');
@@ -49,6 +60,8 @@ export default function AccountPage() {
     const [signupEmail, setSignupEmail] = useState('');
     const [signupFirstName, setSignupFirstName] = useState('');
     const [signupLastName, setSignupLastName] = useState('');
+    const [signupPassword, setSignupPassword] = useState('');
+    const [showSignupPassword, setShowSignupPassword] = useState(false);
     const [signupPhone, setSignupPhone] = useState('');
     const [countryCode, setCountryCode] = useState('+230');
     const [newsletter, setNewsletter] = useState(false);
@@ -73,14 +86,39 @@ export default function AccountPage() {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Login:', { loginEmail, loginPassword, rememberMe });
+        setIsSubmitting(true);
+        try {
+            await login(loginEmail, loginPassword);
+            toast.success(t.loginSuccess || 'Welcome back!');
+            router.replace('/profile');
+        } catch (err: unknown) {
+            const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message || 'Login failed';
+            toast.error(msg);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
-    const handleSignup = (e: React.FormEvent) => {
+    const handleSignup = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Signup:', { signupEmail, signupFirstName, signupLastName, signupPhone: countryCode + signupPhone });
+        setIsSubmitting(true);
+        try {
+            await register({
+                name: `${signupFirstName} ${signupLastName}`.trim(),
+                email: signupEmail,
+                password: signupPassword,
+                phone: signupPhone ? `${countryCode}${signupPhone}` : undefined,
+            });
+            toast.success(t.registerSuccess || 'Account created!');
+            router.replace('/profile');
+        } catch (err: unknown) {
+            const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message || 'Registration failed';
+            toast.error(msg);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -149,17 +187,18 @@ export default function AccountPage() {
                                     />
                                     Remember me
                                 </label>
-                                <button type="button" className="text-[#c89c6b] hover:underline text-xs">
+                                <Link href="/forgot-password" className="text-[#c89c6b] hover:underline text-xs">
                                     Forgot password?
-                                </button>
+                                </Link>
                             </div>
 
                             {/* LOGIN button */}
                             <button
                                 type="submit"
-                                className="w-full h-[46px] bg-[#112b38] border-2 border-[#112b38] text-[#c89c6b] hover:text-white font-bold rounded tracking-widest text-sm transition-all duration-300"
+                                disabled={isSubmitting}
+                                className="w-full h-[46px] bg-[#112b38] border-2 border-[#112b38] text-[#c89c6b] hover:text-white font-bold rounded tracking-widest text-sm transition-all duration-300 disabled:opacity-60"
                             >
-                                LOGIN
+                                {isSubmitting ? 'Logging in...' : 'LOGIN'}
                             </button>
 
                             {/* OR divider */}
@@ -228,6 +267,26 @@ export default function AccountPage() {
                                 className="w-full h-[46px] px-4 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#112b38]"
                                 required
                             />
+
+                            {/* Password */}
+                            <div className="relative">
+                                <input
+                                    type={showSignupPassword ? 'text' : 'password'}
+                                    placeholder="Password"
+                                    value={signupPassword}
+                                    onChange={e => setSignupPassword(e.target.value)}
+                                    className="w-full h-[46px] px-4 pr-10 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#112b38]"
+                                    minLength={8}
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowSignupPassword(!showSignupPassword)}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                                >
+                                    {showSignupPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                </button>
+                            </div>
 
                             {/* Phone Number with country code */}
                             <div className="flex gap-2 w-full">
@@ -303,9 +362,10 @@ export default function AccountPage() {
                             {/* SIGN UP button */}
                             <button
                                 type="submit"
-                                className="w-full h-[46px] bg-[#c89c6b] border-2 border-[#c89c6b] text-[#112b38] hover:text-white font-bold rounded tracking-widest text-sm transition-all duration-300"
+                                disabled={isSubmitting}
+                                className="w-full h-[46px] bg-[#c89c6b] border-2 border-[#c89c6b] text-[#112b38] hover:text-white font-bold rounded tracking-widest text-sm transition-all duration-300 disabled:opacity-60"
                             >
-                                SIGN UP
+                                {isSubmitting ? 'Creating account...' : 'SIGN UP'}
                             </button>
 
                             {/* OR divider */}

@@ -4,6 +4,9 @@ import "./globals.css";
 import WhatsAppButton from "@/components/about/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import { LanguageProvider } from "@/context/LanguageContext";
+import { AuthProvider } from "@/context/AuthContext";
+import { Toaster } from "react-hot-toast";
+import ReduxProvider from "@/store/ReduxProvider";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -25,11 +28,16 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={roboto.variable}>
       <body className={roboto.className}>
-        <LanguageProvider>
-          {children}
-          <WhatsAppButton />
-          <ScrollToTop />
-        </LanguageProvider>
+        <ReduxProvider>
+          <LanguageProvider>
+            <AuthProvider>
+              {children}
+              <WhatsAppButton />
+              <ScrollToTop />
+              <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
+            </AuthProvider>
+          </LanguageProvider>
+        </ReduxProvider>
       </body>
     </html>
   );

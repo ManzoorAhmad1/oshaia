@@ -4,7 +4,10 @@ import { useState, useEffect, useRef } from 'react';
 import { Eye, EyeOff, X } from 'lucide-react';
 import { FcGoogle } from 'react-icons/fc';
 import { useLanguage } from '@/context/LanguageContext';
+import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 interface AuthModalProps {
     isOpen: boolean;
@@ -259,6 +262,8 @@ const sortedCountries = [...countries].sort((a, b) => a.name.localeCompare(b.nam
 
 export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: AuthModalProps) {
     const { t } = useLanguage();
+    const { login, register } = useAuth();
+    const router = useRouter();
     const [mode, setMode] = useState<'login' | 'signup'>(initialMode);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -268,6 +273,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
     const [showPassword, setShowPassword] = useState(false);
     const [showCountryDropdown, setShowCountryDropdown] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const modalRef = useRef<HTMLDivElement>(null);
     const backdropRef = useRef<HTMLDivElement>(null);
@@ -372,12 +378,36 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
 
     if (!isOpen) return null;
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (mode === 'login') {
-            console.log({ email, password });
-        } else {
-            console.log({ email, fullName, mobileNumber: countryCode + mobileNumber, password });
+        setIsSubmitting(true);
+        try {
+            if (mode === 'login') {
+                const loggedInUser = await login(email, password);
+                toast.success(t.loginSuccess || 'Welcome back!');
+                onClose();
+                if (loggedInUser.role === 'admin') {
+                    router.push('/admin');
+                }
+            } else {
+                await register({
+                    name: fullName,
+                    email,
+                    password,
+                    phone: mobileNumber || undefined,
+                    countryCode: mobileNumber ? countryCode : undefined,
+                });
+                toast.success(t.registerSuccess || 'Account created successfully!');
+                onClose();
+            }
+        } catch (err: unknown) {
+            const message =
+                (err as { response?: { data?: { message?: string } } })?.response?.data?.message ||
+                (err instanceof Error ? err.message : null) ||
+                'Something went wrong. Please try again.';
+            toast.error(message);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -452,9 +482,12 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                     </div>
                                     <button
                                         type="button"
+                                        onClick={() => { onClose(); }}
                                         className="text-xs text-gray-600 hover:text-purple-600 mt-1"
                                     >
-                                        {t.lostPassword}
+                                        <Link href="/forgot-password" className="text-xs text-gray-600 hover:text-purple-600">
+                                            {t.lostPassword}
+                                        </Link>
                                     </button>
                                 </div>
 
@@ -481,9 +514,10 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                 {/* Continue Button */}
                                 <button
                                     type="submit"
-                                    className="w-full bg-[#112b38] text-white py-1.5 rounded hover:bg-gray-800 transition-colors font-medium text-sm mt-4"
+                                    disabled={isSubmitting}
+                                    className="w-full bg-[#112b38] text-white py-1.5 rounded hover:bg-gray-800 transition-colors font-medium text-sm mt-4 disabled:opacity-60 disabled:cursor-not-allowed"
                                 >
-                                    {t.continueBtn}
+                                    {isSubmitting ? 'Please wait...' : t.continueBtn}
                                 </button>
 
                                 {/* Terms */}
@@ -667,9 +701,10 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                 {/* Continue Button */}
                                 <button
                                     type="submit"
-                                    className="w-full bg-[#112b38] text-white py-1.5 rounded hover:bg-gray-800 transition-colors font-medium text-sm mt-4"
+                                    disabled={isSubmitting}
+                                    className="w-full bg-[#112b38] text-white py-1.5 rounded hover:bg-gray-800 transition-colors font-medium text-sm mt-4 disabled:opacity-60 disabled:cursor-not-allowed"
                                 >
-                                    {t.continueBtn}
+                                    {isSubmitting ? 'Please wait...' : t.continueBtn}
                                 </button>
 
                                 {/* Terms */}

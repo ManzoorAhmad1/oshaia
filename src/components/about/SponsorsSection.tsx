@@ -4,18 +4,25 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { useCms } from '@/lib/useCms';
+
+const DEFAULT_SPONSORS = [
+  { id: 1, name: 'Sponsor 1', logo: '/images/image-1768921181363.png' },
+  { id: 2, name: 'Sponsor 2', logo: '/images/image-1768921181363.png' },
+  { id: 3, name: 'Sponsor 3', logo: '/images/image-1768921181363.png' },
+  { id: 4, name: 'Sponsor 4', logo: '/images/image-1768921181363.png' },
+  { id: 5, name: 'Sponsor 5', logo: '/images/image-1768921181363.png' },
+  { id: 6, name: 'Sponsor 6', logo: '/images/image-1768921181363.png' },
+  { id: 7, name: 'Sponsor 7', logo: '/images/image-1768921181363.png' },
+  { id: 8, name: 'Sponsor 8', logo: '/images/image-1768921181363.png' },
+];
 
 export default function SponsorsSection() {
-  const sponsors = [
-    { id: 1, name: 'Sponsor 1', logo: '/images/image-1768921181363.png' },
-    { id: 2, name: 'Sponsor 2', logo: '/images/image-1768921181363.png' },
-    { id: 3, name: 'Sponsor 3', logo: '/images/image-1768921181363.png' },
-    { id: 4, name: 'Sponsor 4', logo: '/images/image-1768921181363.png' },
-    { id: 5, name: 'Sponsor 5', logo: '/images/image-1768921181363.png' },
-    { id: 6, name: 'Sponsor 6', logo: '/images/image-1768921181363.png' },
-    { id: 7, name: 'Sponsor 7', logo: '/images/image-1768921181363.png' },
-    { id: 8, name: 'Sponsor 8', logo: '/images/image-1768921181363.png' },
-  ];
+  const { get: getCms } = useCms('about');
+  const cmsImages: string[] = getCms('sponsors').images || [];
+  const sponsors = cmsImages.length > 0
+    ? cmsImages.map((logo, i) => ({ id: i + 1, name: `Sponsor ${i + 1}`, logo }))
+    : DEFAULT_SPONSORS;
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);

@@ -3,63 +3,58 @@
 import React, { useState, useEffect, useRef } from "react"
 import { useLanguage } from "@/context/LanguageContext"
 import Link from "next/link"
+import api from "@/lib/api"
+import { getImageUrl } from '@/lib/imageUrl'
 
-// Mock data array with images and videos
-const slides = [
-    {
-        id: 1,
-        type: "image",
-        url: "/BIG%20BANNER/Bollywood-Unwind-Slider.jpg",
-        alt: "Bollywood Unwind",
-        duration: 6,
-    },
-    {
-        id: 101,
-        type: "video",
-        url: "/21971_cb42a1d4c3a2dd327fcce42ba642f04c-1-en1771248482.mp4",
-        alt: "Video 1",
-        duration: 6,
-    },
-    {
-        id: 102,
-        type: "video",
-        url: "/22193_398acba9ebf32f60d280ccecab409d04-1-en1772118332.mp4",
-        alt: "Video 2",
-        duration: 6,
-    },
-    {
-        id: 2,
-        type: "image",
-        url: "/BIG%20BANNER/kabul-slider-1.jpg",
-        alt: "Kabul Slider",
-        duration: 6,
-    },
-    {
-        id: 4,
-        type: "image",
-        url: "/BIG%20BANNER/lv-new-slider.jpg",
-        alt: "LV New Slider",
-        duration: 6,
-    },
-    {
-        id: 5,
-        type: "image",
-        url: "/BIG%20BANNER/y2k-slider.jpg",
-        alt: "Y2K Slider",
-        duration: 6,
-    }
+interface SlideData {
+    id: string | number
+    type: "image" | "video"
+    url: string
+    alt: string
+    duration: number
+}
+
+// Static fallback slides (local promotional content)
+const STATIC_SLIDES: SlideData[] = [
+    { id: 1, type: "image", url: "/BIG%20BANNER/Bollywood-Unwind-Slider.jpg", alt: "Bollywood Unwind", duration: 6 },
+    { id: 101, type: "video", url: "/21971_cb42a1d4c3a2dd327fcce42ba642f04c-1-en1771248482.mp4", alt: "Video 1", duration: 6 },
+    { id: 102, type: "video", url: "/22193_398acba9ebf32f60d280ccecab409d04-1-en1772118332.mp4", alt: "Video 2", duration: 6 },
+    { id: 2, type: "image", url: "/BIG%20BANNER/kabul-slider-1.jpg", alt: "Kabul Slider", duration: 6 },
+    { id: 4, type: "image", url: "/BIG%20BANNER/lv-new-slider.jpg", alt: "LV New Slider", duration: 6 },
+    { id: 5, type: "image", url: "/BIG%20BANNER/y2k-slider.jpg", alt: "Y2K Slider", duration: 6 },
 ]
 
 const BestOfSessassonSlider = () => {
-    const { t } = useLanguage()
+    const { t, language } = useLanguage()
+    const [apiSlides, setApiSlides] = useState<SlideData[]>([])
     const [currentSlide, setCurrentSlide] = useState(0)
-    const [timeLeft, setTimeLeft] = useState(slides[0].duration)
+    const [timeLeft, setTimeLeft] = useState(STATIC_SLIDES[0].duration)
     const [isMuted, setIsMuted] = useState(true)
     const [isPlaying, setIsPlaying] = useState(true)
     const [isHovering, setIsHovering] = useState(false)
     const videoRef = useRef<HTMLVideoElement>(null)
     const intervalRef = useRef<NodeJS.Timeout | null>(null)
     const progressIntervalRef = useRef<NodeJS.Timeout | null>(null)
+
+    // Fetch featured events and use them as image slides
+    useEffect(() => {
+        api.get('/events', { params: { badge: 'FEATURED', limit: 6 } })
+            .then(res => {
+                const events = res.data.data?.events ?? res.data.events ?? []
+                if (events.length > 0) {
+                    setApiSlides(events.map((ev: { _id: string; title?: { en?: string; fr?: string }; coverImage?: string }) => ({
+                        id: ev._id,
+                        type: 'image' as const,
+                        url: getImageUrl(ev.coverImage, STATIC_SLIDES[0].url),
+                        alt: language === 'fr' ? (ev.title?.fr || ev.title?.en || '') : (ev.title?.en || ev.title?.fr || ''),
+                        duration: 6,
+                    })))
+                }
+            })
+            .catch(() => {})
+    }, [language])
+
+    const slideList = apiSlides.length ? apiSlides : STATIC_SLIDES
 
     // Auto-slide functionality
     useEffect(() => {
@@ -77,7 +72,7 @@ const BestOfSessassonSlider = () => {
 
     const startAutoSlide = () => {
         clearAutoSlide()
-        const currentDuration = slides[currentSlide].duration
+        const currentDuration = slideList[currentSlide].duration
 
         // Reset timer for current slide
         setTimeLeft(currentDuration)
@@ -114,11 +109,11 @@ const BestOfSessassonSlider = () => {
     }
 
     const nextSlide = () => {
-        setCurrentSlide((prev) => (prev + 1) % slides.length)
+        setCurrentSlide((prev) => (prev + 1) % slideList.length)
     }
 
     const prevSlide = () => {
-        setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)
+        setCurrentSlide((prev) => (prev - 1 + slideList.length) % slideList.length)
     }
 
     const goToSlide = (index: number) => {
@@ -143,7 +138,7 @@ const BestOfSessassonSlider = () => {
         }
     }
 
-    const currentSlideData = slides[currentSlide]
+    const currentSlideData = slideList[currentSlide] ?? slideList[0]
 
     return (
         <div className="w-full sm:w-[85%] h-auto mx-auto mb-6 sm:mb-8 md:mb-10 px-4 sm:px-4 mt-60 sm:mt-48 md:mt-40 lg:mt-28">
@@ -260,7 +255,7 @@ const BestOfSessassonSlider = () => {
 
                     {/* Dotted Navigation - Bottom Center */}
                     <div className="absolute bottom-2 sm:bottom-3 md:bottom-4 left-1/2 transform -translate-x-1/2 flex items-center space-x-1 sm:space-x-2 z-10">
-                        {slides.map((_, index) => (
+                        {slideList.map((_, index) => (
                             <button
                                 key={index}
                                 onClick={() => goToSlide(index)}

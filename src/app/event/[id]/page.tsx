@@ -23,6 +23,8 @@ import { Footer } from '@/components/home';
 import { useLanguage } from '@/context/LanguageContext';
 import EventCard from '@/components/event/eventCard';
 import AuthModal from '@/components/AuthModal';
+import { getImageUrl as getImageUrlUtil } from '@/lib/imageUrl';
+import api from '@/lib/api';
 
 interface EventDetailProps {
     params: {
@@ -132,7 +134,7 @@ const slides = [
 ];
 
 export default function EventDetailPage({ params }: EventDetailProps) {
-    const { t }: any = useLanguage();
+    const { t, language }: any = useLanguage();
     const router = useRouter();
     const [selectedTicket, setSelectedTicket] = useState<number | null>(null);
     const [activeTab, setActiveTab] = useState<'tickets' | 'description' | 'moreInfo'>('tickets');
@@ -141,6 +143,8 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     const [playingSongId, setPlayingSongId] = useState<number | null>(null);
     const [songProgress, setSongProgress] = useState<{ [key: number]: number }>({});
     const [relatedCarouselIndex, setRelatedCarouselIndex] = useState(0);
+    const [apiEvent, setApiEvent] = useState<any>(null);
+    const [apiLoading, setApiLoading] = useState(true);
 
     // Collapse states for each section
     const [isTicketsCollapsed, setIsTicketsCollapsed] = useState(false);
@@ -198,72 +202,54 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     const moreInfoRef = useRef<HTMLDivElement>(null);
     const tabContentRef = useRef<HTMLDivElement>(null);
 
-    // Mock event data - Replace with actual API call based on params.id
+    // Fetch real event data from API
+    useEffect(() => {
+        api.get(`/events/${params.id}`)
+            .then(res => setApiEvent(res.data.data?.event ?? res.data.event ?? res.data))
+            .catch(() => {})
+            .finally(() => setApiLoading(false));
+    }, [params.id]);
+
+    const getLang = (field: { en?: string; fr?: string } | undefined) =>
+        field ? (language === 'fr' ? (field.fr || field.en || '') : (field.en || field.fr || '')) : '';
+
+    const getImageUrl = (path: string | undefined) => getImageUrlUtil(path);
+
+    // Merge API data over mock fallbacks
     const event = {
         id: params.id,
-        title: "Star for Mental Health",
-        subtitle: "ISSA NOEL KAREEMA OKAYLA BEN",
-        date: "28 JAN",
-        startDate: "2026-04-29T18:00:00",
-        fullDate: "Tuesday, 29 Apr 2026 at 06:00 pm",
-        endDate: "11:59 pm",
-        location: "Venue",
-        fullAddress: "123A University Street, Dubai, UAE",
-        organizer: "Platinum List",
-        images: [
-            "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1200&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=1200&auto=format&fit=crop"
-        ],
-        description: "Join us for an unforgettable evening dedicated to raising awareness and support for mental health initiatives. This star-studded event will feature amazing performances and inspiring stories.",
-        lineup: [
-            { name: "ISSA NOEL", time: "06:00 PM", type: "Opening Act" },
-            { name: "KAREEMA", time: "07:30 PM", type: "Main Performance" },
-            { name: "OKAYLA BEN", time: "09:00 PM", type: "Headliner" }
-        ],
-        tickets: [
-            {
-                id: 1,
-                name: "General Admission",
-                price: 2500,
-                available: 45,
-                description: "Standing area access",
+        title: apiEvent ? getLang(apiEvent.title) : "Star for Mental Health",
+        subtitle: apiEvent ? getLang(apiEvent.description)?.slice(0, 60) : "ISSA NOEL KAREEMA OKAYLA BEN",
+        date: apiEvent ? new Date(apiEvent.startDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }).toUpperCase() : "28 JAN",
+        startDate: apiEvent?.startDate ?? "2026-04-29T18:00:00",
+        fullDate: apiEvent ? new Date(apiEvent.startDate).toLocaleString('en-GB', { weekday:'long', day:'2-digit', month:'short', year:'numeric' }) + (apiEvent.startTime ? ` at ${apiEvent.startTime}` : '') : "Tuesday, 29 Apr 2026 at 06:00 pm",
+        endDate: apiEvent?.endTime ?? "11:59 pm",
+        location: apiEvent ? getLang(apiEvent.venue) : "Venue",
+        fullAddress: apiEvent ? getLang(apiEvent.address) : "123A University Street, Dubai, UAE",
+        organizer: apiEvent?.createdBy?.name ?? "Platinum List",
+        images: apiEvent?.slides?.length
+            ? apiEvent.slides.map((s: any) => getImageUrl(s.url))
+            : apiEvent?.coverImage
+                ? [getImageUrl(apiEvent.coverImage)]
+                : ["https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&auto=format&fit=crop"],
+        description: apiEvent ? getLang(apiEvent.description) : "Join us for an unforgettable evening dedicated to raising awareness and support for mental health initiatives.",
+        lineup: [],
+        tickets: apiEvent?.ticketTypes?.length
+            ? apiEvent.ticketTypes.map((tt: any, i: number) => ({
+                id: i + 1,
+                name: getLang(tt.name),
+                price: tt.price,
+                available: tt.availableSeats ?? tt.totalSeats ?? 0,
+                description: getLang(tt.description),
                 offerEndsIn: "Limited time",
                 days: "Days"
-            },
-            {
-                id: 2,
-                name: "VIP Package",
-                price: 5000,
-                available: 12,
-                description: "Front row seating + Meet & Greet",
-                offerEndsIn: "Flash sale",
-                days: "Days"
-            },
-            {
-                id: 3,
-                name: "Premium Table",
-                price: 15000,
-                available: 3,
-                description: "Table for 4 + Bottle service",
-                offerEndsIn: "Last chance",
-                days: "Days"
-            }
-        ],
-        relatedEvents: [
-            {
-                id: "2",
-                title: "Summer Music Festival",
-                date: "15 FEB",
-                image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&auto=format&fit=crop"
-            },
-            {
-                id: "3",
-                title: "Jazz Night Live",
-                date: "22 FEB",
-                image: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=400&auto=format&fit=crop"
-            }
-        ]
+            }))
+            : [
+                { id: 1, name: "General Admission", price: 2500, available: 45, description: "Standing area access", offerEndsIn: "Limited time", days: "Days" },
+                { id: 2, name: "VIP Package", price: 5000, available: 12, description: "Front row seating + Meet & Greet", offerEndsIn: "Flash sale", days: "Days" },
+                { id: 3, name: "Premium Table", price: 15000, available: 3, description: "Table for 4 + Bottle service", offerEndsIn: "Last chance", days: "Days" }
+            ],
+        relatedEvents: []
     };
 
     const currentSlideData = slides[currentSlide];
@@ -322,7 +308,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     // Initialize quantities for tickets on mount only
     useEffect(() => {
         const initialQuantities: { [key: number]: number } = {};
-        event.tickets.forEach((ticket) => {
+        event.tickets.forEach((ticket: { id: number }) => {
             initialQuantities[ticket.id] = 0;
         });
         setTicketQuantities(initialQuantities);
@@ -354,7 +340,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
     // Calculate total amount
     const calculateTotal = () => {
-        return event.tickets.reduce((total, ticket) => {
+        return event.tickets.reduce((total: number, ticket: { id: number; price: number }) => {
             return total + (ticketQuantities[ticket.id] || 0) * ticket.price;
         }, 0);
     };
@@ -605,7 +591,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                     {!isTicketsCollapsed && (
                                         <div className="px-0 py-4">
                                             <div className="space-y-3">
-                                                {event.tickets.map((ticket) => (
+                                                {event.tickets.map((ticket: { id: number; name: string; price: number; available: number; description: string; offerEndsIn: string; days: string }) => (
                                                     <div key={ticket.id} className="bg-gray-100 rounded-lg overflow-hidden">
                                                         {/* Main Ticket Row - always horizontal */}
                                                         <div className="px-3 sm:px-4 py-2 flex flex-row items-center gap-3 sm:gap-4">
@@ -757,7 +743,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                     <div className="mt-6">
                                                         <h3 className="font-bold text-lg text-[#112b38] mb-3">🎟 TICKET PRICING</h3>
                                                         <div className="space-y-3">
-                                                            {event.tickets.map((ticket) => (
+                                                            {event.tickets.map((ticket: { id: number; name: string; price: number; description: string }) => (
                                                                 <div key={ticket.id} className="flex items-center justify-between bg-gray-50 rounded-lg px-4 py-3 border border-gray-100">
                                                                     <div>
                                                                         <span className="font-bold text-[#112b38] text-sm">{ticket.name}</span>

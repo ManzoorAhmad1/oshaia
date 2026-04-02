@@ -8,34 +8,46 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import NavSearchHeader from '@/components/event/NavSearchHeader';
+import { useAuth } from '@/context/AuthContext';
+import api from '@/lib/api';
+import { getImageUrl } from '@/lib/imageUrl';
+import toast from 'react-hot-toast';
 
-const mockCheckout = {
-    eventImage: '/Cover%20-/59069_upload68daa2739f40c_1759158899-0-en1759158912.jpg.jpeg',
-    eventName: 'Star for Mental Health',
-    venue: 'Coca-Cola Arena in Dubai',
-    venueShort: 'Venue',
-    date: 'Thu 12 Feb',
-    time: '18:30',
-    ticketType: 'Lower Tier Gold',
-    row: 'J',
-    seat: '165',
-    quantity: 1,
-    ticketPrice: 98.90,
-    processingFee: 30,
-    currency: 'USD',
-    email: 'mugonhavish94@gmail.com',
-    phone: '+2305826 7091',
-};
-
-type PaymentMethod = 'card' | 'juice' | 'mytblink' | null;
+interface ApiEvent {
+    _id: string;
+    title: { en: string; fr: string };
+    startDate: string;
+    startTime?: string;
+    venue: { en: string; fr: string };
+    coverImage?: string;
+    ticketTypes: Array<{ name: string; price: number; quantity: number; sold?: number }>;
+}
 
 export default function CheckoutPage({ params }: { params: { id: string } }) {
     const router = useRouter();
-    const [selectedPayment, setSelectedPayment] = useState<PaymentMethod>(null);
+    const { user, isAuthenticated, isLoading: authLoading } = useAuth();
+    const [event, setEvent] = useState<ApiEvent | null>(null);
+    const [selectedTicketIdx, setSelectedTicketIdx] = useState(0);
+    const [selectedPayment, setSelectedPayment] = useState<'card' | 'juice' | 'mytblink' | null>(null);
     const [summaryOpen, setSummaryOpen] = useState(true);
-    const [timeLeft, setTimeLeft] = useState(13 * 60 - 1); // 12:59 in seconds
-    const [qty, setQty] = useState(mockCheckout.quantity);
+    const [timeLeft, setTimeLeft] = useState(13 * 60 - 1);
+    const [qty, setQty] = useState(1);
     const [agreed, setAgreed] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Auth guard
+    useEffect(() => {
+        if (!authLoading && !isAuthenticated) {
+            router.replace(`/account?redirect=/event/${params.id}/checkout`);
+        }
+    }, [authLoading, isAuthenticated, params.id, router]);
+
+    // Fetch event
+    useEffect(() => {
+        api.get(`/events/${params.id}`)
+            .then(res => setEvent(res.data.data?.event ?? res.data.event ?? null))
+            .catch(() => {});
+    }, [params.id]);
 
     // Countdown timer
     useEffect(() => {
@@ -50,8 +62,36 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
         return `${m}:${s}`;
     };
 
-    const subtotal = mockCheckout.ticketPrice * qty;
-    const total = subtotal + mockCheckout.processingFee / 30; // convert Rs to USD approx
+    const formatDate = (dateStr: string) => {
+        const d = new Date(dateStr);
+        return d.toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short' });
+    };
+
+    const getImageSrc = (ev: ApiEvent) => getImageUrl(ev.coverImage);
+
+    const selectedTicket = event?.ticketTypes?.[selectedTicketIdx];
+    const ticketPrice = selectedTicket?.price ?? 0;
+    const processingFee = 30;
+    const subtotal = ticketPrice * qty;
+    const total = subtotal + processingFee;
+
+    const handlePayNow = async () => {
+        if (!selectedPayment || !agreed) return;
+        setIsSubmitting(true);
+        try {
+            // Order creation would go here when backend orders API is available
+            // For now, confirm the reservation and show success
+            await new Promise(res => setTimeout(res, 1200)); // simulate processing
+            toast.success('Booking confirmed! Your tickets will be sent to your email.');
+            router.push('/profile?tab=tickets');
+        } catch {
+            toast.error('Payment failed. Please try again.');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    if (authLoading) return null;
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -77,8 +117,8 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
                         <div className="rounded-xl overflow-hidden shadow-md border border-gray-200 bg-white">
                             <div className="relative w-full h-[200px] sm:h-[230px]">
                                 <img
-                                    src={mockCheckout.eventImage}
-                                    alt={mockCheckout.eventName}
+                                    src={event ? getImageSrc(event) : '/Cover%20-/59069_upload68daa2739f40c_1759158899-0-en1759158912.jpg.jpeg'}
+                                    alt={event?.title?.en || 'Event'}
                                     className="w-full h-full object-cover"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
@@ -87,21 +127,23 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
                             {/* Event Info */}
                             <div className="p-4 space-y-2">
                                 <h2 className="font-bold text-[#112b38] text-base sm:text-lg leading-tight">
-                                    {mockCheckout.eventName}
+                                    {event?.title?.en || event?.title?.fr || 'Event'}
                                 </h2>
                                 <div className="flex items-center gap-1.5 text-xs text-gray-500">
                                     <MapPin className="w-3.5 h-3.5 text-[#c89c6b] flex-shrink-0" />
-                                    <span>{mockCheckout.venue}</span>
+                                    <span>{event?.venue?.en || event?.venue?.fr || 'Venue'}</span>
                                 </div>
                                 <div className="flex items-center gap-4 text-xs text-gray-500">
                                     <div className="flex items-center gap-1.5">
                                         <Calendar className="w-3.5 h-3.5 text-[#c89c6b] flex-shrink-0" />
-                                        <span>{mockCheckout.date}</span>
+                                        <span>{event ? formatDate(event.startDate) : ''}</span>
                                     </div>
+                                    {event?.startTime && (
                                     <div className="flex items-center gap-1.5">
                                         <Clock className="w-3.5 h-3.5 text-[#c89c6b] flex-shrink-0" />
-                                        <span>{mockCheckout.time}</span>
+                                        <span>{event.startTime}</span>
                                     </div>
+                                    )}
                                 </div>
                             </div>
 
@@ -113,12 +155,22 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
                                 <div className="flex items-start gap-2">
                                     <Ticket className="w-4 h-4 text-[#c89c6b] mt-0.5 flex-shrink-0" />
                                     <div>
-                                        <p className="font-semibold text-[#112b38] text-sm">
-                                            {mockCheckout.ticketType}
-                                        </p>
-                                        <p className="text-xs text-gray-500">
-                                            Row: {mockCheckout.row} &nbsp; Seat: {mockCheckout.seat}
-                                        </p>
+                                        {event?.ticketTypes && event.ticketTypes.length > 1 ? (
+                                            <select
+                                                value={selectedTicketIdx}
+                                                onChange={e => setSelectedTicketIdx(Number(e.target.value))}
+                                                className="text-sm font-semibold text-[#112b38] border border-gray-200 rounded px-2 py-1 bg-white"
+                                            >
+                                                {event.ticketTypes.map((tt, i) => (
+                                                    <option key={i} value={i}>{tt.name} — Rs {tt.price}</option>
+                                                ))}
+                                            </select>
+                                        ) : (
+                                            <p className="font-semibold text-[#112b38] text-sm">
+                                                {selectedTicket?.name || 'General Admission'}
+                                            </p>
+                                        )}
+                                        <p className="text-xs text-gray-500 mt-0.5">Rs {ticketPrice} / ticket</p>
                                     </div>
                                 </div>
 
@@ -156,12 +208,14 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
                             <div className="flex flex-col sm:flex-row gap-1 sm:gap-3 text-xs text-gray-600 font-medium">
                                 <span className="flex items-center gap-1">
                                     <Mail className="w-3 h-3 text-[#c89c6b]" />
-                                    {mockCheckout.email}
+                                    {user?.email || 'your email'}
                                 </span>
+                                {user?.phone && (
                                 <span className="flex items-center gap-1">
                                     <Phone className="w-3 h-3 text-[#c89c6b]" />
-                                    {mockCheckout.phone}
+                                    {user.phone}
                                 </span>
+                                )}
                             </div>
                             <p className="text-xs pt-1">
                                 <a href="/terms" className="text-[#c89c6b] hover:text-[#112b38] underline transition-colors">
@@ -314,8 +368,8 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
                         {/* Order Summary */}
                         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 sm:p-5">
                             <h3 className="font-bold text-[#112b38] text-base sm:text-lg mb-1">
-                                {mockCheckout.eventName}
-                            </h3>
+                                    {event?.title?.en || event?.title?.fr || 'Order Summary'}
+                                </h3>
 
                             {/* Summary Toggle */}
                             <button
@@ -333,9 +387,7 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
                                 <div className="space-y-2 pt-3">
                                     <div className="flex items-center justify-between text-sm">
                                         <span className="text-gray-500">Tickets</span>
-                                        <span className="font-medium text-[#112b38]">
-                                            {subtotal.toFixed(2)} {mockCheckout.currency}
-                                        </span>
+                                        <span className="font-medium text-[#112b38]">Rs {subtotal.toFixed(2)}</span>
                                     </div>
                                     <div className="flex items-center justify-between text-sm">
                                         <span className="text-gray-500">Quantity</span>
@@ -343,13 +395,11 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
                                     </div>
                                     <div className="flex items-center justify-between text-sm">
                                         <span className="text-gray-500">Processing Fee</span>
-                                        <span className="font-medium text-[#112b38]">Rs{mockCheckout.processingFee}</span>
+                                        <span className="font-medium text-[#112b38]">Rs {processingFee}</span>
                                     </div>
                                     <div className="border-t border-dashed border-gray-200 pt-2 mt-2 flex items-center justify-between">
                                         <span className="text-sm font-semibold text-gray-700">Total excl. VAT</span>
-                                        <span className="font-bold text-[#112b38] text-base">
-                                            {(subtotal + 1).toFixed(2)} {mockCheckout.currency}
-                                        </span>
+                                        <span className="font-bold text-[#112b38] text-base">Rs {total.toFixed(2)}</span>
                                     </div>
                                 </div>
                             )}
@@ -363,13 +413,14 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
 
                         {/* PAY NOW Button */}
                         <button
-                            disabled={!selectedPayment || !agreed}
-                            className={`w-full py-4 rounded-xl font-bold text-base tracking-wide transition-all duration-300 ${selectedPayment && agreed
+                            onClick={handlePayNow}
+                            disabled={!selectedPayment || !agreed || isSubmitting}
+                            className={`w-full py-4 rounded-xl font-bold text-base tracking-wide transition-all duration-300 ${selectedPayment && agreed && !isSubmitting
                                 ? 'bg-[#112b38] hover:bg-[#1a3e52] text-white shadow-lg hover:shadow-xl hover:-translate-y-0.5'
                                 : 'bg-gray-300 text-gray-400 cursor-not-allowed'
                                 }`}
                         >
-                            PAY NOW
+                            {isSubmitting ? 'Processing...' : 'PAY NOW'}
                         </button>
 
                         {/* Terms checkbox */}

@@ -1,38 +1,55 @@
+'use client';
 import { useState, useEffect, useRef } from "react";
 import { Calendar, ChevronRight, ChevronLeft, MapPin } from "lucide-react";
 import { Text } from "rizzui/typography";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
 import Link from "next/link";
+import api from "@/lib/api";
+import { getImageUrl } from '@/lib/imageUrl';
 
-const slideData = [
+interface ApiEvent {
+    _id: string;
+    title: { en: string; fr: string };
+    startDate: string;
+    venue: { en: string; fr: string };
+    coverImage?: string;
+    ticketTypes: Array<{ price: number }>;
+}
+
+const STATIC_SLIDES = [
     {
+        id: "1",
         image: "/TOP%20SLLER/22054_9834dd51a16eba240c0c6c97a5237e74-0-en1771488562.jpg",
-        title: "Bel Suono: Three Pianos World Hits Gala at Zabeel Theatre, Dubai",
+        title: "Bel Suono: Three Pianos World Hits Gala",
         date: "FEB 21 NOV",
         price: "500",
     },
     {
+        id: "2",
         image: "/TOP%20SLLER/22078_75ef9ba7a61c8303513ef023de00195d-0-en1771489174.jpg",
-        title: "Big 5 Concert: Stars of Arabic Music Live in Abu Dhabi",
+        title: "Big 5 Concert: Stars of Arabic Music Live",
         date: "MAR 15 DEC",
         price: "350",
     },
     {
+        id: "3",
         image: "/TOP%20SLLER/22099_3899b925d49dbee2814e0c1278a6dc64-0-en1771579388.jpg",
-        title: "Sessions: The Ultimate Live Music Experience, Dubai",
+        title: "Sessions: The Ultimate Live Music Experience",
         date: "APR 20 JAN",
         price: "450",
     },
 ];
-const images = slideData.map(s => s.image);
+
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 export default function EventCard() {
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
     const [index, setIndex] = useState(0);
     const [bottomIndex, setBottomIndex] = useState(0);
     const [timeLeft, setTimeLeft] = useState(6);
     const [isPlaying, setIsPlaying] = useState(true);
+    const [slides, setSlides] = useState(STATIC_SLIDES);
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
     const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
     const router = useRouter();
@@ -40,10 +57,28 @@ export default function EventCard() {
     // Auto slide for bottom carousel
     useEffect(() => {
         const interval = setInterval(() => {
-            setBottomIndex((prev) => (prev + 1) % images.length);
+            setBottomIndex(prev => (prev + 1) % slides.length);
         }, 5000);
         return () => clearInterval(interval);
-    }, []);
+    }, [slides.length]);
+
+    // Fetch trending events from API
+    useEffect(() => {
+        api.get('/events', { params: { badge: 'TRENDING', limit: 5 } })
+            .then(res => {
+                const events: ApiEvent[] = res.data.data?.events ?? res.data.events ?? [];
+                if (events.length > 0) {
+                    setSlides(events.map(ev => ({
+                        id: ev._id,
+                        image: getImageUrl(ev.coverImage, STATIC_SLIDES[0].image),
+                        title: language === 'fr' ? (ev.title?.fr || ev.title?.en) : (ev.title?.en || ev.title?.fr),
+                        date: (() => { const d = new Date(ev.startDate); return `${MONTHS[d.getMonth()].toUpperCase()} ${String(d.getDate()).padStart(2,'0')}`; })(),
+                        price: ev.ticketTypes?.length ? String(Math.min(...ev.ticketTypes.map(t => t.price))) : 'FREE',
+                    })));
+                }
+            })
+            .catch(() => {});
+    }, [language]);
 
     // Auto slide with timer
     useEffect(() => {
@@ -76,7 +111,7 @@ export default function EventCard() {
 
         // Slide transition timer - 6 seconds
         intervalRef.current = setTimeout(() => {
-            setIndex((prev) => (prev + 1) % images.length);
+            setIndex((prev) => (prev + 1) % slides.length);
         }, 6000);
     };
 
@@ -104,9 +139,9 @@ export default function EventCard() {
                 </div>
                 <div className="w-full flex flex-col sm:flex-row ">
                     {/* Left Half - Image Slider */}
-                    <Link href={`/event/${index + 1}`} className="w-full sm:w-1/2 relative h-48 sm:h-[180px] md:h-[200.1px] rounded-tl-lg rounded-lb-lg overflow-hidden block cursor-pointer">
+                    <Link href={`/event/${slides[index]?.id ?? '#'}`} className="w-full sm:w-1/2 relative h-48 sm:h-[180px] md:h-[200.1px] rounded-tl-lg rounded-lb-lg overflow-hidden block cursor-pointer">
                         <img
-                            src={images[index]}
+                            src={slides[index]?.image}
                             alt="Event"
                             className="w-full h-full object-cover transition-all duration-500"
                         />
@@ -149,7 +184,7 @@ export default function EventCard() {
                         <div className="flex flex-col gap-2 sm:gap-3 md:gap-4 mt-2 sm:mt-3 md:mt-4">
                             {/* Event Titles */}
                             <p className="text-black text-xs sm:text-sm md:text-base lg:text-lg font-medium transition-all duration-500">
-                                {slideData[index].title}
+                                {slides[index]?.title}
                             </p>
                             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
                                 <div className="flex gap-2 items-center flex-wrap">
@@ -157,7 +192,7 @@ export default function EventCard() {
                                     <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-gray-600">
                                         <div className="flex items-center gap-1">
                                             <Calendar size={14} className="text-gray-500 sm:w-4 sm:h-4" />
-                                            <span className="font-medium text-xs sm:text-sm">{slideData[index].date}</span>
+                                            <span className="font-medium text-xs sm:text-sm">{slides[index]?.date}</span>
                                         </div>
 
                                     </div>
@@ -165,13 +200,13 @@ export default function EventCard() {
                                     {/* Venue */}
                                     <div className="flex items-center gap-1 text-gray-600">
                                         <MapPin size={14} className="text-gray-500 sm:w-4 sm:h-4" />
-                                        <p className="text-xs sm:text-sm">{t.asFrom} <span>{slideData[index].price}</span></p>
+                                        <p className="text-xs sm:text-sm">{t.asFrom} <span>{slides[index]?.price}</span></p>
                                     </div>
                                 </div>
                                 <div className="flex items-center justify-end">
                                     {/* Navigation Button */}
                                     <button
-                                        onClick={() => setIndex((index + 1) % images.length)}
+                                        onClick={() => setIndex((index + 1) % slides.length)}
                                         className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-[#112b38] text-white rounded-full hover:bg-[#c89c6b] hover:scale-110 flex items-center justify-center border-2 border-gray-300 transition-all duration-300 shadow-md hover:shadow-lg"
                                     >
                                         <img
@@ -190,14 +225,14 @@ export default function EventCard() {
             </div>
             <div className="w-full sm:w-[85%] mx-auto mt-8 sm:mt-12 md:mt-20 flex flex-col relative">
                 <div className="w-full h-[200px] rounded-lg overflow-hidden relative shadow-md">
-                    {images.map((img, i) => (
+                    {slides.map((slide, i) => (
                         <Link
-                            key={i}
-                            href={`/event/${i + 1}`}
+                            key={slide.id}
+                            href={`/event/${slide.id}`}
                             className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ${i === bottomIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
                         >
                             <img
-                                src={img}
+                                src={slide.image}
                                 alt="Event"
                                 className="w-full h-full object-cover"
                             />
@@ -206,7 +241,7 @@ export default function EventCard() {
 
                     {/* Pagination Dots */}
                     <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 z-20 flex gap-2">
-                        {images.map((_, i) => (
+                        {slides.map((_, i) => (
                             <button
                                 key={i}
                                 onClick={(e) => {

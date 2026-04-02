@@ -8,9 +8,11 @@ import { usePathname } from "next/navigation"
 import { FaHome } from "react-icons/fa"
 import { Divider, NavItem } from "../home/HeroCarousel"
 import AuthModal from "@/components/AuthModal"
+import { useAuth } from "@/context/AuthContext"
 
 const NavSearchHeader = () => {
     const { t, language, setLanguage }: any = useLanguage()
+    const { user, isAuthenticated, logout } = useAuth()
     const pathname = usePathname()
 
     const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false)
@@ -263,7 +265,7 @@ const NavSearchHeader = () => {
                                 <div className="flex items-center h-[42px] sm:h-[44px] lg:h-[44.8px] gap-0">
                                     <Link href="/account" className="flex items-center gap-1 text-xs text-gray-700 hover:text-[#c89c6b] transition-colors pl-2 py-1.5 h-full whitespace-nowrap">
                                         <User className="w-4 h-4 sm:w-5 sm:h-5" />
-                                        <span className="hidden xl:inline">{t.myAccount}</span>
+                                        <span className="hidden xl:inline">{isAuthenticated ? (user?.name?.split(' ')[0] || t.myAccount) : t.myAccount}</span>
                                     </Link>
                                     <button onClick={(e) => { e.stopPropagation(); setProfileDropdownOpen(!profileDropdownOpen) }} className="px-1 h-full flex items-center justify-center text-gray-700 hover:text-[#c89c6b] transition-colors">
                                         <ChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform ${profileDropdownOpen ? 'rotate-180' : ''}`} />
@@ -271,29 +273,39 @@ const NavSearchHeader = () => {
                                 </div>
                                 {profileDropdownOpen && (
                                     <div className="absolute top-full right-0 mt-2 w-52 bg-white rounded-lg shadow-xl border border-gray-200 z-50 py-2">
-                                        <Link href="/profile" onClick={() => setProfileDropdownOpen(false)} className="flex items-center gap-2 px-4 py-2 hover:bg-[#112b38] hover:text-white text-xs whitespace-nowrap text-gray-700 transition-colors">
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="8" r="4" strokeWidth="2" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 20c0-4 3.6-7 8-7s8 3 8 7" /></svg>
-                                            My Profile
-                                        </Link>
-                                        <Link href="/profile?tab=bookings" onClick={() => setProfileDropdownOpen(false)} className="flex items-center gap-2 px-4 py-2 hover:bg-[#112b38] hover:text-white text-xs whitespace-nowrap text-gray-700 transition-colors">
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" strokeWidth="2" /><path strokeLinecap="round" strokeWidth="2" d="M16 2v4M8 2v4M3 10h18" /><path strokeLinecap="round" strokeWidth="2" d="M9 16l2 2 4-4" /></svg>
-                                            Booking History
-                                        </Link>
-                                        <Link href="/profile?tab=tickets" onClick={() => setProfileDropdownOpen(false)} className="flex items-center gap-2 px-4 py-2 hover:bg-[#112b38] hover:text-white text-xs whitespace-nowrap text-gray-700 transition-colors">
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" /></svg>
-                                            My Tickets
-                                        </Link>
-                                        <div className="border-t border-gray-100 mt-1 pt-1">
-                                            <button onClick={() => { setProfileDropdownOpen(false); setAuthMode('login'); setIsAuthModalOpen(true) }} className="w-full text-left px-4 py-2 hover:bg-red-50 text-xs whitespace-nowrap text-red-500 transition-colors flex items-center gap-2">
-                                                <LogOut className="w-4 h-4" />
-                                                Logout
+                                        {isAuthenticated ? (
+                                            <>
+                                                <Link href="/profile" onClick={() => setProfileDropdownOpen(false)} className="flex items-center gap-2 px-4 py-2 hover:bg-[#112b38] hover:text-white text-xs whitespace-nowrap text-gray-700 transition-colors">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="8" r="4" strokeWidth="2" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 20c0-4 3.6-7 8-7s8 3 8 7" /></svg>
+                                                    My Profile
+                                                </Link>
+                                                <Link href="/profile?tab=bookings" onClick={() => setProfileDropdownOpen(false)} className="flex items-center gap-2 px-4 py-2 hover:bg-[#112b38] hover:text-white text-xs whitespace-nowrap text-gray-700 transition-colors">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" strokeWidth="2" /><path strokeLinecap="round" strokeWidth="2" d="M16 2v4M8 2v4M3 10h18" /><path strokeLinecap="round" strokeWidth="2" d="M9 16l2 2 4-4" /></svg>
+                                                    Booking History
+                                                </Link>
+                                                <Link href="/profile?tab=tickets" onClick={() => setProfileDropdownOpen(false)} className="flex items-center gap-2 px-4 py-2 hover:bg-[#112b38] hover:text-white text-xs whitespace-nowrap text-gray-700 transition-colors">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" /></svg>
+                                                    My Tickets
+                                                </Link>
+                                                <div className="border-t border-gray-100 mt-1 pt-1">
+                                                    <button onClick={async () => { setProfileDropdownOpen(false); await logout(); }} className="w-full text-left px-4 py-2 hover:bg-red-50 text-xs whitespace-nowrap text-red-500 transition-colors flex items-center gap-2">
+                                                        <LogOut className="w-4 h-4" />
+                                                        Logout
+                                                    </button>
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <button onClick={() => { setProfileDropdownOpen(false); setAuthMode('login'); setIsAuthModalOpen(true) }} className="w-full text-left px-4 py-2 hover:bg-[#112b38] hover:text-white text-xs whitespace-nowrap text-gray-700 transition-colors flex items-center gap-2">
+                                                <User className="w-4 h-4" />
+                                                Login
                                             </button>
-                                        </div>
+                                        )}
                                     </div>
                                 )}
                             </div>
 
                             {/* Login / Sign Up - hidden on mobile, shown in mobile menu */}
+                            {!isAuthenticated && (
                             <div className="hidden sm:flex">
                                 <button className="bg-transparent border-2 border-[#112b38] text-[#112b38] hover:bg-[#112b38] hover:text-[#c89c6b] hover:border-[#112b38] px-3 rounded-l-lg text-xs font-medium transition-all duration-300 shadow-md hover:shadow-lg whitespace-nowrap h-[42px] sm:h-[44px] lg:h-[44.8px]"
                                     onClick={() => { setAuthMode('login'); setIsAuthModalOpen(true) }}>
@@ -304,6 +316,7 @@ const NavSearchHeader = () => {
                                     {t.signUp}
                                 </button>
                             </div>
+                            )}
 
                             {/* Menu - hidden, menu now in hamburger only */}
 

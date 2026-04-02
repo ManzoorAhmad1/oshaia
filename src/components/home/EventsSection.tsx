@@ -1,17 +1,35 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Calendar } from 'lucide-react'
 import { useLanguage } from '@/context/LanguageContext'
+import api from '@/lib/api'
+import { getImageUrl } from '@/lib/imageUrl'
+
+interface ApiEvent {
+  _id: string;
+  title: { en: string; fr: string };
+  category: string;
+  startDate: string;
+  venue: { en: string; fr: string };
+  coverImage?: string;
+  ticketTypes: Array<{ price: number }>;
+  badge?: string;
+  slug: string;
+}
+
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 const EventsSection = () => {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
   const [activeCategory, setActiveCategory] = useState('all')
+  const [events, setEvents] = useState<ApiEvent[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   // Category keys mapping to translations
-  const categoryKeys = ['all', 'concert', 'festival', 'conferences', 'show', 'sport'] as const
+  const categoryKeys = ['all', 'concert', 'festival', 'conferences', 'show', 'sport', 'international'] as const
 
   const getCategoryLabel = (key: string) => {
     const labels: Record<string, string> = {
@@ -21,94 +39,30 @@ const EventsSection = () => {
       conferences: t.conferences,
       show: t.show,
       sport: t.sport,
+      international: t.categoryInternational || 'INTERNATIONAL',
     }
     return labels[key] || key
   }
 
-  const events = [
-    {
-      id: 1,
-      image: '/1080X1080/Bollywood-Unwind-Grid.jpg',
-      title: 'Night Concert Live',
-      category: 'CONCERT',
-      day: '25',
-      month: 'Jan',
-      year: '2026',
-      location: 'Dubai Arena',
-      price: 'RS 299',
-      badge: 'TRENDING',
-      badgeColor: 'bg-accent-orange'
-    },
-    {
-      id: 2,
-      image: '/1080X1080/kabul-grid-1.jpg',
-      title: 'The First Ever',
-      category: 'FESTIVAL',
-      day: '15',
-      month: 'Feb',
-      year: '2026',
-      location: 'Festival City',
-      price: 'RS 199',
-      badge: 'HOT',
-      badgeColor: 'bg-accent-pink'
-    },
-    {
-      id: 3,
-      image: '/1080X1080/lv-new-grid.jpg',
-      title: 'Antalay Championship',
-      category: 'SPORT',
-      day: '10',
-      month: 'Mar',
-      year: '2026',
-      location: 'Sports Complex',
-      price: 'RS 399',
-      badge: 'NEW',
-      badgeColor: 'bg-secondary-purple'
-    },
-    {
-      id: 4,
-      image: '/1080X1080/y2k-grid.jpg',
-      title: 'Summer Music Fest',
-      category: 'CONCERT',
-      day: '20',
-      month: 'Apr',
-      year: '2026',
-      location: 'Beach Arena',
-      price: 'RS 249',
-      badge: '',
-      badgeColor: ''
-    },
-    {
-      id: 5,
-      image: '/1080X1080/Bollywood-Unwind-Grid.jpg',
-      title: 'Tech Conference 2026',
-      category: 'CONFERENCES',
-      day: '05',
-      month: 'May',
-      year: '2026',
-      location: 'Convention Center',
-      price: 'RS 499',
-      badge: 'NEW',
-      badgeColor: 'bg-secondary-purple'
-    },
-    {
-      id: 6,
-      image: '/1080X1080/kabul-grid-1.jpg',
-      title: 'Comedy Night Show',
-      category: 'SHOW',
-      day: '18',
-      month: 'May',
-      year: '2026',
-      location: 'Theater Hall',
-      price: 'RS 149',
-      badge: '',
-      badgeColor: ''
-    }
-  ]
+  useEffect(() => {
+    const params: Record<string, string> = {};
+    if (activeCategory !== 'all') params.category = activeCategory.toUpperCase();
+    api.get('/events', { params })
+      .then(res => setEvents(res.data.data?.events ?? res.data.events ?? []))
+      .catch(() => setEvents([]))
+      .finally(() => setIsLoading(false));
+  }, [activeCategory])
 
-  const filteredEvents = activeCategory === 'all'
-    ? events
-    : events.filter(event => event.category.toLowerCase() === activeCategory)
+  const getTitle = (ev: ApiEvent) => language === 'fr' ? (ev.title?.fr || ev.title?.en) : (ev.title?.en || ev.title?.fr)
+  const getVenue = (ev: ApiEvent) => language === 'fr' ? (ev.venue?.fr || ev.venue?.en) : (ev.venue?.en || ev.venue?.fr)
+  const getMinPrice = (ev: ApiEvent) => {
+    if (!ev.ticketTypes?.length) return 'FREE';
+    const min = Math.min(...ev.ticketTypes.map(t => t.price));
+    return `RS ${min}`;
+  }
+  const getDay = (dateStr: string) => { const d = new Date(dateStr); return String(d.getDate()).padStart(2,'0'); }
+  const getMonth = (dateStr: string) => { const d = new Date(dateStr); return MONTHS[d.getMonth()]; }
+  const getImageSrc = (ev: ApiEvent) => getImageUrl(ev.coverImage);
 
   return (
     <section className="mt-10 sm:mt-8 md:mt-10 pb-8 sm:pb-8 md:pb-10">
@@ -142,17 +96,26 @@ const EventsSection = () => {
 
       {/* Cards + Button - 85% centered */}
       <div className="w-full sm:w-[85%] mx-auto px-4 sm:px-0">
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 py-8 justify-items-center">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="w-full max-w-[340px] h-[400px] bg-gray-200 animate-pulse rounded-2xl" />
+            ))}
+          </div>
+        ) : events.length === 0 ? (
+          <div className="py-16 text-center text-gray-500">No events found.</div>
+        ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 sm:gap-14 md:gap-16 lg:gap-20 py-8 overflow-visible justify-items-center">
-          {filteredEvents.map((event, index) => (
+          {events.map((event, index) => (
             <Link
-              key={event.id}
-              href={`/event/${event.id}`}
+              key={event._id}
+              href={`/event/${event._id}`}
               className="w-full max-w-[340px] h-auto event-card relative overflow-visible block cursor-pointer"
             >
-              {/* Badge Image at Top Left - Z-index high but with pointer-events-none */}
+              {/* Badge Image at Top Left */}
               <div className="hidden sm:block absolute -top-[28px] -left-[59px] w-[420px] h-auto z-50 pointer-events-none">
                 <img
-                  src={`/images/LOGO TAG/${index + 1}.png`}
+                  src={`/images/LOGO TAG/${(index % 6) + 1}.png`}
                   alt="Badge"
                   className="w-full h-auto object-contain scale-110"
                 />
@@ -163,20 +126,20 @@ const EventsSection = () => {
                 {/* Event Image */}
                 <div className="relative w-full h-[340px] overflow-hidden">
                   <Image
-                    src={event.image}
-                    alt={event.title}
+                    src={getImageSrc(event)}
+                    alt={getTitle(event) || 'Event'}
                     fill
                     className="object-cover"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    priority={event.id <= 3}
+                    priority={index < 3}
                   />
 
                   {/* Date Badge */}
                   <div className="absolute top-3 right-3 bg-black/70 rounded shadow-lg overflow-hidden z-20 px-1">
                     <div className="flex items-center gap-1">
                       <Calendar className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
-                      <div className="text-lg sm:text-xl font-bold text-white leading-none">{event.day}</div>
-                      <div className="text-sm sm:text-base font-bold text-white uppercase">{event.month}</div>
+                      <div className="text-lg sm:text-xl font-bold text-white leading-none">{getDay(event.startDate)}</div>
+                      <div className="text-sm sm:text-base font-bold text-white uppercase">{getMonth(event.startDate)}</div>
                     </div>
                   </div>
                 </div>
@@ -184,24 +147,25 @@ const EventsSection = () => {
                 {/* Event Info */}
                 <div className="w-full bg-white flex items-stretch justify-between border border-[#7e7b7b] border-t-0 rounded-bl-2xl rounded-br-lg overflow-hidden">
                   <div className='flex flex-col justify-center pl-3 sm:pl-4 py-2 sm:py-3'>
-                    <p className="text-xs sm:text-sm font-bold whitespace-nowrap">{event.title}</p>
-                    <p className="text-[10px] sm:text-xs text-[#112b38]">{event.location}</p>
+                    <p className="text-xs sm:text-sm font-bold whitespace-nowrap">{getTitle(event)}</p>
+                    <p className="text-[10px] sm:text-xs text-[#112b38]">{getVenue(event)}</p>
                   </div>
                   <div className='w-[135px] bg-[#112b38] hover:bg-[#c89c6b] flex-shrink-0 flex flex-col items-center justify-center py-2 sm:py-3 px-4 sm:px-6 text-white rounded-bl-3xl transition-colors duration-300 relative z-10'>
                     <p className="mr-1 sm:mr-2 text-[8px] sm:text-[9.9px]">{t.asFrom}</p>
-                    <p className="text-xs sm:text-[15.9px]">{event.price}</p>
+                    <p className="text-xs sm:text-[15.9px]">{getMinPrice(event)}</p>
                   </div>
                 </div>
               </div>
             </Link>
           ))}
         </div>
+        )}
 
         {/* View All Button */}
         <div className="w-full flex items-center justify-center mt-2 sm:mt-3 md:mt-4">
-          <button className="w-[200px] h-[35px] sm:h-[40px] md:h-[45px] bg-transparent border-2 border-[#c89c6b] text-[#c89c6b] hover:bg-[#112b38] hover:text-white px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 md:py-2.5 text-sm sm:text-base md:text-lg uppercase tracking-wider rounded-full shadow-lg whitespace-nowrap flex items-center justify-center">
+          <Link href="/event" className="w-[200px] h-[35px] sm:h-[40px] md:h-[45px] bg-transparent border-2 border-[#c89c6b] text-[#c89c6b] hover:bg-[#112b38] hover:text-white px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 md:py-2.5 text-sm sm:text-base md:text-lg uppercase tracking-wider rounded-full shadow-lg whitespace-nowrap flex items-center justify-center">
             {t.viewAllEvent}
-          </button>
+          </Link>
         </div>
       </div>
     </section>

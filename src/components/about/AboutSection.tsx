@@ -2,9 +2,12 @@
 
 import Image from 'next/image';
 import { useLanguage } from '@/context/LanguageContext';
+import { useCms } from '@/lib/useCms';
 
 export default function AboutSection() {
   const { t } = useLanguage();
+  const { get: getCms } = useCms('about');
+  const sectionImage = getCms('whoWeAre').image || '/about us small square.jpeg';
   
   return (
     <section className="w-full sm:w-[85%] mx-auto px-4 sm:px-0 mt-5 mb-6 sm:mb-8 md:mb-10">
@@ -20,7 +23,7 @@ export default function AboutSection() {
         </div>
         <div>
           <Image
-            src="/about us small square.jpeg"
+            src={sectionImage}
             alt="About"
             width={600}
             height={300}

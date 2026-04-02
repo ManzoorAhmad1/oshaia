@@ -1,17 +1,22 @@
 "use client"
 
 import React, { useState } from "react"
+import toast from "react-hot-toast"
 import { useLanguage } from "@/context/LanguageContext"
+import { useCms } from "@/lib/useCms"
 
 const NewsletterSection = () => {
-    const { t } = useLanguage()
+    const { t, language } = useLanguage()
+    const { text: cmsText } = useCms('home')
     const [email, setEmail] = useState("")
     const [isSubscribed, setIsSubscribed] = useState(false)
+
+    const title = cmsText('newsletter', 'title', language as 'en' | 'fr') || t.subscribeToNewsletter
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
         if (email) {
-            console.log("Subscribed with email:", email)
+            toast.success(t.subscribed || 'Subscribed successfully!')
             setIsSubscribed(true)
             setEmail("")
             // Reset subscription status after 3 seconds
@@ -24,7 +29,7 @@ const NewsletterSection = () => {
             <div className="w-full flex flex-col sm:flex-row items-center justify-around gap-4 sm:gap-0 px-4 sm:px-6">
                 {/* Title */}
                 <p className="text-lg sm:text-xl md:text-2xl text-white text-center sm:text-left">
-                    {t.subscribeToNewsletter}
+                    {title}
                 </p>
 
                 {/* Subscription Form */}
