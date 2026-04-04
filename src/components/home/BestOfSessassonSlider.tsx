@@ -5,6 +5,7 @@ import { useLanguage } from "@/context/LanguageContext"
 import Link from "next/link"
 import api from "@/lib/api"
 import { getImageUrl } from '@/lib/imageUrl'
+import { useCms } from '@/lib/useCms'
 
 interface SlideData {
     id: string | number
@@ -26,6 +27,23 @@ const STATIC_SLIDES: SlideData[] = [
 
 const BestOfSessassonSlider = () => {
     const { t, language } = useLanguage()
+    const { get: getCms } = useCms('home')
+    const cmsImages: string[] = getCms('bestOfSeason').images || []
+
+    // Build fallback slides: CMS images override STATIC_SLIDES images; videos always kept
+    const buildFallbackSlides = (): SlideData[] => {
+        if (cmsImages.length > 0) {
+            return cmsImages.map((url, i) => ({
+                id: i + 1,
+                type: 'image' as const,
+                url,
+                alt: `Banner ${i + 1}`,
+                duration: 6,
+            }))
+        }
+        return STATIC_SLIDES
+    }
+
     const [apiSlides, setApiSlides] = useState<SlideData[]>([])
     const [currentSlide, setCurrentSlide] = useState(0)
     const [timeLeft, setTimeLeft] = useState(STATIC_SLIDES[0].duration)
@@ -54,7 +72,7 @@ const BestOfSessassonSlider = () => {
             .catch(() => {})
     }, [language])
 
-    const slideList = apiSlides.length ? apiSlides : STATIC_SLIDES
+    const slideList = apiSlides.length ? apiSlides : buildFallbackSlides()
 
     // Auto-slide functionality
     useEffect(() => {

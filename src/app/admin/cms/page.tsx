@@ -4,6 +4,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import api from '@/lib/api';
 import { getImageUrl } from '@/lib/imageUrl';
+import { clearCmsCache } from '@/lib/useCms';
 import EventForm from '@/components/admin/EventForm';
 import { Loader2, Save, Upload, Plus, Trash2, ChevronDown, ChevronUp, Pencil, Globe, EyeOff, CalendarDays, X } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -150,8 +151,8 @@ const SECTION_FIELD_CONFIG: Record<string, Record<string, SectionFieldFlags>> = 
   home: {
     hero:      { showImage: true },    // HeroCarousel.tsx — getCms('hero').image
     events:    {},                      // Managed via inline event manager
-    partners:  { showGallery: true },   // PartnersSection.tsx — getCms('partners').images
     topSeller: {},                      // Managed via custom per-slide editor below
+    bestOfSeason: { showGallery: true }, // BestOfSessassonSlider fallback images
     platinumlist: { showTitle: true, showSubtitle: true, showImage: true }, // Custom paragraphs editor below
   },
 };
@@ -164,7 +165,6 @@ const CMS_PAGES = [
     sections: [
       { key: 'hero', label: 'Hero / Carousel' },
       { key: 'events', label: 'Events Section' },
-      { key: 'partners', label: 'Partners Section' },
       { key: 'topSeller', label: 'Top Seller Section' },
       { key: 'platinumlist', label: 'Why Buy / Payment / SEO Text' },
     ],
@@ -429,6 +429,7 @@ export default function AdminCmsPage() {
       const { data: res } = await api.put(`/cms/page/${activePage}/${sectionKey}`, data);
       setContent((prev) => ({ ...prev, [sectionKey]: res.section }));
       setEditBuffer((prev) => { const n = { ...prev }; delete n[sectionKey]; return n; });
+      clearCmsCache(activePage);   // invalidate user-facing cache so next page load fetches fresh data
       toast.success(`"${sectionKey}" saved!`);
     } catch {
       toast.error('Failed to save section');

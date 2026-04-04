@@ -16,18 +16,46 @@ export interface CmsSection {
 
 type PageContent = Record<string, CmsSection>;
 
-const cache: Record<string, PageContent> = {};
+// Cache entry with a timestamp so we can expire it
+interface CacheEntry {
+  data: PageContent;
+  fetchedAt: number;
+}
+
+const CACHE_TTL_MS = 30_000; // 30 seconds — user sees updates within 30s of admin saving
+
+const cache: Record<string, CacheEntry> = {};
+
+export function clearCmsCache(pageKey: string) {
+  delete cache[pageKey];
+}
+
+export function clearAllCmsCache() {
+  Object.keys(cache).forEach(k => delete cache[k]);
+}
+
+function isFresh(entry: CacheEntry | undefined): boolean {
+  if (!entry) return false;
+  return Date.now() - entry.fetchedAt < CACHE_TTL_MS;
+}
 
 export function useCms(pageKey: string) {
-  const [content, setContent] = useState<PageContent>(cache[pageKey] || {});
-  const [loading, setLoading] = useState(!cache[pageKey]);
+  const fresh = isFresh(cache[pageKey]);
+  const [content, setContent] = useState<PageContent>(cache[pageKey]?.data || {});
+  const [loading, setLoading] = useState(!fresh);
 
   useEffect(() => {
-    if (cache[pageKey]) { setContent(cache[pageKey]); setLoading(false); return; }
+    // Skip fetch only if cache is fresh
+    if (isFresh(cache[pageKey])) {
+      setContent(cache[pageKey].data);
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
     api.get(`/cms/page/${pageKey}`)
       .then(res => {
         const data: PageContent = res.data.content || {};
-        cache[pageKey] = data;
+        cache[pageKey] = { data, fetchedAt: Date.now() };
         setContent(data);
       })
       .catch(() => {})

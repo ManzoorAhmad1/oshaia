@@ -33,41 +33,17 @@ const Platinumlist = () => {
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-10 sm:gap-12 md:gap-2 mb-6 sm:mb-8 md:mb-10">
             {[
-              {
-                icon: "https://cdn.platinumlist.net/dist/v876/img/why-buy-with-us/secure-checkout.svg",
-                title: t.secureCheckout,
-                desc: t.fastSecuredPayment,
-                alt: "Secure Checkout"
-              },
-              {
-                icon: "https://cdn.platinumlist.net/dist/v876/img/why-buy-with-us/instant-confirmation.svg",
-                title: t.instantConfirmation,
-                desc: t.refundGuarantee,
-                alt: "Instant confirmation"
-              },
-              {
-                icon: "https://cdn.platinumlist.net/dist/v876/img/why-buy-with-us/official-ticket-seller.svg",
-                title: t.officialTicketSeller,
-                desc: t.usedByPeople,
-                alt: "Official Ticket Seller"
-              },
-              {
-                icon: "https://cdn.platinumlist.net/dist/v876/img/why-buy-with-us/customer-service.svg",
-                title: t.customerService247,
-                desc: t.reliableAfterSales,
-                alt: "24/7 Customer Service"
-              }
+              { icon: '/icons/why-buy/secure-checkout.svg', title: t.secureCheckout, desc: t.fastSecuredPayment, alt: 'Secure Checkout' },
+              { icon: '/icons/why-buy/instant-confirmation.svg', title: t.instantConfirmation, desc: t.refundGuarantee, alt: 'Instant Confirmation' },
+              { icon: '/icons/why-buy/official-ticket-seller.svg', title: t.officialTicketSeller, desc: t.usedByPeople, alt: 'Official Ticket Seller' },
+              { icon: '/icons/why-buy/customer-service.svg', title: t.customerService247, desc: t.reliableAfterSales, alt: '24/7 Customer Service' },
             ].map((feature, index) => (
               <div
                 key={index}
                 className="flex flex-col items-start"
               >
                 <div className="mb-3 sm:mb-4">
-                  <img
-                    src={feature.icon}
-                    alt={feature.alt}
-                    className="w-8 h-8 "
-                  />
+                  <img src={feature.icon} alt={feature.alt} className="w-8 h-8" />
                 </div>
                 <h3 className="font-bold text-base sm:text-lg md:text-xl mb-1 sm:mb-2 text-gray-900 whitespace-nowrap">
                   {feature.title}
