@@ -22,7 +22,7 @@ const BestOfSessassonSlider = () => {
     const cms = getCms('bestOfSeason')
     const lang = language === 'fr' ? 'fr' : 'en'
     const sectionTitle = (cms.title as any)?.[lang] || ''
-    const cmsImages: string[] = cms.images || []
+    const cmsImages: string[] = Array.isArray(cms.images) ? cms.images : []
 
     const cmsSlides: SlideData[] = cmsImages.map((url, i) => ({
         id: i + 1,
