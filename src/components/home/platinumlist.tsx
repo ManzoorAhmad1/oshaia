@@ -3,10 +3,25 @@
 import React from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 import { useRouter } from 'next/navigation';
+import { useCms } from '@/lib/useCms';
 
 const Platinumlist = () => {
-  const { t } = useLanguage();
-  const router = useRouter()
+  const { t, language } = useLanguage();
+  const router = useRouter();
+  const { get: getCms } = useCms('home');
+  const cms = getCms('platinumlist');
+  const extra = cms.extra as Record<string, string> | undefined;
+
+  const whyBuyTitle = language === 'fr' ? (cms.title?.fr || t.whyBuyWithUs) : (cms.title?.en || t.whyBuyWithUs);
+  const seoTitle = language === 'fr' ? (cms.subtitle?.fr || t.dubaiEventsTickets) : (cms.subtitle?.en || t.dubaiEventsTickets);
+  const paymentImage = cms.image || '/Red Simple Typographic 2026 Christmas Supplies Logo.png';
+
+  const desc = (n: 1 | 2 | 3 | 4): string => {
+    const key = `desc${n}${language}` as string;
+    const fallback = t[`dubaiDesc${n}` as keyof typeof t] as string;
+    return extra?.[key] || fallback || '';
+  };
+
   return (
     <section className="w-full sm:w-[85%] mx-auto py-6 sm:py-8 md:py-10 px-4 sm:px-0 mt-6 sm:mt-8 md:mt-10">
 
@@ -14,7 +29,7 @@ const Platinumlist = () => {
         <div className="md:w-3/4">
           {/* Why buy with Platinumlist */}
           <h2 className='text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 md:mb-8 text-gray-900'>
-            {t.whyBuyWithUs}
+            {whyBuyTitle}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-10 sm:gap-12 md:gap-2 mb-6 sm:mb-8 md:mb-10">
             {[
@@ -69,7 +84,7 @@ const Platinumlist = () => {
               <div className="font-bold text-lg sm:text-xl mb-3 sm:mb-4 text-gray-800">{t.youChooseHowToPay}</div>
               <div className="flex justify-center">
                 <img
-                  src='/Red Simple Typographic 2026 Christmas Supplies Logo.png'
+                  src={paymentImage}
                   alt="Payment Methods"
                   className="h-8 sm:h-10 md:h-12 w-auto object-contain"
                 />
@@ -81,21 +96,21 @@ const Platinumlist = () => {
         {/* Main Content */}
         <div className="mb-4 sm:mb-6 md:mb-8">
           <div className="flex items-center mb-3 sm:mb-4 md:mb-5">
-            <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-gray-900">{t.dubaiEventsTickets}</h2>
+            <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-gray-900">{seoTitle}</h2>
           </div>
 
           <div className="space-y-3 sm:space-y-4 md:space-y-5">
             <p className="text-sm  text-gray-700 leading-relaxed">
-              {t.dubaiDesc1}
+              {desc(1)}
             </p>
             <p className="text-sm text-gray-700 leading-relaxed">
-              {t.dubaiDesc2}
+              {desc(2)}
             </p>
             <p className="text-sm  text-gray-700 leading-relaxed">
-              {t.dubaiDesc3}
+              {desc(3)}
             </p>
             <p className="text-sm text-gray-700 leading-relaxed">
-              {t.dubaiDesc4}
+              {desc(4)}
             </p>
           </div>
         </div>

@@ -4,6 +4,7 @@ import { Calendar, ChevronRight, ChevronLeft, MapPin } from "lucide-react";
 import { Text } from "rizzui/typography";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
+import { useCms } from '@/lib/useCms';
 import Link from "next/link";
 import api from "@/lib/api";
 import { getImageUrl } from '@/lib/imageUrl';
@@ -45,11 +46,45 @@ const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov
 
 export default function EventCard() {
     const { t, language } = useLanguage();
+    const { get: getCms } = useCms('home');
+    const cmsExtra = getCms('topSeller').extra as { slides?: string; bottomImages?: string } | undefined;
+
+    // Build initial static slides — use CMS extra.slides if available, else hardcoded
+    const buildStaticSlides = () => {
+        try {
+            if (cmsExtra?.slides) {
+                const parsed: Array<{ image: string; title: string; date: string; price: string }> = JSON.parse(cmsExtra.slides);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    return parsed.map((s, i) => ({
+                        id: String(i + 1),
+                        image: s.image || STATIC_SLIDES[i % STATIC_SLIDES.length]?.image || '',
+                        title: s.title || STATIC_SLIDES[i % STATIC_SLIDES.length]?.title || '',
+                        date: s.date || STATIC_SLIDES[i % STATIC_SLIDES.length]?.date || '',
+                        price: s.price || STATIC_SLIDES[i % STATIC_SLIDES.length]?.price || '',
+                    }));
+                }
+            }
+        } catch {}
+        return STATIC_SLIDES;
+    };
+
+    // Build bottom banner images from CMS extra.bottomImages
+    const buildBottomImages = () => {
+        try {
+            if (cmsExtra?.bottomImages) {
+                const parsed: string[] = JSON.parse(cmsExtra.bottomImages);
+                if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+            }
+        } catch {}
+        return STATIC_SLIDES.map(s => s.image);
+    };
+
     const [index, setIndex] = useState(0);
     const [bottomIndex, setBottomIndex] = useState(0);
     const [timeLeft, setTimeLeft] = useState(6);
     const [isPlaying, setIsPlaying] = useState(true);
-    const [slides, setSlides] = useState(STATIC_SLIDES);
+    const [slides, setSlides] = useState(buildStaticSlides);
+    const [bottomImages, setBottomImages] = useState<string[]>(buildBottomImages);
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
     const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
     const router = useRouter();
@@ -57,12 +92,12 @@ export default function EventCard() {
     // Auto slide for bottom carousel
     useEffect(() => {
         const interval = setInterval(() => {
-            setBottomIndex(prev => (prev + 1) % slides.length);
+            setBottomIndex(prev => (prev + 1) % bottomImages.length);
         }, 5000);
         return () => clearInterval(interval);
-    }, [slides.length]);
+    }, [bottomImages.length]);
 
-    // Fetch trending events from API
+    // Fetch trending events from API — overrides upper CMS static slides only
     useEffect(() => {
         api.get('/events', { params: { badge: 'TRENDING', limit: 5 } })
             .then(res => {
@@ -225,30 +260,27 @@ export default function EventCard() {
             </div>
             <div className="w-full sm:w-[85%] mx-auto mt-8 sm:mt-12 md:mt-20 flex flex-col relative">
                 <div className="w-full h-[200px] rounded-lg overflow-hidden relative shadow-md">
-                    {slides.map((slide, i) => (
-                        <Link
-                            key={slide.id}
-                            href={`/event/${slide.id}`}
+                    {bottomImages.map((img, i) => (
+                        <div
+                            key={i}
                             className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ${i === bottomIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
                         >
                             <img
-                                src={slide.image}
-                                alt="Event"
+                                src={img.startsWith('/uploads')
+                                    ? `${(process.env.NEXT_PUBLIC_API_URL || '').replace('/api', '')}${img}`
+                                    : img}
+                                alt="Banner"
                                 className="w-full h-full object-cover"
                             />
-                        </Link>
+                        </div>
                     ))}
 
                     {/* Pagination Dots */}
                     <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 z-20 flex gap-2">
-                        {slides.map((_, i) => (
+                        {bottomImages.map((_, i) => (
                             <button
                                 key={i}
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    setBottomIndex(i);
-                                }}
+                                onClick={() => setBottomIndex(i)}
                                 className={`w-2 h-2 rounded-full transition-all duration-300 shadow-sm ${i === bottomIndex ? 'bg-white scale-125' : 'bg-white/60 hover:bg-white'}`}
                                 aria-label={`Go to slide ${i + 1}`}
                             />

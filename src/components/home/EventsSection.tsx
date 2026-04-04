@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Calendar } from 'lucide-react'
 import { useLanguage } from '@/context/LanguageContext'
+import { useCms } from '@/lib/useCms'
 import api from '@/lib/api'
 import { getImageUrl } from '@/lib/imageUrl'
 
@@ -24,6 +25,7 @@ const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov
 
 const EventsSection = () => {
   const { t, language } = useLanguage()
+  const { get: getCms } = useCms('home')
   const [activeCategory, setActiveCategory] = useState('all')
   const [events, setEvents] = useState<ApiEvent[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -68,7 +70,11 @@ const EventsSection = () => {
     <section className="mt-10 sm:mt-8 md:mt-10 pb-8 sm:pb-8 md:pb-10">
       {/* Section Title - 85% centered */}
       <div className="w-full sm:w-[85%] mx-auto px-4 sm:px-0">
-        <h2 className="section-title text-black my-4 mb-8">{t.allEvent}</h2>
+        <h2 className="section-title text-black my-4 mb-8">
+          {language === 'fr'
+            ? (getCms('events').title?.fr || t.allEvent)
+            : (getCms('events').title?.en || t.allEvent)}
+        </h2>
       </div>
 
       {/* Category Tabs - full width */}

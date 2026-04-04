@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import { getImageUrl } from '@/lib/imageUrl';
 import { Loader2, Upload, Globe, EyeOff, Plus, Trash2 } from 'lucide-react';
+// X imported for potential future use — kept for modal close button usage by consumers
 import toast from 'react-hot-toast';
 
 const CATEGORIES = ['concert', 'festival', 'conferences', 'show', 'sport', 'international'];
@@ -37,6 +38,8 @@ interface EventFormData {
 interface Props {
   initialData?: Partial<EventFormData> & { _id?: string };
   mode: 'create' | 'edit';
+  onSuccess?: () => void;
+  onCancel?: () => void;
 }
 
 const defaultTicket = (): TicketType => ({
@@ -63,7 +66,7 @@ const defaultForm = (): EventFormData => ({
   ticketTypes: [defaultTicket()],
 });
 
-export default function EventForm({ initialData, mode }: Props) {
+export default function EventForm({ initialData, mode, onSuccess, onCancel }: Props) {
   const router = useRouter();
   const [form, setForm] = useState<EventFormData>(() => ({
     ...defaultForm(),
@@ -133,8 +136,12 @@ export default function EventForm({ initialData, mode }: Props) {
         await api.patch(`/events/${initialData?._id}`, form);
         toast.success('Event updated!');
       }
-      router.push('/admin/events');
-      router.refresh();
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        router.push('/admin/events');
+        router.refresh();
+      }
     } catch (err: any) {
       toast.error(err?.response?.data?.message || 'Failed to save event');
     } finally {
@@ -344,7 +351,7 @@ export default function EventForm({ initialData, mode }: Props) {
           {saving && <Loader2 className="w-4 h-4 animate-spin" />}
           {mode === 'create' ? 'Create Event' : 'Save Changes'}
         </button>
-        <button type="button" onClick={() => router.back()}
+        <button type="button" onClick={() => onCancel ? onCancel() : router.back()}
           className="px-6 py-2.5 border border-gray-300 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors">
           Cancel
         </button>
