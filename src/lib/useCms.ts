@@ -62,7 +62,8 @@ export function useCms(pageKey: string) {
       .finally(() => setLoading(false));
   }, [pageKey]);
 
-  const get = (sectionKey: string): CmsSection => content[sectionKey] || {};
+  const get = (sectionKey: string): CmsSection =>
+    content[sectionKey] ?? content[sectionKey.toLowerCase()] ?? {};
 
   const text = (sectionKey: string, field: keyof CmsSection, lang: 'en' | 'fr' = 'en'): string => {
     const sec = get(sectionKey);

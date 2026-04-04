@@ -15,38 +15,26 @@ interface SlideData {
     duration: number
 }
 
-// Static fallback slides (local promotional content)
-const STATIC_SLIDES: SlideData[] = [
-    { id: 1, type: "image", url: "/BIG%20BANNER/Bollywood-Unwind-Slider.jpg", alt: "Bollywood Unwind", duration: 6 },
-    { id: 101, type: "video", url: "/21971_cb42a1d4c3a2dd327fcce42ba642f04c-1-en1771248482.mp4", alt: "Video 1", duration: 6 },
-    { id: 102, type: "video", url: "/22193_398acba9ebf32f60d280ccecab409d04-1-en1772118332.mp4", alt: "Video 2", duration: 6 },
-    { id: 2, type: "image", url: "/BIG%20BANNER/kabul-slider-1.jpg", alt: "Kabul Slider", duration: 6 },
-    { id: 4, type: "image", url: "/BIG%20BANNER/lv-new-slider.jpg", alt: "LV New Slider", duration: 6 },
-    { id: 5, type: "image", url: "/BIG%20BANNER/y2k-slider.jpg", alt: "Y2K Slider", duration: 6 },
-]
-
 const BestOfSessassonSlider = () => {
-    const { t, language } = useLanguage()
+    const { language } = useLanguage()
     const { get: getCms } = useCms('home')
-    const cmsImages: string[] = getCms('bestOfSeason').images || []
 
-    // Build fallback slides: CMS images override STATIC_SLIDES images; videos always kept
-    const buildFallbackSlides = (): SlideData[] => {
-        if (cmsImages.length > 0) {
-            return cmsImages.map((url, i) => ({
-                id: i + 1,
-                type: 'image' as const,
-                url,
-                alt: `Banner ${i + 1}`,
-                duration: 6,
-            }))
-        }
-        return STATIC_SLIDES
-    }
+    const cms = getCms('bestOfSeason')
+    const lang = language === 'fr' ? 'fr' : 'en'
+    const sectionTitle = (cms.title as any)?.[lang] || ''
+    const cmsImages: string[] = cms.images || []
+
+    const cmsSlides: SlideData[] = cmsImages.map((url, i) => ({
+        id: i + 1,
+        type: 'image' as const,
+        url,
+        alt: `Banner ${i + 1}`,
+        duration: 6,
+    }))
 
     const [apiSlides, setApiSlides] = useState<SlideData[]>([])
     const [currentSlide, setCurrentSlide] = useState(0)
-    const [timeLeft, setTimeLeft] = useState(STATIC_SLIDES[0].duration)
+    const [timeLeft, setTimeLeft] = useState(6)
     const [isMuted, setIsMuted] = useState(true)
     const [isPlaying, setIsPlaying] = useState(true)
     const [isHovering, setIsHovering] = useState(false)
@@ -54,7 +42,7 @@ const BestOfSessassonSlider = () => {
     const intervalRef = useRef<NodeJS.Timeout | null>(null)
     const progressIntervalRef = useRef<NodeJS.Timeout | null>(null)
 
-    // Fetch featured events and use them as image slides
+    // Fetch featured events as slides (highest priority)
     useEffect(() => {
         api.get('/events', { params: { badge: 'FEATURED', limit: 6 } })
             .then(res => {
@@ -63,7 +51,7 @@ const BestOfSessassonSlider = () => {
                     setApiSlides(events.map((ev: { _id: string; title?: { en?: string; fr?: string }; coverImage?: string }) => ({
                         id: ev._id,
                         type: 'image' as const,
-                        url: getImageUrl(ev.coverImage, STATIC_SLIDES[0].url),
+                        url: getImageUrl(ev.coverImage, cmsSlides[0]?.url || ''),
                         alt: language === 'fr' ? (ev.title?.fr || ev.title?.en || '') : (ev.title?.en || ev.title?.fr || ''),
                         duration: 6,
                     })))
@@ -72,10 +60,12 @@ const BestOfSessassonSlider = () => {
             .catch(() => {})
     }, [language])
 
-    const slideList = apiSlides.length ? apiSlides : buildFallbackSlides()
+    // Priority: API featured events → CMS images
+    const slideList: SlideData[] = apiSlides.length ? apiSlides : cmsSlides
 
     // Auto-slide functionality
     useEffect(() => {
+        if (slideList.length === 0) return
         if (isPlaying && !isHovering) {
             startAutoSlide()
         } else {
@@ -86,10 +76,11 @@ const BestOfSessassonSlider = () => {
             clearAutoSlide()
             clearProgressTimer()
         }
-    }, [currentSlide, isPlaying, isHovering])
+    }, [currentSlide, isPlaying, isHovering, slideList.length])
 
     const startAutoSlide = () => {
         clearAutoSlide()
+        if (slideList.length === 0) return
         const currentDuration = slideList[currentSlide].duration
 
         // Reset timer for current slide
@@ -160,10 +151,13 @@ const BestOfSessassonSlider = () => {
 
     return (
         <div className="w-full sm:w-[85%] h-auto mx-auto mb-6 sm:mb-8 md:mb-10 px-4 sm:px-4 mt-60 sm:mt-48 md:mt-40 lg:mt-28">
+            {sectionTitle && (
             <h2 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1 sm:mb-2 lg:mb-3 tracking-tight uppercase">
-                {t.bestOfSeason}
+                {sectionTitle}
             </h2>
+            )}
 
+            {slideList.length === 0 ? null : (
             <div
                 className="relative rounded-lg sm:rounded-xl lg:rounded-3xl overflow-hidden shadow-md sm:shadow-lg bg-white w-full h-auto"
                 onMouseEnter={() => setIsHovering(true)}
@@ -287,6 +281,7 @@ const BestOfSessassonSlider = () => {
                     </div>
                 </div>
             </div>
+            )}
         </div>
     )
 }

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { BsChatDots, BsSend } from 'react-icons/bs';
 import { useLanguage } from '@/context/LanguageContext';
+import { useCms } from '@/lib/useCms';
 
 interface Message {
   from: 'user' | 'bot';
@@ -10,7 +11,12 @@ interface Message {
 }
 
 export default function HelpChatBot() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const { text: cmsText } = useCms('help');
+  const lang = language === 'fr' ? 'fr' : 'en';
+
+  const faqTitle = cmsText('faq', 'title', lang as 'en' | 'fr');
+  const faqDesc = cmsText('faq', 'description', lang as 'en' | 'fr');
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const chatBoxRef = useRef<HTMLDivElement>(null);
@@ -91,10 +97,10 @@ export default function HelpChatBot() {
         {/* Left Column – FAQ / Template Questions */}
         <div>
           <h2 className="text-3xl font-bold text-[#c89c6b] mb-4">
-            {t.frequentlyAskedQuestions}
+            {faqTitle}
           </h2>
           <p className="text-gray-700 mb-6">
-            {t.chooseQuestionOrChat}
+            {faqDesc}
           </p>
 
           <div className="space-y-3">

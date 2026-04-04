@@ -41,6 +41,10 @@ const SECTION_DEFAULTS: Record<string, Record<string, Partial<CmsSection>>> = {
       title: { en: 'Our Partners', fr: 'Nos partenaires' },
       images: [],
     },
+    bestOfSeason: {
+      title: { en: 'Best of the Season', fr: 'Le meilleur de la saison' },
+      images: [],
+    },
     topSeller: {
       extra: {
         slides: JSON.stringify([
@@ -74,31 +78,67 @@ const SECTION_DEFAULTS: Record<string, Record<string, Partial<CmsSection>>> = {
   about: {
     hero: {
       title: { en: 'About Us', fr: 'À propos de nous' },
-      subtitle: { en: 'Your trusted event ticketing platform', fr: 'Votre plateforme de billetterie de confiance' },
+      subtitle: { en: 'Your trusted platform for discovering and booking amazing events.', fr: 'Votre plateforme de confiance pour découvrir et réserver des événements incroyables.' },
       image: '/About%20Us.jpeg',
     },
     whoWeAre: {
       title: { en: 'Who We Are', fr: 'Qui sommes-nous' },
       description: {
-        en: 'Oshaia is a premier event ticketing platform dedicated to connecting people with extraordinary experiences. We partner with top event organizers to bring you the best in entertainment, culture, and more.',
-        fr: 'Oshaia est une plateforme de billetterie d\'événements de premier plan dédiée à connecter les gens avec des expériences extraordinaires.',
+        en: 'Oshaia.com is a modern event ticketing platform created to make discovering and booking events simple, fast, and reliable. Our goal is to provide a seamless experience for both event organisers and attendees through a secure and user-friendly digital platform.',
+        fr: 'Nous sommes une plateforme de billetterie événementielle dynamique conçue pour rendre votre expérience événementielle fluide — de la navigation à la réservation. Notre mission est de connecter les organisateurs d\'événements et les participants grâce à un environnement numérique intuitif et sécurisé.',
       },
       image: '/about us small square.jpeg',
+      extra: {
+        desc2En: 'We connect people with the best events happening across Mauritius while giving organisers powerful tools to manage ticket sales, promotions, and event access efficiently.',
+        desc2Fr: 'Que vous souhaitiez organiser des concerts, des festivals, des conférences ou des rassemblements communautaires, nous fournissons les outils pour gérer efficacement les ventes de billets, les sélections de sièges et les promotions.',
+      },
+    },
+    services: {
+      title: { en: 'What We Offer', fr: 'Ce que nous offrons' },
+      extra: {
+        card1titleEn: 'Online Ticketing',
+        card1titleFr: 'Billetterie en ligne',
+        card1descEn: 'Book your tickets for concerts, sports, and festivals instantly through our secure platform.',
+        card1descFr: 'Réservez vos billets pour concerts, sports et festivals instantanément via notre plateforme sécurisée.',
+        card2titleEn: 'Event Management',
+        card2titleFr: 'Gestion d\'événements',
+        card2descEn: 'Event organizers can easily manage schedules, ticket categories, and customer data.',
+        card2descFr: 'Les organisateurs peuvent facilement gérer les horaires, catégories de billets et données clients.',
+        card3titleEn: 'Sponsor & Partner Access',
+        card3titleFr: 'Accès sponsors et partenaires',
+        card3descEn: 'We connect sponsors with events that match their audience and brand goals.',
+        card3descFr: 'Nous connectons les sponsors avec des événements correspondant à leur audience et objectifs de marque.',
+      },
     },
     sponsors: {
       title: { en: 'Our Sponsors', fr: 'Nos sponsors' },
       images: [],
     },
-    stats: {
-      extra: { years: '5+', customers: '50,000+', events: '200+' },
-    },
     whyChooseUs: {
       title: { en: 'Why Choose Us', fr: 'Pourquoi nous choisir' },
+      extra: {
+        card1titleEn: 'Secure Payment',
+        card1titleFr: 'Paiement sécurisé',
+        card1descEn: 'All transactions are encrypted for your safety and peace of mind.',
+        card1descFr: 'Toutes les transactions sont cryptées pour votre sécurité et votre tranquillité d\'esprit.',
+        card2titleEn: 'Fast & Easy',
+        card2titleFr: 'Rapide et facile',
+        card2descEn: 'Book tickets in just a few clicks with our user-friendly interface.',
+        card2descFr: 'Réservez des billets en quelques clics grâce à notre interface conviviale.',
+        card3titleEn: 'Customer Support',
+        card3titleFr: 'Support client',
+        card3descEn: 'We\'re here to help — from booking issues to event inquiries.',
+        card3descFr: 'Nous sommes là pour vous aider — des problèmes de réservation aux questions sur les événements.',
+      },
     },
     cta: {
-      title: { en: 'Ready to experience something amazing?', fr: 'Prêt à vivre quelque chose d\'incroyable ?' },
+      title: { en: 'Join Thousands of Event-Goers Today', fr: 'Rejoignez des milliers d\'amateurs d\'événements aujourd\'hui' },
+      description: {
+        en: 'Experience the easiest way to discover and attend your favorite events.',
+        fr: 'Découvrez la façon la plus simple de trouver et participer à vos événements préférés.',
+      },
       buttonText: { en: 'Browse Events', fr: 'Parcourir les événements' },
-      buttonLink: '/events',
+      buttonLink: '/event',
     },
   },
   footer: {
@@ -133,11 +173,67 @@ const SECTION_DEFAULTS: Record<string, Record<string, Partial<CmsSection>>> = {
     },
     faq: {
       title: { en: 'Frequently Asked Questions', fr: 'Questions fréquemment posées' },
+      description: {
+        en: 'Choose a question below or type your query in the chat.',
+        fr: 'Choisissez une question ci-dessous ou tapez votre requête dans le chat.',
+      },
     },
     contact: {
       title: { en: 'Still need help?', fr: 'Besoin d\'aide supplémentaire ?' },
-      buttonText: { en: 'Contact Us', fr: 'Contactez-nous' },
+      description: {
+        en: 'Our support team is ready to assist you with any issue.',
+        fr: 'Notre équipe d\'assistance est prête à vous aider pour tout problème.',
+      },
+      buttonText: { en: 'Contact Support', fr: 'Contacter le support' },
+      buttonLink: '/contact',
+      extra: {
+        legalTitleEn: 'Legal',
+        legalTitleFr: 'Légal',
+        legalDescEn: 'Please review our terms and cookie policy before using the Oshaia platform and purchasing event tickets.',
+        legalDescFr: 'Veuillez consulter nos conditions générales et notre politique de cookies avant d\'utiliser la plateforme Oshaia.',
+        termsLabelEn: 'Terms & Conditions',
+        termsLabelFr: 'Conditions générales',
+        termsLink: '/terms',
+        cookieLabelEn: 'Cookie Terms',
+        cookieLabelFr: 'Politique des cookies',
+        cookieLink: '/terms#cookie-terms',
+      },
     },
+  },
+  terms: {
+    hero: {
+      title: { en: 'Terms & Conditions', fr: 'Conditions générales' },
+      subtitle: { en: 'Please read these terms carefully before purchasing tickets on Oshaia.', fr: 'Veuillez lire attentivement ces conditions avant d\'acheter des billets sur Oshaia.' },
+      image: '/About%20Us.jpeg',
+    },
+    intro: {
+      title: { en: 'Oshaia – Event Ticket Purchases', fr: 'Oshaia – Achats de billets d\'événements' },
+      description: {
+        en: 'These terms and conditions govern all ticket purchases made through the Oshaia platform operated by Aventure Agency LTD. By completing a purchase, you agree to abide by these terms in full.',
+        fr: 'Ces conditions générales régissent tous les achats de billets effectués via la plateforme Oshaia exploitée par Aventure Agency LTD. En effectuant un achat, vous acceptez de respecter intégralement ces conditions.',
+      },
+    },
+    footer: {
+      extra: {
+        note1En: '© 2026 Oshaia.com, Aventure Agency LTD. All rights reserved.',
+        note1Fr: '© 2026 Oshaia.com, Aventure Agency LTD. Tous droits réservés.',
+        note2En: 'These terms were last updated in March 2026 and supersede all previous versions.',
+        note2Fr: 'Ces conditions ont été mises à jour en mars 2026 et remplacent toutes les versions précédentes.',
+      },
+    },
+    section1: { extra: { titleEn: '1. Introduction', titleFr: '1. Introduction', contentEn: 'Welcome to Oshaia. These Terms and Conditions govern your use of the Oshaia platform and the purchase of event tickets through our website and related services. By accessing or using our platform, you agree to be bound by these Terms and Conditions in their entirety.', contentFr: 'Bienvenue sur Oshaia. Ces Conditions générales régissent votre utilisation de la plateforme Oshaia et l\'achat de billets d\'événements. En accédant à notre plateforme, vous acceptez d\'être lié par ces conditions dans leur intégralité.' } },
+    section2: { extra: { titleEn: '2. Ticket Purchases', titleFr: '2. Achats de billets', contentEn: 'All ticket purchases made through Oshaia are subject to availability. Your order is confirmed only upon receipt of our confirmation email and successful payment processing.', contentFr: 'Tous les achats de billets effectués via Oshaia sont soumis à disponibilité. Votre commande n\'est confirmée qu\'à réception de notre e-mail de confirmation et du traitement réussi du paiement.' } },
+    section3: { extra: { titleEn: '3. Payment & Pricing', titleFr: '3. Paiement et tarification', contentEn: 'All prices displayed on the Oshaia platform are in the currency specified at checkout. Ticket prices may include applicable taxes, service fees, and booking charges.', contentFr: 'Tous les prix affichés sur la plateforme Oshaia sont dans la devise indiquée lors du paiement. Les prix des billets peuvent inclure les taxes applicables, les frais de service et les frais de réservation.' } },
+    section4: { extra: { titleEn: '4. Refund & Cancellation Policy', titleFr: '4. Politique de remboursement et d\'annulation', contentEn: 'All ticket sales are generally final. Refunds are only available if the event is officially cancelled or postponed and you are unable to attend on the new date.', contentFr: 'Toutes les ventes de billets sont généralement définitives. Les remboursements ne sont disponibles que si l\'événement est officiellement annulé ou reporté et que vous ne pouvez pas assister à la nouvelle date.' } },
+    section5: { extra: { titleEn: '5. Event Changes & Cancellations', titleFr: '5. Modifications et annulations d\'événements', contentEn: 'Events are subject to change or cancellation by the event organiser. Oshaia will make every reasonable effort to notify ticket holders of significant changes via the email address provided.', contentFr: 'Les événements sont susceptibles d\'être modifiés ou annulés par l\'organisateur. Oshaia fera tout son possible pour informer les détenteurs de billets des changements importants.' } },
+    section6: { extra: { titleEn: '6. Attendee Conduct & Prohibited Activities', titleFr: '6. Conduite des participants et activités interdites', contentEn: 'By purchasing tickets through Oshaia, you agree to comply with the terms of entry and codes of conduct set by the event organiser and venue. Reselling tickets without authorisation is strictly prohibited.', contentFr: 'En achetant des billets via Oshaia, vous acceptez de respecter les conditions d\'entrée et les codes de conduite établis par l\'organisateur. La revente de billets sans autorisation est strictement interdite.' } },
+    section7: { extra: { titleEn: '7. User Accounts & Security', titleFr: '7. Comptes utilisateurs et sécurité', contentEn: 'You are responsible for maintaining the confidentiality of your login credentials and for all activities that occur under your account. You must provide accurate and complete information when registering.', contentFr: 'Vous êtes responsable de la confidentialité de vos identifiants et de toutes les activités effectuées sous votre compte. Vous devez fournir des informations exactes et complètes lors de l\'inscription.' } },
+    section8: { extra: { titleEn: '8. Intellectual Property', titleFr: '8. Propriété intellectuelle', contentEn: 'All content on the Oshaia platform is the property of Aventure Agency LTD or its content licensors and is protected by applicable intellectual property laws.', contentFr: 'Tout le contenu de la plateforme Oshaia est la propriété d\'Aventure Agency LTD ou de ses concédants et est protégé par les lois applicables en matière de propriété intellectuelle.' } },
+    section9: { extra: { titleEn: '9. Limitation of Liability', titleFr: '9. Limitation de responsabilité', contentEn: 'To the fullest extent permitted by applicable law, Oshaia and Aventure Agency LTD shall not be liable for any indirect, incidental, or consequential damages resulting from your use of the platform.', contentFr: 'Dans toute la mesure permise par la loi applicable, Oshaia et Aventure Agency LTD ne seront pas responsables des dommages indirects, accessoires ou consécutifs résultant de votre utilisation de la plateforme.' } },
+    section10: { extra: { titleEn: '10. Privacy & Data Protection', titleFr: '10. Confidentialité et protection des données', contentEn: 'Your privacy is important to us. We collect personal information solely for the purpose of processing your ticket purchase and providing customer support. We do not sell your personal data to third parties.', contentFr: 'Votre vie privée est importante pour nous. Nous collectons des informations personnelles uniquement pour traiter votre achat de billets et fournir une assistance clientèle. Nous ne vendons pas vos données personnelles à des tiers.' } },
+    section11: { extra: { titleEn: '11. Governing Law', titleFr: '11. Droit applicable', contentEn: 'These Terms and Conditions shall be governed by and construed in accordance with the laws of the jurisdiction in which Aventure Agency LTD is registered.', contentFr: 'Ces conditions générales seront régies et interprétées conformément aux lois de la juridiction dans laquelle Aventure Agency LTD est enregistrée.' } },
+    section12: { extra: { titleEn: '12. Contact Us', titleFr: '12. Contactez-nous', contentEn: 'If you have any questions regarding these Terms and Conditions, please contact us at: needhelp@oshaia.com', contentFr: 'Si vous avez des questions concernant ces conditions générales, veuillez nous contacter à : needhelp@oshaia.com' } },
+    section13: { extra: { titleEn: '13. Cookie Policy', titleFr: '13. Politique des cookies', contentEn: 'Oshaia uses cookies and similar tracking technologies to enhance your experience on our platform. You may manage your cookie preferences through your browser settings at any time.', contentFr: 'Oshaia utilise des cookies et des technologies de suivi similaires pour améliorer votre expérience sur notre plateforme. Vous pouvez gérer vos préférences de cookies via les paramètres de votre navigateur.' } },
   },
 };
 
@@ -152,8 +248,29 @@ const SECTION_FIELD_CONFIG: Record<string, Record<string, SectionFieldFlags>> = 
     hero:      { showImage: true },    // HeroCarousel.tsx — getCms('hero').image
     events:    {},                      // Managed via inline event manager
     topSeller: {},                      // Managed via custom per-slide editor below
-    bestOfSeason: { showGallery: true }, // BestOfSessassonSlider fallback images
+    bestOfSeason: { showTitle: true, showGallery: true }, // BestOfSessassonSlider
     platinumlist: { showTitle: true, showSubtitle: true, showImage: true }, // Custom paragraphs editor below
+  },
+  about: {
+    hero:        { showTitle: true, showSubtitle: true, showImage: true },
+    whoWeAre:    { showTitle: true, showDescription: true, showImage: true }, // + custom desc2 editor
+    services:    { showTitle: true },   // + custom 3-card editor
+    sponsors:    { showGallery: true },
+    whyChooseUs: { showTitle: true },   // + custom 3-card editor
+    cta:         { showTitle: true, showDescription: true, showButton: true },
+  },
+  help: {
+    hero:    { showTitle: true, showSubtitle: true, showImage: true },
+    faq:     { showTitle: true, showDescription: true },
+    contact: { showTitle: true, showDescription: true, showButton: true }, // + legal inline editor
+  },
+  terms: {
+    hero:     { showTitle: true, showSubtitle: true, showImage: true },
+    intro:    { showTitle: true, showDescription: true },
+    footer:   {}, // custom inline editor
+    section1: {}, section2: {}, section3: {}, section4: {}, section5: {},
+    section6: {}, section7: {}, section8: {}, section9: {}, section10: {},
+    section11: {}, section12: {}, section13: {},
   },
 };
 
@@ -166,6 +283,7 @@ const CMS_PAGES = [
       { key: 'hero', label: 'Hero / Carousel' },
       { key: 'events', label: 'Events Section' },
       { key: 'topSeller', label: 'Top Seller Section' },
+      { key: 'bestOfSeason', label: 'Best of the Season (Slider)' },
       { key: 'platinumlist', label: 'Why Buy / Payment / SEO Text' },
     ],
   },
@@ -175,8 +293,8 @@ const CMS_PAGES = [
     sections: [
       { key: 'hero', label: 'Hero Section' },
       { key: 'whoWeAre', label: 'Who We Are' },
+      { key: 'services', label: 'Services (What We Offer)' },
       { key: 'sponsors', label: 'Sponsors (Logo Gallery)' },
-      { key: 'stats', label: 'Stats (Years, Customers, Events)' },
       { key: 'whyChooseUs', label: 'Why Choose Us' },
       { key: 'cta', label: 'Call to Action' },
     ],
@@ -197,6 +315,28 @@ const CMS_PAGES = [
       { key: 'hero', label: 'Help Hero' },
       { key: 'faq', label: 'FAQ Content' },
       { key: 'contact', label: 'Contact CTA' },
+    ],
+  },
+  {
+    key: 'terms',
+    label: 'Terms & Conditions',
+    sections: [
+      { key: 'hero', label: 'Hero Banner' },
+      { key: 'intro', label: 'Intro Card' },
+      { key: 'footer', label: 'Footer Note' },
+      { key: 'section1', label: '1. Introduction' },
+      { key: 'section2', label: '2. Ticket Purchases' },
+      { key: 'section3', label: '3. Payment & Pricing' },
+      { key: 'section4', label: '4. Refund & Cancellation Policy' },
+      { key: 'section5', label: '5. Event Changes & Cancellations' },
+      { key: 'section6', label: '6. Attendee Conduct & Prohibited Activities' },
+      { key: 'section7', label: '7. User Accounts & Security' },
+      { key: 'section8', label: '8. Intellectual Property' },
+      { key: 'section9', label: '9. Limitation of Liability' },
+      { key: 'section10', label: '10. Privacy & Data Protection' },
+      { key: 'section11', label: '11. Governing Law' },
+      { key: 'section12', label: '12. Contact Us' },
+      { key: 'section13', label: '13. Cookie Policy' },
     ],
   },
 ];
@@ -999,6 +1139,291 @@ export default function AdminCmsPage() {
                                   className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b] resize-none"
                                   placeholder={`French paragraph ${n}...`}
                                 />
+                              </label>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* ── Help: Legal Box (help/contact only) ──────────── */}
+                    {activePage === 'help' && sectionKey === 'contact' && (
+                      <div className="mt-2 border-t border-gray-100 pt-5 space-y-4">
+                        <div className="flex items-center justify-between flex-wrap gap-2">
+                          <div>
+                            <span className="text-sm font-semibold text-[#112b38]">Legal Box</span>
+                            <p className="text-xs text-gray-400 mt-0.5">The right panel showing Terms & Cookie links.</p>
+                          </div>
+                          <button type="button" onClick={() => saveSection(sectionKey)} disabled={savingKey === sectionKey}
+                            className="flex items-center gap-2 px-4 py-1.5 bg-[#112b38] text-white rounded-lg text-xs font-medium hover:bg-[#0d2030] transition-colors disabled:opacity-60">
+                            {savingKey === sectionKey ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />} Save
+                          </button>
+                        </div>
+                        <div className="space-y-3">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <label className="block">
+                              <span className="text-xs text-gray-500 mb-1 block">Title (EN)</span>
+                              <input value={(getSectionData(sectionKey) as any)?.extra?.legalTitleEn ?? ''}
+                                onChange={(e) => updateBuffer(sectionKey, 'extra.legalTitleEn', e.target.value)}
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]"
+                                placeholder="Legal" />
+                            </label>
+                            <label className="block">
+                              <span className="text-xs text-gray-500 mb-1 block">Title (FR)</span>
+                              <input value={(getSectionData(sectionKey) as any)?.extra?.legalTitleFr ?? ''}
+                                onChange={(e) => updateBuffer(sectionKey, 'extra.legalTitleFr', e.target.value)}
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]"
+                                placeholder="Légal" />
+                            </label>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <label className="block">
+                              <span className="text-xs text-gray-500 mb-1 block">Description (EN)</span>
+                              <textarea rows={2} value={(getSectionData(sectionKey) as any)?.extra?.legalDescEn ?? ''}
+                                onChange={(e) => updateBuffer(sectionKey, 'extra.legalDescEn', e.target.value)}
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b] resize-none"
+                                placeholder="Please review our terms..." />
+                            </label>
+                            <label className="block">
+                              <span className="text-xs text-gray-500 mb-1 block">Description (FR)</span>
+                              <textarea rows={2} value={(getSectionData(sectionKey) as any)?.extra?.legalDescFr ?? ''}
+                                onChange={(e) => updateBuffer(sectionKey, 'extra.legalDescFr', e.target.value)}
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b] resize-none"
+                                placeholder="Veuillez consulter nos conditions..." />
+                            </label>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <label className="block">
+                              <span className="text-xs text-gray-500 mb-1 block">Terms Button Label (EN)</span>
+                              <input value={(getSectionData(sectionKey) as any)?.extra?.termsLabelEn ?? ''}
+                                onChange={(e) => updateBuffer(sectionKey, 'extra.termsLabelEn', e.target.value)}
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]"
+                                placeholder="Terms & Conditions" />
+                            </label>
+                            <label className="block">
+                              <span className="text-xs text-gray-500 mb-1 block">Terms Button Label (FR)</span>
+                              <input value={(getSectionData(sectionKey) as any)?.extra?.termsLabelFr ?? ''}
+                                onChange={(e) => updateBuffer(sectionKey, 'extra.termsLabelFr', e.target.value)}
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]"
+                                placeholder="Conditions générales" />
+                            </label>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <label className="block">
+                              <span className="text-xs text-gray-500 mb-1 block">Terms Link</span>
+                              <input value={(getSectionData(sectionKey) as any)?.extra?.termsLink ?? ''}
+                                onChange={(e) => updateBuffer(sectionKey, 'extra.termsLink', e.target.value)}
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]"
+                                placeholder="/terms" />
+                            </label>
+                            <label className="block">
+                              <span className="text-xs text-gray-500 mb-1 block">Cookie Button Label (EN)</span>
+                              <input value={(getSectionData(sectionKey) as any)?.extra?.cookieLabelEn ?? ''}
+                                onChange={(e) => updateBuffer(sectionKey, 'extra.cookieLabelEn', e.target.value)}
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]"
+                                placeholder="Cookie Terms" />
+                            </label>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <label className="block">
+                              <span className="text-xs text-gray-500 mb-1 block">Cookie Button Label (FR)</span>
+                              <input value={(getSectionData(sectionKey) as any)?.extra?.cookieLabelFr ?? ''}
+                                onChange={(e) => updateBuffer(sectionKey, 'extra.cookieLabelFr', e.target.value)}
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]"
+                                placeholder="Politique des cookies" />
+                            </label>
+                            <label className="block">
+                              <span className="text-xs text-gray-500 mb-1 block">Cookie Link</span>
+                              <input value={(getSectionData(sectionKey) as any)?.extra?.cookieLink ?? ''}
+                                onChange={(e) => updateBuffer(sectionKey, 'extra.cookieLink', e.target.value)}
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]"
+                                placeholder="/terms#cookie-terms" />
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* ── Terms: Footer Note ──────────────────────────── */}
+                    {activePage === 'terms' && sectionKey === 'footer' && (
+                      <div className="mt-2 border-t border-gray-100 pt-5 space-y-4">
+                        <div className="flex items-center justify-between flex-wrap gap-2">
+                          <div>
+                            <span className="text-sm font-semibold text-[#112b38]">Footer Notes</span>
+                            <p className="text-xs text-gray-400 mt-0.5">Two lines shown at the very bottom of the Terms page.</p>
+                          </div>
+                          <button type="button" onClick={() => saveSection(sectionKey)} disabled={savingKey === sectionKey}
+                            className="flex items-center gap-2 px-4 py-1.5 bg-[#112b38] text-white rounded-lg text-xs font-medium hover:bg-[#0d2030] transition-colors disabled:opacity-60">
+                            {savingKey === sectionKey ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />} Save
+                          </button>
+                        </div>
+                        <div className="space-y-3">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <label className="block">
+                              <span className="text-xs text-gray-500 mb-1 block">Note Line 1 (EN)</span>
+                              <input value={(getSectionData(sectionKey) as any)?.extra?.note1En ?? ''}
+                                onChange={(e) => updateBuffer(sectionKey, 'extra.note1En', e.target.value)}
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]"
+                                placeholder="© 2026 Oshaia.com, Aventure Agency LTD. All rights reserved." />
+                            </label>
+                            <label className="block">
+                              <span className="text-xs text-gray-500 mb-1 block">Note Line 1 (FR)</span>
+                              <input value={(getSectionData(sectionKey) as any)?.extra?.note1Fr ?? ''}
+                                onChange={(e) => updateBuffer(sectionKey, 'extra.note1Fr', e.target.value)}
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]"
+                                placeholder="© 2026 Oshaia.com, Aventure Agency LTD. Tous droits réservés." />
+                            </label>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <label className="block">
+                              <span className="text-xs text-gray-500 mb-1 block">Note Line 2 (EN)</span>
+                              <input value={(getSectionData(sectionKey) as any)?.extra?.note2En ?? ''}
+                                onChange={(e) => updateBuffer(sectionKey, 'extra.note2En', e.target.value)}
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]"
+                                placeholder="These terms were last updated in March 2026..." />
+                            </label>
+                            <label className="block">
+                              <span className="text-xs text-gray-500 mb-1 block">Note Line 2 (FR)</span>
+                              <input value={(getSectionData(sectionKey) as any)?.extra?.note2Fr ?? ''}
+                                onChange={(e) => updateBuffer(sectionKey, 'extra.note2Fr', e.target.value)}
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]"
+                                placeholder="Ces conditions ont été mises à jour en mars 2026..." />
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* ── Terms: Section Editor (section1–section13) ──────── */}
+                    {activePage === 'terms' && sectionKey.startsWith('section') && (
+                      <div className="mt-2 border-t border-gray-100 pt-5 space-y-4">
+                        <div className="flex items-center justify-between flex-wrap gap-2">
+                          <div>
+                            <span className="text-sm font-semibold text-[#112b38]">Section Content</span>
+                            <p className="text-xs text-gray-400 mt-0.5">Title and body text displayed for this terms section.</p>
+                          </div>
+                          <button type="button" onClick={() => saveSection(sectionKey)} disabled={savingKey === sectionKey}
+                            className="flex items-center gap-2 px-4 py-1.5 bg-[#112b38] text-white rounded-lg text-xs font-medium hover:bg-[#0d2030] transition-colors disabled:opacity-60">
+                            {savingKey === sectionKey ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />} Save
+                          </button>
+                        </div>
+                        <div className="space-y-3">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <label className="block">
+                              <span className="text-xs text-gray-500 mb-1 block">Title (EN)</span>
+                              <input value={(getSectionData(sectionKey) as any)?.extra?.titleEn ?? ''}
+                                onChange={(e) => updateBuffer(sectionKey, 'extra.titleEn', e.target.value)}
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]"
+                                placeholder="Section title in English" />
+                            </label>
+                            <label className="block">
+                              <span className="text-xs text-gray-500 mb-1 block">Title (FR)</span>
+                              <input value={(getSectionData(sectionKey) as any)?.extra?.titleFr ?? ''}
+                                onChange={(e) => updateBuffer(sectionKey, 'extra.titleFr', e.target.value)}
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]"
+                                placeholder="Section title in French" />
+                            </label>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <label className="block">
+                              <span className="text-xs text-gray-500 mb-1 block">Content (EN)</span>
+                              <textarea rows={6} value={(getSectionData(sectionKey) as any)?.extra?.contentEn ?? ''}
+                                onChange={(e) => updateBuffer(sectionKey, 'extra.contentEn', e.target.value)}
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b] resize-y"
+                                placeholder="Section body text in English" />
+                            </label>
+                            <label className="block">
+                              <span className="text-xs text-gray-500 mb-1 block">Content (FR)</span>
+                              <textarea rows={6} value={(getSectionData(sectionKey) as any)?.extra?.contentFr ?? ''}
+                                onChange={(e) => updateBuffer(sectionKey, 'extra.contentFr', e.target.value)}
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b] resize-y"
+                                placeholder="Section body text in French" />
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* ── About: Who We Are — second paragraph ──────────── */}
+                    {activePage === 'about' && sectionKey === 'whoWeAre' && (
+                      <div className="mt-2 border-t border-gray-100 pt-5 space-y-3">
+                        <div className="flex items-center justify-between flex-wrap gap-2">
+                          <div>
+                            <span className="text-sm font-semibold text-[#112b38]">Second Paragraph</span>
+                            <p className="text-xs text-gray-400 mt-0.5">Second text block shown below the main description.</p>
+                          </div>
+                          <button type="button" onClick={() => saveSection(sectionKey)} disabled={savingKey === sectionKey}
+                            className="flex items-center gap-2 px-4 py-1.5 bg-[#112b38] text-white rounded-lg text-xs font-medium hover:bg-[#0d2030] transition-colors disabled:opacity-60">
+                            {savingKey === sectionKey ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />} Save
+                          </button>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <label className="block">
+                            <span className="text-xs text-gray-500 mb-1 block">EN</span>
+                            <textarea rows={3}
+                              value={(getSectionData(sectionKey) as any)?.extra?.desc2En ?? ''}
+                              onChange={(e) => updateBuffer(sectionKey, 'extra.desc2En', e.target.value)}
+                              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b] resize-none"
+                              placeholder="English second paragraph..." />
+                          </label>
+                          <label className="block">
+                            <span className="text-xs text-gray-500 mb-1 block">FR</span>
+                            <textarea rows={3}
+                              value={(getSectionData(sectionKey) as any)?.extra?.desc2Fr ?? ''}
+                              onChange={(e) => updateBuffer(sectionKey, 'extra.desc2Fr', e.target.value)}
+                              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b] resize-none"
+                              placeholder="French second paragraph..." />
+                          </label>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* ── About: Services / WhyChooseUs — 3 card editor ─── */}
+                    {activePage === 'about' && (sectionKey === 'services' || sectionKey === 'whyChooseUs') && (
+                      <div className="mt-2 border-t border-gray-100 pt-5 space-y-4">
+                        <div className="flex items-center justify-between flex-wrap gap-2">
+                          <div>
+                            <span className="text-sm font-semibold text-[#112b38]">Cards (3)</span>
+                            <p className="text-xs text-gray-400 mt-0.5">Title and description for each card, in both languages.</p>
+                          </div>
+                          <button type="button" onClick={() => saveSection(sectionKey)} disabled={savingKey === sectionKey}
+                            className="flex items-center gap-2 px-4 py-1.5 bg-[#112b38] text-white rounded-lg text-xs font-medium hover:bg-[#0d2030] transition-colors disabled:opacity-60">
+                            {savingKey === sectionKey ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />} Save
+                          </button>
+                        </div>
+                        {([1, 2, 3] as const).map((n) => (
+                          <div key={n} className="rounded-xl border border-gray-200 bg-gray-50 p-3 space-y-2">
+                            <span className="text-xs font-semibold text-[#112b38]">Card {n}</span>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                              <label className="block">
+                                <span className="text-xs text-gray-500 mb-1 block">Title (EN)</span>
+                                <input value={(getSectionData(sectionKey) as any)?.extra?.[`card${n}titleEn`] ?? ''}
+                                  onChange={(e) => updateBuffer(sectionKey, `extra.card${n}titleEn`, e.target.value)}
+                                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]"
+                                  placeholder={`Card ${n} title (English)...`} />
+                              </label>
+                              <label className="block">
+                                <span className="text-xs text-gray-500 mb-1 block">Title (FR)</span>
+                                <input value={(getSectionData(sectionKey) as any)?.extra?.[`card${n}titleFr`] ?? ''}
+                                  onChange={(e) => updateBuffer(sectionKey, `extra.card${n}titleFr`, e.target.value)}
+                                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]"
+                                  placeholder={`Card ${n} title (French)...`} />
+                              </label>
+                              <label className="block">
+                                <span className="text-xs text-gray-500 mb-1 block">Description (EN)</span>
+                                <textarea rows={2}
+                                  value={(getSectionData(sectionKey) as any)?.extra?.[`card${n}descEn`] ?? ''}
+                                  onChange={(e) => updateBuffer(sectionKey, `extra.card${n}descEn`, e.target.value)}
+                                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b] resize-none"
+                                  placeholder={`Card ${n} description (English)...`} />
+                              </label>
+                              <label className="block">
+                                <span className="text-xs text-gray-500 mb-1 block">Description (FR)</span>
+                                <textarea rows={2}
+                                  value={(getSectionData(sectionKey) as any)?.extra?.[`card${n}descFr`] ?? ''}
+                                  onChange={(e) => updateBuffer(sectionKey, `extra.card${n}descFr`, e.target.value)}
+                                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b] resize-none"
+                                  placeholder={`Card ${n} description (French)...`} />
                               </label>
                             </div>
                           </div>
