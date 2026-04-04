@@ -8,6 +8,7 @@ import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import { useGoogleLogin } from '@react-oauth/google';
 
 interface AuthModalProps {
     isOpen: boolean;
@@ -262,7 +263,7 @@ const sortedCountries = [...countries].sort((a, b) => a.name.localeCompare(b.nam
 
 export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: AuthModalProps) {
     const { t } = useLanguage();
-    const { login, register } = useAuth();
+    const { login, register, socialLogin } = useAuth();
     const router = useRouter();
     const [mode, setMode] = useState<'login' | 'signup'>(initialMode);
     const [email, setEmail] = useState('');
@@ -274,6 +275,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
     const [showCountryDropdown, setShowCountryDropdown] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSocialLoading, setIsSocialLoading] = useState<'google' | 'facebook' | null>(null);
 
     const modalRef = useRef<HTMLDivElement>(null);
     const backdropRef = useRef<HTMLDivElement>(null);
@@ -376,6 +378,28 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
         }
     }, [showCountryDropdown]);
 
+    // ── Google OAuth ─────────────────────────────────────────
+    const handleGoogleLogin = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
+            setIsSocialLoading('google');
+            try {
+                const user = await socialLogin('google', tokenResponse.access_token);
+                toast.success(`Welcome, ${user.name}!`);
+                onClose();
+                if (user.role === 'admin') router.push('/admin');
+            } catch {
+                toast.error('Google login failed. Please try again.');
+            } finally {
+                setIsSocialLoading(null);
+            }
+        },
+        onError: () => {
+            toast.error('Google login was cancelled or failed.');
+            setIsSocialLoading(null);
+        },
+        flow: 'implicit',
+    });
+
     if (!isOpen) return null;
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -409,6 +433,36 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
         } finally {
             setIsSubmitting(false);
         }
+    };
+
+    // ── Facebook OAuth ───────────────────────────────────────────────────
+    const handleFacebookLogin = () => {
+        if (typeof window === 'undefined' || !(window as unknown as { FB?: { login: Function } }).FB) {
+            toast.error('Facebook SDK not loaded yet. Please try again.');
+            return;
+        }
+        const FB = (window as unknown as { FB: { login: Function } }).FB;
+        setIsSocialLoading('facebook');
+        FB.login(
+            async (response: { authResponse?: { accessToken: string }; status: string }) => {
+                if (response.authResponse?.accessToken) {
+                    try {
+                        const user = await socialLogin('facebook', response.authResponse.accessToken);
+                        toast.success(`Welcome, ${user.name}!`);
+                        onClose();
+                        if (user.role === 'admin') router.push('/admin');
+                    } catch {
+                        toast.error('Facebook login failed. Please try again.');
+                    } finally {
+                        setIsSocialLoading(null);
+                    }
+                } else {
+                    toast.error('Facebook login was cancelled.');
+                    setIsSocialLoading(null);
+                }
+            },
+            { scope: 'email,public_profile' }
+        );
     };
 
     const selectedCountry = sortedCountries.find(c => c.code === countryCode) || sortedCountries[0];
@@ -491,15 +545,29 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                     </button>
                                 </div>
 
-                                {/* Sign in with Google */}
-                                <div className="flex items-center justify-center gap-2 text-sm text-gray-700">
-                                    <span>{t.signInWith}</span>
-                                    <button type="button" className="flex items-center justify-center">
-                                        <FcGoogle size={24} />
+                                {/* Social Login */}
+                                <div className="flex flex-col gap-2">
+                                    <button
+                                        type="button"
+                                        disabled={isSocialLoading === 'google'}
+                                        onClick={() => handleGoogleLogin()}
+                                        className="w-full flex items-center justify-center gap-2 border border-gray-300 rounded py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                                    >
+                                        <FcGoogle size={20} />
+                                        {isSocialLoading === 'google' ? 'Connecting...' : 'Continue with Google'}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        disabled={isSocialLoading === 'facebook'}
+                                        onClick={handleFacebookLogin}
+                                        className="w-full flex items-center justify-center gap-2 bg-[#1877F2] text-white rounded py-2 text-sm font-medium hover:bg-[#166FE5] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                                    >
+                                        <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                                        </svg>
+                                        {isSocialLoading === 'facebook' ? 'Connecting...' : 'Continue with Facebook'}
                                     </button>
                                 </div>
-
-                                {/* Create Account Link */}
                                 <div className="text-center text-sm">
                                     <span className="text-gray-600">{t.newHere} </span>
                                     <button
@@ -666,11 +734,27 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signup' }: A
                                         </button>
                                     </div>
 
-                                    {/* Sign in with Google */}
-                                    <div className="flex items-center justify-center gap-2 text-sm text-gray-700">
-                                        <span>{t.signInWith}</span>
-                                        <button type="button" className="flex items-center justify-center">
-                                            <FcGoogle size={24} />
+                                    {/* Social Login */}
+                                    <div className="flex flex-col gap-2">
+                                        <button
+                                            type="button"
+                                            disabled={isSocialLoading === 'google'}
+                                            onClick={() => handleGoogleLogin()}
+                                            className="w-full flex items-center justify-center gap-2 border border-gray-300 rounded py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                                        >
+                                            <FcGoogle size={20} />
+                                            {isSocialLoading === 'google' ? 'Connecting...' : 'Continue with Google'}
+                                        </button>
+                                        <button
+                                            type="button"
+                                            disabled={isSocialLoading === 'facebook'}
+                                            onClick={handleFacebookLogin}
+                                            className="w-full flex items-center justify-center gap-2 bg-[#1877F2] text-white rounded py-2 text-sm font-medium hover:bg-[#166FE5] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                                        >
+                                            <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                                            </svg>
+                                            {isSocialLoading === 'facebook' ? 'Connecting...' : 'Continue with Facebook'}
                                         </button>
                                     </div>
 

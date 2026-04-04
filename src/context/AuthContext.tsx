@@ -19,6 +19,7 @@ interface AuthContextType {
   register: (data: RegisterData) => Promise<void>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
+  socialLogin: (provider: 'google' | 'facebook', token: string) => Promise<AuthUser>;
 }
 
 interface RegisterData {
@@ -69,6 +70,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }));
   };
 
+  // ── Social Login (Google / Facebook) ─────────────────────────────────────────
+  const socialLogin = async (provider: 'google' | 'facebook', token: string): Promise<AuthUser> => {
+    const { data } = await api.post('/auth/social-login', { provider, token });
+    dispatch(setCredentials({
+      user: data.user,
+      accessToken: data.accessToken,
+      refreshToken: data.refreshToken,
+    }));
+    return data.user;
+  };
+
   // ── Logout ────────────────────────────────────────────────────────────
   const logout = async () => {
     try {
@@ -92,6 +104,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         register,
         logout,
         refreshUser,
+        socialLogin,
       }}
     >
       {children}

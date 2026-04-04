@@ -7,6 +7,7 @@ export interface AuthUser {
   role: 'user' | 'admin';
   phone?: string;
   countryCode?: string;
+  avatar?: string | null;
   createdAt?: string;
 }
 
