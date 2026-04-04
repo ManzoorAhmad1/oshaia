@@ -113,10 +113,10 @@ const Platinumlist = () => {
               {/* Middle - Contact Section */}
               <div className="md:col-span-3 flex flex-col items-center space-y-1.5">
                 <h3 className="text-base md:text-lg font-semibold text-gray-900 text-center">
-                  Do you have any questions?
+                  {t.doYouHaveQuestion}
                 </h3>
                 <p className="text-gray-600 text-xs sm:text-sm hover:text-[#c89c6b] cursor-pointer" onClick={() => router.push('help')}>
-                  Please contact us
+                  {t.pleaseContactUs}
                 </p>
               </div>
 
@@ -135,7 +135,7 @@ const Platinumlist = () => {
                 </div>
                 {/* Chat online pill */}
                 <a
-                  href="https://wa.me/1234567890"
+                  href={`https://wa.me/${extra?.whatsappNumber || '2300000000'}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 px-4 py-2 border-2 border-gray-900 rounded-full hover:bg-gray-900 hover:text-white transition-all duration-300 group"
@@ -144,7 +144,7 @@ const Platinumlist = () => {
                     <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z" />
                   </svg>
                   <span className="text-sm sm:text-base font-bold text-gray-900 group-hover:text-white transition-colors whitespace-nowrap">
-                    Chat online
+                    {t.chatOnline}
                   </span>
                 </a>
               </div>

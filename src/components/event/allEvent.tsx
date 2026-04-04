@@ -2,40 +2,34 @@
 
 import React, { useState, useEffect, useRef } from "react"
 import Link from "next/link"
+import { useCms } from '@/lib/useCms'
+import { useLanguage } from '@/context/LanguageContext'
 
-// Mock data array with images and videos
-const slides = [
-    {
-        id: 1,
-        type: "image",
-        url: "/images/BANNER - SAMPLE/fire-horse-grid-1 1090x1080.jpg",
-        alt: "Festival Crowd",
-        duration: 5,
-    },
-    {
-        id: 2,
-        type: "image",
-        url: "/images/BANNER - SAMPLE/Home Page Carousel.jpg",
-        alt: "Concert Performance",
-        duration: 5,
-    },
-    {
-        id: 4,
-        type: "image",
-        url: "/images/BANNER - SAMPLE/Video For Carousel and Main Event(Where Choose Tickets Or Seats)1.jpg",
-        alt: "DJ Performance",
-        duration: 5,
-    },
-    {
-        id: 5,
-        type: "image",
-        url: "/images/BANNER - SAMPLE/Video For Carousel and Main Event(Where Choose Tickets Or Seats)2.jpg",
-        alt: "Dance Performance",
-        duration: 5,
-    }
+type SlideItem = {
+    id: number
+    type: "image" | "video"
+    url: string
+    alt: string
+    duration: number
+}
+
+const DEFAULT_SLIDES: SlideItem[] = [
+    { id: 1, type: "image", url: "/images/BANNER - SAMPLE/fire-horse-grid-1 1090x1080.jpg", alt: "Festival Crowd", duration: 5 },
+    { id: 2, type: "image", url: "/images/BANNER - SAMPLE/Home Page Carousel.jpg", alt: "Concert Performance", duration: 5 },
+    { id: 3, type: "image", url: "/images/BANNER - SAMPLE/Video For Carousel and Main Event(Where Choose Tickets Or Seats)1.jpg", alt: "DJ Performance", duration: 5 },
+    { id: 4, type: "image", url: "/images/BANNER - SAMPLE/Video For Carousel and Main Event(Where Choose Tickets Or Seats)2.jpg", alt: "Dance Performance", duration: 5 },
 ]
 
 const AllEvents = () => {
+    const { t } = useLanguage()
+    const { get: getCms } = useCms('event')
+    const bannerCms = getCms('banner')
+    const cmsImages: string[] = Array.isArray(bannerCms.images) ? bannerCms.images : []
+
+    const slides: SlideItem[] = cmsImages.length > 0
+        ? cmsImages.map((url, i) => ({ id: i + 1, type: "image" as const, url, alt: `Banner ${i + 1}`, duration: 5 }))
+        : DEFAULT_SLIDES
+
     const [currentSlide, setCurrentSlide] = useState(0)
     const [timeLeft, setTimeLeft] = useState(slides[0].duration)
     const [isMuted, setIsMuted] = useState(true)
@@ -131,7 +125,7 @@ const AllEvents = () => {
     return (
         <div className="w-full max-w-[85%] h-auto mx-auto mb-6 sm:mb-8 md:mb-10 px-2 sm:px-4 mt-60 sm:mt-48 md:mt-40 lg:mt-44 xl:mt-28">
             <h2 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 mb-2 sm:mb-3 lg:mb-4 tracking-tight uppercase">
-                All Event
+                {t.allEvent}
             </h2>
 
             <div className="relative rounded-lg sm:rounded-xl lg:rounded-3xl overflow-hidden shadow-md sm:shadow-lg bg-white w-full h-auto">

@@ -102,7 +102,7 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-2 mb-3">
               <BsTicketPerforated className="text-[#c89c6b] text-2xl" />
-              <span className="font-extrabold text-lg text-gray-900">TicketWeb</span>
+              <span className="font-extrabold text-lg text-gray-900">Oshaia</span>
             </div>
             <p className="text-sm text-gray-500 leading-snug">
               {t.entertainmentPlatform}
@@ -173,7 +173,7 @@ export default function Footer() {
       {/* Copyright */}
       <div className="border-t border-gray-200 py-4 bg-gray-50">
         <p className="text-center text-sm text-gray-500">
-          © 2026 <span className="font-semibold text-gray-800">TicketWeb</span> — {t.allRightsReserved}.
+          © 2026 <span className="font-semibold text-gray-800">Oshaia</span> — {t.allRightsReserved}.
         </p>
       </div>
     </footer>

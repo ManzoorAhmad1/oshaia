@@ -18,30 +18,6 @@ interface ApiEvent {
     ticketTypes: Array<{ price: number }>;
 }
 
-const STATIC_SLIDES = [
-    {
-        id: "1",
-        image: "/TOP%20SLLER/22054_9834dd51a16eba240c0c6c97a5237e74-0-en1771488562.jpg",
-        title: "Bel Suono: Three Pianos World Hits Gala",
-        date: "FEB 21 NOV",
-        price: "500",
-    },
-    {
-        id: "2",
-        image: "/TOP%20SLLER/22078_75ef9ba7a61c8303513ef023de00195d-0-en1771489174.jpg",
-        title: "Big 5 Concert: Stars of Arabic Music Live",
-        date: "MAR 15 DEC",
-        price: "350",
-    },
-    {
-        id: "3",
-        image: "/TOP%20SLLER/22099_3899b925d49dbee2814e0c1278a6dc64-0-en1771579388.jpg",
-        title: "Sessions: The Ultimate Live Music Experience",
-        date: "APR 20 JAN",
-        price: "450",
-    },
-];
-
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 export default function EventCard() {
@@ -49,7 +25,7 @@ export default function EventCard() {
     const { get: getCms } = useCms('home');
     const cmsExtra = getCms('topSeller').extra as { slides?: string; bottomImages?: string } | undefined;
 
-    // Build initial static slides — use CMS extra.slides if available, else hardcoded
+    // Build initial slides from CMS extra.slides if available
     const buildStaticSlides = () => {
         try {
             if (cmsExtra?.slides) {
@@ -57,15 +33,15 @@ export default function EventCard() {
                 if (Array.isArray(parsed) && parsed.length > 0) {
                     return parsed.map((s, i) => ({
                         id: String(i + 1),
-                        image: s.image || STATIC_SLIDES[i % STATIC_SLIDES.length]?.image || '',
-                        title: s.title || STATIC_SLIDES[i % STATIC_SLIDES.length]?.title || '',
-                        date: s.date || STATIC_SLIDES[i % STATIC_SLIDES.length]?.date || '',
-                        price: s.price || STATIC_SLIDES[i % STATIC_SLIDES.length]?.price || '',
+                        image: s.image || '',
+                        title: s.title || '',
+                        date: s.date || '',
+                        price: s.price || '',
                     }));
                 }
             }
         } catch {}
-        return STATIC_SLIDES;
+        return [];
     };
 
     // Build bottom banner images from CMS extra.bottomImages
@@ -76,7 +52,7 @@ export default function EventCard() {
                 if (Array.isArray(parsed) && parsed.length > 0) return parsed;
             }
         } catch {}
-        return STATIC_SLIDES.map(s => s.image);
+        return [];
     };
 
     const [index, setIndex] = useState(0);
@@ -91,6 +67,7 @@ export default function EventCard() {
 
     // Auto slide for bottom carousel
     useEffect(() => {
+        if (bottomImages.length === 0) return;
         const interval = setInterval(() => {
             setBottomIndex(prev => (prev + 1) % bottomImages.length);
         }, 5000);
@@ -105,7 +82,7 @@ export default function EventCard() {
                 if (events.length > 0) {
                     setSlides(events.map(ev => ({
                         id: ev._id,
-                        image: getImageUrl(ev.coverImage, STATIC_SLIDES[0].image),
+                        image: getImageUrl(ev.coverImage, ''),
                         title: language === 'fr' ? (ev.title?.fr || ev.title?.en) : (ev.title?.en || ev.title?.fr),
                         date: (() => { const d = new Date(ev.startDate); return `${MONTHS[d.getMonth()].toUpperCase()} ${String(d.getDate()).padStart(2,'0')}`; })(),
                         price: ev.ticketTypes?.length ? String(Math.min(...ev.ticketTypes.map(t => t.price))) : 'FREE',
@@ -172,6 +149,7 @@ export default function EventCard() {
                         {t.topSeller}
                     </p>
                 </div>
+                {slides.length > 0 && (
                 <div className="w-full flex flex-col sm:flex-row ">
                     {/* Left Half - Image Slider */}
                     <Link href={`/event/${slides[index]?.id ?? '#'}`} className="w-full sm:w-1/2 relative h-48 sm:h-[180px] md:h-[200.1px] rounded-tl-lg rounded-lb-lg overflow-hidden block cursor-pointer">
@@ -257,6 +235,7 @@ export default function EventCard() {
 
                     </div>
                 </div>
+                )}
             </div>
             <div className="w-full sm:w-[85%] mx-auto mt-8 sm:mt-12 md:mt-20 flex flex-col relative">
                 <div className="w-full h-[200px] rounded-lg overflow-hidden relative shadow-md">
