@@ -49,7 +49,7 @@ export default function AdminEventsPage() {
     setTogglingId(id);
     try {
       const { data } = await api.patch(`/events/${id}/toggle-visibility`);
-      setEvents((prev) => prev.map((e) => (e._id === id ? { ...e, isPublic: data.isPublic } : e)));
+      setEvents((prev) => prev.map((e) => (String(e.id) === String(id) ? { ...e, isPublic: data.isPublic } : e)));
       toast.success(data.message);
     } catch {
       toast.error('Failed to toggle visibility');
@@ -63,7 +63,7 @@ export default function AdminEventsPage() {
     setDeletingId(id);
     try {
       await api.delete(`/events/${id}`);
-      setEvents((prev) => prev.filter((e) => e._id !== id));
+      setEvents((prev) => prev.filter((e) => String(e.id) !== String(id)));
       toast.success('Event deleted');
     } catch {
       toast.error('Failed to delete event');
