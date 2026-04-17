@@ -9,6 +9,7 @@ import type { Swiper as SwiperType } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import { useCms } from '@/lib/useCms'
+import { useLanguage } from '@/context/LanguageContext'
 
 const DEFAULT_PARTNERS = [
   { id: 1, name: 'Partner 1', logo: '/images/image-1768921181363.png' },
@@ -33,8 +34,11 @@ function getCurrentSpv(): number {
 }
 
 const PartnersSection = () => {
+  const { language } = useLanguage()
   const { get: getCms } = useCms('home');
   const cmsImages: string[] = getCms('partners').images || [];
+  const partnersCms = getCms('partners');
+  const partnersTitle = (language === 'fr' ? partnersCms.title?.fr : partnersCms.title?.en) || 'OUR PARTNERS';
   const partners = cmsImages.length > 0
     ? cmsImages.map((logo, i) => ({ id: i + 1, name: `Partner ${i + 1}`, logo }))
     : DEFAULT_PARTNERS;
@@ -56,7 +60,7 @@ const PartnersSection = () => {
     <section className="py-6 sm:py-8 md:py-10 mt-6 sm:mt-8 md:mt-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-4 md:px-6 lg:px-8">
         <h2 className="text-sm sm:text-xl md:text-2xl lg:text-3xl font-bold text-center text-accent-orange mb-3 sm:mb-4 md:mb-5 lg:mb-6 uppercase tracking-wider">
-          OUR PARTNERS
+          {partnersTitle}
         </h2>
 
         <div className="relative px-10 sm:px-12">

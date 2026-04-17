@@ -143,7 +143,7 @@ const SECTION_DEFAULTS: Record<string, Record<string, Partial<CmsSection>>> = {
   },
   footer: {
     main: {
-      title: { en: 'Oshaia', fr: 'Oshaia' },
+      title: { en: 'KEEP IN TOUCH', fr: 'RESTEZ EN CONTACT' },
       description: {
         en: 'Beyond your journey — your trusted platform for events & ticketing.',
         fr: 'Au-delà de votre voyage — votre plateforme de confiance pour les événements et la billetterie.',
@@ -162,6 +162,20 @@ const SECTION_DEFAULTS: Record<string, Record<string, Partial<CmsSection>>> = {
         email: 'contact@oshaia.com',
         phone: '+230 5000 0000',
         address: 'Port Louis, Mauritius',
+      },
+    },
+    navigation: {
+      extra: {
+        col1HeaderEn: 'About Us', col1HeaderFr: 'À propos de nous',
+        col2HeaderEn: 'Categories', col2HeaderFr: 'Catégories',
+        col3HeaderEn: 'Services', col3HeaderFr: 'Services',
+        col4HeaderEn: 'Customer', col4HeaderFr: 'Client',
+        col1Links: '[{"label":"Who We Are?","href":"/about"},{"label":"Home","href":"/"},{"label":"Events","href":"/event"},{"label":"Help Center","href":"/help"},{"label":"Terms & Conditions","href":"/terms"}]',
+        col2Links: '[{"label":"All","href":"/event"},{"label":"Concerts","href":"/event"},{"label":"Festivals","href":"/event"},{"label":"Conferences","href":"/event"},{"label":"Shows","href":"/event"},{"label":"Sports","href":"/event"}]',
+        col3Links: '[{"label":"Event services","href":"/about"},{"label":"Marketing services","href":"/about"},{"label":"Venue ticketing","href":"/about"},{"label":"Organisers\' Guide","href":"/help"}]',
+        col4Links: '[{"label":"My Profile","href":"/profile"},{"label":"My Bookings","href":"/account"},{"label":"How to Buy Tickets","href":"/help"},{"label":"Terms & Conditions","href":"/terms"},{"label":"Help & Support","href":"/help"}]',
+        copyright: '\u00a9 2026 Oshaia.com, Aventure Agency LTD. All rights reserved.',
+        copyrightFr: '\u00a9 2026 Oshaia.com, Aventure Agency LTD. Tous droits r\u00e9serv\u00e9s.',
       },
     },
   },
@@ -245,18 +259,19 @@ type SectionFieldFlags = {
 };
 const SECTION_FIELD_CONFIG: Record<string, Record<string, SectionFieldFlags>> = {
   home: {
-    hero:      { showImage: true },    // HeroCarousel.tsx — getCms('hero').image
-    events:    {},                      // Managed via inline event manager
-    topSeller: {},                      // Managed via custom per-slide editor below
-    bestOfSeason: { showTitle: true, showGallery: true }, // BestOfSessassonSlider
-    platinumlist: { showTitle: true, showSubtitle: true, showImage: true }, // Custom paragraphs editor below
+    hero:      { showImage: true, showGallery: true },   // single image OR multi-slide carousel
+    events:    {},
+    topSeller: {},
+    bestOfSeason: { showTitle: true, showGallery: true },
+    partners:     { showTitle: true, showGallery: true },
+    platinumlist: { showTitle: true, showSubtitle: true, showImage: true },
   },
   about: {
     hero:        { showTitle: true, showSubtitle: true, showImage: true },
-    whoWeAre:    { showTitle: true, showDescription: true, showImage: true }, // + custom desc2 editor
-    services:    { showTitle: true },   // + custom 3-card editor
-    sponsors:    { showGallery: true },
-    whyChooseUs: { showTitle: true },   // + custom 3-card editor
+    whoWeAre:    { showTitle: true, showDescription: true, showImage: true },
+    services:    { showTitle: true },
+    sponsors:    { showTitle: true, showGallery: true },
+    whyChooseUs: { showTitle: true },
     cta:         { showTitle: true, showDescription: true, showButton: true },
   },
   help: {
@@ -280,10 +295,11 @@ const CMS_PAGES = [
     key: 'home',
     label: 'Home Page',
     sections: [
-      { key: 'hero', label: 'Hero / Carousel' },
+      { key: 'hero', label: 'Hero Banner (Carousel — images + videos)' },
       { key: 'events', label: 'Events Section' },
       { key: 'topSeller', label: 'Top Seller Section' },
       { key: 'bestOfSeason', label: 'Best of the Season (Slider)' },
+      { key: 'partners', label: 'Partners (Logo Carousel)' },
       { key: 'platinumlist', label: 'Why Buy / Payment / SEO Text' },
     ],
   },
@@ -303,9 +319,10 @@ const CMS_PAGES = [
     key: 'footer',
     label: 'Footer',
     sections: [
-      { key: 'main', label: 'Footer Content' },
+      { key: 'main', label: 'Footer Brand (Keep in Touch heading)' },
       { key: 'social', label: 'Social Links' },
       { key: 'contact', label: 'Contact Info' },
+      { key: 'navigation', label: 'Navigation Columns & Copyright' },
     ],
   },
   {
@@ -844,31 +861,49 @@ export default function AdminCmsPage() {
                     <div>
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                          {activePage === 'home' && sectionKey === 'partners'
+                          {activePage === 'home' && sectionKey === 'hero'
+                            ? 'Hero Slides (images or videos — auto-rotates on user side)'
+                            : activePage === 'home' && sectionKey === 'partners'
                             ? 'Partner Logos'
                             : activePage === 'home' && sectionKey === 'topSeller'
                             ? 'Slide Images (fallback when no Trending events)'
-                            : 'Image Gallery'}
+                            : activePage === 'home' && sectionKey === 'bestOfSeason'
+                            ? 'Season Slides (images or videos)'
+                            : activePage === 'about' && sectionKey === 'sponsors'
+                            ? 'Sponsor Logos'
+                            : 'Media Gallery (images or videos)'}
                         </span>
                           <label className={`flex items-center gap-1.5 text-xs text-[#c89c6b] cursor-pointer hover:text-[#b8885a] ${uploadingKey === `${sectionKey}-slide` ? 'opacity-60 pointer-events-none' : ''}`}>
                           {uploadingKey === `${sectionKey}-slide` ? <Loader2 className="w-3 h-3 animate-spin" /> : <Plus className="w-3 h-3" />}
-                          Add Image
+                          Add Image / Video
                           <input type="file" accept="image/*,video/*" className="hidden"
                             onChange={(e) => e.target.files?.[0] && uploadImage(sectionKey, 'slide', e.target.files[0])} />
                         </label>
                       </div>
                       <div className="flex flex-wrap gap-3">
-                        {(data.images || []).map((img, imgIdx) => (
+                        {(data.images || []).map((img, imgIdx) => {
+                          const isVid = /\.(mp4|webm|ogg|mov)(\?|$)/i.test(img);
+                          const src = img.startsWith('/uploads') ? `${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '')}${img}` : img;
+                          return (
                           <div key={imgIdx} className="relative group">
-                            <img
-                              src={img.startsWith('/uploads') ? `${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '')}${img}` : img}
-                              className="w-20 h-16 object-cover rounded-lg border border-gray-200"
-                              alt={`slide ${imgIdx}`}
-                            />
+                            {isVid ? (
+                              <div className="w-20 h-16 rounded-lg border border-gray-200 bg-gray-900 flex items-center justify-center relative overflow-hidden">
+                                <video src={src} className="w-full h-full object-cover opacity-60" muted />
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                  <svg className="w-5 h-5 text-white drop-shadow" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                </div>
+                                <span className="absolute bottom-0.5 left-0.5 text-[9px] bg-black/60 text-white px-1 rounded">VIDEO</span>
+                              </div>
+                            ) : (
+                              <img
+                                src={src}
+                                className="w-20 h-16 object-cover rounded-lg border border-gray-200"
+                                alt={`slide ${imgIdx}`}
+                              />
+                            )}
                             <button
                               type="button"
                               onClick={() => {
-                                // Use only real saved images (buffer or DB), NOT defaults
                                 const realImages = editBuffer[sectionKey]?.images ?? content[sectionKey]?.images ?? [];
                                 const newImgs = realImages.filter((_, i) => i !== imgIdx);
                                 updateBuffer(sectionKey, 'images', newImgs);
@@ -878,7 +913,8 @@ export default function AdminCmsPage() {
                               <Trash2 className="w-2.5 h-2.5" />
                             </button>
                           </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     </div>
                     )}

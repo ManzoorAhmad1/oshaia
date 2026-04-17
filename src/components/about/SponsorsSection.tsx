@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useCms } from '@/lib/useCms';
+import { useLanguage } from '@/context/LanguageContext';
 
 const DEFAULT_SPONSORS = [
   { id: 1, name: 'Sponsor 1', logo: '/images/image-1768921181363.png' },
@@ -18,8 +19,11 @@ const DEFAULT_SPONSORS = [
 ];
 
 export default function SponsorsSection() {
+  const { language } = useLanguage();
   const { get: getCms } = useCms('about');
   const cmsImages: string[] = getCms('sponsors').images || [];
+  const sponsorsCms = getCms('sponsors');
+  const sponsorsTitle = (language === 'fr' ? sponsorsCms.title?.fr : sponsorsCms.title?.en) || 'OUR SPONSORS';
   const sponsors = cmsImages.length > 0
     ? cmsImages.map((logo, i) => ({ id: i + 1, name: `Sponsor ${i + 1}`, logo }))
     : DEFAULT_SPONSORS;
@@ -80,7 +84,7 @@ export default function SponsorsSection() {
     >
       <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
         <h2 className="text-sm sm:text-xl md:text-2xl lg:text-3xl font-bold text-center text-[#c89c6b] mb-3 sm:mb-4 md:mb-5 lg:mb-6 uppercase tracking-wider">
-          OUR SPONSORS
+          {sponsorsTitle}
         </h2>
 
         <div className="relative px-2 sm:px-4 md:px-8 lg:px-12">

@@ -15,6 +15,15 @@ const HeroCarousel = () => {
     const { language, setLanguage, t } = useLanguage()
     const { user, logout, isAuthenticated } = useAuth()
     const { get: getCms } = useCms('home')
+
+    // ── Hero banner carousel ──────────────────────────────────────
+    const heroImages: string[] = getCms('hero').images || []
+    const heroSingleImage = getCms('hero').image || '/Coveer Web-01-01.png'
+    const heroSlides = heroImages.length > 0 ? heroImages : [heroSingleImage]
+    const isHeroVideo = (url: string) => /\.(mp4|webm|ogg|mov)(\?|$)/i.test(url)
+    const [heroIdx, setHeroIdx] = useState(0)
+    const heroTimerRef = useRef<NodeJS.Timeout | null>(null)
+
     const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false)
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false)
     const [searchFocused, setSearchFocused] = useState(false)
@@ -168,6 +177,14 @@ const HeroCarousel = () => {
         return d < today
     }
 
+    // Hero carousel auto-play
+    useEffect(() => {
+        if (heroSlides.length <= 1) return
+        heroTimerRef.current = setInterval(() => setHeroIdx(i => (i + 1) % heroSlides.length), 5000)
+        return () => { if (heroTimerRef.current) clearInterval(heroTimerRef.current) }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [heroSlides.length])
+
     return (
         <>
             <div className="bg-white">
@@ -175,13 +192,52 @@ const HeroCarousel = () => {
                 {/* HERO CARD */}
                 <div className="relative max-w-full sm:max-w-[1400.1px] h-[240px] sm:h-[300px] md:h-[340px] lg:h-[354.6px] mx-auto px-4 lg:px-8 xl:px-12 2xl:px-16 pt-4 sm:pt-6">
                     <div className="relative w-full h-full rounded-xl sm:rounded-xl lg:rounded-3xl overflow-hidden shadow-lg sm:shadow-xl lg:shadow-2xl">
-                        <Image
-                            src={getCms('hero').image || '/Coveer Web-01-01.png'}
-                            alt="Oshaia - Beyond your Journey"
-                            fill
-                            className="object-cover"
-                            priority
-                        />
+                        {/* Slide */}
+                        {isHeroVideo(heroSlides[heroIdx]) ? (
+                            <video
+                                key={heroSlides[heroIdx]}
+                                src={heroSlides[heroIdx]}
+                                className="w-full h-full object-cover"
+                                autoPlay muted loop playsInline
+                            />
+                        ) : (
+                            <Image
+                                src={heroSlides[heroIdx]}
+                                alt="Oshaia - Beyond your Journey"
+                                fill
+                                className="object-cover"
+                                priority
+                            />
+                        )}
+                        {/* Arrows + Dots (only when multiple slides) */}
+                        {heroSlides.length > 1 && (
+                            <>
+                                <button
+                                    type="button"
+                                    onClick={() => { setHeroIdx(i => (i - 1 + heroSlides.length) % heroSlides.length); if (heroTimerRef.current) { clearInterval(heroTimerRef.current); heroTimerRef.current = setInterval(() => setHeroIdx(i => (i + 1) % heroSlides.length), 5000); } }}
+                                    className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 z-20 bg-black/30 hover:bg-black/50 text-white rounded-full p-1 sm:p-1.5 transition-colors"
+                                    aria-label="Previous slide"
+                                >
+                                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/></svg>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => { setHeroIdx(i => (i + 1) % heroSlides.length); if (heroTimerRef.current) { clearInterval(heroTimerRef.current); heroTimerRef.current = setInterval(() => setHeroIdx(i => (i + 1) % heroSlides.length), 5000); } }}
+                                    className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 z-20 bg-black/30 hover:bg-black/50 text-white rounded-full p-1 sm:p-1.5 transition-colors"
+                                    aria-label="Next slide"
+                                >
+                                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/></svg>
+                                </button>
+                                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
+                                    {heroSlides.map((_, i) => (
+                                        <button key={i} type="button" onClick={() => setHeroIdx(i)}
+                                            className={`rounded-full transition-all duration-300 ${i === heroIdx ? 'w-5 h-1.5 bg-white' : 'w-1.5 h-1.5 bg-white/50 hover:bg-white/80'}`}
+                                            aria-label={`Slide ${i + 1}`}
+                                        />
+                                    ))}
+                                </div>
+                            </>
+                        )}
                     </div>
 
                     {/* FLOATING NAV */}

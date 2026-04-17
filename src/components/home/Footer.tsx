@@ -12,13 +12,54 @@ import NewsletterSection from './NewsletterSection';
 import Platinumlist from './platinumlist';
 import { useRouter } from 'next/navigation';
 import { useCms } from '@/lib/useCms';
+import { useLanguage } from '@/context/LanguageContext';
 
 const Footer = () => {
+  const { language } = useLanguage();
   const { get: getCms } = useCms('footer');
   const router=useRouter()
 
+  const footerMain = getCms('main');
   const footerSocial = getCms('social');
   const footerContact = getCms('contact');
+  const footerNav = getCms('navigation');
+
+  const lang = language === 'fr' ? 'fr' : 'en';
+  const ls = language === 'fr' ? 'Fr' : 'En';
+
+  // Column headers from CMS (fallback to English defaults)
+  const col1Header = footerNav.extra?.[`col1Header${ls}`] || (language === 'fr' ? 'À propos de nous' : 'About Us');
+  const col2Header = footerNav.extra?.[`col2Header${ls}`] || (language === 'fr' ? 'Catégories' : 'Categories');
+  const col3Header = footerNav.extra?.[`col3Header${ls}`] || 'Services';
+  const col4Header = footerNav.extra?.[`col4Header${ls}`] || (language === 'fr' ? 'Client' : 'Customer');
+
+  // Column links from CMS (JSON arrays)
+  const parseLinks = (key: string, fallback: {label: string; href: string}[]): {label: string; href: string}[] => {
+    try { const v = footerNav.extra?.[key]; if (v) { const p = JSON.parse(v); if (Array.isArray(p)) return p; } } catch {}
+    return fallback;
+  };
+  const col1Links = parseLinks('col1Links', [
+    { label: 'Who We Are ?', href: '/about' }, { label: 'Home', href: '/' }, { label: 'Events', href: '/event' },
+    { label: 'Help Center', href: '/help' }, { label: 'We are hiring', href: '#' }, { label: 'Terms & Conditions', href: '/terms' },
+  ]);
+  const col2Links = parseLinks('col2Links', [
+    { label: 'All', href: '/event' }, { label: 'Concerts', href: '/event' }, { label: 'Festivals', href: '/event' },
+    { label: 'Conferences', href: '/event' }, { label: 'Shows', href: '/event' }, { label: 'Sports', href: '/event' },
+  ]);
+  const col3Links = parseLinks('col3Links', [
+    { label: 'Event services', href: '/about' }, { label: 'Marketing services', href: '/about' },
+    { label: 'Event staffing', href: '/about' }, { label: 'Ticket printing', href: '/about' },
+    { label: 'Venue ticketing', href: '/about' }, { label: "Organisers' Guide", href: '/help' },
+  ]);
+  const col4Links = parseLinks('col4Links', [
+    { label: 'My Profile', href: '/profile' }, { label: 'My Bookings', href: '/account' },
+    { label: 'How to Buy Tickets', href: '/help' }, { label: 'Terms & Conditions', href: '/terms' },
+    { label: 'Help & Support', href: '/help' }, { label: 'Contact Us', href: '/help' },
+  ]);
+
+  // Copyright + Keep in Touch heading
+  const copyright = footerNav.extra?.[`copyright${ls}`] || footerNav.extra?.copyright || '© 2026 Oshaia.com, Aventure Agency LTD. All rights reserved.';
+  const keepInTouch = (language === 'fr' ? footerMain.title?.fr : footerMain.title?.en) || 'KEEP IN TOUCH';
 
   const socialLinks = [
     { name: 'Facebook', icon: FaFacebook, url: footerSocial.extra?.facebook || '#' },
@@ -27,9 +68,9 @@ const Footer = () => {
     { name: 'TikTok', icon: FaTiktok, url: footerSocial.extra?.tiktok || '#' },
   ]
 
-  const address = footerContact.extra?.address || 'Maxuel street, Frankfurt 2589 Germany';
-  const phone = footerContact.extra?.phone || '(022) 666 888 0000';
-  const email = footerContact.extra?.email || 'needhelp@gmail.com';
+  const address = footerContact.extra?.address || 'Port Louis, Mauritius';
+  const phone = footerContact.extra?.phone || '+230 5000 0000';
+  const email = footerContact.extra?.email || 'contact@oshaia.com';
   return (
     <footer className="w-full bg-white">
       <PartnersSection />
@@ -40,19 +81,11 @@ const Footer = () => {
       <div className="w-full bg-[#112b38] py-10 sm:py-12">
         <div className="max-w-6xl mx-auto px-6 sm:px-10 md:px-16 grid grid-cols-2 md:grid-cols-4 gap-8">
 
-          {/* About Us */}
+          {/* Column 1 */}
           <div>
-            <h4 className="text-[#c89c6b] font-bold text-sm sm:text-base mb-4 uppercase">About us</h4>
+            <h4 className="text-[#c89c6b] font-bold text-sm sm:text-base mb-4 uppercase">{col1Header}</h4>
             <ul className="space-y-2">
-              {[
-                { label: 'Who We Are ?', href: '/about' },
-                { label: 'Home', href: '/' },
-                { label: 'Events', href: '/event' },
-                { label: 'Help Center', href: '/help' },
-                { label: 'We are hiring', href: '#' },
-                { label: 'Latest News', href: '#' },
-                { label: 'Terms & Conditions', href: '/terms' },
-              ].map(item => (
+              {col1Links.map(item => (
                 <li key={item.label}>
                   <Link href={item.href} className="text-white text-xs sm:text-sm hover:text-[#c89c6b] transition-colors">
                     {item.label}
@@ -62,19 +95,11 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Categories */}
+          {/* Column 2 */}
           <div>
-            <h4 className="text-[#c89c6b] font-bold text-sm sm:text-base mb-4 uppercase">Categories</h4>
+            <h4 className="text-[#c89c6b] font-bold text-sm sm:text-base mb-4 uppercase">{col2Header}</h4>
             <ul className="space-y-2">
-              {[
-                { label: 'All', href: '/event' },
-                { label: 'Concerts', href: '/event' },
-                { label: 'Festivals', href: '/event' },
-                { label: 'Conferences', href: '/event' },
-                { label: 'Shows', href: '/event' },
-                { label: 'Sports', href: '/event' },
-                { label: 'Top Seller', href: '/event' },
-              ].map(item => (
+              {col2Links.map(item => (
                 <li key={item.label}>
                   <Link href={item.href} className="text-white text-xs sm:text-sm hover:text-[#c89c6b] transition-colors">
                     {item.label}
@@ -84,20 +109,11 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Services */}
+          {/* Column 3 */}
           <div>
-            <h4 className="text-[#c89c6b] font-bold text-sm sm:text-base mb-4 uppercase">Services</h4>
+            <h4 className="text-[#c89c6b] font-bold text-sm sm:text-base mb-4 uppercase">{col3Header}</h4>
             <ul className="space-y-2">
-              {[
-                { label: 'Event services', href: '/about' },
-                { label: 'Marketing services', href: '/about' },
-                { label: 'Event staffing', href: '/about' },
-                { label: 'Ticket printing', href: '/about' },
-                { label: 'Venue ticketing', href: '/about' },
-                { label: 'System features', href: '/about' },
-                { label: "Organisers' Guide", href: '/help' },
-                { label: 'Advertise with us', href: '/about' },
-              ].map(item => (
+              {col3Links.map(item => (
                 <li key={item.label}>
                   <Link href={item.href} className="text-white text-xs sm:text-sm hover:text-[#c89c6b] transition-colors">
                     {item.label}
@@ -107,19 +123,11 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Customer */}
+          {/* Column 4 */}
           <div>
-            <h4 className="text-[#c89c6b] font-bold text-sm sm:text-base mb-4 uppercase">Customer</h4>
+            <h4 className="text-[#c89c6b] font-bold text-sm sm:text-base mb-4 uppercase">{col4Header}</h4>
             <ul className="space-y-2">
-              {[
-                { label: 'My Profile', href: '/profile' },
-                { label: 'My Bookings', href: '/account' },
-                { label: 'Chat with Us on WhatsApp', href: '#' },
-                { label: 'How to Buy Tickets', href: '/help' },
-                { label: 'Terms & Conditions', href: '/terms' },
-                { label: 'Help & Support', href: '/help' },
-                { label: 'Contact Us', href: '/help' },
-              ].map(item => (
+              {col4Links.map(item => (
                 <li key={item.label}>
                   <Link href={item.href} className="text-white text-xs sm:text-sm hover:text-[#c89c6b] transition-colors">
                     {item.label}
@@ -135,7 +143,7 @@ const Footer = () => {
       {/* Keep in Touch - white section */}
       <div className="w-full bg-white py-6 text-center border-b border-gray-100">
         <h4 className="text-sm sm:text-base font-bold uppercase mb-3 text-black tracking-widest">
-          KEEP IN TOUCH
+          {keepInTouch}
         </h4>
         <ul className="flex items-center justify-center gap-5 list-none">
           {socialLinks.map((social) => (
@@ -172,7 +180,7 @@ const Footer = () => {
       {/* Copyright + Terms */}
       <div className="w-full bg-white py-4 text-center">
         <p className="text-gray-700 text-xs sm:text-sm mb-2">
-          Copyright © 2026 Oshaia.com, Aventure Agency LTD. All rights reserved.
+          {copyright}
         </p>
         <ul className="flex items-center justify-center gap-2 sm:gap-3 list-none text-xs sm:text-sm">
           <li>

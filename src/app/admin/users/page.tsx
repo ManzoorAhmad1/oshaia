@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import api from '@/lib/api';
-import { Loader2, UserX, UserCheck, Search, Plus, X, Eye, EyeOff } from 'lucide-react';
+import { Loader2, UserX, UserCheck, Search, Plus, X, Eye, EyeOff, ShieldCheck } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 type StaffRole = 'organizer' | 'moderator' | 'scanner' | 'ticket_runner';
@@ -15,6 +15,7 @@ interface User {
   isActive: boolean;
   createdAt: string;
   phone?: string;
+  permissions?: string[] | null;
 }
 
 const ROLE_STYLES: Record<string, string> = {
@@ -39,6 +40,43 @@ const STAFF_ROLES: { value: StaffRole; label: string; desc: string }[] = [
   { value: 'ticket_runner', label: 'Ticket Runner', desc: 'Manage ticket distribution' },
 ];
 
+// All permissions with labels grouped by category
+const PERMISSION_GROUPS = [
+  {
+    group: 'General',
+    items: [
+      { key: 'dashboard', label: 'Dashboard', desc: 'Access dashboard overview' },
+      { key: 'settings',  label: 'Settings',  desc: 'View and edit account settings' },
+    ],
+  },
+  {
+    group: 'Events',
+    items: [
+      { key: 'events.view',   label: 'View Events',        desc: 'Browse all events list' },
+      { key: 'events.create', label: 'Create Events',      desc: 'Add new events' },
+      { key: 'events.edit',   label: 'Edit Events',        desc: 'Modify existing events' },
+      { key: 'events.delete', label: 'Delete Events',      desc: 'Permanently remove events' },
+      { key: 'events.toggle', label: 'Toggle Visibility',  desc: 'Publish or unpublish events' },
+    ],
+  },
+  {
+    group: 'Other',
+    items: [
+      { key: 'cms',     label: 'CMS / Content',   desc: 'Edit homepage content' },
+      { key: 'users',   label: 'Staff Management', desc: 'Create and manage staff accounts' },
+      { key: 'scanner', label: 'Ticket Scanner',   desc: 'Scan event tickets' },
+      { key: 'tickets', label: 'Ticket Management', desc: 'Manage ticket distribution' },
+    ],
+  },
+];
+
+const ROLE_DEFAULT_PERMISSIONS: Record<StaffRole, string[]> = {
+  organizer:     ['dashboard', 'events.view', 'events.create', 'events.edit', 'settings'],
+  moderator:     ['dashboard', 'events.view', 'events.toggle', 'settings'],
+  scanner:       ['dashboard', 'scanner', 'settings'],
+  ticket_runner: ['dashboard', 'tickets', 'settings'],
+};
+
 export default function AdminUsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -51,6 +89,7 @@ export default function AdminUsersPage() {
   const [creating, setCreating] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', password: '', role: 'organizer' as StaffRole });
   const [showPass, setShowPass] = useState(false);
+  const [permissions, setPermissions] = useState<string[]>(ROLE_DEFAULT_PERMISSIONS['organizer']);
 
   useEffect(() => {
     api.get('/admin/users')
@@ -58,6 +97,18 @@ export default function AdminUsersPage() {
       .catch(() => toast.error('Failed to load users'))
       .finally(() => setLoading(false));
   }, []);
+
+  // Auto-update permissions when role changes
+  const handleRoleChange = (role: StaffRole) => {
+    setForm((f) => ({ ...f, role }));
+    setPermissions(ROLE_DEFAULT_PERMISSIONS[role]);
+  };
+
+  const togglePermission = (key: string) => {
+    setPermissions((prev) =>
+      prev.includes(key) ? prev.filter((p) => p !== key) : [...prev, key]
+    );
+  };
 
   const toggleActive = async (user: User) => {
     setActionId(user.id);
@@ -76,11 +127,12 @@ export default function AdminUsersPage() {
     e.preventDefault();
     setCreating(true);
     try {
-      const { data } = await api.post('/admin/users', form);
+      const { data } = await api.post('/admin/users', { ...form, permissions });
       setUsers((prev) => [data.user, ...prev]);
       toast.success(`${ROLE_LABELS[form.role]} account created`);
       setShowModal(false);
       setForm({ name: '', email: '', password: '', role: 'organizer' });
+      setPermissions(ROLE_DEFAULT_PERMISSIONS['organizer']);
     } catch (err: any) {
       toast.error(err?.response?.data?.message || 'Failed to create account');
     } finally {
@@ -147,6 +199,7 @@ export default function AdminUsersPage() {
                   <th className="text-left px-4 py-3 font-medium text-gray-600">Name</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-600">Email</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-600">Role</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-600">Permissions</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-600">Joined</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-600">Status</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-600">Actions</th>
@@ -154,7 +207,7 @@ export default function AdminUsersPage() {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {filtered.length === 0 && (
-                  <tr><td colSpan={6} className="text-center py-10 text-gray-400">No users found.</td></tr>
+                  <tr><td colSpan={7} className="text-center py-10 text-gray-400">No users found.</td></tr>
                 )}
                 {filtered.map((user) => (
                   <tr key={user.id} className="hover:bg-gray-50">
@@ -164,6 +217,20 @@ export default function AdminUsersPage() {
                       <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${ROLE_STYLES[user.role] || 'bg-gray-100 text-gray-600'}`}>
                         {ROLE_LABELS[user.role] || user.role}
                       </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      {user.permissions && user.permissions.length > 0 ? (
+                        <div className="flex flex-wrap gap-1 max-w-[200px]">
+                          {user.permissions.slice(0, 3).map((p) => (
+                            <span key={p} className="px-1.5 py-0.5 bg-[#c89c6b]/10 text-[#112b38] rounded text-[10px] font-medium">{p}</span>
+                          ))}
+                          {user.permissions.length > 3 && (
+                            <span className="px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded text-[10px]">+{user.permissions.length - 3}</span>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="text-xs text-gray-400 italic">Role defaults</span>
+                      )}
                     </td>
                     <td className="px-4 py-3 text-gray-500">{new Date(user.createdAt).toLocaleDateString()}</td>
                     <td className="px-4 py-3">
@@ -191,20 +258,20 @@ export default function AdminUsersPage() {
       {/* Create Staff Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 sticky top-0 bg-white z-10 rounded-t-2xl">
               <h2 className="text-lg font-bold text-[#112b38]">Create Staff Account</h2>
               <button onClick={() => setShowModal(false)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500">
                 <X className="w-4 h-4" />
               </button>
             </div>
-            <form onSubmit={handleCreate} className="p-6 space-y-4">
+            <form onSubmit={handleCreate} className="p-6 space-y-5">
               {/* Role picker */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Select Role</label>
                 <div className="grid grid-cols-2 gap-2">
                   {STAFF_ROLES.map(({ value, label, desc }) => (
-                    <button key={value} type="button" onClick={() => setForm((f) => ({ ...f, role: value }))}
+                    <button key={value} type="button" onClick={() => handleRoleChange(value)}
                       className={`text-left p-3 rounded-xl border-2 transition-all ${form.role === value ? 'border-[#c89c6b] bg-[#c89c6b]/10' : 'border-gray-200 hover:border-gray-300'}`}>
                       <p className="text-xs font-bold text-[#112b38]">{label}</p>
                       <p className="text-[10px] text-gray-500 mt-0.5 leading-tight">{desc}</p>
@@ -212,6 +279,42 @@ export default function AdminUsersPage() {
                   ))}
                 </div>
               </div>
+
+              {/* Permissions */}
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <ShieldCheck className="w-4 h-4 text-[#c89c6b]" />
+                  <label className="text-sm font-medium text-gray-700">Permissions</label>
+                  <span className="ml-auto text-[10px] text-gray-400">{permissions.length} selected</span>
+                </div>
+                <div className="border border-gray-200 rounded-xl overflow-hidden divide-y divide-gray-100">
+                  {PERMISSION_GROUPS.map(({ group, items }) => (
+                    <div key={group}>
+                      <div className="px-3 py-2 bg-gray-50">
+                        <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">{group}</p>
+                      </div>
+                      <div className="divide-y divide-gray-50">
+                        {items.map(({ key, label, desc }) => (
+                          <label key={key}
+                            className="flex items-center gap-3 px-3 py-2.5 cursor-pointer hover:bg-gray-50 transition-colors">
+                            <input
+                              type="checkbox"
+                              checked={permissions.includes(key)}
+                              onChange={() => togglePermission(key)}
+                              className="w-4 h-4 accent-[#c89c6b] rounded flex-shrink-0"
+                            />
+                            <div className="min-w-0">
+                              <p className="text-xs font-semibold text-[#112b38]">{label}</p>
+                              <p className="text-[10px] text-gray-400">{desc}</p>
+                            </div>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">Full Name</label>
                 <input type="text" required value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
@@ -238,7 +341,7 @@ export default function AdminUsersPage() {
                 </div>
                 <p className="text-[11px] text-gray-400 mt-1">Share this with the staff member. They can change it from Settings.</p>
               </div>
-              <div className="flex gap-3 pt-2">
+              <div className="flex gap-3 pt-1">
                 <button type="button" onClick={() => setShowModal(false)}
                   className="flex-1 py-2.5 border border-gray-300 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
                   Cancel

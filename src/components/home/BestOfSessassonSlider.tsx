@@ -26,7 +26,7 @@ const BestOfSessassonSlider = () => {
 
     const cmsSlides: SlideData[] = cmsImages.map((url, i) => ({
         id: i + 1,
-        type: 'image' as const,
+        type: /\.(mp4|webm|ogg|mov)(\?|$)/i.test(url) ? 'video' as const : 'image' as const,
         url,
         alt: `Banner ${i + 1}`,
         duration: 6,

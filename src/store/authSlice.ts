@@ -9,6 +9,7 @@ export interface AuthUser {
   countryCode?: string;
   avatar?: string | null;
   createdAt?: string;
+  permissions?: string[] | null;
 }
 
 interface AuthState {
