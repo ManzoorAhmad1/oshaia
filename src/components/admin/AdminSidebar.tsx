@@ -8,22 +8,57 @@ import { useAuth } from '@/context/AuthContext';
 import {
   LayoutDashboard, Calendar, FileImage, Users,
   Settings, LogOut, ChevronLeft, ChevronRight,
-  Menu, X, BarChart3, Globe
+  Menu, X, Globe, QrCode, Ticket
 } from 'lucide-react';
 
-const navItems = [
-  { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
-  { href: '/admin/events', label: 'Events', icon: Calendar },
-  { href: '/admin/cms', label: 'CMS / Content', icon: FileImage },
-  { href: '/admin/users', label: 'Users', icon: Users },
-  { href: '/admin/settings', label: 'Settings', icon: Settings },
-];
+type Role = 'admin' | 'organizer' | 'moderator' | 'scanner' | 'ticket_runner' | 'user';
+
+const ROLE_LABELS: Record<Role, string> = {
+  admin: 'Main Admin',
+  organizer: 'Organizer',
+  moderator: 'Moderator',
+  scanner: 'Scanner',
+  ticket_runner: 'Ticket Runner',
+  user: 'User',
+};
+
+const ROLE_COLORS: Record<Role, string> = {
+  admin: 'bg-purple-500/20 text-purple-300',
+  organizer: 'bg-blue-500/20 text-blue-300',
+  moderator: 'bg-orange-500/20 text-orange-300',
+  scanner: 'bg-green-500/20 text-green-300',
+  ticket_runner: 'bg-yellow-500/20 text-yellow-300',
+  user: 'bg-gray-500/20 text-gray-300',
+};
+
+const getNavItems = (role: Role): { href: string; label: string; icon: React.ElementType; exact?: boolean }[] => {
+  const dashboard  = { href: '/admin',         label: 'Dashboard',     icon: LayoutDashboard, exact: true };
+  const events     = { href: '/admin/events',   label: 'Events',        icon: Calendar };
+  const myEvents   = { href: '/admin/events',   label: 'My Events',     icon: Calendar };
+  const cms        = { href: '/admin/cms',      label: 'CMS / Content', icon: FileImage };
+  const staff      = { href: '/admin/users',    label: 'Staff',         icon: Users };
+  const settings   = { href: '/admin/settings', label: 'Settings',      icon: Settings };
+  const scanner    = { href: '/admin/scanner',  label: 'Scan Ticket',   icon: QrCode };
+  const tickets    = { href: '/admin/tickets',  label: 'Tickets',       icon: Ticket };
+
+  switch (role) {
+    case 'admin':        return [dashboard, events, cms, staff, settings];
+    case 'organizer':    return [dashboard, myEvents, settings];
+    case 'moderator':    return [dashboard, events, settings];
+    case 'scanner':      return [dashboard, scanner, settings];
+    case 'ticket_runner':return [dashboard, tickets, settings];
+    default:             return [dashboard, settings];
+  }
+};
 
 export default function AdminSidebar() {
   const pathname = usePathname();
   const { logout, user } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const role = (user?.role || 'user') as Role;
+  const navItems = getNavItems(role);
 
   const isActive = (href: string, exact = false) =>
     exact ? pathname === href : pathname.startsWith(href);
@@ -38,7 +73,7 @@ export default function AdminSidebar() {
         {!collapsed && (
           <div>
             <p className="font-extrabold text-white text-sm leading-none tracking-widest uppercase">Oshaia</p>
-            <p className="text-xs text-[#c89c6b] mt-0.5">Admin Panel</p>
+            <p className="text-xs text-[#c89c6b] mt-0.5">{ROLE_LABELS[role]} Panel</p>
           </div>
         )}
       </div>
@@ -54,7 +89,7 @@ export default function AdminSidebar() {
           const active = isActive(href, exact);
           return (
             <Link
-              key={href}
+              key={label}
               href={href}
               onClick={() => setMobileOpen(false)}
               title={collapsed ? label : undefined}
@@ -92,9 +127,11 @@ export default function AdminSidebar() {
             <div className="w-7 h-7 rounded-full bg-[#c89c6b] flex items-center justify-center flex-shrink-0">
               <span className="text-xs font-bold text-white">{user?.name?.charAt(0)?.toUpperCase() || 'A'}</span>
             </div>
-            <div className="min-w-0">
+            <div className="min-w-0 flex-1">
               <p className="text-xs font-semibold text-white truncate">{user?.name}</p>
-              <p className="text-[10px] text-white/40 truncate">{user?.email}</p>
+              <span className={`inline-block text-[10px] px-1.5 py-0.5 rounded-full font-medium mt-0.5 ${ROLE_COLORS[role]}`}>
+                {ROLE_LABELS[role]}
+              </span>
             </div>
           </div>
         )}
@@ -136,8 +173,11 @@ export default function AdminSidebar() {
           </button>
           <span className="font-extrabold text-white text-sm tracking-widest uppercase">Oshaia Admin</span>
         </div>
-        <div className="w-7 h-7 rounded-full bg-[#c89c6b] flex items-center justify-center">
-          <span className="text-xs font-bold text-white">{user?.name?.charAt(0)?.toUpperCase() || 'A'}</span>
+        <div className="flex items-center gap-2">
+          <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${ROLE_COLORS[role]}`}>{ROLE_LABELS[role]}</span>
+          <div className="w-7 h-7 rounded-full bg-[#c89c6b] flex items-center justify-center">
+            <span className="text-xs font-bold text-white">{user?.name?.charAt(0)?.toUpperCase() || 'A'}</span>
+          </div>
         </div>
       </div>
 

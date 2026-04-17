@@ -36,7 +36,7 @@ interface EventFormData {
 }
 
 interface Props {
-  initialData?: Partial<EventFormData> & { _id?: string };
+  initialData?: Partial<EventFormData> & { id?: string; _id?: string };
   mode: 'create' | 'edit';
   onSuccess?: () => void;
   onCancel?: () => void;
@@ -133,7 +133,7 @@ export default function EventForm({ initialData, mode, onSuccess, onCancel }: Pr
         await api.post('/events', form);
         toast.success('Event created!');
       } else {
-        await api.patch(`/events/${initialData?._id}`, form);
+        await api.patch(`/events/${initialData?.id || initialData?._id}`, form);
         toast.success('Event updated!');
       }
       if (onSuccess) {

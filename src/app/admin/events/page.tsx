@@ -8,7 +8,8 @@ import { Plus, Pencil, Trash2, Globe, EyeOff, Loader2, RefreshCw, Search } from 
 import toast from 'react-hot-toast';
 
 interface Event {
-  _id: string;
+  id: string;
+  _id?: string;
   title: { en: string; fr: string };
   category: string;
   startDate: string;
@@ -138,7 +139,7 @@ export default function AdminEventsPage() {
                   </tr>
                 )}
                 {events.map((event) => (
-                  <tr key={event._id} className="hover:bg-gray-50 transition-colors">
+                  <tr key={event.id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
                         {event.coverImage && (
@@ -164,15 +165,15 @@ export default function AdminEventsPage() {
                     </td>
                     <td className="px-4 py-3">
                       <button
-                        onClick={() => toggleVisibility(event._id)}
-                        disabled={togglingId === event._id}
+                        onClick={() => toggleVisibility(event.id)}
+                        disabled={togglingId === (event.id)}
                         className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                           event.isPublic
                             ? 'bg-green-100 text-green-700 hover:bg-green-200'
                             : 'bg-orange-100 text-orange-700 hover:bg-orange-200'
                         }`}
                       >
-                        {togglingId === event._id ? (
+                        {togglingId === (event.id) ? (
                           <Loader2 className="w-3 h-3 animate-spin" />
                         ) : event.isPublic ? (
                           <Globe className="w-3 h-3" />
@@ -185,17 +186,17 @@ export default function AdminEventsPage() {
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
                         <Link
-                          href={`/admin/events/${event._id}/edit`}
+                          href={`/admin/events/${event.id}/edit`}
                           className="p-1.5 text-gray-500 hover:text-[#112b38] hover:bg-[#c89c6b]/10 rounded-lg transition-colors"
                         >
                           <Pencil className="w-4 h-4" />
                         </Link>
                         <button
-                          onClick={() => deleteEvent(event._id)}
-                          disabled={deletingId === event._id}
+                          onClick={() => deleteEvent(event.id)}
+                          disabled={deletingId === (event.id)}
                           className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                         >
-                          {deletingId === event._id ? (
+                          {deletingId === (event.id) ? (
                             <Loader2 className="w-4 h-4 animate-spin" />
                           ) : (
                             <Trash2 className="w-4 h-4" />

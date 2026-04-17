@@ -6,7 +6,7 @@ import api from '@/lib/api';
 import { getImageUrl } from '@/lib/imageUrl';
 import {
   Calendar, Users, Globe, EyeOff, Loader2, TrendingUp,
-  Ticket, ArrowUpRight, ArrowDownRight, Clock, Plus, FileImage, Settings
+  Ticket, ArrowUpRight, Clock, Plus, FileImage, Settings, QrCode, CheckCircle
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -18,38 +18,41 @@ interface FullStats {
   activeUsers: number;
   totalTicketTypes: number;
   categoryCounts: Record<string, number>;
-  recentEvents: Array<{ _id: string; title: { en: string }; startDate: string; isPublic: boolean; category: string; coverImage?: string }>;
-  recentUsers: Array<{ _id: string; name: string; email: string; createdAt: string; isActive: boolean }>;
+  recentEvents: Array<{ id: string; _id?: string; title: { en: string }; startDate: string; isPublic: boolean; category: string; coverImage?: string }>;
+  recentUsers: Array<{ id: string; _id?: string; name: string; email: string; createdAt: string; isActive: boolean }>;
 }
-
-const BRAND = '#c89c6b';
-const DARK = '#112b38';
 
 const BAR_COLORS = ['#c89c6b', '#2a6b8a', '#e8b87a', '#1a4a60', '#d4a06a', '#3a7a9a'];
 
+const ROLE_LABELS: Record<string, string> = {
+  admin: 'Main Admin', organizer: 'Organizer',
+  moderator: 'Moderator', scanner: 'Scanner',
+  ticket_runner: 'Ticket Runner',
+};
+
 export default function AdminDashboardPage() {
   const { user } = useAuth();
+  const role = user?.role || 'user';
   const [stats, setStats] = useState<FullStats | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
+        const isAdmin = role === 'admin';
         const [eventsRes, usersRes] = await Promise.all([
           api.get('/events/admin/all?limit=1000'),
-          api.get('/admin/users'),
+          isAdmin ? api.get('/admin/users') : Promise.resolve({ data: { users: [] } }),
         ]);
         const events: any[] = eventsRes.data.events || [];
         const users: any[] = usersRes.data.users || [];
 
-        // Category counts
         const categoryCounts: Record<string, number> = {};
         events.forEach((e) => {
           const cat = e.category || 'other';
           categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
         });
 
-        // Total ticket types across all events
         const totalTicketTypes = events.reduce((sum: number, e: any) => sum + (e.ticketTypes?.length || 0), 0);
 
         setStats({
@@ -82,7 +85,8 @@ export default function AdminDashboardPage() {
 
   const statCards = stats ? [
     {
-      label: 'Total Events', value: stats.totalEvents,
+      label: role === 'organizer' ? 'My Events' : 'Total Events',
+      value: stats.totalEvents,
       icon: Calendar, bg: 'bg-[#112b38]', text: 'text-[#c89c6b]',
       sub: `${stats.publicEvents} public`, href: '/admin/events',
     },
@@ -92,21 +96,46 @@ export default function AdminDashboardPage() {
       sub: `${Math.round((stats.publicEvents / Math.max(stats.totalEvents, 1)) * 100)}% of total`,
       href: '/admin/events',
     },
-    {
-      label: 'Total Users', value: stats.totalUsers,
-      icon: Users, bg: 'bg-[#c89c6b]/10', text: 'text-[#c89c6b]',
-      sub: `${stats.activeUsers} active`,
-      href: '/admin/users',
-    },
+    ...(role === 'admin' ? [
+      {
+        label: 'Total Users', value: stats.totalUsers,
+        icon: Users, bg: 'bg-[#c89c6b]/10', text: 'text-[#c89c6b]',
+        sub: `${stats.activeUsers} active`, href: '/admin/users',
+      },
+    ] : []),
     {
       label: 'Ticket Types', value: stats.totalTicketTypes,
       icon: Ticket, bg: 'bg-blue-50', text: 'text-blue-700',
-      sub: 'across all events',
-      href: '/admin/events',
+      sub: 'across all events', href: '/admin/events',
     },
   ] : [];
 
   const maxCat = stats ? Math.max(...Object.values(stats.categoryCounts), 1) : 1;
+
+  // Scanner role — minimal dashboard
+  if (role === 'scanner') {
+    return (
+      <div className="p-6 lg:p-8 space-y-6 max-w-lg">
+        <div>
+          <h1 className="text-2xl font-bold text-[#112b38]">Welcome, {user?.name}</h1>
+          <p className="text-gray-500 text-sm mt-1">Scanner Dashboard</p>
+        </div>
+        <div className="bg-white rounded-2xl border border-gray-200 p-8 text-center">
+          <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+            <QrCode className="w-10 h-10 text-green-600" />
+          </div>
+          <h2 className="text-xl font-bold text-[#112b38] mb-2">Ready to Scan</h2>
+          <p className="text-gray-500 text-sm mb-6">Use your scanning device to verify tickets at the event entrance.</p>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-medium">
+            <CheckCircle className="w-4 h-4" /> System Online
+          </div>
+        </div>
+        <Link href="/admin/settings" className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-50 w-fit">
+          <Settings className="w-4 h-4 text-[#c89c6b]" /> Settings
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-full">
@@ -114,17 +143,23 @@ export default function AdminDashboardPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold text-[#112b38]">Welcome back, {user?.name} 👋</h1>
-          <p className="text-gray-500 text-sm mt-1">Here's your platform overview for today.</p>
+          <p className="text-gray-500 text-sm mt-1">
+            <span className="capitalize font-medium text-[#c89c6b]">{ROLE_LABELS[role] || role}</span> — Here&apos;s your overview.
+          </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Link href="/admin/events/new"
-            className="flex items-center gap-1.5 px-4 py-2 bg-[#112b38] text-white rounded-lg text-sm font-medium hover:bg-[#0d2030] transition-colors border border-[#c89c6b]/20">
-            <Plus className="w-4 h-4" /> Add Event
-          </Link>
-          <Link href="/admin/cms"
-            className="flex items-center gap-1.5 px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
-            <FileImage className="w-4 h-4 text-[#c89c6b]" /> CMS
-          </Link>
+          {(role === 'admin' || role === 'organizer') && (
+            <Link href="/admin/events/new"
+              className="flex items-center gap-1.5 px-4 py-2 bg-[#112b38] text-white rounded-lg text-sm font-medium hover:bg-[#0d2030] transition-colors border border-[#c89c6b]/20">
+              <Plus className="w-4 h-4" /> Add Event
+            </Link>
+          )}
+          {role === 'admin' && (
+            <Link href="/admin/cms"
+              className="flex items-center gap-1.5 px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+              <FileImage className="w-4 h-4 text-[#c89c6b]" /> CMS
+            </Link>
+          )}
         </div>
       </div>
 
@@ -185,7 +220,8 @@ export default function AdminDashboardPage() {
               </div>
             </div>
 
-            {/* Users overview */}
+            {/* Users overview — admin only */}
+            {role === 'admin' ? (
             <div className="bg-white rounded-xl border border-gray-200 p-5">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="font-bold text-[#112b38]">Users Overview</h2>
@@ -228,6 +264,27 @@ export default function AdminDashboardPage() {
                 </div>
               </div>
             </div>
+            ) : (
+            /* Non-admin: show event visibility summary instead */
+            <div className="bg-white rounded-xl border border-gray-200 p-5">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="font-bold text-[#112b38]">Event Visibility</h2>
+                <Globe className="w-4 h-4 text-[#c89c6b]" />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-emerald-50 rounded-xl p-4 text-center">
+                  <Globe className="w-6 h-6 text-emerald-600 mx-auto mb-2" />
+                  <p className="text-2xl font-bold text-emerald-700">{stats!.publicEvents}</p>
+                  <p className="text-xs text-gray-500 mt-1">Public Events</p>
+                </div>
+                <div className="bg-orange-50 rounded-xl p-4 text-center">
+                  <EyeOff className="w-6 h-6 text-orange-500 mx-auto mb-2" />
+                  <p className="text-2xl font-bold text-orange-600">{stats!.privateEvents}</p>
+                  <p className="text-xs text-gray-500 mt-1">Private Events</p>
+                </div>
+              </div>
+            </div>
+            )}
           </div>
 
           {/* Recent Events + Recent Users */}
@@ -244,7 +301,7 @@ export default function AdminDashboardPage() {
                   <p className="text-gray-400 text-sm text-center py-8">No events yet</p>
                 ) : (
                   stats!.recentEvents.map((ev) => (
-                    <div key={ev._id} className="flex items-center gap-3 px-5 py-3 hover:bg-gray-50 transition-colors">
+                    <div key={ev.id || ev._id} className="flex items-center gap-3 px-5 py-3 hover:bg-gray-50 transition-colors">
                       <div className="w-10 h-10 rounded-lg bg-[#112b38]/10 flex-shrink-0 overflow-hidden">
                         {ev.coverImage ? (
                           <img
@@ -276,7 +333,8 @@ export default function AdminDashboardPage() {
               </div>
             </div>
 
-            {/* Recent Users */}
+            {/* Recent Users — admin only */}
+            {role === 'admin' && (
             <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
               <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
                 <h2 className="font-bold text-[#112b38]">Recent Users</h2>
@@ -287,7 +345,7 @@ export default function AdminDashboardPage() {
                   <p className="text-gray-400 text-sm text-center py-8">No users yet</p>
                 ) : (
                   stats!.recentUsers.map((u) => (
-                    <div key={u._id} className="flex items-center gap-3 px-5 py-3 hover:bg-gray-50 transition-colors">
+                    <div key={u.id || u._id} className="flex items-center gap-3 px-5 py-3 hover:bg-gray-50 transition-colors">
                       <div className="w-9 h-9 rounded-full bg-[#112b38] flex items-center justify-center flex-shrink-0">
                         <span className="text-sm font-bold text-[#c89c6b]">{u.name?.charAt(0)?.toUpperCase() || '?'}</span>
                       </div>
@@ -308,23 +366,34 @@ export default function AdminDashboardPage() {
                 )}
               </div>
             </div>
+            )}
           </div>
 
           {/* Quick Actions */}
           <div className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="font-bold text-[#112b38] mb-4">Quick Actions</h2>
             <div className="flex flex-wrap gap-3">
-              <Link href="/admin/events/new"
-                className="flex items-center gap-2 px-4 py-2.5 bg-[#112b38] text-white rounded-lg text-sm font-medium hover:bg-[#0d2030] transition-colors">
-                <Calendar className="w-4 h-4 text-[#c89c6b]" /> Add New Event
-              </Link>
-              <Link href="/admin/cms"
+              {(role === 'admin' || role === 'organizer') && (
+                <Link href="/admin/events/new"
+                  className="flex items-center gap-2 px-4 py-2.5 bg-[#112b38] text-white rounded-lg text-sm font-medium hover:bg-[#0d2030] transition-colors">
+                  <Calendar className="w-4 h-4 text-[#c89c6b]" /> Add New Event
+                </Link>
+              )}
+              {role === 'admin' && (
+                <Link href="/admin/cms"
+                  className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                  <FileImage className="w-4 h-4 text-[#c89c6b]" /> Edit CMS Content
+                </Link>
+              )}
+              {role === 'admin' && (
+                <Link href="/admin/users"
+                  className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                  <Users className="w-4 h-4 text-[#c89c6b]" /> Manage Staff
+                </Link>
+              )}
+              <Link href="/admin/events"
                 className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
-                <FileImage className="w-4 h-4 text-[#c89c6b]" /> Edit CMS Content
-              </Link>
-              <Link href="/admin/users"
-                className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
-                <Users className="w-4 h-4 text-[#c89c6b]" /> Manage Users
+                <Calendar className="w-4 h-4 text-[#c89c6b]" /> View Events
               </Link>
               <Link href="/admin/settings"
                 className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">

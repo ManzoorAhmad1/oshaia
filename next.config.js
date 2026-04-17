@@ -5,14 +5,8 @@ const nextConfig = {
   
   // Domain خود detect کرے گا
   env: {
-    // Automatic domain detection
-    NEXT_PUBLIC_SITE_URL: 'https://dmcamaster.com',
+    NEXT_PUBLIC_SITE_URL: 'https://oshaia.com',
   },
-  
-  // Production کے لیے output type
-  ...(process.env.NODE_ENV === 'production' && {
-    output: 'standalone',
-  }),
   
   images: {
     remotePatterns: [

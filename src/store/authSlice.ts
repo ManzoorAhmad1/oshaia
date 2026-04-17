@@ -4,7 +4,7 @@ export interface AuthUser {
   id: string;
   name: string;
   email: string;
-  role: 'user' | 'admin';
+  role: 'user' | 'admin' | 'organizer' | 'moderator' | 'scanner' | 'ticket_runner';
   phone?: string;
   countryCode?: string;
   avatar?: string | null;

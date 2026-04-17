@@ -2,11 +2,13 @@
 
 import React, { useEffect, useState } from 'react';
 import api from '@/lib/api';
-import { Loader2, UserX, UserCheck, Search } from 'lucide-react';
+import { Loader2, UserX, UserCheck, Search, Plus, X, Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
 
+type StaffRole = 'organizer' | 'moderator' | 'scanner' | 'ticket_runner';
+
 interface User {
-  _id: string;
+  id: string;
   name: string;
   email: string;
   role: string;
@@ -15,11 +17,40 @@ interface User {
   phone?: string;
 }
 
+const ROLE_STYLES: Record<string, string> = {
+  admin:         'bg-purple-100 text-purple-700',
+  organizer:     'bg-blue-100 text-blue-700',
+  moderator:     'bg-orange-100 text-orange-700',
+  scanner:       'bg-green-100 text-green-700',
+  ticket_runner: 'bg-yellow-100 text-yellow-800',
+  user:          'bg-gray-100 text-gray-600',
+};
+
+const ROLE_LABELS: Record<string, string> = {
+  admin: 'Main Admin', organizer: 'Organizer',
+  moderator: 'Moderator', scanner: 'Scanner',
+  ticket_runner: 'Ticket Runner', user: 'User',
+};
+
+const STAFF_ROLES: { value: StaffRole; label: string; desc: string }[] = [
+  { value: 'organizer',     label: 'Organizer',     desc: 'Create & manage their own events' },
+  { value: 'moderator',     label: 'Moderator',     desc: 'Review events & toggle visibility' },
+  { value: 'scanner',       label: 'Scanner',       desc: 'Scan tickets at events' },
+  { value: 'ticket_runner', label: 'Ticket Runner', desc: 'Manage ticket distribution' },
+];
+
 export default function AdminUsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [actionId, setActionId] = useState<string | null>(null);
+  const [filterRole, setFilterRole] = useState('all');
+
+  // Create staff modal
+  const [showModal, setShowModal] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [form, setForm] = useState({ name: '', email: '', password: '', role: 'organizer' as StaffRole });
+  const [showPass, setShowPass] = useState(false);
 
   useEffect(() => {
     api.get('/admin/users')
@@ -29,10 +60,10 @@ export default function AdminUsersPage() {
   }, []);
 
   const toggleActive = async (user: User) => {
-    setActionId(user._id);
+    setActionId(user.id);
     try {
-      await api.patch(`/admin/users/${user._id}`, { isActive: !user.isActive });
-      setUsers((prev) => prev.map((u) => u._id === user._id ? { ...u, isActive: !u.isActive } : u));
+      await api.patch(`/admin/users/${user.id}`, { isActive: !user.isActive });
+      setUsers((prev) => prev.map((u) => u.id === user.id ? { ...u, isActive: !u.isActive } : u));
       toast.success(user.isActive ? 'User deactivated' : 'User activated');
     } catch {
       toast.error('Action failed');
@@ -41,30 +72,66 @@ export default function AdminUsersPage() {
     }
   };
 
-  const filtered = users.filter(
-    (u) =>
-      u.name.toLowerCase().includes(search.toLowerCase()) ||
-      u.email.toLowerCase().includes(search.toLowerCase())
-  );
+  const handleCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCreating(true);
+    try {
+      const { data } = await api.post('/admin/users', form);
+      setUsers((prev) => [data.user, ...prev]);
+      toast.success(`${ROLE_LABELS[form.role]} account created`);
+      setShowModal(false);
+      setForm({ name: '', email: '', password: '', role: 'organizer' });
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || 'Failed to create account');
+    } finally {
+      setCreating(false);
+    }
+  };
+
+  const filtered = users.filter((u) => {
+    const matchSearch = u.name.toLowerCase().includes(search.toLowerCase()) ||
+      u.email.toLowerCase().includes(search.toLowerCase());
+    const matchRole = filterRole === 'all' || u.role === filterRole;
+    return matchSearch && matchRole;
+  });
 
   return (
     <div className="p-6 lg:p-8 space-y-6">
+      {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-[#112b38]">Users</h1>
-          <p className="text-gray-500 text-sm mt-0.5">{users.length} registered users</p>
+          <h1 className="text-2xl font-bold text-[#112b38]">Staff Management</h1>
+          <p className="text-gray-500 text-sm mt-0.5">{users.length} accounts total</p>
         </div>
+        <button onClick={() => setShowModal(true)}
+          className="flex items-center gap-2 px-4 py-2.5 bg-[#112b38] text-white rounded-xl text-sm font-semibold hover:bg-[#0d2030] transition-colors border border-[#c89c6b]/30">
+          <Plus className="w-4 h-4" /> Create Staff Account
+        </button>
       </div>
 
-      {/* Search */}
-      <div className="relative max-w-sm">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search by name or email..."
-          className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]"
-        />
+      {/* Role summary cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {STAFF_ROLES.map(({ value, label }) => (
+          <div key={value} className="bg-white rounded-xl border border-gray-200 p-4">
+            <p className="text-xs text-gray-500">{label}</p>
+            <p className="text-2xl font-bold text-[#112b38] mt-1">{users.filter((u) => u.role === value).length}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Filters */}
+      <div className="flex flex-wrap gap-3">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input value={search} onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search by name or email..."
+            className="pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b] w-64" />
+        </div>
+        <select value={filterRole} onChange={(e) => setFilterRole(e.target.value)}
+          className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b] bg-white">
+          <option value="all">All Roles</option>
+          {Object.entries(ROLE_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+        </select>
       </div>
 
       {loading ? (
@@ -87,17 +154,15 @@ export default function AdminUsersPage() {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {filtered.length === 0 && (
-                  <tr>
-                    <td colSpan={6} className="text-center py-10 text-gray-400">No users found.</td>
-                  </tr>
+                  <tr><td colSpan={6} className="text-center py-10 text-gray-400">No users found.</td></tr>
                 )}
                 {filtered.map((user) => (
-                  <tr key={user._id} className="hover:bg-gray-50">
+                  <tr key={user.id} className="hover:bg-gray-50">
                     <td className="px-4 py-3 font-medium text-gray-900">{user.name}</td>
                     <td className="px-4 py-3 text-gray-600">{user.email}</td>
                     <td className="px-4 py-3">
-                      <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${user.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-600'}`}>
-                        {user.role}
+                      <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${ROLE_STYLES[user.role] || 'bg-gray-100 text-gray-600'}`}>
+                        {ROLE_LABELS[user.role] || user.role}
                       </span>
                     </td>
                     <td className="px-4 py-3 text-gray-500">{new Date(user.createdAt).toLocaleDateString()}</td>
@@ -107,23 +172,84 @@ export default function AdminUsersPage() {
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      <button
-                        onClick={() => toggleActive(user)}
-                        disabled={actionId === user._id || user.role === 'admin'}
+                      <button onClick={() => toggleActive(user)}
+                        disabled={actionId === user.id || user.role === 'admin'}
                         title={user.role === 'admin' ? 'Cannot deactivate admin' : ''}
-                        className="p-1.5 rounded-lg text-gray-500 hover:text-purple-700 hover:bg-purple-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                      >
-                        {actionId === user._id
-                          ? <Loader2 className="w-4 h-4 animate-spin" />
-                          : user.isActive
-                            ? <UserX className="w-4 h-4" />
-                            : <UserCheck className="w-4 h-4" />}
+                        className="p-1.5 rounded-lg text-gray-500 hover:text-purple-700 hover:bg-purple-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+                        {actionId === user.id ? <Loader2 className="w-4 h-4 animate-spin" />
+                          : user.isActive ? <UserX className="w-4 h-4" /> : <UserCheck className="w-4 h-4" />}
                       </button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* Create Staff Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+              <h2 className="text-lg font-bold text-[#112b38]">Create Staff Account</h2>
+              <button onClick={() => setShowModal(false)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <form onSubmit={handleCreate} className="p-6 space-y-4">
+              {/* Role picker */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Select Role</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {STAFF_ROLES.map(({ value, label, desc }) => (
+                    <button key={value} type="button" onClick={() => setForm((f) => ({ ...f, role: value }))}
+                      className={`text-left p-3 rounded-xl border-2 transition-all ${form.role === value ? 'border-[#c89c6b] bg-[#c89c6b]/10' : 'border-gray-200 hover:border-gray-300'}`}>
+                      <p className="text-xs font-bold text-[#112b38]">{label}</p>
+                      <p className="text-[10px] text-gray-500 mt-0.5 leading-tight">{desc}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Full Name</label>
+                <input type="text" required value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                  placeholder="John Doe"
+                  className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Email Address</label>
+                <input type="email" required value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+                  placeholder="staff@oshaia.com"
+                  className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
+                <div className="relative">
+                  <input type={showPass ? 'text' : 'password'} required minLength={8}
+                    value={form.password} onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
+                    placeholder="Min. 8 characters"
+                    className="w-full px-3 py-2.5 pr-10 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]" />
+                  <button type="button" onClick={() => setShowPass(!showPass)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                    {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+                <p className="text-[11px] text-gray-400 mt-1">Share this with the staff member. They can change it from Settings.</p>
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button type="button" onClick={() => setShowModal(false)}
+                  className="flex-1 py-2.5 border border-gray-300 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                  Cancel
+                </button>
+                <button type="submit" disabled={creating}
+                  className="flex-1 py-2.5 bg-[#112b38] text-white rounded-xl text-sm font-semibold hover:bg-[#0d2030] transition-colors disabled:opacity-60 flex items-center justify-center gap-2 border border-[#c89c6b]/30">
+                  {creating && <Loader2 className="w-4 h-4 animate-spin" />}
+                  {creating ? 'Creating...' : 'Create Account'}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

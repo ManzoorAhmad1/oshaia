@@ -2,7 +2,8 @@ import axios from 'axios';
 import { store } from '@/store/store';
 import { setTokens, clearAuth } from '@/store/authSlice';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const _rawApiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.oshaia.com/api';
+const BASE_URL = _rawApiUrl.startsWith('http') ? _rawApiUrl : `https://${_rawApiUrl}`;
 
 const api = axios.create({
   baseURL: BASE_URL,
