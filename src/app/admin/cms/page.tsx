@@ -6,7 +6,7 @@ import api from '@/lib/api';
 import { getImageUrl } from '@/lib/imageUrl';
 import { clearCmsCache } from '@/lib/useCms';
 import EventForm from '@/components/admin/EventForm';
-import { Loader2, Save, Upload, Plus, Trash2, ChevronDown, ChevronUp, Pencil, Globe, EyeOff, CalendarDays, X } from 'lucide-react';
+import { Loader2, Save, Upload, Plus, Trash2, ChevronDown, ChevronUp, Pencil, Globe, EyeOff, Eye, CalendarDays, X, ToggleLeft, ToggleRight, ChevronRight } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 // ── CmsEvent type (for inline event manager) ─────────────────────────────
@@ -356,6 +356,21 @@ const CMS_PAGES = [
       { key: 'section13', label: '13. Cookie Policy' },
     ],
   },
+  {
+    key: 'event',
+    label: 'Event Detail (Slug)',
+    sections: [
+      { key: 'hero', label: 'Hero Carousel' },
+      { key: 'tickets', label: 'Tickets Section' },
+      { key: 'description', label: 'Description & Artist Bios' },
+      { key: 'artists', label: 'Artist Carousel' },
+      { key: 'moreInfo', label: 'More Info (Warning & T&C)' },
+      { key: 'location', label: 'Location Map' },
+      { key: 'sitePlan', label: 'Site Plan' },
+      { key: 'songs', label: 'Music Player' },
+      { key: 'relatedEvents', label: 'Related Events' },
+    ],
+  },
 ];
 
 interface CmsSection {
@@ -371,6 +386,7 @@ interface CmsSection {
   image?: string;
   images?: string[];
   extra?: Record<string, any>;
+  isVisible?: boolean;
 }
 
 export default function AdminCmsPage() {
@@ -381,6 +397,59 @@ export default function AdminCmsPage() {
   const [editBuffer, setEditBuffer] = useState<Record<string, CmsSection>>({});
   const [savingKey, setSavingKey] = useState<string | null>(null);
   const [uploadingKey, setUploadingKey] = useState<string | null>(null);
+
+  // ── Left sidebar: page accordion ─────────────────────────────────────────────
+  const [expandedPages, setExpandedPages] = useState<Set<string>>(new Set([CMS_PAGES[0].key]));
+  // visibility: { pageKey: { sectionKey: isVisible } } — loaded lazily per page
+  const [sectionVisibility, setSectionVisibility] = useState<Record<string, Record<string, boolean>>>({});
+  const [togglingKey, setTogglingKey] = useState<string | null>(null);
+
+  const togglePageExpand = (pageKey: string) => {
+    setExpandedPages(prev => {
+      const next = new Set(prev);
+      if (next.has(pageKey)) { next.delete(pageKey); } else { next.add(pageKey); }
+      return next;
+    });
+    // Also load visibility data for this page if not yet loaded
+    if (!sectionVisibility[pageKey]) loadPageVisibility(pageKey);
+  };
+
+  const loadPageVisibility = async (pageKey: string) => {
+    try {
+      const { data } = await api.get(`/cms/page/${pageKey}`);
+      const vis: Record<string, boolean> = {};
+      Object.entries(data.content || {}).forEach(([sk, sec]: [string, any]) => {
+        vis[sk] = sec.isVisible !== false;
+      });
+      setSectionVisibility(prev => ({ ...prev, [pageKey]: vis }));
+    } catch {}
+  };
+
+  const handleToggleVisibility = async (pageKey: string, sectionKey: string) => {
+    const key = `${pageKey}:${sectionKey}`;
+    setTogglingKey(key);
+    try {
+      const { data } = await api.patch(`/cms/page/${pageKey}/${sectionKey}/toggle`);
+      const newVisible = data.section?.isVisible !== false;
+      setSectionVisibility(prev => ({
+        ...prev,
+        [pageKey]: { ...(prev[pageKey] || {}), [sectionKey]: newVisible },
+      }));
+      // If toggling for the active page, update content cache too
+      if (pageKey === activePage) {
+        setContent(prev => ({
+          ...prev,
+          [sectionKey]: { ...(prev[sectionKey] || { pageKey, sectionKey }), isVisible: newVisible },
+        }));
+      }
+      clearCmsCache(pageKey);
+      toast.success(`"${sectionKey}" is now ${newVisible ? 'visible' : 'hidden'}`);
+    } catch {
+      toast.error('Toggle failed');
+    } finally {
+      setTogglingKey(null);
+    }
+  };
 
   // ── Inline event manager state ────────────────────────────────────────
   const [cmsEvents, setCmsEvents] = useState<CmsEvent[]>([]);
@@ -482,6 +551,12 @@ export default function AdminCmsPage() {
       setContent(data.content || {});
       setEditBuffer({});
       setExpandedSection(null);
+      // Also sync visibility for this page
+      const vis: Record<string, boolean> = {};
+      Object.entries(data.content || {}).forEach(([sk, sec]: [string, any]) => {
+        vis[sk] = sec.isVisible !== false;
+      });
+      setSectionVisibility(prev => ({ ...prev, [pageKey]: vis }));
     } catch {
       toast.error('Failed to load CMS content');
     } finally {
@@ -490,6 +565,12 @@ export default function AdminCmsPage() {
   }, []);
 
   useEffect(() => { fetchPageContent(activePage); }, [activePage, fetchPageContent]);
+
+  // Pre-load visibility for all pages on mount (lightweight)
+  useEffect(() => {
+    CMS_PAGES.forEach(p => loadPageVisibility(p.key));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Load events when home/events section is expanded
   useEffect(() => {
@@ -619,7 +700,86 @@ export default function AdminCmsPage() {
   };
 
   return (
-    <div className="p-6 lg:p-8 space-y-6">
+    <div className="flex min-h-[calc(100vh-4rem)]">
+      {/* ══════════════════════════════════════════════════════════════
+          LEFT SIDEBAR — Pages & Sections with visibility toggles
+      ══════════════════════════════════════════════════════════════ */}
+      <aside className="w-64 min-w-[220px] max-w-[260px] bg-white border-r border-gray-200 flex flex-col overflow-hidden">
+        <div className="px-4 py-3 border-b border-gray-100 shrink-0">
+          <h2 className="text-xs font-bold text-[#112b38] uppercase tracking-wider">Pages</h2>
+          <p className="text-[10px] text-gray-400 mt-0.5">Toggle to show/hide sections</p>
+        </div>
+        <div className="flex-1 overflow-y-auto py-2">
+          {CMS_PAGES.map((page) => {
+            const isExpanded = expandedPages.has(page.key);
+            const visForPage = sectionVisibility[page.key] || {};
+            return (
+              <div key={page.key} className="border-b border-gray-100 last:border-0">
+                {/* Page name row */}
+                <button
+                  type="button"
+                  onClick={() => togglePageExpand(page.key)}
+                  className={`w-full flex items-center justify-between px-4 py-2.5 text-left transition-colors hover:bg-gray-50 ${activePage === page.key ? 'bg-[#c89c6b]/8' : ''}`}
+                >
+                  <span className={`text-sm font-semibold truncate ${activePage === page.key ? 'text-[#c89c6b]' : 'text-[#112b38]'}`}>{page.label}</span>
+                  <ChevronRight className={`w-3.5 h-3.5 text-gray-400 transition-transform flex-shrink-0 ml-1 ${isExpanded ? 'rotate-90' : ''}`} />
+                </button>
+                {/* Section items */}
+                {isExpanded && (
+                  <div className="pb-1">
+                    {page.sections.map(({ key: sKey, label: sLabel }) => {
+                      const isVisible = visForPage[sKey] !== false; // default visible
+                      const tKey = `${page.key}:${sKey}`;
+                      const isToggling = togglingKey === tKey;
+                      const isSelected = activePage === page.key && expandedSection === sKey;
+                      return (
+                        <div
+                          key={sKey}
+                          className={`flex items-center gap-2 pl-6 pr-3 py-1.5 group cursor-pointer transition-colors ${isSelected ? 'bg-[#112b38]/5' : 'hover:bg-gray-50'} ${!isVisible ? 'opacity-50' : ''}`}
+                        >
+                          {/* Click label → select section for editing */}
+                          <span
+                            className="flex-1 text-xs text-gray-600 truncate cursor-pointer"
+                            onClick={() => {
+                              if (activePage !== page.key) setActivePage(page.key);
+                              setExpandedSection(sKey);
+                              // Scroll to section editor (handled by existing logic)
+                            }}
+                            title={sLabel}
+                          >
+                            {sLabel}
+                          </span>
+                          {/* Visibility toggle */}
+                          <button
+                            type="button"
+                            title={isVisible ? 'Click to hide this section' : 'Click to show this section'}
+                            disabled={isToggling}
+                            onClick={() => handleToggleVisibility(page.key, sKey)}
+                            className="flex-shrink-0 focus:outline-none"
+                          >
+                            {isToggling
+                              ? <Loader2 className="w-4 h-4 animate-spin text-gray-400" />
+                              : isVisible
+                                ? <Eye className="w-4 h-4 text-[#c89c6b] group-hover:opacity-80" />
+                                : <EyeOff className="w-4 h-4 text-gray-300 group-hover:text-gray-400" />
+                            }
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </aside>
+
+      {/* ══════════════════════════════════════════════════════════════
+          RIGHT PANEL — Content editor
+      ══════════════════════════════════════════════════════════════ */}
+      <div className="flex-1 p-6 lg:p-8 space-y-6 overflow-y-auto min-w-0">
+
       {/* ── Edit Event Modal ────────────────────────────────────────── */}
       {editingEvent && (
         <div
@@ -628,53 +788,37 @@ export default function AdminCmsPage() {
         >
           <div className="bg-gray-50 rounded-2xl shadow-2xl w-full max-w-3xl flex flex-col"
             style={{ maxHeight: 'calc(100vh - 24px)' }}>
-            {/* Fixed header */}
             <div className="flex items-center justify-between px-4 sm:px-6 py-4 bg-white rounded-t-2xl border-b border-gray-200 shrink-0">
               <div className="min-w-0 pr-3">
                 <h2 className="text-base sm:text-lg font-bold text-[#112b38] truncate">Edit Event</h2>
                 <p className="text-xs text-gray-500 mt-0.5 truncate">{editingEvent.title?.en}</p>
               </div>
-              <button
-                type="button"
-                onClick={() => setEditingEvent(null)}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors text-gray-500 shrink-0"
-              >
+              <button type="button" onClick={() => setEditingEvent(null)} className="p-2 hover:bg-gray-100 rounded-lg transition-colors text-gray-500 shrink-0">
                 <X className="w-5 h-5" />
               </button>
             </div>
-            {/* Scrollable body */}
             <div className="overflow-y-auto flex-1 p-4 sm:p-6">
-              <EventForm
-                mode="edit"
-                initialData={editingEvent as any}
-                onSuccess={() => { setEditingEvent(null); fetchCmsEvents(); }}
-                onCancel={() => setEditingEvent(null)}
-              />
+              <EventForm mode="edit" initialData={editingEvent as any} onSuccess={() => { setEditingEvent(null); fetchCmsEvents(); }} onCancel={() => setEditingEvent(null)} />
             </div>
           </div>
         </div>
       )}
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-[#112b38]">CMS — Content Management</h1>
-        <p className="text-gray-500 text-sm mt-0.5">Edit all page content and images for both languages.</p>
-      </div>
 
-      {/* Page tabs */}
-      <div className="flex flex-wrap gap-2 border-b border-gray-200 pb-0">
-        {CMS_PAGES.map((page) => (
-          <button
-            key={page.key}
-            onClick={() => setActivePage(page.key)}
-            className={`px-4 py-2 text-sm font-medium rounded-t-lg border-b-2 transition-colors ${
-              activePage === page.key
-                ? 'border-[#c89c6b] text-[#112b38] bg-[#c89c6b]/10'
-                : 'border-transparent text-gray-500 hover:text-[#112b38]'
-            }`}
-          >
-            {page.label}
-          </button>
-        ))}
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-[#112b38]">CMS — Content Management</h1>
+          <p className="text-gray-500 text-sm mt-0.5">Editing: <span className="font-medium text-[#c89c6b]">{CMS_PAGES.find(p => p.key === activePage)?.label}</span></p>
+        </div>
+        {/* Page quick-select tabs (compact) */}
+        <div className="hidden lg:flex flex-wrap gap-1.5">
+          {CMS_PAGES.map((page) => (
+            <button key={page.key} onClick={() => setActivePage(page.key)}
+              className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${activePage === page.key ? 'border-[#c89c6b] text-[#112b38] bg-[#c89c6b]/10' : 'border-gray-200 text-gray-500 hover:text-[#112b38] hover:border-gray-300'}`}>
+              {page.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Sections */}
@@ -700,26 +844,44 @@ export default function AdminCmsPage() {
             return (
               <div key={sectionKey} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 {/* Section header — click to expand */}
-                <button
-                  type="button"
-                  onClick={() => setExpandedSection(isExpanded ? null : sectionKey)}
-                  className="w-full flex items-center justify-between px-5 py-4 hover:bg-gray-50 transition-colors"
-                >
-                  <div className="flex items-center gap-3">
+                <div className="w-full flex items-center justify-between px-5 py-4">
+                  {/* Left: expand toggle */}
+                  <button
+                    type="button"
+                    onClick={() => setExpandedSection(isExpanded ? null : sectionKey)}
+                    className="flex items-center gap-3 flex-1 text-left hover:opacity-80 transition-opacity"
+                  >
                     <span className="font-medium text-gray-800">{label}</span>
-                    {isDirty && (
-                      <span className="px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full text-xs font-medium">
-                        Unsaved
+                    {isDirty && <span className="px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full text-xs font-medium">Unsaved</span>}
+                    {content[sectionKey] && !isDirty && <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-xs font-medium">Saved</span>}
+                    {/* Visibility badge */}
+                    {(sectionVisibility[activePage]?.[sectionKey] === false) && (
+                      <span className="px-2 py-0.5 bg-red-50 text-red-500 border border-red-200 rounded-full text-xs font-medium flex items-center gap-1">
+                        <EyeOff className="w-3 h-3" /> Hidden
                       </span>
                     )}
-                    {content[sectionKey] && !isDirty && (
-                      <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-xs font-medium">
-                        Saved
-                      </span>
-                    )}
-                  </div>
-                  {isExpanded ? <ChevronUp className="w-4 h-4 text-gray-500" /> : <ChevronDown className="w-4 h-4 text-gray-500" />}
-                </button>
+                    {isExpanded ? <ChevronUp className="w-4 h-4 text-gray-500 ml-1" /> : <ChevronDown className="w-4 h-4 text-gray-500 ml-1" />}
+                  </button>
+                  {/* Right: visibility toggle button */}
+                  <button
+                    type="button"
+                    title={sectionVisibility[activePage]?.[sectionKey] === false ? 'Section hidden — click to show' : 'Section visible — click to hide'}
+                    disabled={togglingKey === `${activePage}:${sectionKey}`}
+                    onClick={() => handleToggleVisibility(activePage, sectionKey)}
+                    className={`ml-3 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors flex-shrink-0 ${
+                      sectionVisibility[activePage]?.[sectionKey] === false
+                        ? 'bg-gray-100 text-gray-400 border-gray-200 hover:bg-gray-200'
+                        : 'bg-green-50 text-green-600 border-green-200 hover:bg-green-100'
+                    }`}
+                  >
+                    {togglingKey === `${activePage}:${sectionKey}`
+                      ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      : sectionVisibility[activePage]?.[sectionKey] === false
+                        ? <><EyeOff className="w-3.5 h-3.5" /> Hidden</>
+                        : <><Eye className="w-3.5 h-3.5" /> Visible</>
+                    }
+                  </button>
+                </div>
 
                 {/* Expanded editor */}
                 {isExpanded && (
@@ -1578,6 +1740,7 @@ export default function AdminCmsPage() {
           })}
         </div>
       )}
+      </div>
     </div>
   );
 }

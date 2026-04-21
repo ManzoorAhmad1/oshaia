@@ -25,6 +25,7 @@ import EventCard from '@/components/event/eventCard';
 import AuthModal from '@/components/AuthModal';
 import { getImageUrl as getImageUrlUtil } from '@/lib/imageUrl';
 import api from '@/lib/api';
+import { useCms } from '@/lib/useCms';
 
 interface EventDetailProps {
     params: {
@@ -32,64 +33,10 @@ interface EventDetailProps {
     };
 }
 
-const VIDEO_BG = "/Cover%20-/59069_upload68daa2739f40c_1759158899-0-en1759158912.jpg.jpeg";
+// NOTE: artists and songs come from the API — no static artist constants
 
-const artists = [
-    {
-        name: "Daskill", role: "DJ",
-        img: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=400&h=400&fit=crop",
-        bio: "Daskill est un DJ, beatmaker et artiste musical. Il partage ses créations musicales avec une énergie incroyable sur scène, fusionnant plusieurs genres musicaux.",
-        socials: { instagram: "#", soundcloud: "#", youtube: "#", tiktok: "#" },
-    },
-    {
-        name: "DJ M'RICK", role: "DJ",
-        img: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&h=400&fit=crop",
-        bio: "DJ M'Rick est un DJ et producteur originaire de La Réunion. Actif sur la scène musicale depuis plus de 10 ans, il mixe avec passion et précision.",
-        socials: { instagram: "#", facebook: "#", youtube: "#" },
-    },
-    {
-        name: "AVLS", role: "DJ / Producer",
-        img: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=400&h=400&fit=crop",
-        bio: "AVLS est un producteur et DJ réputé pour ses sets électrisants et ses productions originales qui captivant les foules.",
-        socials: { instagram: "#" },
-    },
-    {
-        name: "Moon", role: "DJ",
-        img: "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=400&h=400&fit=crop",
-        bio: "Moon est un DJ talentueux qui mélange les genres avec aisance, créant des ambiances uniques qui font danser le public toute la nuit.",
-        socials: { instagram: "#", facebook: "#", tiktok: "#" },
-    },
-    {
-        name: "Mary Jane", role: "DJ",
-        img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop",
-        bio: "Mary Jane est une DJ dynamique connue pour ses sets énergiques et sa capacité à lire et enflammer la foule, quels que soient l'heure et le lieu.",
-        socials: { instagram: "#", facebook: "#" },
-    },
-    {
-        name: "DJ Luvlesh", role: "DJ",
-        img: "https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?w=400&h=400&fit=crop",
-        bio: "Originaire de l'Île Maurice, DJ Luvlesh (Luvlesh Désiré) est bien plus qu'un DJ : il est le tout premier à avoir introduit et popularisé l'Amapiano sur l'île.",
-        socials: {},
-    },
-    {
-        name: "DJ Darrel", role: "DJ",
-        img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
-        bio: "Darrell is a DJ & vibe creator from Mauritius. With more than 8 years behind the decks, he has built a reputation for delivering unforgettable sets.",
-        socials: { instagram: "#", facebook: "#", tiktok: "#" },
-    },
-    {
-        name: "DJ Ryan J", role: "DJ / Producer",
-        img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop",
-        bio: "DJ Ryan J is a DJ and producer known for his unique blend of Afrobeats, R&B, and electronic music that keeps crowds moving all night long.",
-        socials: { soundcloud: "#", instagram: "#" },
-    },
-];
-
-const ARTIST_CLONE = 3;
-const artistsExtended = [...artists.slice(-ARTIST_CLONE), ...artists, ...artists.slice(0, ARTIST_CLONE)];
-
+// Fallback slides used when API event has no slides of its own
 const slides = [
-    // 1. First image (always bg for videos too)
     {
         id: 1,
         type: "image",
@@ -97,16 +44,14 @@ const slides = [
         alt: "Event Cover",
         duration: 6,
     },
-    // 2. Video 1
     {
         id: 2,
         type: "video",
         url: "/22193_398acba9ebf32f60d280ccecab409d04-1-en1772118332.mp4",
         alt: "Event Video 1",
-        bgImage: VIDEO_BG,
+        bgImage: "/Cover%20-/59069_upload68daa2739f40c_1759158899-0-en1759158912.jpg.jpeg",
         duration: 6,
     },
-    // 3. Image
     {
         id: 3,
         type: "image",
@@ -114,16 +59,14 @@ const slides = [
         alt: "Rishab Rikhiram Sharma",
         duration: 6,
     },
-    // 4. Video 2
     {
         id: 4,
         type: "video",
         url: "/21971_cb42a1d4c3a2dd327fcce42ba642f04c-1-en1771248482.mp4",
         alt: "Event Video 2",
-        bgImage: VIDEO_BG,
+        bgImage: "/Cover%20-/59069_upload68daa2739f40c_1759158899-0-en1759158912.jpg.jpeg",
         duration: 6,
     },
-    // 5. Image
     {
         id: 5,
         type: "image",
@@ -136,6 +79,9 @@ const slides = [
 export default function EventDetailPage({ params }: EventDetailProps) {
     const { t, language }: any = useLanguage();
     const router = useRouter();
+    // CMS section visibility config for the event detail page
+    const { content: cmsEventConfig } = useCms('event');
+    const isSectionVisible = (key: string) => cmsEventConfig[key]?.isVisible !== false;
     const [selectedTicket, setSelectedTicket] = useState<number | null>(null);
     const [activeTab, setActiveTab] = useState<'tickets' | 'description' | 'moreInfo'>('tickets');
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -156,45 +102,12 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     // State for ticket quantities - Initialize properly
     const [ticketQuantities, setTicketQuantities] = useState<{ [key: number]: number }>({});
     const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0 });
-    const [artistCarouselIndex, setArtistCarouselIndex] = useState(ARTIST_CLONE);
+    const [artistCarouselIndex, setArtistCarouselIndex] = useState(3); // reset when artists load
     const [artistProgress, setArtistProgress] = useState(0);
     const [artistNoTransition, setArtistNoTransition] = useState(false);
-    const [selectedArtist, setSelectedArtist] = useState<typeof artists[0] | null>(null);
-
-    const relatedEvents = [
-        { id: 1, title: "EN TOUTE INTIMITÉ", location: "Le Suffren Hotel & Spa", price: "RS 450", image: "https://otayo.com/wp-content/uploads/2026/01/zulu-new-grid.jpg", day: "18", month: "Oct", badge: 1 },
-        { id: 2, title: "Summer Music Festival", location: "Grand Bay", price: "RS 600", image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&auto=format&fit=crop", day: "19", month: "Oct", badge: 2 },
-        { id: 3, title: "Jazz Night Live", location: "Caudan Waterfront", price: "RS 800", image: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=400&auto=format&fit=crop", day: "24", month: "Oct", badge: 3 },
-        { id: 4, title: "Afrobeats Night", location: "Bagatelle Mall", price: "RS 500", image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&auto=format&fit=crop", day: "28", month: "Oct", badge: 1 },
-        { id: 5, title: "Tropical Vibes", location: "Flic en Flac", price: "RS 350", image: "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=400&auto=format&fit=crop", day: "02", month: "Nov", badge: 2 },
-        { id: 6, title: "Rock The Night", location: "Trianon Arena", price: "RS 750", image: "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=400&auto=format&fit=crop", day: "08", month: "Nov", badge: 3 },
-    ];
+    const [selectedArtist, setSelectedArtist] = useState<any>(null);
+    const [relatedEvents, setRelatedEvents] = useState<any[]>([]);
     const cardsPerPage = 3;
-    const totalSteps = relatedEvents.length - cardsPerPage; // slide 1 card at a time
-
-    const mockSongs = [
-        {
-            id: 1,
-            artist: "Maroon 5",
-            title: "Sugar",
-            image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&auto=format&fit=crop",
-            audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-        },
-        {
-            id: 2,
-            artist: "Coldplay",
-            title: "Yellow",
-            image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1200&auto=format&fit=crop",
-            audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-        },
-        {
-            id: 3,
-            artist: "Ed Sheeran",
-            title: "Shape of You",
-            image: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=1200&auto=format&fit=crop",
-            audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
-        },
-    ];
 
     // Refs for each section
     const ticketsRef = useRef<HTMLDivElement>(null);
@@ -206,8 +119,45 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     useEffect(() => {
         api.get(`/events/${params.id}`)
             .then(res => setApiEvent(res.data.data?.event ?? res.data.event ?? res.data))
-            .catch(() => {})
+            .catch(() => { })
             .finally(() => setApiLoading(false));
+    }, [params.id]);
+
+    // Reset artist carousel index when displayArtists changes (API data loads)
+    // NOTE: displayArtists is computed below from apiEvent — this effect runs after render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => {
+        const len = apiEvent?.artists?.length ?? 0;
+        if (len > 0) setArtistCarouselIndex(Math.min(3, len));
+    }, [apiEvent?.artists?.length]);
+
+    // Fetch related events (same category, excluding current)
+    useEffect(() => {
+        if (!apiEvent?.category) return;
+        api.get('/events', { params: { category: apiEvent.category, limit: 7 } })
+            .then(res => {
+                const list = res.data.data?.events ?? res.data.events ?? [];
+                setRelatedEvents(list.filter((e: any) => String(e.id) !== String(params.id)).slice(0, 6));
+            })
+            .catch(() => { });
+    }, [apiEvent?.category]);
+
+    // Socket.IO — join event room & listen for real-time ticket updates
+    useEffect(() => {
+        import('@/lib/socket').then(({ getSocket }) => {
+            const socket = getSocket();
+            socket.emit('join:event', params.id);
+            const handler = (data: { eventId: string; ticketTypes: any[] }) => {
+                if (String(data.eventId) === String(params.id)) {
+                    setApiEvent((prev: any) => prev ? { ...prev, ticketTypes: data.ticketTypes } : prev);
+                }
+            };
+            socket.on('ticket:updated', handler);
+            return () => {
+                socket.emit('leave:event', params.id);
+                socket.off('ticket:updated', handler);
+            };
+        });
     }, [params.id]);
 
     const getLang = (field: { en?: string; fr?: string } | undefined) =>
@@ -215,14 +165,24 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
     const getImageUrl = (path: string | undefined) => getImageUrlUtil(path);
 
-    // Merge API data over mock fallbacks
+    // ── Dynamic artists from API ──────────────────────────────────────────
+    const displayArtists: any[] = apiEvent?.artists?.length ? apiEvent.artists : [];
+    const ARTIST_CLONE = Math.min(3, displayArtists.length);
+    const artistsExtended = displayArtists.length > 0
+        ? [...displayArtists.slice(-ARTIST_CLONE), ...displayArtists, ...displayArtists.slice(0, ARTIST_CLONE)]
+        : [];
+
+    // ── Songs from API (hide section if none) ─────────────────────────────
+    const mockSongs: any[] = apiEvent?.songs ?? [];
+
+    // ── Merge API data over mock fallbacks ────────────────────────────────
     const event = {
         id: params.id,
         title: apiEvent ? getLang(apiEvent.title) : "Star for Mental Health",
         subtitle: apiEvent ? getLang(apiEvent.description)?.slice(0, 60) : "ISSA NOEL KAREEMA OKAYLA BEN",
         date: apiEvent ? new Date(apiEvent.startDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }).toUpperCase() : "28 JAN",
         startDate: apiEvent?.startDate ?? "2026-04-29T18:00:00",
-        fullDate: apiEvent ? new Date(apiEvent.startDate).toLocaleString('en-GB', { weekday:'long', day:'2-digit', month:'short', year:'numeric' }) + (apiEvent.startTime ? ` at ${apiEvent.startTime}` : '') : "Tuesday, 29 Apr 2026 at 06:00 pm",
+        fullDate: apiEvent ? new Date(apiEvent.startDate).toLocaleString('en-GB', { weekday: 'long', day: '2-digit', month: 'short', year: 'numeric' }) + (apiEvent.startTime ? ` at ${apiEvent.startTime}` : '') : "Tuesday, 29 Apr 2026 at 06:00 pm",
         endDate: apiEvent?.endTime ?? "11:59 pm",
         location: apiEvent ? getLang(apiEvent.venue) : "Venue",
         fullAddress: apiEvent ? getLang(apiEvent.address) : "123A University Street, Dubai, UAE",
@@ -235,20 +195,23 @@ export default function EventDetailPage({ params }: EventDetailProps) {
         description: apiEvent ? getLang(apiEvent.description) : "Join us for an unforgettable evening dedicated to raising awareness and support for mental health initiatives.",
         lineup: [],
         tickets: apiEvent?.ticketTypes?.length
-            ? apiEvent.ticketTypes.map((tt: any, i: number) => ({
-                id: i + 1,
-                name: getLang(tt.name),
-                price: tt.price,
-                available: tt.availableSeats ?? tt.totalSeats ?? 0,
-                description: getLang(tt.description),
-                offerEndsIn: "Limited time",
-                days: "Days"
-            }))
-            : [
-                { id: 1, name: "General Admission", price: 2500, available: 45, description: "Standing area access", offerEndsIn: "Limited time", days: "Days" },
-                { id: 2, name: "VIP Package", price: 5000, available: 12, description: "Front row seating + Meet & Greet", offerEndsIn: "Flash sale", days: "Days" },
-                { id: 3, name: "Premium Table", price: 15000, available: 3, description: "Table for 4 + Bottle service", offerEndsIn: "Last chance", days: "Days" }
-            ],
+            ? apiEvent.ticketTypes.map((tt: any, i: number) => {
+                const daysLeft = tt.expiryDate
+                    ? Math.max(0, Math.ceil((new Date(tt.expiryDate).getTime() - Date.now()) / 86400000))
+                    : null;
+                return {
+                    id: i + 1,
+                    name: getLang(tt.name),
+                    price: tt.price,
+                    available: tt.availableSeats ?? tt.totalSeats ?? 0,
+                    totalSeats: tt.totalSeats ?? 0,
+                    description: getLang(tt.description),
+                    offerEndsIn: 'Limited time',
+                    daysLeft,
+                    days: 'Days',
+                };
+            })
+            : [],
         relatedEvents: []
     };
 
@@ -342,13 +305,13 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     useEffect(() => {
         if (artistNoTransition) return;
         const min = ARTIST_CLONE;
-        const max = ARTIST_CLONE + artists.length - 1;
+        const max = ARTIST_CLONE + displayArtists.length - 1;
         if (artistCarouselIndex < min || artistCarouselIndex > max) {
             const t = setTimeout(() => {
                 setArtistNoTransition(true);
                 const jumpTo = artistCarouselIndex < min
-                    ? artistCarouselIndex + artists.length
-                    : artistCarouselIndex - artists.length;
+                    ? artistCarouselIndex + displayArtists.length
+                    : artistCarouselIndex - displayArtists.length;
                 setArtistCarouselIndex(jumpTo);
                 requestAnimationFrame(() => requestAnimationFrame(() => setArtistNoTransition(false)));
             }, 510);
@@ -430,11 +393,13 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
     // Auto-advance related events carousel every 3 seconds
     useEffect(() => {
+        const steps = Math.max(0, relatedEvents.length - cardsPerPage);
+        if (steps === 0) return;
         const timer = setInterval(() => {
-            setRelatedCarouselIndex(prev => (prev + 1) % (totalSteps + 1));
+            setRelatedCarouselIndex(prev => (prev + 1) % (steps + 1));
         }, 3000);
         return () => clearInterval(timer);
-    }, [totalSteps]);
+    }, [relatedEvents.length, cardsPerPage]);
 
     // Scroll function
     const scrollToSection = (sectionRef: React.RefObject<HTMLDivElement>) => {
@@ -546,7 +511,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                             </div>
                                             <div className="flex items-center gap-2 text-sm group">
                                                 <TicketIcon className="w-4 h-4 text-[#c89c6b] group-hover:text-[#112b38] flex-shrink-0 transition-colors" />
-                                                <span className="text-[#c89c6b]">{t.from} <span className="font-bold text-[#c89c6b]">Rs 1,000</span></span>
+                                                <span className="text-[#c89c6b]">{t.from} <span className="font-bold text-[#c89c6b]">Rs {event.tickets.length ? Math.min(...event.tickets.map((tk: any) => tk.price)).toLocaleString() : '—'}</span></span>
                                             </div>
                                             <div className="flex gap-2 mt-4">
                                                 <div className='flex flex-col items-center'>
@@ -616,325 +581,337 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                             {/* Tab Content - All sections visible in scrollable container */}
                             <div ref={tabContentRef} className="space-y-8 max-h-[600px] overflow-y-auto scroll-smooth px-1 tab-scroll-visible">
                                 {/* Tickets Section */}
-                                <div ref={ticketsRef} id="tickets-section">
-                                    {/* Collapsible Header */}
-                                    <button
-                                        onClick={() => setIsTicketsCollapsed(!isTicketsCollapsed)}
-                                        className="w-full flex items-center justify-between py-4 px-2 hover:bg-gray-50 transition-colors"
-                                    >
-                                        <div className="flex items-center gap-2">
-                                            <svg
-                                                className={`w-5 h-5 text-gray-600 transition-transform duration-200 ${isTicketsCollapsed ? '-rotate-90' : ''}`}
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 24 24"
-                                            >
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                            </svg>
-                                            <h2 className="text-xl sm:text-2xl font-bold">{t.chooseYourTickets}</h2>
-                                        </div>
-                                    </button>
+                                {isSectionVisible('tickets') ? (
+                                    <div ref={ticketsRef} id="tickets-section">
+                                        {/* Collapsible Header */}
+                                        <button
+                                            onClick={() => setIsTicketsCollapsed(!isTicketsCollapsed)}
+                                            className="w-full flex items-center justify-between py-4 px-2 hover:bg-gray-50 transition-colors"
+                                        >
+                                            <div className="flex items-center gap-2">
+                                                <svg
+                                                    className={`w-5 h-5 text-gray-600 transition-transform duration-200 ${isTicketsCollapsed ? '-rotate-90' : ''}`}
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                </svg>
+                                                <h2 className="text-xl sm:text-2xl font-bold">{t.chooseYourTickets}</h2>
+                                            </div>
+                                        </button>
 
-                                    {!isTicketsCollapsed && (
-                                        <div className="px-0 py-4">
-                                            <div className="space-y-3">
-                                                {event.tickets.map((ticket: { id: number; name: string; price: number; available: number; description: string; offerEndsIn: string; days: string }) => (
-                                                    <div key={ticket.id} className="bg-gray-100 rounded-lg overflow-hidden">
-                                                        {/* Main Ticket Row - always horizontal */}
-                                                        <div className="px-3 sm:px-4 py-2 flex flex-row items-center gap-3 sm:gap-4">
-                                                            {/* Ticket Name */}
-                                                            <Text className="font-bold text-xs sm:text-sm text-[#112b38] flex-shrink-0 whitespace-nowrap min-w-[110px] sm:min-w-[140px]">
-                                                                {ticket.name}
-                                                            </Text>
+                                        {!isTicketsCollapsed && (
+                                            <div className="px-0 py-4">
+                                                <div className="space-y-3">
+                                                    {event.tickets.map((ticket: { id: number; name: string; price: number; available: number; totalSeats?: number; description: string; offerEndsIn: string; daysLeft?: number | null; days: string }) => (
+                                                        <div key={ticket.id} className="bg-gray-100 rounded-lg overflow-hidden">
+                                                            {/* Main Ticket Row - always horizontal */}
+                                                            <div className="px-3 sm:px-4 py-2 flex flex-row items-center gap-3 sm:gap-4">
+                                                                {/* Ticket Name */}
+                                                                <Text className="font-bold text-xs sm:text-sm text-[#112b38] flex-shrink-0 whitespace-nowrap min-w-[110px] sm:min-w-[140px]">
+                                                                    {ticket.name}
+                                                                </Text>
 
-                                                            {/* Price */}
-                                                            <div className="font-bold text-sm sm:text-lg text-[#112b38] flex-shrink-0 whitespace-nowrap min-w-[70px] sm:min-w-[90px]">
-                                                                Rs{ticket.price.toLocaleString()}
-                                                            </div>
+                                                                {/* Price */}
+                                                                <div className="font-bold text-sm sm:text-lg text-[#112b38] flex-shrink-0 whitespace-nowrap min-w-[70px] sm:min-w-[90px]">
+                                                                    Rs{ticket.price.toLocaleString()}
+                                                                </div>
 
-                                                            {/* Offer Text - hidden on xs, shown sm+ */}
-                                                            <div className="hidden sm:block font-semibold text-sm flex-shrink-0 whitespace-nowrap text-[#c89c6b] hover:text-[#112b38] transition-colors duration-200">
-                                                                {ticket.offerEndsIn} 8 {ticket.days.toLowerCase()}
-                                                            </div>
-
-                                                            <div className="flex items-center gap-2 flex-shrink-0 ml-auto">
-                                                                {/* Accordion Toggle Button */}
-                                                                <button
-                                                                    onClick={() => setSelectedTicket(selectedTicket === ticket.id ? null : ticket.id)}
-                                                                    className="w-6 h-6 rounded-full bg-[#112b38] flex items-center justify-center hover:bg-[#c89c6b] hover:scale-110 transition-all duration-300"
-                                                                >
-                                                                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                                                                    </svg>
-                                                                </button>
-
-                                                                {/* Quantity Selector */}
-                                                                <div className="flex items-center gap-1 sm:gap-2">
+                                                                {/* Offer Text - hidden on xs, shown sm+ */}
+                                                                <div className="hidden sm:block font-semibold text-sm flex-shrink-0 whitespace-nowrap text-[#c89c6b] hover:text-[#112b38] transition-colors duration-200">
+                                                                    {ticket.offerEndsIn}{ticket.daysLeft !== null ? ` ${ticket.daysLeft} days` : ''}
+                                                                </div>
+                                                                <div className="flex items-center gap-2 flex-shrink-0 ml-auto">
+                                                                    {/* Accordion Toggle Button */}
                                                                     <button
-                                                                        className={`w-5 h-5 sm:w-6 sm:h-6 border-2 border-gray-300 rounded flex items-center justify-center transition-all duration-300 font-bold text-sm sm:text-base ${ticketQuantities[ticket.id] === 0
-                                                                            ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400'
-                                                                            : 'hover:bg-[#112b38] hover:text-white hover:border-[#112b38] text-gray-700'
-                                                                            }`}
-                                                                        onClick={() => decrementQuantity(ticket.id)}
-                                                                        disabled={ticketQuantities[ticket.id] === 0}
+                                                                        onClick={() => setSelectedTicket(selectedTicket === ticket.id ? null : ticket.id)}
+                                                                        className="w-6 h-6 rounded-full bg-[#112b38] flex items-center justify-center hover:bg-[#c89c6b] hover:scale-110 transition-all duration-300"
                                                                     >
-                                                                        -
+                                                                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                                                                        </svg>
                                                                     </button>
 
-                                                                    <div className="w-8 sm:w-12 text-center font-semibold text-base sm:text-lg">
-                                                                        {ticketQuantities[ticket.id] !== undefined ? ticketQuantities[ticket.id] : 0}
+                                                                    {/* Quantity Selector */}
+                                                                    <div className="flex items-center gap-1 sm:gap-2">
+                                                                        <button
+                                                                            className={`w-5 h-5 sm:w-6 sm:h-6 border-2 border-gray-300 rounded flex items-center justify-center transition-all duration-300 font-bold text-sm sm:text-base ${ticketQuantities[ticket.id] === 0
+                                                                                ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400'
+                                                                                : 'hover:bg-[#112b38] hover:text-white hover:border-[#112b38] text-gray-700'
+                                                                                }`}
+                                                                            onClick={() => decrementQuantity(ticket.id)}
+                                                                            disabled={ticketQuantities[ticket.id] === 0}
+                                                                        >
+                                                                            -
+                                                                        </button>
+
+                                                                        <div className="w-8 sm:w-12 text-center font-semibold text-base sm:text-lg">
+                                                                            {ticketQuantities[ticket.id] !== undefined ? ticketQuantities[ticket.id] : 0}
+                                                                        </div>
+
+                                                                        <button
+                                                                            className={`w-5 h-5 sm:w-6 sm:h-6 border-2 border-[#c89c6b] rounded flex items-center justify-center transition-all duration-300 font-bold text-sm sm:text-base ${ticketQuantities[ticket.id] === 20
+                                                                                ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400 border-gray-300'
+                                                                                : 'text-[#112b38] hover:bg-[#c89c6b] hover:text-white'
+                                                                                }`}
+                                                                            onClick={() => incrementQuantity(ticket.id, ticket.available)}
+                                                                            disabled={ticketQuantities[ticket.id] === 20}
+                                                                        >
+                                                                            +
+                                                                        </button>
                                                                     </div>
-
-                                                                    <button
-                                                                        className={`w-5 h-5 sm:w-6 sm:h-6 border-2 border-[#c89c6b] rounded flex items-center justify-center transition-all duration-300 font-bold text-sm sm:text-base ${ticketQuantities[ticket.id] === 20
-                                                                            ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400 border-gray-300'
-                                                                            : 'text-[#112b38] hover:bg-[#c89c6b] hover:text-white'
-                                                                            }`}
-                                                                        onClick={() => incrementQuantity(ticket.id, ticket.available)}
-                                                                        disabled={ticketQuantities[ticket.id] === 20}
-                                                                    >
-                                                                        +
-                                                                    </button>
                                                                 </div>
                                                             </div>
-                                                        </div>
 
-                                                        {/* Accordion Content */}
-                                                        {selectedTicket === ticket.id && (
-                                                            <div className="px-3 sm:px-4 py-3 bg-white border-t border-gray-200">
-                                                                <p className="text-sm text-gray-600">{ticket.description}</p>
-                                                                <p className="text-xs text-[#112b38] mt-2">Only {ticket.available} tickets available (Max 20 per person)</p>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                ))}
+                                                            {/* Accordion Content */}
+                                                            {selectedTicket === ticket.id && (
+                                                                <div className="px-3 sm:px-4 py-3 bg-white border-t border-gray-200">
+                                                                    <p className="text-sm text-gray-600">{ticket.description}</p>
+                                                                    <p className="text-xs text-[#112b38] mt-2">Only {ticket.available} tickets available (Max 20 per person)</p>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                                </div>
                                             </div>
-                                        </div>
-                                    )}
-                                </div>
+                                        )}
+                                    </div>
+                                ) : null} {/* end tickets */}
 
                                 {/* Description Section */}
-                                <div ref={descriptionRef} id="description-section">
-                                    <div className="bg-white mt-4">
-                                        {/* Collapsible Header */}
-                                        <button
-                                            onClick={() => setIsDescriptionCollapsed(!isDescriptionCollapsed)}
-                                            className="w-full flex items-center justify-between p-4 sm:p-6 hover:bg-gray-50 transition-colors"
-                                        >
-                                            <div className="flex items-center gap-2">
-                                                <svg
-                                                    className={`w-5 h-5 text-gray-600 transition-transform duration-200 ${isDescriptionCollapsed ? '-rotate-90' : ''}`}
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                                </svg>
-                                                <h2 className="text-xl sm:text-2xl font-bold text-[#112b38]">{t.eventDescription}</h2>
-                                            </div>
-                                        </button>
+                                {isSectionVisible('description') ? (
+                                    <div ref={descriptionRef} id="description-section">
+                                        <div className="bg-white mt-4">
+                                            {/* Collapsible Header */}
+                                            <button
+                                                onClick={() => setIsDescriptionCollapsed(!isDescriptionCollapsed)}
+                                                className="w-full flex items-center justify-between p-4 sm:p-6 hover:bg-gray-50 transition-colors"
+                                            >
+                                                <div className="flex items-center gap-2">
+                                                    <svg
+                                                        className={`w-5 h-5 text-gray-600 transition-transform duration-200 ${isDescriptionCollapsed ? '-rotate-90' : ''}`}
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        viewBox="0 0 24 24"
+                                                    >
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                    </svg>
+                                                    <h2 className="text-xl sm:text-2xl font-bold text-[#112b38]">{t.eventDescription}</h2>
+                                                </div>
+                                            </button>
 
-                                        {!isDescriptionCollapsed && (
-                                            <div className="px-4 sm:px-6 pb-4 sm:pb-6">
-                                                <div className="prose max-w-none text-[#112b38] text-sm sm:text-base space-y-4">
-                                                    <Text>{event.description}</Text>
+                                            {!isDescriptionCollapsed && (
+                                                <div className="px-4 sm:px-6 pb-4 sm:pb-6">
+                                                    <div className="prose max-w-none text-[#112b38] text-sm sm:text-base space-y-4">
+                                                        <Text>{event.description}</Text>
 
-                                                    {/* What To Expect */}
-                                                    <div className="mt-6">
-                                                        <h3 className="font-bold text-lg text-[#112b38] mb-3">⭕️ WHAT TO EXPECT</h3>
-                                                        <ul className="space-y-2">
-                                                            {[
-                                                                'International Artists headlining the event',
-                                                                'More than 6 local support artists',
-                                                                'Music Genre: Afro-House / Afro-Tech / Electronic',
-                                                                'Open-Air garden & beach venue at a 5★ resort',
-                                                                'Exclusive 2hr headliner set recorded LIVE',
-                                                                'Signature stage design with giant LED screens',
-                                                                'New sitting areas & lounges for ALL zones',
-                                                                'Exclusive Backstage access for VIPs & VVIPs',
-                                                                'Exclusive Meet & Greet Area for VVIPs',
-                                                                'Dedicated washrooms per zone',
-                                                                'Multiple food & beverage corners',
-                                                                'Fire Breathers, Laser Show & more surprises',
-                                                            ].map((item, i) => (
-                                                                <li key={i} className="flex items-start gap-2 text-[#112b38] text-sm">
-                                                                    <span className="mt-1 w-3 h-3 rounded-sm bg-[#112b38] flex-shrink-0 inline-block" />
-                                                                    <span>{item}</span>
-                                                                </li>
-                                                            ))}
-                                                        </ul>
-                                                    </div>
-
-                                                    {/* Artist Biographies */}
-                                                    <div className="mt-6">
-                                                        <h3 className="font-bold text-lg text-[#112b38] mb-4">⭕️ ARTIST BIOGRAPHY</h3>
-                                                        <div className="space-y-6">
-                                                            {artists.map((artist) => (
-                                                                <div key={artist.name} className="flex gap-4 items-start bg-gray-50 rounded-xl p-4 border border-gray-100">
-                                                                    <img
-                                                                        src={artist.img}
-                                                                        alt={artist.name}
-                                                                        className="w-16 h-16 rounded-full object-cover flex-shrink-0 border-2 border-[#c89c6b]"
-                                                                    />
-                                                                    <div>
-                                                                        <h4 className="font-bold text-[#112b38] text-base">{artist.name}</h4>
-                                                                        <p className="text-xs text-[#c89c6b] font-semibold mb-1">{artist.role}</p>
-                                                                        <p className="text-sm text-gray-600 leading-relaxed">{artist.bio}</p>
-                                                                    </div>
-                                                                </div>
-                                                            ))}
+                                                        {/* What To Expect */}
+                                                        <div className="mt-6">
+                                                            <h3 className="font-bold text-lg text-[#112b38] mb-3">⭕️ WHAT TO EXPECT</h3>
+                                                            <ul className="space-y-2">
+                                                                {[
+                                                                    'International Artists headlining the event',
+                                                                    'More than 6 local support artists',
+                                                                    'Music Genre: Afro-House / Afro-Tech / Electronic',
+                                                                    'Open-Air garden & beach venue at a 5★ resort',
+                                                                    'Exclusive 2hr headliner set recorded LIVE',
+                                                                    'Signature stage design with giant LED screens',
+                                                                    'New sitting areas & lounges for ALL zones',
+                                                                    'Exclusive Backstage access for VIPs & VVIPs',
+                                                                    'Exclusive Meet & Greet Area for VVIPs',
+                                                                    'Dedicated washrooms per zone',
+                                                                    'Multiple food & beverage corners',
+                                                                    'Fire Breathers, Laser Show & more surprises',
+                                                                ].map((item, i) => (
+                                                                    <li key={i} className="flex items-start gap-2 text-[#112b38] text-sm">
+                                                                        <span className="mt-1 w-3 h-3 rounded-sm bg-[#112b38] flex-shrink-0 inline-block" />
+                                                                        <span>{item}</span>
+                                                                    </li>
+                                                                ))}
+                                                            </ul>
                                                         </div>
-                                                    </div>
 
-                                                    {/* Ticket Pricing */}
-                                                    <div className="mt-6">
-                                                        <h3 className="font-bold text-lg text-[#112b38] mb-3">🎟 TICKET PRICING</h3>
-                                                        <div className="space-y-3">
-                                                            {event.tickets.map((ticket: { id: number; name: string; price: number; description: string }) => (
-                                                                <div key={ticket.id} className="flex items-center justify-between bg-gray-50 rounded-lg px-4 py-3 border border-gray-100">
-                                                                    <div>
-                                                                        <span className="font-bold text-[#112b38] text-sm">{ticket.name}</span>
-                                                                        <p className="text-xs text-gray-500 mt-0.5">{ticket.description}</p>
+                                                        {/* Artist Biographies */}
+                                                        <div className="mt-6">
+                                                            <h3 className="font-bold text-lg text-[#112b38] mb-4">⭕️ ARTIST BIOGRAPHY</h3>
+                                                            <div className="space-y-6">
+                                                                {displayArtists.length === 0 ? (
+                                                                    <p className="text-sm text-gray-400">No artist information available.</p>
+                                                                ) : displayArtists.map((artist: any) => (
+                                                                    <div key={artist.name} className="flex gap-4 items-start bg-gray-50 rounded-xl p-4 border border-gray-100">
+                                                                        <img
+                                                                            src={artist.img}
+                                                                            alt={artist.name}
+                                                                            className="w-16 h-16 rounded-full object-cover flex-shrink-0 border-2 border-[#c89c6b]"
+                                                                        />
+                                                                        <div>
+                                                                            <h4 className="font-bold text-[#112b38] text-base">{artist.name}</h4>
+                                                                            <p className="text-xs text-[#c89c6b] font-semibold mb-1">{artist.role}</p>
+                                                                            <p className="text-sm text-gray-600 leading-relaxed">{artist.bio}</p>
+                                                                        </div>
                                                                     </div>
-                                                                    <span className="font-bold text-[#c89c6b] text-base">Rs {ticket.price.toLocaleString()}</span>
-                                                                </div>
-                                                            ))}
+                                                                ))}
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Ticket Pricing */}
+                                                        <div className="mt-6">
+                                                            <h3 className="font-bold text-lg text-[#112b38] mb-3">🎟 TICKET PRICING</h3>
+                                                            <div className="space-y-3">
+                                                                {event.tickets.map((ticket: { id: number; name: string; price: number; description: string }) => (
+                                                                    <div key={ticket.id} className="flex items-center justify-between bg-gray-50 rounded-lg px-4 py-3 border border-gray-100">
+                                                                        <div>
+                                                                            <span className="font-bold text-[#112b38] text-sm">{ticket.name}</span>
+                                                                            <p className="text-xs text-gray-500 mt-0.5">{ticket.description}</p>
+                                                                        </div>
+                                                                        <span className="font-bold text-[#c89c6b] text-base">Rs {ticket.price.toLocaleString()}</span>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        )}
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
+                                ) : null}
 
                                 {/* More Info Section */}
-                                <div ref={moreInfoRef} id="moreInfo-section">
-                                    <div className="bg-white mt-4">
-                                        {/* Collapsible Header */}
-                                        <button
-                                            onClick={() => setIsMoreInfoCollapsed(!isMoreInfoCollapsed)}
-                                            className="w-full flex items-center justify-between p-4 sm:p-6 hover:bg-gray-50 transition-colors"
-                                        >
-                                            <div className="flex items-center gap-2">
-                                                <svg
-                                                    className={`w-5 h-5 text-gray-600 transition-transform duration-200 ${isMoreInfoCollapsed ? '-rotate-90' : ''}`}
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                                </svg>
-                                                <h2 className="text-xl sm:text-2xl font-bold text-[#112b38]">{t.moreInformation}</h2>
-                                            </div>
-                                        </button>
+                                {isSectionVisible('moreInfo') ? (
+                                    <div ref={moreInfoRef} id="moreInfo-section">
+                                        <div className="bg-white mt-4">
+                                            {/* Collapsible Header */}
+                                            <button
+                                                onClick={() => setIsMoreInfoCollapsed(!isMoreInfoCollapsed)}
+                                                className="w-full flex items-center justify-between p-4 sm:p-6 hover:bg-gray-50 transition-colors"
+                                            >
+                                                <div className="flex items-center gap-2">
+                                                    <svg
+                                                        className={`w-5 h-5 text-gray-600 transition-transform duration-200 ${isMoreInfoCollapsed ? '-rotate-90' : ''}`}
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        viewBox="0 0 24 24"
+                                                    >
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                    </svg>
+                                                    <h2 className="text-xl sm:text-2xl font-bold text-[#112b38]">{t.moreInformation}</h2>
+                                                </div>
+                                            </button>
 
-                                        {!isMoreInfoCollapsed && (
-                                            <div className="px-4 sm:px-6 pb-4 sm:pb-6">
-                                                <div className="space-y-6 text-sm sm:text-base text-[#112b38]">
+                                            {!isMoreInfoCollapsed && (
+                                                <div className="px-4 sm:px-6 pb-4 sm:pb-6">
+                                                    <div className="space-y-6 text-sm sm:text-base text-[#112b38]">
 
-                                                    {/* Warning */}
-                                                    <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-                                                        <h3 className="font-bold text-base mb-3 text-amber-700">⚠ WARNING</h3>
-                                                        <ul className="space-y-2 list-disc list-inside text-gray-700 text-sm">
-                                                            <li>This is a LIMITED capacity event — do not wait to buy your tickets.</li>
-                                                            <li>LIMITED PARKING. We request you to book a taxi, driver, or car-pool to avoid traffic and parking issues.</li>
-                                                            <li>This is an 18+ event. Minors will not be allowed unless accompanied by a parent or responsible party.</li>
-                                                            <li>By attending you accept to be photographed and filmed by our crew.</li>
-                                                            <li>You are not allowed to bring food or drinks inside the venue premises.</li>
-                                                            <li>Tickets once bought are NOT refundable.</li>
-                                                            <li>The event organiser shall not be held liable for cancellation or disruption due to force majeure events.</li>
-                                                        </ul>
-                                                    </div>
-
-                                                    {/* Terms & Conditions */}
-                                                    <div>
-                                                        <h3 className="font-bold text-lg mb-3">{t.ageRestriction} & Terms</h3>
-                                                        <ul className="space-y-2 list-disc list-inside text-gray-700 text-sm">
-                                                            <li>The Event starts at 15:00 and ends at 23:30. Doors open at 15:00 and close at 17:00.</li>
-                                                            <li>This is strictly an 18+ event.</li>
-                                                            <li>Food & drinks from outside will not be permitted.</li>
-                                                            <li>The organiser reserves the right to amend the venue in case of unforeseeable circumstances.</li>
-                                                            <li>Photography and filming is prohibited during the show.</li>
-                                                            <li>No Show: If customer does not attend, 100% Cancellation Fee applies.</li>
-                                                            <li>No cancellation or exchange available once ticket is confirmed and issued.</li>
-                                                            <li>Security checks of bags will be conducted.</li>
-                                                            <li>Failure to present your ticket at the event will entitle the organiser to deny access.</li>
-                                                            <li>You can print your e-ticket or have it ready to scan from your smartphone. Make sure the QR code and booking ref is visible.</li>
-                                                        </ul>
-                                                    </div>
-
-                                                    {/* Lockdown & Cyclone Protocol */}
-                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                                        <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
-                                                            <h3 className="font-bold text-base mb-2 text-blue-800">🔒 Lockdown Protocol</h3>
-                                                            <p className="text-sm text-gray-600 mb-2">If an event coincides with a lockdown or government-imposed restrictions, it may be cancelled or postponed.</p>
-                                                            <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
-                                                                <li><strong>Postponement:</strong> Tickets remain valid for the rescheduled date.</li>
-                                                                <li><strong>Cancellation:</strong> A full refund will be provided per cancellation terms.</li>
+                                                        {/* Warning */}
+                                                        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                                                            <h3 className="font-bold text-base mb-3 text-amber-700">⚠ WARNING</h3>
+                                                            <ul className="space-y-2 list-disc list-inside text-gray-700 text-sm">
+                                                                <li>This is a LIMITED capacity event — do not wait to buy your tickets.</li>
+                                                                <li>LIMITED PARKING. We request you to book a taxi, driver, or car-pool to avoid traffic and parking issues.</li>
+                                                                <li>This is an 18+ event. Minors will not be allowed unless accompanied by a parent or responsible party.</li>
+                                                                <li>By attending you accept to be photographed and filmed by our crew.</li>
+                                                                <li>You are not allowed to bring food or drinks inside the venue premises.</li>
+                                                                <li>Tickets once bought are NOT refundable.</li>
+                                                                <li>The event organiser shall not be held liable for cancellation or disruption due to force majeure events.</li>
                                                             </ul>
                                                         </div>
-                                                        <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
-                                                            <h3 className="font-bold text-base mb-2 text-blue-800">🌀 Cyclone Protocol</h3>
-                                                            <p className="text-sm text-gray-600 mb-2">If a booking falls under Cyclone Class 2 or higher, the event may be postponed or cancelled.</p>
-                                                            <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
-                                                                <li><strong>Postponement:</strong> Tickets remain valid for the rescheduled date.</li>
-                                                                <li><strong>Cancellation:</strong> A full refund will be provided per cancellation terms.</li>
+
+                                                        {/* Terms & Conditions */}
+                                                        <div>
+                                                            <h3 className="font-bold text-lg mb-3">{t.ageRestriction} & Terms</h3>
+                                                            <ul className="space-y-2 list-disc list-inside text-gray-700 text-sm">
+                                                                <li>The Event starts at 15:00 and ends at 23:30. Doors open at 15:00 and close at 17:00.</li>
+                                                                <li>This is strictly an 18+ event.</li>
+                                                                <li>Food & drinks from outside will not be permitted.</li>
+                                                                <li>The organiser reserves the right to amend the venue in case of unforeseeable circumstances.</li>
+                                                                <li>Photography and filming is prohibited during the show.</li>
+                                                                <li>No Show: If customer does not attend, 100% Cancellation Fee applies.</li>
+                                                                <li>No cancellation or exchange available once ticket is confirmed and issued.</li>
+                                                                <li>Security checks of bags will be conducted.</li>
+                                                                <li>Failure to present your ticket at the event will entitle the organiser to deny access.</li>
+                                                                <li>You can print your e-ticket or have it ready to scan from your smartphone. Make sure the QR code and booking ref is visible.</li>
                                                             </ul>
                                                         </div>
-                                                    </div>
 
-                                                    {/* Contact */}
-                                                    <div className="text-sm text-gray-600 border-t border-gray-100 pt-4">
-                                                        If you have any queries, contact our customer hotline or chat with us via WhatsApp.
+                                                        {/* Lockdown & Cyclone Protocol */}
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+                                                                <h3 className="font-bold text-base mb-2 text-blue-800">🔒 Lockdown Protocol</h3>
+                                                                <p className="text-sm text-gray-600 mb-2">If an event coincides with a lockdown or government-imposed restrictions, it may be cancelled or postponed.</p>
+                                                                <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                                                    <li><strong>Postponement:</strong> Tickets remain valid for the rescheduled date.</li>
+                                                                    <li><strong>Cancellation:</strong> A full refund will be provided per cancellation terms.</li>
+                                                                </ul>
+                                                            </div>
+                                                            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+                                                                <h3 className="font-bold text-base mb-2 text-blue-800">🌀 Cyclone Protocol</h3>
+                                                                <p className="text-sm text-gray-600 mb-2">If a booking falls under Cyclone Class 2 or higher, the event may be postponed or cancelled.</p>
+                                                                <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                                                    <li><strong>Postponement:</strong> Tickets remain valid for the rescheduled date.</li>
+                                                                    <li><strong>Cancellation:</strong> A full refund will be provided per cancellation terms.</li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Contact */}
+                                                        <div className="text-sm text-gray-600 border-t border-gray-100 pt-4">
+                                                            If you have any queries, contact our customer hotline or chat with us via WhatsApp.
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        )}
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
+                                ) : null} {/* end moreInfo */}
 
                             </div> {/* end tab content */}
 
+
                             {/* Location Map */}
-                            <div className="">
-                                <div className="space-y-4">
-                                    <div className="flex items-start gap-3 bg-white rounded-xl p-4 sm:p-6 shadow-md border border-gray-200">
-                                        <div className='flex flex-col items-center justify-center px-2 rounded-lg shadow-md'>
-                                            <MapPin className="w-5 h-5 text-[#112b38] flex-shrink-0 mt-1" />
-                                            <div className="font-semibold text-sm sm:text-base">{event.location}</div>
-                                            <div className="text-xs sm:text-sm text-[#112b38]">{t.location}</div>
+                            {isSectionVisible('location') && (
+                                <div className="">
+                                    <div className="space-y-4">
+                                        <div className="flex items-start gap-3 bg-white rounded-xl p-4 sm:p-6 shadow-md border border-gray-200">
+                                            <div className='flex flex-col items-center justify-center px-2 rounded-lg shadow-md'>
+                                                <MapPin className="w-5 h-5 text-[#112b38] flex-shrink-0 mt-1" />
+                                                <div className="font-semibold text-sm sm:text-base">{event.location}</div>
+                                                <div className="text-xs sm:text-sm text-[#112b38]">{t.location}</div>
+                                            </div>
+                                            <div>
+                                                <Text>Etihad Park</Text>
+                                                <Text>{event.fullAddress}</Text>
+                                                <Text className='flex gap-2 items-center '>{t.viewDirection} <FaGreaterThan /></Text>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <Text>Etihad Park</Text>
-                                            <Text>{event.fullAddress}</Text>
-                                            <Text className='flex gap-2 items-center '>{t.viewDirection} <FaGreaterThan /></Text>
+                                        <div className="w-full h-[250px] bg-gray-200 rounded-xl overflow-hidden">
+                                            <iframe
+                                                src={`https://maps.google.com/maps?q=${encodeURIComponent(event.fullAddress || event.location || 'Mauritius')}&output=embed`}
+                                                width="100%"
+                                                height="100%"
+                                                style={{ border: 0 }}
+                                                allowFullScreen
+                                                loading="lazy"
+                                                referrerPolicy="no-referrer-when-downgrade"
+                                            />
                                         </div>
                                     </div>
-                                    <div className="w-full h-[250px] bg-gray-200 rounded-xl overflow-hidden">
-                                        <iframe
-                                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3610.163942789584!2d55.27103831501205!3d25.197196683887764!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f43496ad9c645%3A0xbde66e5084295162!2sDubai%20-%20United%20Arab%20Emirates!5e0!3m2!1sen!2s!4v1234567890123!5m2!1sen!2s"
-                                            width="100%"
-                                            height="100%"
-                                            style={{ border: 0 }}
-                                            allowFullScreen
-                                            loading="lazy"
-                                            referrerPolicy="no-referrer-when-downgrade"
+                                </div>
+                            )} {/* end location */}
+
+                            {/* Site Plan */}
+                            {isSectionVisible('sitePlan') && (
+                                <div className="bg-white rounded-xl">
+                                    <h2 className="text-xl sm:text-2xl font-bold mb-4 text-[#112b38]">{t.sitePlan}</h2>
+                                    <div className="relative w-full h-[200px] bg-gradient-to-br from-green-50 to-blue-50 rounded-xl overflow-hidden border border-gray-200">
+                                        <img
+                                            src='/images/mapImage.png'
+                                            className='w-full h-full object-cover'
+                                            alt="Site Plan"
                                         />
                                     </div>
                                 </div>
-                            </div>
-
-                            {/* Site Plan */}
-                            <div className="bg-white rounded-xl">
-                                <h2 className="text-xl sm:text-2xl font-bold mb-4 text-[#112b38]">{t.sitePlan}</h2>
-                                <div className="relative w-full h-[200px] bg-gradient-to-br from-green-50 to-blue-50 rounded-xl overflow-hidden border border-gray-200">
-                                    <img
-                                        src='/images/mapImage.png'
-                                        className='w-full h-full object-cover'
-                                        alt="Site Plan"
-                                    />
-                                </div>
-                            </div>
+                            )} {/* end sitePlan */}
                         </div>
 
                         {/* Right Column - Sidebar */}
@@ -945,19 +922,19 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 text-xs sm:text-sm text-[#c89c6b]">
                                     <div className="flex items-center gap-2">
                                         <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#c89c6b]" />
-                                        <span className="font-medium whitespace-nowrap">Sat 18 Oct</span>
+                                        <span className="font-medium whitespace-nowrap">{event.date}</span>
                                     </div>
                                     <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm">
                                         <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#c89c6b] flex-shrink-0" />
-                                        <span className="whitespace-nowrap">{t.doors}: 20:00</span>
-                                        <span className="whitespace-nowrap">{t.start}: 20:00</span>
+                                        {apiEvent?.startTime && <span className="whitespace-nowrap">{t.start}: {apiEvent.startTime}</span>}
+                                        {apiEvent?.endTime && <span className="whitespace-nowrap">{t.doors}: {apiEvent.endTime}</span>}
                                     </div>
                                 </div>
 
                                 {/* Countdown Timer Section */}
-                                <div className="flex flex-col sm:flex-row items-center justify-between rounded-lg p-3 mt-3 sm:mt-4 gap-3 sm:gap-0" style={{background:'rgba(200,156,107,0.10)'}}>
+                                <div className="flex flex-col sm:flex-row items-center justify-between rounded-lg p-3 mt-3 sm:mt-4 gap-3 sm:gap-0" style={{ background: 'rgba(200,156,107,0.10)' }}>
                                     <div className="flex items-center gap-2">
-                                        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center text-[#c89c6b] flex-shrink-0" style={{background:'rgba(200,156,107,0.18)'}}>
+                                        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center text-[#c89c6b] flex-shrink-0" style={{ background: 'rgba(200,156,107,0.18)' }}>
                                             <Timer className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                         </div>
                                         <div>
@@ -968,10 +945,9 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
                                     <div className="flex gap-2 sm:gap-3 text-center">
                                         {[
-                                            { value: "03", label: t.days },
-                                            { value: "22", label: t.hours },
-                                            { value: "56", label: t.mins },
-                                            { value: "17", label: t.seconds },
+                                            { value: String(countdown.days).padStart(2, '0'), label: t.days },
+                                            { value: String(countdown.hours).padStart(2, '0'), label: t.hours },
+                                            { value: String(countdown.minutes).padStart(2, '0'), label: t.mins },
                                         ].map((item, index) => (
                                             <div key={index}>
                                                 <p className="text-base sm:text-lg font-bold text-[#112b38]">{item.value}</p>
@@ -987,7 +963,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         <p className="text-xs sm:text-sm text-[#c89c6b] whitespace-nowrap">{t.totalAmount}</p>
                                         <p className="text-lg sm:text-xl font-bold text-red-500 whitespace-nowrap">Rs {calculateTotal().toLocaleString()}</p>
                                     </div>
-                                    <button 
+                                    <button
                                         onClick={() => router.push(`/event/${params.id}/checkout`)}
                                         disabled={calculateTotal() === 0}
                                         className={`w-full sm:w-auto font-semibold px-6 py-2 sm:py-2.5 rounded-lg transition-all duration-300 shadow-md whitespace-nowrap ${calculateTotal() === 0 ? 'bg-gray-300 text-gray-400 cursor-not-allowed' : 'bg-[#c89c6b] hover:bg-[#b8885a] text-white hover:scale-105 hover:shadow-lg'}`}
@@ -998,7 +974,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
                                 {/* Action Buttons */}
                                 <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 mt-4 pt-4 border-t border-gray-100">
-                                    <button 
+                                    <button
                                         onClick={() => setIsAuthModalOpen(true)}
                                         className="flex items-center gap-1 sm:gap-1.5 hover:text-[#112b38] transition-all duration-300 text-xs sm:text-sm text-[#c89c6b]"
                                     >
@@ -1006,7 +982,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         <span className="whitespace-nowrap hidden sm:inline">{t.addToCalendar}</span>
                                         <span className="whitespace-nowrap sm:hidden">Calendar</span>
                                     </button>
-                                    <button 
+                                    <button
                                         onClick={() => setIsAuthModalOpen(true)}
                                         className="flex items-center gap-1 sm:gap-1.5 hover:text-[#112b38] transition-all duration-300 text-xs sm:text-sm text-[#c89c6b]"
                                     >
@@ -1014,12 +990,12 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         <span className="whitespace-nowrap hidden sm:inline">{t.shareEvent}</span>
                                         <span className="whitespace-nowrap sm:hidden">Share</span>
                                     </button>
-                                  
+
                                 </div>
                             </div>
 
                             {/* Related Events - Song Player */}
-                            {mockSongs.map((song) => (
+                            {isSectionVisible('songs') && mockSongs.length > 0 && mockSongs.map((song) => (
                                 <div key={song.id} className="relative mx-auto bg-white rounded-xl shadow-sm px-3 sm:px-4 py-2 sm:py-3 flex items-center justify-between overflow-hidden gap-2 sm:gap-0">
                                     <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
                                         <div className="relative w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0">
@@ -1081,118 +1057,128 @@ export default function EventDetailPage({ params }: EventDetailProps) {
             </div>
 
             {/* Artist Slider & Portrait Section */}
-            <div className="w-full bg-[#112b38]">
-                <div className="max-w-[1230px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                    <span className="block text-[#c89c6b] text-xs font-bold uppercase tracking-widest mb-4">Performers</span>
+            {isSectionVisible('artists') && (
+                <div className="w-full bg-[#112b38]">
+                    <div className="max-w-[1230px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                        <span className="block text-[#c89c6b] text-xs font-bold uppercase tracking-widest mb-4">Performers</span>
 
-                    {/* Cards */}
-                    <div
-                        className="overflow-hidden relative"
-                        style={{ maskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)' }}
-                    >
-                        <div
-                            className="flex"
-                            style={{
-                                transform: `translateX(calc(-${artistCarouselIndex * 225}px + 50% - 112px))`,
-                                transition: artistNoTransition ? 'none' : 'transform 0.5s ease-in-out',
-                            }}
-                        >
-                            {artistsExtended.map((artist, i) => (
+                        {displayArtists.length === 0 ? (
+                            <p className="text-white/40 text-sm py-4">No performers listed for this event.</p>
+                        ) : (
+                            <>
+                                {/* Cards */}
                                 <div
-                                    key={i}
-                                    onClick={() => setSelectedArtist(artist)}
-                                    className="flex-shrink-0 cursor-pointer transition-all duration-500 px-1"
-                                    style={{
-                                        width: '225px',
-                                        transform: i === artistCarouselIndex ? 'scale(1)' : 'scale(0.88)',
-                                        opacity: Math.abs(i - artistCarouselIndex) > 2 ? 0.15 : 1,
-                                    }}
+                                    className="overflow-hidden relative"
+                                    style={{ maskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)' }}
                                 >
                                     <div
-                                        className="relative rounded-xl overflow-hidden cursor-pointer"
+                                        className="flex"
                                         style={{
-                                            height: '280px',
-                                            border: i === artistCarouselIndex ? '1px solid rgba(200,156,107,0.35)' : '1px solid rgba(17,43,56,0.12)',
+                                            transform: `translateX(calc(-${artistCarouselIndex * 225}px + 50% - 112px))`,
+                                            transition: artistNoTransition ? 'none' : 'transform 0.5s ease-in-out',
                                         }}
                                     >
-                                        {/* Background image */}
-                                        <div
-                                            className="absolute inset-0 bg-cover bg-center transition-transform duration-500"
-                                            style={{
-                                                backgroundImage: `url(${artist.img})`,
-                                                transform: i === artistCarouselIndex ? 'scale(1)' : 'scale(1.15)',
-                                            }}
-                                        />
-                                        {/* Progress bar on active card */}
-                                        {i === artistCarouselIndex && (
-                                            <>
-                                                <div className="absolute bottom-0 left-0 h-[4px] z-20 w-full" style={{ background: 'rgba(200,156,107,0.25)' }} />
-                                                <div className="absolute bottom-0 left-0 h-[4px] z-20" style={{ width: `${artistProgress}%`, background: '#c89c6b', transition: 'width 0.05s linear' }} />
-                                            </>
-                                        )}
-                                        {/* Overlay */}
-                                        <div
-                                            className="absolute inset-0"
-                                            style={{ background: 'linear-gradient(0deg, rgba(17,43,56,0.82) 20%, rgba(17,43,56,0.25) 60%, transparent 100%)' }}
-                                        />
-                                        {/* Content */}
-                                        <div className="absolute bottom-0 left-0 right-0 p-4">
-                                            <h2 className="text-white font-extrabold text-base mb-0.5 leading-tight">{artist.name}</h2>
-                                            <span className="text-[#c89c6b] text-xs font-bold block mb-2">{artist.role}</span>
-                                            {i === artistCarouselIndex && (
-                                                <p className="text-white/70 text-[11px] leading-snug line-clamp-2 mb-2">{artist.bio}</p>
-                                            )}
-                                            {/* Social icons */}
-                                            <div className="flex gap-2 flex-wrap">
-                                                {artist.socials.instagram && <a href={artist.socials.instagram} onClick={e => e.stopPropagation()} target="_blank" rel="noopener noreferrer"><FaInstagram className="w-5 h-5 text-[#c89c6b] hover:text-white transition-colors" /></a>}
-                                                {artist.socials.facebook && <a href={artist.socials.facebook} onClick={e => e.stopPropagation()} target="_blank" rel="noopener noreferrer"><FaFacebook className="w-5 h-5 text-[#c89c6b] hover:text-white transition-colors" /></a>}
-                                                {artist.socials.tiktok && <a href={artist.socials.tiktok} onClick={e => e.stopPropagation()} target="_blank" rel="noopener noreferrer" className="text-[#c89c6b] hover:text-white transition-colors text-sm font-bold">TT</a>}
+                                        {artistsExtended.map((artist, i) => (
+                                            <div
+                                                key={i}
+                                                onClick={() => setSelectedArtist(artist)}
+                                                className="flex-shrink-0 cursor-pointer transition-all duration-500 px-1"
+                                                style={{
+                                                    width: '225px',
+                                                    transform: i === artistCarouselIndex ? 'scale(1)' : 'scale(0.88)',
+                                                    opacity: Math.abs(i - artistCarouselIndex) > 2 ? 0.15 : 1,
+                                                }}
+                                            >
+                                                <div
+                                                    className="relative rounded-xl overflow-hidden cursor-pointer"
+                                                    style={{
+                                                        height: '280px',
+                                                        border: i === artistCarouselIndex ? '1px solid rgba(200,156,107,0.35)' : '1px solid rgba(17,43,56,0.12)',
+                                                    }}
+                                                >
+                                                    {/* Background image */}
+                                                    <div
+                                                        className="absolute inset-0 bg-cover bg-center transition-transform duration-500"
+                                                        style={{
+                                                            backgroundImage: `url(${artist.img})`,
+                                                            transform: i === artistCarouselIndex ? 'scale(1)' : 'scale(1.15)',
+                                                        }}
+                                                    />
+                                                    {/* Progress bar on active card */}
+                                                    {i === artistCarouselIndex && (
+                                                        <>
+                                                            <div className="absolute bottom-0 left-0 h-[4px] z-20 w-full" style={{ background: 'rgba(200,156,107,0.25)' }} />
+                                                            <div className="absolute bottom-0 left-0 h-[4px] z-20" style={{ width: `${artistProgress}%`, background: '#c89c6b', transition: 'width 0.05s linear' }} />
+                                                        </>
+                                                    )}
+                                                    {/* Overlay */}
+                                                    <div
+                                                        className="absolute inset-0"
+                                                        style={{ background: 'linear-gradient(0deg, rgba(17,43,56,0.82) 20%, rgba(17,43,56,0.25) 60%, transparent 100%)' }}
+                                                    />
+                                                    {/* Content */}
+                                                    <div className="absolute bottom-0 left-0 right-0 p-4">
+                                                        <h2 className="text-white font-extrabold text-base mb-0.5 leading-tight">{artist.name}</h2>
+                                                        <span className="text-[#c89c6b] text-xs font-bold block mb-2">{artist.role}</span>
+                                                        {i === artistCarouselIndex && (
+                                                            <p className="text-white/70 text-[11px] leading-snug line-clamp-2 mb-2">{artist.bio}</p>
+                                                        )}
+                                                        {/* Social icons */}
+                                                        <div className="flex gap-2 flex-wrap">
+                                                            {artist.socials.instagram && <a href={artist.socials.instagram} onClick={e => e.stopPropagation()} target="_blank" rel="noopener noreferrer"><FaInstagram className="w-5 h-5 text-[#c89c6b] hover:text-white transition-colors" /></a>}
+                                                            {artist.socials.facebook && <a href={artist.socials.facebook} onClick={e => e.stopPropagation()} target="_blank" rel="noopener noreferrer"><FaFacebook className="w-5 h-5 text-[#c89c6b] hover:text-white transition-colors" /></a>}
+                                                            {artist.socials.tiktok && <a href={artist.socials.tiktok} onClick={e => e.stopPropagation()} target="_blank" rel="noopener noreferrer" className="text-[#c89c6b] hover:text-white transition-colors text-sm font-bold">TT</a>}
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
+                                        ))}
                                     </div>
                                 </div>
-                            ))}
-                        </div>
+
+                                {/* Controls: prev | dots | next */}
+                                {(() => {
+                                    const artistRealIndex = displayArtists.length > 0
+                                        ? (artistCarouselIndex - ARTIST_CLONE + displayArtists.length * 100) % displayArtists.length
+                                        : 0;
+                                    return (
+                                        <div className="flex items-center justify-between mt-5 gap-3">
+                                            <button
+                                                onClick={() => setArtistCarouselIndex(p => p - 1)}
+                                                className="w-10 h-10 rounded-full border border-[#c89c6b]/30 bg-[#c89c6b]/10 hover:bg-[#c89c6b]/20 flex items-center justify-center transition-all shadow-sm flex-shrink-0"
+                                            >
+                                                <ChevronLeft className="w-5 h-5 text-[#c89c6b]" />
+                                            </button>
+
+                                            <div className="flex items-center justify-center gap-1.5 flex-1">
+                                                {displayArtists.map((_: any, i: number) => (
+                                                    <button
+                                                        key={i}
+                                                        onClick={() => setArtistCarouselIndex(i + ARTIST_CLONE)}
+                                                        className="rounded-full transition-all duration-300"
+                                                        style={{
+                                                            width: i === artistRealIndex ? '24px' : '8px',
+                                                            height: '8px',
+                                                            background: i === artistRealIndex ? '#c89c6b' : 'rgba(200,156,107,0.2)',
+                                                        }}
+                                                    />
+                                                ))}
+                                            </div>
+
+                                            <button
+                                                onClick={() => setArtistCarouselIndex(p => p + 1)}
+                                                className="w-10 h-10 rounded-full border border-[#c89c6b]/30 bg-[#c89c6b]/10 hover:bg-[#c89c6b]/20 flex items-center justify-center transition-all shadow-sm flex-shrink-0"
+                                            >
+                                                <ChevronRight className="w-5 h-5 text-[#c89c6b]" />
+                                            </button>
+                                        </div>
+                                    );
+                                })()}
+                            </>
+                        )}
                     </div>
-
-                    {/* Controls: prev | dots | next */}
-                    {(() => {
-                        const artistRealIndex = (artistCarouselIndex - ARTIST_CLONE + artists.length * 100) % artists.length;
-                        return (
-                            <div className="flex items-center justify-between mt-5 gap-3">
-                                <button
-                                    onClick={() => setArtistCarouselIndex(p => p - 1)}
-                                    className="w-10 h-10 rounded-full border border-[#c89c6b]/30 bg-[#c89c6b]/10 hover:bg-[#c89c6b]/20 flex items-center justify-center transition-all shadow-sm flex-shrink-0"
-                                >
-                                    <ChevronLeft className="w-5 h-5 text-[#c89c6b]" />
-                                </button>
-
-                                <div className="flex items-center justify-center gap-1.5 flex-1">
-                                    {artists.map((_, i) => (
-                                        <button
-                                            key={i}
-                                            onClick={() => setArtistCarouselIndex(i + ARTIST_CLONE)}
-                                            className="rounded-full transition-all duration-300"
-                                            style={{
-                                                width: i === artistRealIndex ? '24px' : '8px',
-                                                height: '8px',
-                                                background: i === artistRealIndex ? '#c89c6b' : 'rgba(200,156,107,0.2)',
-                                            }}
-                                        />
-                                    ))}
-                                </div>
-
-                                <button
-                                    onClick={() => setArtistCarouselIndex(p => p + 1)}
-                                    className="w-10 h-10 rounded-full border border-[#c89c6b]/30 bg-[#c89c6b]/10 hover:bg-[#c89c6b]/20 flex items-center justify-center transition-all shadow-sm flex-shrink-0"
-                                >
-                                    <ChevronRight className="w-5 h-5 text-[#c89c6b]" />
-                                </button>
-                            </div>
-                        );
-                    })()}
                 </div>
-            </div>
+            )} {/* end artists section visibility */}
 
             {/* Artist Modal */}
             {selectedArtist && (
@@ -1232,90 +1218,74 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                 </div>
             )}
 
-            <div className="w-full sm:w-[85%] mx-auto my-12 px-4 sm:px-0">
-                <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-2xl font-bold text-gray-800">{t.relatedEvents || "Related Events"}</h2>
-                    <div className="flex items-center gap-2">
-                        <button
-                            onClick={() => setRelatedCarouselIndex(prev => (prev - 1 + totalSteps + 1) % (totalSteps + 1))}
-                            className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-[#112b38] hover:text-white hover:border-[#112b38] transition-all duration-300"
-                        >
-                            <ChevronLeft className="w-4 h-4" />
-                        </button>
-                        <button
-                            onClick={() => setRelatedCarouselIndex(prev => (prev + 1) % (totalSteps + 1))}
-                            className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-[#112b38] hover:text-white hover:border-[#112b38] transition-all duration-300"
-                        >
-                            <ChevronRight className="w-4 h-4" />
-                        </button>
-                    </div>
-                </div>
-
-                <div className="relative overflow-hidden">
-                    <div
-                        className="flex transition-transform duration-500 ease-in-out"
-                        style={{ transform: `translateX(-${relatedCarouselIndex * (100 / cardsPerPage)}%)` }}
-                    >
-                        {relatedEvents.map((ev) => (
-                            <div key={ev.id} className="w-1/3 flex-shrink-0 px-5 sm:px-7 py-8 overflow-visible">
-                                <Link
-                                    href={`/event/${ev.id}`}
-                                    className="w-full max-w-[340px] h-auto event-card relative overflow-visible block cursor-pointer mx-auto"
-                                >
-                                    <div className="hidden sm:block absolute -top-[28px] -left-[59px] w-[420px] h-auto z-50 pointer-events-none">
-                                        <img
-                                            src={`/images/LOGO TAG/${ev.badge}.png`}
-                                            alt="Badge"
-                                            className="w-full h-auto object-contain scale-110"
-                                        />
-                                    </div>
-                                    <div className="relative z-10 overflow-hidden rounded-tr-2xl rounded-br-2xl rounded-bl-2xl shadow-xl bg-white">
-                                        <div className="relative w-full h-[340px] overflow-hidden">
-                                            <Image
-                                                src={ev.image}
-                                                alt={ev.title}
-                                                fill
-                                                className="object-cover"
-                                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                                            />
-                                            <div className="absolute top-3 right-3 bg-black/70 rounded shadow-lg overflow-hidden z-20 px-1">
-                                                <div className="flex items-center gap-1">
-                                                    <Calendar className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
-                                                    <div className="text-lg sm:text-xl font-bold text-white leading-none">{ev.day}</div>
-                                                    <div className="text-sm sm:text-base font-bold text-white uppercase">{ev.month}</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="w-full bg-white flex items-stretch justify-between border border-[#7e7b7b] border-t-0 rounded-bl-2xl rounded-br-lg overflow-hidden">
-                                            <div className='flex flex-col justify-center pl-3 sm:pl-4 py-2 sm:py-3'>
-                                                <p className="text-xs sm:text-sm font-bold whitespace-nowrap text-gray-900">{ev.title}</p>
-                                                <p className="text-[10px] sm:text-xs text-[#112b38]">{ev.location}</p>
-                                            </div>
-                                            <div className='w-[135px] bg-[#112b38] hover:bg-[#c89c6b] flex-shrink-0 flex flex-col items-center justify-center py-2 sm:py-3 px-4 sm:px-6 text-white rounded-bl-3xl transition-colors duration-300 relative z-10'>
-                                                <p className="mr-1 sm:mr-2 text-[8px] sm:text-[9.9px]">{t.asFrom}</p>
-                                                <p className="text-xs sm:text-[15.9px]">{ev.price}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Link>
+            {isSectionVisible('relatedEvents') && relatedEvents.length > 0 && (() => {
+                const totalSteps = Math.max(0, relatedEvents.length - cardsPerPage);
+                return (
+                    <div className="w-full sm:w-[85%] mx-auto my-12 px-4 sm:px-0">
+                        <div className="flex items-center justify-between mb-6">
+                            <h2 className="text-2xl font-bold text-gray-800">{t.relatedEvents || 'Related Events'}</h2>
+                            <div className="flex items-center gap-2">
+                                <button onClick={() => setRelatedCarouselIndex(prev => (prev - 1 + totalSteps + 1) % (totalSteps + 1))}
+                                    className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-[#112b38] hover:text-white hover:border-[#112b38] transition-all duration-300">
+                                    <ChevronLeft className="w-4 h-4" />
+                                </button>
+                                <button onClick={() => setRelatedCarouselIndex(prev => (prev + 1) % (totalSteps + 1))}
+                                    className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-[#112b38] hover:text-white hover:border-[#112b38] transition-all duration-300">
+                                    <ChevronRight className="w-4 h-4" />
+                                </button>
                             </div>
-                        ))}
+                        </div>
+                        <div className="relative overflow-hidden">
+                            <div className="flex transition-transform duration-500 ease-in-out"
+                                style={{ transform: `translateX(-${relatedCarouselIndex * (100 / cardsPerPage)}%)` }}>
+                                {relatedEvents.map((ev: any) => {
+                                    const evTitle = language === 'fr' ? (ev.title?.fr || ev.title?.en) : (ev.title?.en || ev.title?.fr);
+                                    const evVenue = language === 'fr' ? (ev.venue?.fr || ev.venue?.en) : (ev.venue?.en || ev.venue?.fr);
+                                    const evImg = getImageUrl(ev.coverImage);
+                                    const evDate = new Date(ev.startDate);
+                                    const evDay = String(evDate.getDate()).padStart(2, '0');
+                                    const evMonth = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][evDate.getMonth()];
+                                    const evMinPrice = ev.ticketTypes?.length ? Math.min(...ev.ticketTypes.map((t: any) => t.price)) : 0;
+                                    return (
+                                        <div key={ev.id} className="w-1/3 flex-shrink-0 px-5 sm:px-7 py-8 overflow-visible">
+                                            <Link href={`/event/${ev.id}`} className="w-full max-w-[340px] h-auto event-card relative overflow-visible block cursor-pointer mx-auto">
+                                                <div className="relative z-10 overflow-hidden rounded-tr-2xl rounded-br-2xl rounded-bl-2xl shadow-xl bg-white">
+                                                    <div className="relative w-full h-[340px] overflow-hidden">
+                                                        <Image src={evImg} alt={evTitle || 'Event'} fill className="object-cover" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
+                                                        <div className="absolute top-3 right-3 bg-black/70 rounded shadow-lg overflow-hidden z-20 px-1">
+                                                            <div className="flex items-center gap-1">
+                                                                <Calendar className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
+                                                                <div className="text-lg sm:text-xl font-bold text-white leading-none">{evDay}</div>
+                                                                <div className="text-sm sm:text-base font-bold text-white uppercase">{evMonth}</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="w-full bg-white flex items-stretch justify-between border border-[#7e7b7b] border-t-0 rounded-bl-2xl rounded-br-lg overflow-hidden">
+                                                        <div className='flex flex-col justify-center pl-3 sm:pl-4 py-2 sm:py-3'>
+                                                            <p className="text-xs sm:text-sm font-bold whitespace-nowrap text-gray-900">{evTitle}</p>
+                                                            <p className="text-[10px] sm:text-xs text-[#112b38]">{evVenue}</p>
+                                                        </div>
+                                                        <div className='w-[135px] bg-[#112b38] hover:bg-[#c89c6b] flex-shrink-0 flex flex-col items-center justify-center py-2 sm:py-3 px-4 sm:px-6 text-white rounded-bl-3xl transition-colors duration-300 relative z-10'>
+                                                            <p className="mr-1 sm:mr-2 text-[8px] sm:text-[9.9px]">{t.asFrom}</p>
+                                                            <p className="text-xs sm:text-[15.9px]">Rs {evMinPrice.toLocaleString()}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Link>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                        <div className="flex justify-center gap-2 mt-3">
+                            {Array.from({ length: totalSteps + 1 }).map((_, i) => (
+                                <button key={i} onClick={() => setRelatedCarouselIndex(i)}
+                                    className={`rounded-full transition-all duration-300 ${i === relatedCarouselIndex ? 'w-5 h-2 bg-[#c89c6b]' : 'w-2 h-2 bg-gray-300 hover:bg-[#c89c6b]/60'}`} />
+                            ))}
+                        </div>
                     </div>
-                </div>
-                {/* Dot indicators */}
-                <div className="flex justify-center gap-2 mt-3">
-                    {Array.from({ length: totalSteps + 1 }).map((_, i) => (
-                        <button
-                            key={i}
-                            onClick={() => setRelatedCarouselIndex(i)}
-                            className={`rounded-full transition-all duration-300 ${i === relatedCarouselIndex
-                                ? 'w-5 h-2 bg-[#c89c6b]'
-                                : 'w-2 h-2 bg-gray-300 hover:bg-[#c89c6b]/60'
-                            }`}
-                        />
-                    ))}
-                </div>
-            </div>
+                );
+            })()}
 
             {/* Auth Modal */}
             <AuthModal

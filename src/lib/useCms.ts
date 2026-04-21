@@ -12,6 +12,7 @@ export interface CmsSection {
   image?: string;
   images?: string[];
   extra?: Record<string, any>;
+  isVisible?: boolean;
 }
 
 type PageContent = Record<string, CmsSection>;

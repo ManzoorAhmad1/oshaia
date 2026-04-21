@@ -16,6 +16,8 @@ interface TicketType {
   price: number;
   currency: string;
   totalSeats: number;
+  availableSeats: number;
+  expiryDate: string;        // ISO date string e.g. "2026-05-01"
   description: { en: string; fr: string };
 }
 
@@ -47,6 +49,8 @@ const defaultTicket = (): TicketType => ({
   price: 0,
   currency: 'RS',
   totalSeats: 100,
+  availableSeats: 100,
+  expiryDate: '',
   description: { en: '', fr: '' },
 });
 
@@ -318,27 +322,88 @@ export default function EventForm({ initialData, mode, onSuccess, onCancel }: Pr
                 </button>
               )}
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+
+            {/* Row 1: Names */}
+            <div className="grid grid-cols-2 gap-3">
               <label className="block">
-                <span className="text-xs text-gray-500 mb-1 block">Name (EN)</span>
+                <span className="text-xs text-gray-500 mb-1 block">Name (EN) *</span>
                 <input value={ticket.name.en} onChange={(e) => updateTicket(idx, 'name.en', e.target.value)}
+                  placeholder="e.g. General Admission"
                   className="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]" />
               </label>
               <label className="block">
                 <span className="text-xs text-gray-500 mb-1 block">Name (FR)</span>
                 <input value={ticket.name.fr} onChange={(e) => updateTicket(idx, 'name.fr', e.target.value)}
+                  placeholder="e.g. Admission Générale"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]" />
+              </label>
+            </div>
+
+            {/* Row 2: Price, Total Seats, Available Seats, Expiry Date */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <label className="block">
+                <span className="text-xs text-gray-500 mb-1 block">Price (RS) *</span>
+                <input type="number" min="0" value={ticket.price}
+                  onChange={(e) => updateTicket(idx, 'price', Number(e.target.value))}
                   className="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]" />
               </label>
               <label className="block">
-                <span className="text-xs text-gray-500 mb-1 block">Price</span>
-                <input type="number" min="0" value={ticket.price} onChange={(e) => updateTicket(idx, 'price', Number(e.target.value))}
+                <span className="text-xs text-gray-500 mb-1 block">Total Seats *</span>
+                <input type="number" min="1" value={ticket.totalSeats}
+                  onChange={(e) => {
+                    const total = Number(e.target.value);
+                    updateTicket(idx, 'totalSeats', total);
+                    // keep availableSeats in sync if not already edited
+                    if (ticket.availableSeats === ticket.totalSeats) {
+                      updateTicket(idx, 'availableSeats', total);
+                    }
+                  }}
                   className="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]" />
               </label>
               <label className="block">
-                <span className="text-xs text-gray-500 mb-1 block">Total Seats</span>
-                <input type="number" min="1" value={ticket.totalSeats} onChange={(e) => updateTicket(idx, 'totalSeats', Number(e.target.value))}
+                <span className="text-xs text-gray-500 mb-1 block">Available Seats</span>
+                <input type="number" min="0" max={ticket.totalSeats} value={ticket.availableSeats}
+                  onChange={(e) => updateTicket(idx, 'availableSeats', Number(e.target.value))}
                   className="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]" />
               </label>
+              <label className="block">
+                <span className="text-xs text-gray-500 mb-1 block">Expiry Date</span>
+                <input type="date" value={ticket.expiryDate}
+                  onChange={(e) => updateTicket(idx, 'expiryDate', e.target.value)}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]" />
+              </label>
+            </div>
+
+            {/* Row 3: Short Description */}
+            <div className="grid grid-cols-2 gap-3">
+              <label className="block">
+                <span className="text-xs text-gray-500 mb-1 block">Description (EN)</span>
+                <input value={ticket.description.en} onChange={(e) => updateTicket(idx, 'description.en', e.target.value)}
+                  placeholder="e.g. Standing area access"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]" />
+              </label>
+              <label className="block">
+                <span className="text-xs text-gray-500 mb-1 block">Description (FR)</span>
+                <input value={ticket.description.fr} onChange={(e) => updateTicket(idx, 'description.fr', e.target.value)}
+                  placeholder="e.g. Accès zone debout"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]" />
+              </label>
+            </div>
+
+            {/* Remaining tickets indicator */}
+            <div className="flex items-center gap-2 pt-1">
+              <div className="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
+                <div
+                  className="h-2 rounded-full transition-all duration-500"
+                  style={{
+                    width: ticket.totalSeats > 0 ? `${Math.round((ticket.availableSeats / ticket.totalSeats) * 100)}%` : '0%',
+                    backgroundColor: ticket.availableSeats / ticket.totalSeats > 0.3 ? '#22c55e' : ticket.availableSeats / ticket.totalSeats > 0.1 ? '#f59e0b' : '#ef4444',
+                  }}
+                />
+              </div>
+              <span className="text-xs text-gray-500 whitespace-nowrap">
+                {ticket.availableSeats} / {ticket.totalSeats} remaining
+              </span>
             </div>
           </div>
         ))}

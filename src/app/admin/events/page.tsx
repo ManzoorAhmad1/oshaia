@@ -4,8 +4,16 @@ import React, { useEffect, useState, useCallback } from 'react';
 import api from '@/lib/api';
 import { getImageUrl } from '@/lib/imageUrl';
 import Link from 'next/link';
-import { Plus, Pencil, Trash2, Globe, EyeOff, Loader2, RefreshCw, Search } from 'lucide-react';
+import { Plus, Pencil, Trash2, Globe, EyeOff, Loader2, RefreshCw, Search, Ticket } from 'lucide-react';
 import toast from 'react-hot-toast';
+
+interface TicketTypeSummary {
+  name: { en: string; fr: string };
+  price: number;
+  totalSeats: number;
+  availableSeats?: number;
+  expiryDate?: string;
+}
 
 interface Event {
   id: string;
@@ -16,6 +24,7 @@ interface Event {
   isPublic: boolean;
   badge: string;
   coverImage: string;
+  ticketTypes?: TicketTypeSummary[];
 }
 
 const CATEGORIES = ['all', 'concert', 'festival', 'conferences', 'show', 'sport'];
@@ -44,6 +53,20 @@ export default function AdminEventsPage() {
   }, [category, search]);
 
   useEffect(() => { fetchEvents(); }, [fetchEvents]);
+
+  // Real-time ticket count updates via socket
+  useEffect(() => {
+    import('@/lib/socket').then(({ getSocket }) => {
+      const socket = getSocket();
+      const handler = (data: { eventId: string; ticketTypes: TicketTypeSummary[] }) => {
+        setEvents(prev => prev.map(e =>
+          String(e.id) === String(data.eventId) ? { ...e, ticketTypes: data.ticketTypes } : e
+        ));
+      };
+      socket.on('ticket:updated', handler);
+      return () => { socket.off('ticket:updated', handler); };
+    });
+  }, []);
 
   const toggleVisibility = async (id: string) => {
     setTogglingId(id);
@@ -128,6 +151,7 @@ export default function AdminEventsPage() {
                   <th className="text-left px-4 py-3 font-medium text-gray-600">Event</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-600">Category</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-600">Date</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-600">Tickets</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-600">Status</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-600">Actions</th>
                 </tr>
@@ -135,7 +159,7 @@ export default function AdminEventsPage() {
               <tbody className="divide-y divide-gray-100">
                 {events.length === 0 && (
                   <tr>
-                    <td colSpan={5} className="text-center py-10 text-gray-400">No events found.</td>
+                    <td colSpan={6} className="text-center py-10 text-gray-400">No events found.</td>
                   </tr>
                 )}
                 {events.map((event) => (
@@ -162,6 +186,38 @@ export default function AdminEventsPage() {
                     </td>
                     <td className="px-4 py-3 text-gray-600">
                       {new Date(event.startDate).toLocaleDateString()}
+                    </td>
+                    {/* Tickets remaining */}
+                    <td className="px-4 py-3">
+                      {event.ticketTypes?.length ? (
+                        <div className="space-y-1">
+                          {event.ticketTypes.map((tt, i) => {
+                            const avail = tt.availableSeats ?? tt.totalSeats ?? 0;
+                            const total = tt.totalSeats ?? 0;
+                            const pct = total > 0 ? Math.round((avail / total) * 100) : 0;
+                            const color = pct > 30 ? '#22c55e' : pct > 10 ? '#f59e0b' : '#ef4444';
+                            const daysLeft = tt.expiryDate
+                              ? Math.max(0, Math.ceil((new Date(tt.expiryDate).getTime() - Date.now()) / 86400000))
+                              : null;
+                            return (
+                              <div key={i} className="text-xs">
+                                <div className="flex items-center justify-between gap-2">
+                                  <span className="text-gray-700 font-medium truncate max-w-[90px]">{tt.name?.en || `#${i+1}`}</span>
+                                  <span style={{ color }} className="font-bold whitespace-nowrap">{avail}/{total}</span>
+                                </div>
+                                <div className="w-full bg-gray-100 rounded-full h-1.5 mt-0.5">
+                                  <div className="h-1.5 rounded-full transition-all duration-500" style={{ width: `${pct}%`, backgroundColor: color }} />
+                                </div>
+                                {daysLeft !== null && (
+                                  <span className="text-gray-400 text-[10px]">{daysLeft}d left</span>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <span className="text-gray-400 text-xs">—</span>
+                      )}
                     </td>
                     <td className="px-4 py-3">
                       <button
