@@ -419,7 +419,7 @@ export default function AdminCmsPage() {
       const { data } = await api.get(`/cms/page/${pageKey}`);
       const vis: Record<string, boolean> = {};
       Object.entries(data.content || {}).forEach(([sk, sec]: [string, any]) => {
-        vis[sk] = sec.isVisible !== false;
+        vis[sk] = sec.isVisible === undefined || sec.isVisible === null || Boolean(sec.isVisible);
       });
       setSectionVisibility(prev => ({ ...prev, [pageKey]: vis }));
     } catch {}
@@ -430,7 +430,7 @@ export default function AdminCmsPage() {
     setTogglingKey(key);
     try {
       const { data } = await api.patch(`/cms/page/${pageKey}/${sectionKey}/toggle`);
-      const newVisible = data.section?.isVisible !== false;
+      const newVisible = Boolean(data.section?.isVisible);
       setSectionVisibility(prev => ({
         ...prev,
         [pageKey]: { ...(prev[pageKey] || {}), [sectionKey]: newVisible },
@@ -554,7 +554,7 @@ export default function AdminCmsPage() {
       // Also sync visibility for this page
       const vis: Record<string, boolean> = {};
       Object.entries(data.content || {}).forEach(([sk, sec]: [string, any]) => {
-        vis[sk] = sec.isVisible !== false;
+        vis[sk] = sec.isVisible === undefined || sec.isVisible === null || Boolean(sec.isVisible);
       });
       setSectionVisibility(prev => ({ ...prev, [pageKey]: vis }));
     } catch {

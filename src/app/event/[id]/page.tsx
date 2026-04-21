@@ -81,7 +81,10 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     const router = useRouter();
     // CMS section visibility config for the event detail page
     const { content: cmsEventConfig } = useCms('event');
-    const isSectionVisible = (key: string) => cmsEventConfig[key]?.isVisible !== false;
+    const isSectionVisible = (key: string) => {
+        const vis = cmsEventConfig[key]?.isVisible;
+        return vis === undefined || vis === null || Boolean(vis);
+    };
     const [selectedTicket, setSelectedTicket] = useState<number | null>(null);
     const [activeTab, setActiveTab] = useState<'tickets' | 'description' | 'moreInfo'>('tickets');
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
