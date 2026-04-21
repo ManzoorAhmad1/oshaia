@@ -10,7 +10,8 @@ import api from '@/lib/api'
 import { getImageUrl } from '@/lib/imageUrl'
 
 interface ApiEvent {
-  _id: string;
+  id?: number | string;
+  _id?: string;
   title: { en: string; fr: string };
   category: string;
   startDate: string;
@@ -114,8 +115,8 @@ const EventsSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 sm:gap-14 md:gap-16 lg:gap-20 py-8 overflow-visible justify-items-center">
           {events.map((event, index) => (
             <Link
-              key={event._id}
-              href={`/event/${event._id}`}
+              key={event.id ?? event._id}
+              href={`/event/${event.id ?? event._id}`}
               className="w-full max-w-[340px] h-auto event-card relative overflow-visible block cursor-pointer"
             >
               {/* Badge Image at Top Left */}

@@ -9,7 +9,8 @@ import api from '@/lib/api';
 import { getImageUrl } from '@/lib/imageUrl';
 
 interface ApiEvent {
-  _id: string;
+  id?: number | string;
+  _id?: string;
   title: { en: string; fr: string };
   category: string;
   startDate: string;
@@ -111,7 +112,7 @@ export default function EventsGrid() {
                     <p className="py-16 text-center text-gray-500">{t.noEventsFound || 'No events found.'}</p>
                 ) : (
                     events.map((event) => (
-                        <Link key={event._id} href={`/event/${event._id}`} className="w-full block">
+                        <Link key={event.id ?? event._id} href={`/event/${event.id ?? event._id}`} className="w-full block">
                             <div className="bg-white rounded-xl w-full mx-auto overflow-hidden border border-black cursor-pointer hover:shadow-lg transition-shadow duration-200 p-4">
                                 <div className="flex flex-col sm:flex-row">
                                     {/* Event Image */}

@@ -252,9 +252,60 @@ export default function EventDetailPage({ params }: EventDetailProps) {
         relatedEvents: []
     };
 
-    const currentSlideData = slides[currentSlide];
+    // Build slides dynamically from real event data
+    const dynamicSlides = React.useMemo(() => {
+        if (!apiEvent) return null; // still loading
+        const coverUrl = apiEvent.coverImage ? getImageUrl(apiEvent.coverImage) : null;
+        const built: { id: number; type: string; url: string; alt: string; bgImage?: string; duration: number }[] = [];
 
-    // Live countdown from event.startDate
+        // Slide 1: event's own coverImage
+        built.push({
+            id: 1,
+            type: 'image',
+            url: coverUrl ?? slides[0].url,
+            alt: getLang(apiEvent.title) || 'Event Cover',
+            duration: 6,
+        });
+
+        // Slides 2+: if event has its own slides array use those, otherwise fall back to the static slides (skip index 0)
+        const extraFromApi = Array.isArray(apiEvent.slides) && apiEvent.slides.length > 0;
+        if (extraFromApi) {
+            apiEvent.slides.forEach((s: any, i: number) => {
+                const url = getImageUrl(s.url || s);
+                const isVideo = /\.(mp4|webm|ogg|mov)(\?|$)/i.test(url);
+                built.push({
+                    id: i + 2,
+                    type: isVideo ? 'video' : 'image',
+                    url,
+                    alt: s.alt || `Slide ${i + 2}`,
+                    bgImage: isVideo ? (coverUrl ?? url) : undefined,
+                    duration: 6,
+                });
+            });
+        } else {
+            // Use the remaining static slides (index 1 onward) so videos/images still appear
+            slides.slice(1).forEach((s, i) => {
+                built.push({
+                    ...s,
+                    id: i + 2,
+                    // For video slides, replace bgImage with the event's coverImage
+                    bgImage: s.type === 'video' ? (coverUrl ?? s.bgImage) : undefined,
+                });
+            });
+        }
+
+        return built;
+    }, [apiEvent]);
+
+    // Use dynamic slides once loaded, otherwise keep a placeholder
+    const activeSlides = dynamicSlides ?? slides;
+    const safeCurrentSlide = Math.min(currentSlide, activeSlides.length - 1);
+    const currentSlideData = activeSlides[safeCurrentSlide];
+
+    // Reset to slide 0 when event data loads (new slides array)
+    useEffect(() => {
+        setCurrentSlide(0);
+    }, [dynamicSlides]);
     useEffect(() => {
         const target = new Date(event.startDate).getTime();
         const tick = () => {
@@ -419,7 +470,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     return (
         <div className="relative">
 
-            {/* Background image - matches reference: fixed height, dark inside overlay, gradient below */}
+            {/* Background — blurred event cover image */}
             <div
                 className="absolute top-0 left-0 right-0 -z-10 pointer-events-none overflow-hidden"
                 style={{
@@ -432,13 +483,9 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                     transform: 'scale(1.1)',
                     height: '717px',
                     width: '100%',
-                    display: 'flex',
-                    alignItems: 'flex-end',
                 }}
             >
-                {/* inside overlay – ~55% black opacity */}
                 <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.55)' }} />
-                {/* gradient below – fade to white */}
                 <div
                     className="absolute bottom-0 left-0 right-0 h-[160px]"
                     style={{ background: 'linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.6) 65%, rgba(255,255,255,0.92) 100%)' }}
@@ -449,8 +496,8 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
             {/* Hero Carousel Slider */}
             <TicketHeroSection
-                slides={slides}
-                currentSlide={currentSlide}
+                slides={activeSlides}
+                currentSlide={safeCurrentSlide}
                 setCurrentSlide={setCurrentSlide}
                 currentSlideData={currentSlideData}
             />
