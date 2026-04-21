@@ -14,7 +14,7 @@ const Platinumlist = () => {
 
   const whyBuyTitle = language === 'fr' ? (cms.title?.fr || t.whyBuyWithUs) : (cms.title?.en || t.whyBuyWithUs);
   const seoTitle = language === 'fr' ? (cms.subtitle?.fr || t.dubaiEventsTickets) : (cms.subtitle?.en || t.dubaiEventsTickets);
-  const paymentImage = cms.image || '/Red Simple Typographic 2026 Christmas Supplies Logo.png';
+  const paymentImage = cms.image || '/images/Payment Graphic.jpg.jpeg';
 
   const desc = (n: 1 | 2 | 3 | 4): string => {
     const key = `desc${n}${language}` as string;

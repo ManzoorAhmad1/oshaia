@@ -20,12 +20,25 @@ interface ApiEvent {
 
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
+const DEFAULT_TOP_SELLER_SLIDES = [
+    { id: 'd1', image: '/TOP%20SLLER/22054_9834dd51a16eba240c0c6c97a5237e74-0-en1771488562.jpg', title: '', date: '', price: '' },
+    { id: 'd2', image: '/TOP%20SLLER/22078_75ef9ba7a61c8303513ef023de00195d-0-en1771489174.jpg', title: '', date: '', price: '' },
+    { id: 'd3', image: '/TOP%20SLLER/22099_3899b925d49dbee2814e0c1278a6dc64-0-en1771579388.jpg', title: '', date: '', price: '' },
+];
+
+const DEFAULT_BOTTOM_IMAGES = [
+    '/BIG%20BANNER/Bollywood-Unwind-Slider.jpg',
+    '/BIG%20BANNER/kabul-slider-1.jpg',
+    '/BIG%20BANNER/lv-new-slider.jpg',
+    '/BIG%20BANNER/y2k-slider.jpg',
+];
+
 export default function EventCard() {
     const { t, language } = useLanguage();
     const { get: getCms } = useCms('home');
     const cmsExtra = getCms('topSeller').extra as { slides?: string; bottomImages?: string } | undefined;
 
-    // Build initial slides from CMS extra.slides if available
+    // Build initial slides from CMS extra.slides if available, fall back to defaults
     const buildStaticSlides = () => {
         try {
             if (cmsExtra?.slides) {
@@ -41,10 +54,10 @@ export default function EventCard() {
                 }
             }
         } catch {}
-        return [];
+        return DEFAULT_TOP_SELLER_SLIDES;
     };
 
-    // Build bottom banner images from CMS extra.bottomImages
+    // Build bottom banner images from CMS extra.bottomImages, fall back to defaults
     const buildBottomImages = () => {
         try {
             if (cmsExtra?.bottomImages) {
@@ -52,7 +65,7 @@ export default function EventCard() {
                 if (Array.isArray(parsed) && parsed.length > 0) return parsed;
             }
         } catch {}
-        return [];
+        return DEFAULT_BOTTOM_IMAGES;
     };
 
     const [index, setIndex] = useState(0);
@@ -74,8 +87,15 @@ export default function EventCard() {
         return () => clearInterval(interval);
     }, [bottomImages.length]);
 
-    // Fetch trending events from API — overrides upper CMS static slides only
+    // Fetch trending events from API — only when CMS hasn't configured slides explicitly
     useEffect(() => {
+        // If CMS has explicit slides set, don't override with API
+        const hasCmsSlides = (() => {
+            try { const v = cmsExtra?.slides; if (v) { const p = JSON.parse(v); return Array.isArray(p) && p.length > 0; } } catch {}
+            return false;
+        })();
+        if (hasCmsSlides) return;
+
         api.get('/events', { params: { badge: 'TRENDING', limit: 5 } })
             .then(res => {
                 const events: ApiEvent[] = res.data.data?.events ?? res.data.events ?? [];
