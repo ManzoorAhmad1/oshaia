@@ -283,8 +283,8 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                 });
             });
         } else {
-            // Use the remaining static slides (index 1 onward) so videos/images still appear
-            slides.slice(1).forEach((s, i) => {
+            // Use ALL static slides after the coverImage so nothing is skipped
+            slides.forEach((s, i) => {
                 built.push({
                     ...s,
                     id: i + 2,
