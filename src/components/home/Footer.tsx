@@ -17,7 +17,13 @@ import { useLanguage } from '@/context/LanguageContext';
 const Footer = () => {
   const { language } = useLanguage();
   const { get: getCms } = useCms('footer');
+  const { content: homeCms } = useCms('home');
   const router=useRouter()
+
+  const isHomeVisible = (key: string) => {
+    const vis = homeCms[key]?.isVisible;
+    return vis === undefined || vis === null || Boolean(vis);
+  };
 
   const footerMain = getCms('main');
   const footerSocial = getCms('social');
@@ -73,9 +79,9 @@ const Footer = () => {
   const email = footerContact.extra?.email || 'contact@oshaia.com';
   return (
     <footer className="w-full bg-white">
-      <PartnersSection />
+      {isHomeVisible('partners') && <PartnersSection />}
       <NewsletterSection />
-      <Platinumlist />
+      {isHomeVisible('platinumlist') && <Platinumlist />}
 
       {/* Dark columns section */}
       <div className="w-full bg-[#112b38] py-10 sm:py-12">

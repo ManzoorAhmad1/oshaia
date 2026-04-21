@@ -202,6 +202,9 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                 const daysLeft = tt.expiryDate
                     ? Math.max(0, Math.ceil((new Date(tt.expiryDate).getTime() - Date.now()) / 86400000))
                     : null;
+                const offerEndsIn = tt.expiryDate
+                    ? (daysLeft !== null && daysLeft > 0 ? `Offer ends in` : 'Offer expired')
+                    : '';
                 return {
                     id: i + 1,
                     name: getLang(tt.name),
@@ -209,7 +212,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                     available: tt.availableSeats ?? tt.totalSeats ?? 0,
                     totalSeats: tt.totalSeats ?? 0,
                     description: getLang(tt.description),
-                    offerEndsIn: 'Limited time',
+                    offerEndsIn,
                     daysLeft,
                     days: 'Days',
                 };
@@ -322,24 +325,23 @@ export default function EventDetailPage({ params }: EventDetailProps) {
         }
     }, [artistCarouselIndex, artistNoTransition]);
 
-    // Initialize quantities for tickets on mount only
+    // Initialize quantities when tickets load from API
     useEffect(() => {
+        if (event.tickets.length === 0) return;
         const initialQuantities: { [key: number]: number } = {};
         event.tickets.forEach((ticket: { id: number }) => {
             initialQuantities[ticket.id] = 0;
         });
         setTicketQuantities(initialQuantities);
-    }, []);
+    }, [event.tickets.length]);
 
-    // Increment quantity function - Fixed to ensure state updates properly
+    // Increment quantity function - capped at min(20, available)
     const incrementQuantity = (ticketId: number, maxAvailable: number) => {
+        const cap = Math.min(20, maxAvailable > 0 ? maxAvailable : 20);
         setTicketQuantities(prev => {
             const currentQty = prev[ticketId] || 0;
-            const newQty = Math.min(currentQty + 1, 20);
-            return {
-                ...prev,
-                [ticketId]: newQty
-            };
+            const newQty = Math.min(currentQty + 1, cap);
+            return { ...prev, [ticketId]: newQty };
         });
     };
 
@@ -623,7 +625,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
                                                                 {/* Offer Text - hidden on xs, shown sm+ */}
                                                                 <div className="hidden sm:block font-semibold text-sm flex-shrink-0 whitespace-nowrap text-[#c89c6b] hover:text-[#112b38] transition-colors duration-200">
-                                                                    {ticket.offerEndsIn}{ticket.daysLeft !== null ? ` ${ticket.daysLeft} days` : ''}
+                                                                    {ticket.offerEndsIn}{ticket.offerEndsIn && ticket.daysLeft != null && ticket.daysLeft > 0 ? ` ${ticket.daysLeft} days` : ''}
                                                                 </div>
                                                                 <div className="flex items-center gap-2 flex-shrink-0 ml-auto">
                                                                     {/* Accordion Toggle Button */}
@@ -654,12 +656,12 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                                         </div>
 
                                                                         <button
-                                                                            className={`w-5 h-5 sm:w-6 sm:h-6 border-2 border-[#c89c6b] rounded flex items-center justify-center transition-all duration-300 font-bold text-sm sm:text-base ${ticketQuantities[ticket.id] === 20
+                                                                            className={`w-5 h-5 sm:w-6 sm:h-6 border-2 border-[#c89c6b] rounded flex items-center justify-center transition-all duration-300 font-bold text-sm sm:text-base ${ticketQuantities[ticket.id] >= Math.min(20, ticket.available || 20)
                                                                                 ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400 border-gray-300'
                                                                                 : 'text-[#112b38] hover:bg-[#c89c6b] hover:text-white'
                                                                                 }`}
                                                                             onClick={() => incrementQuantity(ticket.id, ticket.available)}
-                                                                            disabled={ticketQuantities[ticket.id] === 20}
+                                                                            disabled={ticketQuantities[ticket.id] >= Math.min(20, ticket.available || 20)}
                                                                         >
                                                                             +
                                                                         </button>
@@ -671,7 +673,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                             {selectedTicket === ticket.id && (
                                                                 <div className="px-3 sm:px-4 py-3 bg-white border-t border-gray-200">
                                                                     <p className="text-sm text-gray-600">{ticket.description}</p>
-                                                                    <p className="text-xs text-[#112b38] mt-2">Only {ticket.available} tickets available (Max 20 per person)</p>
+                                                                    <p className="text-xs text-[#112b38] mt-2">Only {ticket.available} tickets available (Max {Math.min(20, ticket.available)} per person)</p>
                                                                 </div>
                                                             )}
                                                         </div>

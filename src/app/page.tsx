@@ -6,8 +6,6 @@ import BestOfSessassonSlider from '@/components/home/BestOfSessassonSlider'
 import EventsSection from '@/components/home/EventsSection'
 import Footer from '@/components/home/Footer'
 import Top_seller from '@/components/home/top_seller'
-import PartnersSection from '@/components/home/PartnersSection'
-import Platinumlist from '@/components/home/platinumlist'
 import { useCms } from '@/lib/useCms'
 
 const HomePage = () => {
@@ -24,8 +22,6 @@ const HomePage = () => {
         {isVisible('bestOfSeason') && <BestOfSessassonSlider />}
         {isVisible('events') && <EventsSection />}
         {isVisible('topSeller') && <Top_seller />}
-        {isVisible('partners') && <PartnersSection />}
-        {isVisible('platinumlist') && <Platinumlist />}
       </main>
       <Footer />
     </div>

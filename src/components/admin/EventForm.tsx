@@ -48,8 +48,8 @@ const defaultTicket = (): TicketType => ({
   name: { en: '', fr: '' },
   price: 0,
   currency: 'RS',
-  totalSeats: 100,
-  availableSeats: 100,
+  totalSeats: 0,
+  availableSeats: 0,
   expiryDate: '',
   description: { en: '', fr: '' },
 });

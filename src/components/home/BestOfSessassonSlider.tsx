@@ -60,8 +60,9 @@ const BestOfSessassonSlider = () => {
             .catch(() => {})
     }, [language])
 
-    // Priority: API featured events → CMS images
-    const slideList: SlideData[] = apiSlides.length ? apiSlides : cmsSlides
+    // Priority: CMS images first (admin uploads those intentionally).
+    // Fall back to API featured events only when no CMS images are set.
+    const slideList: SlideData[] = cmsSlides.length ? cmsSlides : apiSlides
 
     // Auto-slide functionality
     useEffect(() => {
