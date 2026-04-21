@@ -153,9 +153,9 @@ const EventsSection = () => {
 
                 {/* Event Info */}
                 <div className="w-full bg-white flex items-stretch justify-between border border-[#7e7b7b] border-t-0 rounded-bl-2xl rounded-br-lg overflow-hidden">
-                  <div className='flex flex-col justify-center pl-3 sm:pl-4 py-2 sm:py-3'>
-                    <p className="text-xs sm:text-sm font-bold whitespace-nowrap">{getTitle(event)}</p>
-                    <p className="text-[10px] sm:text-xs text-[#112b38]">{getVenue(event)}</p>
+                  <div className='flex flex-col justify-center pl-3 sm:pl-4 py-2 sm:py-3 min-w-0 flex-1 overflow-hidden'>
+                    <p className="text-xs sm:text-sm font-bold truncate">{getTitle(event)}</p>
+                    <p className="text-[10px] sm:text-xs text-[#112b38] truncate">{getVenue(event)}</p>
                   </div>
                   <div className='w-[135px] bg-[#112b38] hover:bg-[#c89c6b] flex-shrink-0 flex flex-col items-center justify-center py-2 sm:py-3 px-4 sm:px-6 text-white rounded-bl-3xl transition-colors duration-300 relative z-10'>
                     <p className="mr-1 sm:mr-2 text-[8px] sm:text-[9.9px]">{t.asFrom}</p>
