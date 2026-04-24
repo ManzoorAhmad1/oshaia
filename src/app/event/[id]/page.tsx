@@ -220,10 +220,12 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                     offerEndsIn,
                     daysLeft,
                     days: 'Days',
+                    buy1Get1: tt.buy1Get1 ?? false,
                 };
             })
             : [],
-        relatedEvents: []
+        relatedEvents: [],
+        bookingLink: apiEvent?.bookingLink ?? '',
     };
 
     // Build slides dynamically from real event data
@@ -616,14 +618,21 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         {!isTicketsCollapsed && (
                                             <div className="px-0 py-4">
                                                 <div className="space-y-3">
-                                                    {event.tickets.map((ticket: { id: number; name: string; price: number; available: number; totalSeats?: number; description: string; offerEndsIn: string; daysLeft?: number | null; days: string }) => (
+                                                    {event.tickets.map((ticket: { id: number; name: string; price: number; available: number; totalSeats?: number; description: string; offerEndsIn: string; daysLeft?: number | null; days: string; buy1Get1?: boolean }) => (
                                                         <div key={ticket.id} className="bg-gray-100 rounded-lg overflow-hidden">
                                                             {/* Main Ticket Row - always horizontal */}
                                                             <div className="px-3 sm:px-4 py-2 flex flex-row items-center gap-3 sm:gap-4">
                                                                 {/* Ticket Name */}
-                                                                <Text className="font-bold text-xs sm:text-sm text-[#112b38] flex-shrink-0 whitespace-nowrap min-w-[110px] sm:min-w-[140px]">
+                                                                <div className="flex flex-col flex-shrink-0 min-w-[110px] sm:min-w-[140px]">
+                                                                  <Text className="font-bold text-xs sm:text-sm text-[#112b38] whitespace-nowrap">
                                                                     {ticket.name}
-                                                                </Text>
+                                                                  </Text>
+                                                                  {ticket.buy1Get1 && (
+                                                                    <span className="inline-flex items-center gap-0.5 mt-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-green-100 text-green-700 w-fit">
+                                                                      🎁 1+1 FREE
+                                                                    </span>
+                                                                  )}
+                                                                </div>
 
                                                                 {/* Price */}
                                                                 <div className="font-bold text-sm sm:text-lg text-[#112b38] flex-shrink-0 whitespace-nowrap min-w-[70px] sm:min-w-[90px]">
@@ -678,9 +687,18 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
                                                             {/* Accordion Content */}
                                                             {selectedTicket === ticket.id && (
-                                                                <div className="px-3 sm:px-4 py-3 bg-white border-t border-gray-200">
+                                                                <div className="px-3 sm:px-4 py-3 bg-white border-t border-gray-200 space-y-1.5">
                                                                     <p className="text-sm text-gray-600">{ticket.description}</p>
-                                                                    <p className="text-xs text-[#112b38] mt-2">Only {ticket.available} tickets available (Max {Math.min(20, ticket.available)} per person)</p>
+                                                                    <p className="text-xs text-[#112b38]">Only {ticket.available} tickets available (Max {Math.min(20, ticket.available)} per person)</p>
+                                                                    {ticket.buy1Get1 && (
+                                                                        <div className="flex items-center gap-2 mt-1 p-2 rounded-lg bg-green-50 border border-green-200">
+                                                                            <span className="text-lg">🎁</span>
+                                                                            <div>
+                                                                                <p className="text-xs font-bold text-green-700">Buy 1 Get 1 Free!</p>
+                                                                                <p className="text-[11px] text-green-600">Each ticket purchased comes with 1 free ticket.</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
                                                                 </div>
                                                             )}
                                                         </div>
@@ -976,11 +994,19 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                         <p className="text-lg sm:text-xl font-bold text-red-500 whitespace-nowrap">Rs {calculateTotal().toLocaleString()}</p>
                                     </div>
                                     <button
-                                        onClick={() => router.push(`/event/${params.id}/checkout`)}
-                                        disabled={calculateTotal() === 0}
-                                        className={`w-full sm:w-auto font-semibold px-6 py-2 sm:py-2.5 rounded-lg transition-all duration-300 shadow-md whitespace-nowrap ${calculateTotal() === 0 ? 'bg-gray-300 text-gray-400 cursor-not-allowed' : 'bg-[#c89c6b] hover:bg-[#b8885a] text-white hover:scale-105 hover:shadow-lg'}`}
+                                        onClick={() => {
+                                            if (event.bookingLink) {
+                                                window.open(event.bookingLink, '_blank', 'noopener,noreferrer');
+                                            } else {
+                                                router.push(`/event/${params.id}/checkout`);
+                                            }
+                                        }}
+                                        disabled={calculateTotal() === 0 && !event.bookingLink}
+                                        className={`w-full sm:w-auto font-semibold px-6 py-2 sm:py-2.5 rounded-lg transition-all duration-300 shadow-md whitespace-nowrap ${(calculateTotal() === 0 && !event.bookingLink) ? 'bg-gray-300 text-gray-400 cursor-not-allowed' : 'bg-[#c89c6b] hover:bg-[#b8885a] text-white hover:scale-105 hover:shadow-lg'}`}
                                     >
-                                        {t.bookNow}
+                                        {event.bookingLink ? (
+                                            <span className="flex items-center gap-1.5"><Link2 className="w-4 h-4" /> Book via Partner</span>
+                                        ) : t.bookNow}
                                     </button>
                                 </div>
 

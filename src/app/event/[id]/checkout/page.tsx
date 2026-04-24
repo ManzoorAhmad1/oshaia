@@ -20,7 +20,7 @@ interface ApiEvent {
     startTime?: string;
     venue: { en: string; fr: string };
     coverImage?: string;
-    ticketTypes: Array<{ name: { en: string; fr: string } | string; price: number; processingFee?: number; discount?: number; discountType?: 'flat' | 'percent'; totalSeats?: number; availableSeats?: number; quantity?: number; sold?: number }>;
+    ticketTypes: Array<{ name: { en: string; fr: string } | string; price: number; processingFee?: number; discount?: number; discountType?: 'flat' | 'percent'; totalSeats?: number; availableSeats?: number; quantity?: number; sold?: number; buy1Get1?: boolean }>;
 }
 
 export default function CheckoutPage({ params }: { params: { id: string } }) {
@@ -399,8 +399,22 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
                                     </div>
                                     <div className="flex items-center justify-between text-sm">
                                         <span className="text-gray-500">Quantity</span>
-                                        <span className="font-medium text-[#112b38]">{qty}</span>
+                                        <span className="font-medium text-[#112b38]">{qty} ticket{qty > 1 ? 's' : ''}</span>
                                     </div>
+                                    {selectedTicket?.buy1Get1 && (
+                                        <div className="flex items-center justify-between text-sm">
+                                            <span className="flex items-center gap-1 text-green-600 font-medium">
+                                                🎁 Buy 1 Get 1 Free
+                                            </span>
+                                            <span className="font-bold text-green-600">+{qty} FREE</span>
+                                        </div>
+                                    )}
+                                    {selectedTicket?.buy1Get1 && (
+                                        <div className="flex items-center justify-between text-xs text-green-700 bg-green-50 rounded-lg px-3 py-1.5">
+                                            <span>Total tickets you receive</span>
+                                            <span className="font-bold">{qty * 2} tickets</span>
+                                        </div>
+                                    )}
                                     {discountAmt > 0 && (
                                         <div className="flex items-center justify-between text-sm">
                                             <span className="text-gray-500">

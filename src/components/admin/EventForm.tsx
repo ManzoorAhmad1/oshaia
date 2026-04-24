@@ -4,7 +4,7 @@ import React, { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import { getImageUrl } from '@/lib/imageUrl';
-import { Loader2, Upload, Globe, EyeOff, Plus, Trash2 } from 'lucide-react';
+import { Loader2, Upload, Globe, EyeOff, Plus, Trash2, Link2, Gift } from 'lucide-react';
 // X imported for potential future use — kept for modal close button usage by consumers
 import toast from 'react-hot-toast';
 
@@ -22,6 +22,7 @@ interface TicketType {
   availableSeats: number;
   expiryDate: string;        // ISO date string e.g. "2026-05-01"
   description: { en: string; fr: string };
+  buy1Get1: boolean;
 }
 
 interface EventFormData {
@@ -35,6 +36,7 @@ interface EventFormData {
   startTime: string;
   endTime: string;
   badge: string;
+  bookingLink: string;
   isPublic: boolean;
   coverImage: string;
   ticketTypes: TicketType[];
@@ -58,6 +60,7 @@ const defaultTicket = (): TicketType => ({
   availableSeats: 0,
   expiryDate: '',
   description: { en: '', fr: '' },
+  buy1Get1: false,
 });
 
 const defaultForm = (): EventFormData => ({
@@ -71,6 +74,7 @@ const defaultForm = (): EventFormData => ({
   startTime: '',
   endTime: '',
   badge: '',
+  bookingLink: '',
   isPublic: false,
   coverImage: '',
   ticketTypes: [defaultTicket()],
@@ -245,6 +249,30 @@ export default function EventForm({ initialData, mode, onSuccess, onCancel }: Pr
               {form.isPublic ? 'Public' : 'Private'}
             </button>
           </label>
+        </div>
+      </section>
+
+      {/* ── External Booking Link ── */}
+      <section className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
+        <div className="flex items-center gap-2">
+          <Link2 className="w-4 h-4 text-[#c89c6b]" />
+          <h2 className="font-semibold text-gray-800">External Booking Link</h2>
+          <span className="text-xs text-gray-400 font-normal">(optional)</span>
+        </div>
+        <div className="space-y-1.5">
+          <input
+            type="url"
+            placeholder="https://example.com/book — leave empty to use built-in checkout"
+            value={form.bookingLink}
+            onChange={(e) => setField('bookingLink', e.target.value)}
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]"
+          />
+          {form.bookingLink && (
+            <p className="text-xs text-amber-600 flex items-center gap-1">
+              <Link2 className="w-3 h-3" />
+              Users will be redirected to this external URL to book tickets.
+            </p>
+          )}
         </div>
       </section>
 
@@ -436,6 +464,28 @@ export default function EventForm({ initialData, mode, onSuccess, onCancel }: Pr
                   placeholder="e.g. Accès zone debout"
                   className="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]" />
               </label>
+            </div>
+
+            {/* Row 4: Buy 1 Get 1 Free toggle */}
+            <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50 border border-dashed border-gray-200">
+              <div className="flex items-center gap-2">
+                <Gift className="w-4 h-4 text-[#c89c6b]" />
+                <div>
+                  <p className="text-sm font-medium text-gray-700">Buy 1 Get 1 Free</p>
+                  <p className="text-xs text-gray-400">User pays for 1 ticket and gets 2</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => updateTicket(idx, 'buy1Get1', !ticket.buy1Get1)}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
+                  ticket.buy1Get1 ? 'bg-[#c89c6b]' : 'bg-gray-300'
+                }`}
+              >
+                <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${
+                  ticket.buy1Get1 ? 'translate-x-6' : 'translate-x-1'
+                }`} />
+              </button>
             </div>
 
             {/* Remaining tickets indicator */}
