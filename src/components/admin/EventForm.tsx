@@ -14,6 +14,9 @@ const BADGES = ['', 'TRENDING', 'HOT', 'NEW'];
 interface TicketType {
   name: { en: string; fr: string };
   price: number;
+  processingFee: number;
+  discount: number;
+  discountType: 'flat' | 'percent';
   currency: string;
   totalSeats: number;
   availableSeats: number;
@@ -47,6 +50,9 @@ interface Props {
 const defaultTicket = (): TicketType => ({
   name: { en: '', fr: '' },
   price: 0,
+  processingFee: 0,
+  discount: 0,
+  discountType: 'flat',
   currency: 'RS',
   totalSeats: 0,
   availableSeats: 0,
@@ -339,17 +345,58 @@ export default function EventForm({ initialData, mode, onSuccess, onCancel }: Pr
               </label>
             </div>
 
-            {/* Row 2: Price, Total Seats, Available Seats, Expiry Date */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {/* Row 2: Price, Processing Fee, Discount, Total Seats, Available Seats, Expiry Date */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               <label className="block">
                 <span className="text-xs text-gray-500 mb-1 block">Price (RS) *</span>
                 <input type="number" min="0" value={ticket.price}
+                  onFocus={(e) => e.target.select()}
                   onChange={(e) => updateTicket(idx, 'price', Number(e.target.value))}
                   className="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]" />
               </label>
               <label className="block">
+                <span className="text-xs text-gray-500 mb-1 block">Processing Fee</span>
+                <input type="number" min="0" value={ticket.processingFee ?? 0}
+                  onFocus={(e) => e.target.select()}
+                  onChange={(e) => updateTicket(idx, 'processingFee', Number(e.target.value))}
+                  placeholder="e.g. 30"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]" />
+              </label>
+              {/* Discount */}
+              <div className="block">
+                <span className="text-xs text-gray-500 mb-1 block">Discount</span>
+                <div className="flex gap-1.5">
+                  <input type="number" min="0" value={ticket.discount ?? 0}
+                    onFocus={(e) => e.target.select()}
+                    onChange={(e) => updateTicket(idx, 'discount', Number(e.target.value))}
+                    placeholder="0"
+                    className="flex-1 min-w-0 border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]" />
+                  <select
+                    value={ticket.discountType ?? 'flat'}
+                    onChange={(e) => updateTicket(idx, 'discountType', e.target.value)}
+                    className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b] bg-white"
+                  >
+                    <option value="flat">RS</option>
+                    <option value="percent">%</option>
+                  </select>
+                </div>
+                {/* Preview discounted price */}
+                {(ticket.discount ?? 0) > 0 && (
+                  <p className="text-[10px] text-[#c89c6b] mt-1">
+                    Final: RS {(
+                      ticket.discountType === 'percent'
+                        ? ticket.price - (ticket.price * (ticket.discount / 100))
+                        : ticket.price - ticket.discount
+                    ).toFixed(0)}
+                  </p>
+                )}
+              </div>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <label className="block">
                 <span className="text-xs text-gray-500 mb-1 block">Total Seats *</span>
                 <input type="number" min="1" value={ticket.totalSeats}
+                  onFocus={(e) => e.target.select()}
                   onChange={(e) => {
                     const total = Number(e.target.value);
                     updateTicket(idx, 'totalSeats', total);
@@ -363,6 +410,7 @@ export default function EventForm({ initialData, mode, onSuccess, onCancel }: Pr
               <label className="block">
                 <span className="text-xs text-gray-500 mb-1 block">Available Seats</span>
                 <input type="number" min="0" max={ticket.totalSeats} value={ticket.availableSeats}
+                  onFocus={(e) => e.target.select()}
                   onChange={(e) => updateTicket(idx, 'availableSeats', Number(e.target.value))}
                   className="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]" />
               </label>

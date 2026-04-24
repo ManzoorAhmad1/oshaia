@@ -4,7 +4,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import api from '@/lib/api';
 import { getImageUrl } from '@/lib/imageUrl';
 import Link from 'next/link';
-import { Plus, Pencil, Trash2, Globe, EyeOff, Loader2, RefreshCw, Search, Ticket } from 'lucide-react';
+import { Plus, Pencil, Trash2, Globe, EyeOff, Eye, Loader2, RefreshCw, Search, X, Tag, Calendar, MapPin } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface TicketTypeSummary {
@@ -36,6 +36,7 @@ export default function AdminEventsPage() {
   const [category, setCategory] = useState('all');
   const [togglingId, setTogglingId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [previewEvent, setPreviewEvent] = useState<Event | null>(null);
 
   const fetchEvents = useCallback(async () => {
     setLoading(true);
@@ -96,6 +97,7 @@ export default function AdminEventsPage() {
   };
 
   return (
+    <>
     <div className="p-6 lg:p-8 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-3">
@@ -241,6 +243,13 @@ export default function AdminEventsPage() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setPreviewEvent(event)}
+                          className="p-1.5 text-gray-500 hover:text-[#c89c6b] hover:bg-[#c89c6b]/10 rounded-lg transition-colors"
+                          title="Preview"
+                        >
+                          <Eye className="w-4 h-4" />
+                        </button>
                         <Link
                           href={`/admin/events/${event.id}/edit`}
                           className="p-1.5 text-gray-500 hover:text-[#112b38] hover:bg-[#c89c6b]/10 rounded-lg transition-colors"
@@ -268,5 +277,134 @@ export default function AdminEventsPage() {
         </div>
       )}
     </div>
+
+      {/* Preview Modal */}
+      {previewEvent && (
+        <div
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          onClick={() => setPreviewEvent(null)}
+        >
+          <div
+            className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Cover Image */}
+            <div className="relative w-full h-48 rounded-t-2xl overflow-hidden bg-gray-100">
+              {previewEvent.coverImage ? (
+                <img
+                  src={getImageUrl(previewEvent.coverImage)}
+                  alt={previewEvent.title.en}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-gray-300">
+                  <Tag className="w-12 h-12" />
+                </div>
+              )}
+              {/* Close btn */}
+              <button
+                onClick={() => setPreviewEvent(null)}
+                className="absolute top-3 right-3 bg-black/50 hover:bg-black/70 text-white rounded-full p-1.5 transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+              {/* Badge */}
+              <span className="absolute bottom-3 left-3 px-2 py-0.5 bg-[#112b38]/80 text-white text-xs rounded-full capitalize">
+                {previewEvent.category}
+              </span>
+              {/* Visibility */}
+              <span className={`absolute bottom-3 right-3 px-2 py-0.5 text-xs rounded-full font-medium ${
+                previewEvent.isPublic ? 'bg-green-500/90 text-white' : 'bg-orange-400/90 text-white'
+              }`}>
+                {previewEvent.isPublic ? 'Public' : 'Private'}
+              </span>
+            </div>
+
+            {/* Details */}
+            <div className="p-5 space-y-4">
+              {/* Title */}
+              <div>
+                <h2 className="text-lg font-bold text-[#112b38]">{previewEvent.title.en}</h2>
+                {previewEvent.title.fr && (
+                  <p className="text-sm text-gray-400 mt-0.5">{previewEvent.title.fr}</p>
+                )}
+              </div>
+
+              {/* Date */}
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <Calendar className="w-4 h-4 text-[#c89c6b] flex-shrink-0" />
+                <span>{new Date(previewEvent.startDate).toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
+              </div>
+
+              {/* Tickets */}
+              {previewEvent.ticketTypes && previewEvent.ticketTypes.length > 0 && (
+                <div>
+                  <h3 className="text-sm font-semibold text-[#112b38] mb-2">Ticket Types</h3>
+                  <div className="space-y-3">
+                    {previewEvent.ticketTypes.map((tt, i) => {
+                      const avail = tt.availableSeats ?? tt.totalSeats ?? 0;
+                      const total = tt.totalSeats ?? 0;
+                      const pct = total > 0 ? Math.round((avail / total) * 100) : 0;
+                      const color = pct > 30 ? '#22c55e' : pct > 10 ? '#f59e0b' : '#ef4444';
+                      const daysLeft = tt.expiryDate
+                        ? Math.max(0, Math.ceil((new Date(tt.expiryDate).getTime() - Date.now()) / 86400000))
+                        : null;
+                      return (
+                        <div key={i} className="bg-gray-50 rounded-xl p-3 border border-gray-100">
+                          <div className="flex items-center justify-between mb-1.5">
+                            <div>
+                              <span className="text-sm font-semibold text-[#112b38]">{tt.name?.en || `Type ${i + 1}`}</span>
+                              {tt.name?.fr && <span className="text-xs text-gray-400 ml-2">{tt.name.fr}</span>}
+                            </div>
+                            <span className="text-sm font-bold text-[#c89c6b]">${tt.price ?? 0}</span>
+                          </div>
+                          <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
+                            <span>Available: <b style={{ color }}>{avail}</b> / {total}</span>
+                            {daysLeft !== null && (
+                              <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-medium ${
+                                daysLeft > 7 ? 'bg-green-100 text-green-700' : daysLeft > 0 ? 'bg-orange-100 text-orange-700' : 'bg-red-100 text-red-600'
+                              }`}>
+                                {daysLeft > 0 ? `${daysLeft}d left` : 'Expired'}
+                              </span>
+                            )}
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div
+                              className="h-2 rounded-full transition-all duration-500"
+                              style={{ width: `${pct}%`, backgroundColor: color }}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {(!previewEvent.ticketTypes || previewEvent.ticketTypes.length === 0) && (
+                <p className="text-sm text-gray-400 text-center py-2">No ticket types found</p>
+              )}
+
+              {/* Actions */}
+              <div className="flex gap-2 pt-1">
+                <Link
+                  href={`/admin/events/${previewEvent.id}/edit`}
+                  className="flex-1 flex items-center justify-center gap-2 py-2 bg-[#112b38] text-white rounded-lg text-sm font-medium hover:bg-[#0d2030] transition-colors"
+                  onClick={() => setPreviewEvent(null)}
+                >
+                  <Pencil className="w-3.5 h-3.5" /> Edit Event
+                </Link>
+                <button
+                  onClick={() => setPreviewEvent(null)}
+                  className="px-4 py-2 border border-gray-200 text-gray-600 rounded-lg text-sm hover:bg-gray-50 transition-colors"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

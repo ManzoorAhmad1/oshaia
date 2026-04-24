@@ -20,7 +20,7 @@ interface ApiEvent {
     startTime?: string;
     venue: { en: string; fr: string };
     coverImage?: string;
-    ticketTypes: Array<{ name: string; price: number; quantity: number; sold?: number }>;
+    ticketTypes: Array<{ name: { en: string; fr: string } | string; price: number; processingFee?: number; discount?: number; discountType?: 'flat' | 'percent'; totalSeats?: number; availableSeats?: number; quantity?: number; sold?: number }>;
 }
 
 export default function CheckoutPage({ params }: { params: { id: string } }) {
@@ -71,8 +71,16 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
 
     const selectedTicket = event?.ticketTypes?.[selectedTicketIdx];
     const ticketPrice = selectedTicket?.price ?? 0;
-    const processingFee = 30;
-    const subtotal = ticketPrice * qty;
+    const processingFee = selectedTicket?.processingFee ?? 0;
+    const discountAmt = (() => {
+        const d = selectedTicket?.discount ?? 0;
+        if (!d) return 0;
+        return selectedTicket?.discountType === 'percent'
+            ? ticketPrice * (d / 100)
+            : d;
+    })();
+    const discountedPrice = Math.max(0, ticketPrice - discountAmt);
+    const subtotal = discountedPrice * qty;
     const total = subtotal + processingFee;
 
     const handlePayNow = async () => {
@@ -387,12 +395,20 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
                                 <div className="space-y-2 pt-3">
                                     <div className="flex items-center justify-between text-sm">
                                         <span className="text-gray-500">Tickets</span>
-                                        <span className="font-medium text-[#112b38]">Rs {subtotal.toFixed(2)}</span>
+                                        <span className="font-medium text-[#112b38]">Rs {(ticketPrice * qty).toFixed(2)}</span>
                                     </div>
                                     <div className="flex items-center justify-between text-sm">
                                         <span className="text-gray-500">Quantity</span>
                                         <span className="font-medium text-[#112b38]">{qty}</span>
                                     </div>
+                                    {discountAmt > 0 && (
+                                        <div className="flex items-center justify-between text-sm">
+                                            <span className="text-gray-500">
+                                                Discount{selectedTicket?.discountType === 'percent' ? ` (${selectedTicket.discount}%)` : ''}
+                                            </span>
+                                            <span className="font-medium text-green-600">- Rs {(discountAmt * qty).toFixed(2)}</span>
+                                        </div>
+                                    )}
                                     <div className="flex items-center justify-between text-sm">
                                         <span className="text-gray-500">Processing Fee</span>
                                         <span className="font-medium text-[#112b38]">Rs {processingFee}</span>
