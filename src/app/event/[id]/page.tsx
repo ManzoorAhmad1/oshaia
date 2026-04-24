@@ -81,10 +81,15 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     const router = useRouter();
     // CMS section visibility config for the event detail page
     const { content: cmsEventConfig } = useCms('event');
+    const { content: cmsHomeConfig } = useCms('home');
     const isSectionVisible = (key: string) => {
         const vis = cmsEventConfig[key]?.isVisible;
         return vis === undefined || vis === null || Boolean(vis);
     };
+    const showBadge = (() => {
+        const vis = cmsHomeConfig['events']?.extra?.showBadge;
+        return vis === undefined || vis === null || vis === true || vis === 'true' || vis === 1 || vis === '1';
+    })();
     const [selectedTicket, setSelectedTicket] = useState<number | null>(null);
     const [activeTab, setActiveTab] = useState<'tickets' | 'description' | 'moreInfo'>('tickets');
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -470,6 +475,8 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                 currentSlide={safeCurrentSlide}
                 setCurrentSlide={setCurrentSlide}
                 currentSlideData={currentSlideData}
+                badge={`/images/LOGO TAG/${((Number(params.id) || 1) % 6) + 1}.png`}
+                showBadge={showBadge}
             />
 
             <div className="relative min-h-screen mt-8">

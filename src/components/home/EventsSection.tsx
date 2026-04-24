@@ -26,7 +26,11 @@ const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov
 
 const EventsSection = () => {
   const { t, language } = useLanguage()
-  const { get: getCms } = useCms('home')
+  const { get: getCms, content: homeCms } = useCms('home')
+  const showBadge = (() => {
+    const vis = homeCms['events']?.extra?.showBadge;
+    return vis === undefined || vis === null || vis === true || vis === 'true' || vis === 1 || vis === '1';
+  })();
   const [activeCategory, setActiveCategory] = useState('all')
   const [events, setEvents] = useState<ApiEvent[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -120,6 +124,7 @@ const EventsSection = () => {
               className="w-full max-w-[340px] h-auto event-card relative overflow-visible block cursor-pointer"
             >
               {/* Badge Image at Top Left */}
+              {showBadge && (
               <div className="hidden sm:block absolute -top-[28px] -left-[59px] w-[420px] h-auto z-50 pointer-events-none">
                 <img
                   src={`/images/LOGO TAG/${(index % 6) + 1}.png`}
@@ -127,6 +132,7 @@ const EventsSection = () => {
                   className="w-full h-auto object-contain scale-110"
                 />
               </div>
+              )}
 
               {/* Main Content */}
               <div className="relative z-10 overflow-hidden rounded-tr-2xl rounded-br-2xl rounded-bl-2xl shadow-xl bg-white">

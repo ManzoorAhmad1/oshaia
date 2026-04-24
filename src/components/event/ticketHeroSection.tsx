@@ -6,7 +6,7 @@ import { ChevronsLeft, ChevronsRight } from "lucide-react"
 // Mock data array with images and videos
 
 
-const TicketHeroSection = ({currentSlide,slides,setCurrentSlide,currentSlideData}:any) => {
+const TicketHeroSection = ({currentSlide,slides,setCurrentSlide,currentSlideData,badge,showBadge}:any) => {
     const [isMuted, setIsMuted] = useState(true)
     const [isPlaying, setIsPlaying] = useState(true)
     const videoRef = useRef<HTMLVideoElement>(null)
@@ -119,6 +119,12 @@ const TicketHeroSection = ({currentSlide,slides,setCurrentSlide,currentSlideData
     return (
         <div className="max-w-full h-auto mx-auto" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             <div className="relative max-w-full sm:max-w-[1400.1px] h-[200px] sm:h-[280px] md:h-[320px] lg:h-[357.5px] mx-auto px-4 lg:px-8 xl:px-12 2xl:px-16 pt-4 sm:pt-6">
+                {/* Badge top-left overlay — anchored to image corner, outside overflow-hidden */}
+                {showBadge && badge && (
+                  <div className="absolute top-0 left-[-24px] lg:left-[-24px] xl:left-[-24px] 2xl:left-2 w-[320px] sm:w-[400px] lg:w-[460px] h-auto z-30 pointer-events-none -translate-x-6 -translate-y-6">
+                    <img src={badge} alt="Badge" className="w-full h-auto object-contain" />
+                  </div>
+                )}
                 <div className="relative w-full h-full rounded-xl sm:rounded-xl lg:rounded-3xl overflow-hidden shadow-lg sm:shadow-xl lg:shadow-2xl">
                     <div className="relative w-full h-full">
                         <div className="absolute top-2 right-2 sm:top-3 sm:right-3 z-20">

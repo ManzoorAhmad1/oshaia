@@ -12,7 +12,7 @@
  * so switching between local (localhost:5000) and production (Hostinger)
  * only requires changing that env variable.
  */
-const _rawUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const _rawUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.oshaia.com/api';
 const BACKEND_BASE = (_rawUrl.startsWith('http') ? _rawUrl : `https://${_rawUrl}`).replace('/api', '');
 
 export function getImageUrl(

@@ -6,7 +6,7 @@ import api from '@/lib/api';
 import { getImageUrl } from '@/lib/imageUrl';
 import { clearCmsCache } from '@/lib/useCms';
 import EventForm from '@/components/admin/EventForm';
-import { Loader2, Save, Upload, Plus, Trash2, ChevronDown, ChevronUp, Pencil, Globe, EyeOff, Eye, CalendarDays, X, ToggleLeft, ToggleRight, ChevronRight } from 'lucide-react';
+import { Loader2, Save, Upload, Plus, Trash2, ChevronDown, ChevronUp, Pencil, Globe, EyeOff, Eye, CalendarDays, X, ToggleLeft, ToggleRight, ChevronRight, ShieldAlert, Tag } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 // ── CmsEvent type (for inline event manager) ─────────────────────────────
@@ -403,6 +403,53 @@ export default function AdminCmsPage() {
   // visibility: { pageKey: { sectionKey: isVisible } } — loaded lazily per page
   const [sectionVisibility, setSectionVisibility] = useState<Record<string, Record<string, boolean>>>({});
   const [togglingKey, setTogglingKey] = useState<string | null>(null);
+  const [togglingBadge, setTogglingBadge] = useState(false);
+  const [pendingBadgeToggle, setPendingBadgeToggle] = useState(false);
+
+  // badge visibility — derived from loaded content (home > events > extra.showBadge)
+  const badgeVisible = (() => {
+    const v = content['events']?.extra?.showBadge ?? sectionVisibility['home']?.['events__badge'];
+    if (v === undefined || v === null) return true;
+    return v === true || v === 'true' || v === 1 || v === '1';
+  })();
+
+  const performBadgeToggle = async () => {
+    setTogglingBadge(true);
+    try {
+      const current = content['events']?.extra || {};
+      const newVal = !badgeVisible;
+      const { data: res } = await api.put('/cms/page/home/events', {
+        pageKey: 'home', sectionKey: 'events',
+        extra: { ...current, showBadge: newVal },
+      });
+      setContent(prev => ({ ...prev, events: res.section }));
+      clearCmsCache('home');
+      toast.success(`Event badges ${newVal ? 'shown' : 'hidden'}`);
+    } catch {
+      toast.error('Failed to update badge visibility');
+    } finally {
+      setTogglingBadge(false);
+    }
+  };
+
+  const handleToggleBadge = () => {
+    if (badgeVisible) {
+      // hiding → require credentials
+      setPendingBadgeToggle(true);
+      setConfirmModal({ pageKey: 'home', sectionKey: 'events__badge' });
+      setConfirmEmail('');
+      setConfirmPassword('');
+      setConfirmError('');
+    } else {
+      // showing → no confirmation needed
+      performBadgeToggle();
+    }
+  };
+  const [confirmModal, setConfirmModal] = useState<{ pageKey: string; sectionKey: string } | null>(null);
+  const [confirmEmail, setConfirmEmail] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [confirmError, setConfirmError] = useState('');
+  const [confirmLoading, setConfirmLoading] = useState(false);
 
   const togglePageExpand = (pageKey: string) => {
     setExpandedPages(prev => {
@@ -425,7 +472,7 @@ export default function AdminCmsPage() {
     } catch {}
   };
 
-  const handleToggleVisibility = async (pageKey: string, sectionKey: string) => {
+  const performToggle = async (pageKey: string, sectionKey: string) => {
     const key = `${pageKey}:${sectionKey}`;
     setTogglingKey(key);
     try {
@@ -435,7 +482,6 @@ export default function AdminCmsPage() {
         ...prev,
         [pageKey]: { ...(prev[pageKey] || {}), [sectionKey]: newVisible },
       }));
-      // If toggling for the active page, update content cache too
       if (pageKey === activePage) {
         setContent(prev => ({
           ...prev,
@@ -448,6 +494,43 @@ export default function AdminCmsPage() {
       toast.error('Toggle failed');
     } finally {
       setTogglingKey(null);
+    }
+  };
+
+  // If currently visible → disabling: show confirm modal. If hidden → enabling: direct.
+  const handleToggleVisibility = (pageKey: string, sectionKey: string) => {
+    const currentlyVisible = sectionVisibility[pageKey]?.[sectionKey] !== false;
+    if (currentlyVisible) {
+      setConfirmModal({ pageKey, sectionKey });
+      setConfirmEmail('');
+      setConfirmPassword('');
+      setConfirmError('');
+    } else {
+      performToggle(pageKey, sectionKey);
+    }
+  };
+
+  const handleConfirmedToggle = async () => {
+    if (!confirmModal) return;
+    if (!confirmEmail.trim() || !confirmPassword.trim()) {
+      setConfirmError('Please enter your email and password.');
+      return;
+    }
+    setConfirmLoading(true);
+    setConfirmError('');
+    try {
+      await api.post('/auth/login', { email: confirmEmail.trim(), password: confirmPassword });
+      if (pendingBadgeToggle) {
+        await performBadgeToggle();
+        setPendingBadgeToggle(false);
+      } else {
+        await performToggle(confirmModal.pageKey, confirmModal.sectionKey);
+      }
+      setConfirmModal(null);
+    } catch {
+      setConfirmError('Invalid email or password. Please try again.');
+    } finally {
+      setConfirmLoading(false);
     }
   };
 
@@ -700,6 +783,7 @@ export default function AdminCmsPage() {
   };
 
   return (
+    <>
     <div className="flex min-h-[calc(100vh-4rem)]">
       {/* ══════════════════════════════════════════════════════════════
           LEFT SIDEBAR — Pages & Sections with visibility toggles
@@ -749,7 +833,22 @@ export default function AdminCmsPage() {
                           >
                             {sLabel}
                           </span>
-                          {/* Visibility toggle */}
+                          {/* Badge toggle — only for home:events (LEFT of eye) */}
+                          {page.key === 'home' && sKey === 'events' && (
+                            <button
+                              type="button"
+                              title={badgeVisible ? 'Badges ON — click to hide' : 'Badges OFF — click to show'}
+                              disabled={togglingBadge}
+                              onClick={(e) => { e.stopPropagation(); handleToggleBadge(); }}
+                              className="flex-shrink-0 focus:outline-none"
+                            >
+                              {togglingBadge
+                                ? <Loader2 className="w-4 h-4 animate-spin text-gray-400" />
+                                : <Tag className={`w-4 h-4 ${badgeVisible ? 'text-[#c89c6b]' : 'text-gray-300'}`} />
+                              }
+                            </button>
+                          )}
+                          {/* Visibility toggle (RIGHT) */}
                           <button
                             type="button"
                             title={isVisible ? 'Click to hide this section' : 'Click to show this section'}
@@ -1127,7 +1226,7 @@ export default function AdminCmsPage() {
                       ))}
                     </div>                    )}
                     {/* Save button */}
-                    {(show.title || show.subtitle || show.description || show.button || show.image || show.gallery || show.extra) && (
+                    {(show.title || show.subtitle || show.description || show.button || show.image || show.gallery || show.extra || (activePage === 'home' && sectionKey === 'events')) && (
                     <div className="flex justify-end pt-2">
                       <button
                         type="button"
@@ -1742,5 +1841,77 @@ export default function AdminCmsPage() {
       )}
       </div>
     </div>
+
+    {/* ── Security Confirm Modal ──────────────────────────────────────── */}
+    {confirmModal && (
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+        onClick={() => { if (!confirmLoading) { setConfirmModal(null); setPendingBadgeToggle(false); } }}>
+        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden"
+          onClick={e => e.stopPropagation()}>
+          {/* Header */}
+          <div className="flex items-center gap-3 px-6 py-4 bg-[#112b38] text-white">
+            <ShieldAlert className="w-5 h-5 text-[#c89c6b] flex-shrink-0" />
+            <div>
+              <h3 className="font-bold text-sm">Security Confirmation</h3>
+              <p className="text-[11px] text-white/70 mt-0.5">
+                {pendingBadgeToggle ? 'Enter your credentials to hide event badges' : 'Enter your credentials to disable this section'}
+              </p>
+            </div>
+          </div>
+          {/* Body */}
+          <div className="px-6 py-5 space-y-4">
+            <div>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Email</label>
+              <input
+                type="email"
+                value={confirmEmail}
+                onChange={e => setConfirmEmail(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleConfirmedToggle()}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]"
+                placeholder="admin@example.com"
+                disabled={confirmLoading}
+                autoFocus
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Password</label>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={e => setConfirmPassword(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleConfirmedToggle()}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b]"
+                placeholder="••••••••"
+                disabled={confirmLoading}
+              />
+            </div>
+            {confirmError && (
+              <p className="text-xs text-red-500 font-medium">{confirmError}</p>
+            )}
+          </div>
+          {/* Footer */}
+          <div className="flex gap-3 px-6 pb-5">
+            <button
+              type="button"
+              onClick={() => { setConfirmModal(null); setPendingBadgeToggle(false); }}
+              disabled={confirmLoading}
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-50"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleConfirmedToggle}
+              disabled={confirmLoading}
+              className="flex-1 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-bold transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+            >
+              {confirmLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <EyeOff className="w-4 h-4" />}
+              Disable
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+    </>
   );
 }
