@@ -170,12 +170,12 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
                                                 className="text-sm font-semibold text-[#112b38] border border-gray-200 rounded px-2 py-1 bg-white"
                                             >
                                                 {event.ticketTypes.map((tt, i) => (
-                                                    <option key={i} value={i}>{tt.name} — Rs {tt.price}</option>
+                                                    <option key={i} value={i}>{typeof tt.name === 'object' ? tt.name.en : tt.name} — Rs {tt.price}</option>
                                                 ))}
                                             </select>
                                         ) : (
                                             <p className="font-semibold text-[#112b38] text-sm">
-                                                {selectedTicket?.name || 'General Admission'}
+                                                {(typeof selectedTicket?.name === 'object' ? selectedTicket.name.en : selectedTicket?.name) || 'General Admission'}
                                             </p>
                                         )}
                                         <p className="text-xs text-gray-500 mt-0.5">Rs {ticketPrice} / ticket</p>
