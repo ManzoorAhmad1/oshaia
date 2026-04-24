@@ -3,6 +3,7 @@ import { Roboto } from "next/font/google";
 import "./globals.css";
 import WhatsAppButton from "@/components/about/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
+import AdminPreviewBar from "@/components/admin/AdminPreviewBar";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { Toaster } from "react-hot-toast";
@@ -57,6 +58,7 @@ export default function RootLayout({
           <OAuthProviders>
             <LanguageProvider>
               <AuthProvider>
+                <AdminPreviewBar />
                 {children}
                 <WhatsAppButton />
                 <ScrollToTop />

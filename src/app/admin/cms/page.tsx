@@ -6,7 +6,7 @@ import api from '@/lib/api';
 import { getImageUrl } from '@/lib/imageUrl';
 import { clearCmsCache } from '@/lib/useCms';
 import EventForm from '@/components/admin/EventForm';
-import { Loader2, Save, Upload, Plus, Trash2, ChevronDown, ChevronUp, Pencil, Globe, EyeOff, Eye, CalendarDays, X, ToggleLeft, ToggleRight, ChevronRight, ShieldAlert, Tag } from 'lucide-react';
+import { Loader2, Save, Upload, Plus, Trash2, ChevronDown, ChevronUp, Pencil, Globe, EyeOff, Eye, CalendarDays, X, ToggleLeft, ToggleRight, ChevronRight, ShieldAlert, Tag, Monitor } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 // ── CmsEvent type (for inline event manager) ─────────────────────────────
@@ -446,6 +446,17 @@ export default function AdminCmsPage() {
     }
   };
   const [confirmModal, setConfirmModal] = useState<{ pageKey: string; sectionKey: string } | null>(null);
+
+
+  // Map CMS page key → frontend URL
+  const PAGE_PREVIEW_URLS: Record<string, string> = {
+    home: '/',
+    about: '/about',
+    footer: '/',
+    help: '/help',
+    terms: '/terms',
+    event: '/event',
+  };
   const [confirmEmail, setConfirmEmail] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [confirmError, setConfirmError] = useState('');
@@ -806,7 +817,19 @@ export default function AdminCmsPage() {
                   className={`w-full flex items-center justify-between px-4 py-2.5 text-left transition-colors hover:bg-gray-50 ${activePage === page.key ? 'bg-[#c89c6b]/8' : ''}`}
                 >
                   <span className={`text-sm font-semibold truncate ${activePage === page.key ? 'text-[#c89c6b]' : 'text-[#112b38]'}`}>{page.label}</span>
-                  <ChevronRight className={`w-3.5 h-3.5 text-gray-400 transition-transform flex-shrink-0 ml-1 ${isExpanded ? 'rotate-90' : ''}`} />
+                  <div className="flex items-center gap-1 flex-shrink-0 ml-1">
+                    {PAGE_PREVIEW_URLS[page.key] && (
+                      <button
+                        type="button"
+                        title={`Preview ${page.label}`}
+                        onClick={(e) => { e.stopPropagation(); window.open(PAGE_PREVIEW_URLS[page.key], '_blank'); }}
+                        className="p-0.5 hover:bg-[#c89c6b]/20 rounded transition-colors"
+                      >
+                        <Monitor className="w-3.5 h-3.5 text-gray-400 hover:text-[#c89c6b]" />
+                      </button>
+                    )}
+                    <ChevronRight className={`w-3.5 h-3.5 text-gray-400 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
+                  </div>
                 </button>
                 {/* Section items */}
                 {isExpanded && (
@@ -1843,8 +1866,7 @@ export default function AdminCmsPage() {
     </div>
 
     {/* ── Security Confirm Modal ──────────────────────────────────────── */}
-    {confirmModal && (
-      <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+    {confirmModal && (      <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
         onClick={() => { if (!confirmLoading) { setConfirmModal(null); setPendingBadgeToggle(false); } }}>
         <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden"
           onClick={e => e.stopPropagation()}>
@@ -1912,6 +1934,7 @@ export default function AdminCmsPage() {
         </div>
       </div>
     )}
+
     </>
   );
 }
