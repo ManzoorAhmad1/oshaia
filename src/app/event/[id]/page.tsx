@@ -199,6 +199,10 @@ export default function EventDetailPage({ params }: EventDetailProps) {
             ? apiEvent.slides.map((s: any) => getImageUrl(s.url))
             : apiEvent?.coverImage
                 ? [getImageUrl(apiEvent.coverImage)]
+                : apiEvent?.bannerLandscape
+                ? [getImageUrl(apiEvent.bannerLandscape)]
+                : apiEvent?.bannerSquare
+                ? [getImageUrl(apiEvent.bannerSquare)]
                 : ["https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&auto=format&fit=crop"],
         description: apiEvent ? getLang(apiEvent.description) : "Join us for an unforgettable evening dedicated to raising awareness and support for mental health initiatives.",
         lineup: [],
@@ -231,7 +235,13 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     // Build slides dynamically from real event data
     const dynamicSlides = React.useMemo(() => {
         if (!apiEvent) return null; // still loading
-        const coverUrl = apiEvent.coverImage ? getImageUrl(apiEvent.coverImage) : null;
+        const coverUrl = apiEvent.coverImage
+            ? getImageUrl(apiEvent.coverImage)
+            : apiEvent.bannerLandscape
+            ? getImageUrl(apiEvent.bannerLandscape)
+            : apiEvent.bannerSquare
+            ? getImageUrl(apiEvent.bannerSquare)
+            : null;
         const built: { id: number; type: string; url: string; alt: string; bgImage?: string; duration: number }[] = [];
 
         // Slide 1: event's own coverImage
@@ -935,7 +945,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                     <h2 className="text-xl sm:text-2xl font-bold mb-4 text-[#112b38]">{t.sitePlan}</h2>
                                     <div className="relative w-full h-[200px] bg-gradient-to-br from-green-50 to-blue-50 rounded-xl overflow-hidden border border-gray-200">
                                         <img
-                                            src='/images/mapImage.png'
+                                            src={apiEvent?.sitePlanImage ? getImageUrl(apiEvent.sitePlanImage) : '/images/mapImage.png'}
                                             className='w-full h-full object-cover'
                                             alt="Site Plan"
                                         />
