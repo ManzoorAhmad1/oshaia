@@ -235,10 +235,11 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     // Build slides dynamically from real event data
     const dynamicSlides = React.useMemo(() => {
         if (!apiEvent) return null; // still loading
-        const coverUrl = apiEvent.coverImage
-            ? getImageUrl(apiEvent.coverImage)
-            : apiEvent.bannerLandscape
+        // Banner 2 (Landscape) is the hero slider image
+        const coverUrl = apiEvent.bannerLandscape
             ? getImageUrl(apiEvent.bannerLandscape)
+            : apiEvent.coverImage
+            ? getImageUrl(apiEvent.coverImage)
             : apiEvent.bannerSquare
             ? getImageUrl(apiEvent.bannerSquare)
             : null;
@@ -457,11 +458,11 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     return (
         <div className="relative">
 
-            {/* Background — blurred event cover image */}
+            {/* Background — Banner 3 (Background Blur) */}
             <div
                 className="absolute top-0 left-0 right-0 -z-10 pointer-events-none overflow-hidden"
                 style={{
-                    backgroundImage: `url(${currentSlideData.type === 'video' ? currentSlideData.bgImage : currentSlideData.url})`,
+                    backgroundImage: `url(${apiEvent?.bannerBgBlur ? getImageUrl(apiEvent.bannerBgBlur) : (currentSlideData.type === 'video' ? currentSlideData.bgImage : currentSlideData.url)})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'top center',
                     backgroundRepeat: 'no-repeat',
@@ -487,7 +488,17 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                 currentSlide={safeCurrentSlide}
                 setCurrentSlide={setCurrentSlide}
                 currentSlideData={currentSlideData}
-                badge={`/images/LOGO TAG/${((Number(params.id) || 1) % 6) + 1}.png`}
+                badge={(() => {
+                    const BADGE_MAP: Record<string,number> = {
+                        'FINAL RELEASE':1,'LIMITED TICKETS':2,'BUY 2 GET 1 FREE':3,'LAST CHANCE':4,
+                        'FLASH SALE':5,'PHASE 4':6,'PHASE 3':7,'PHASE 2':8,'PHASE 1':9,
+                        'EXCLUSIVE':10,'SELLING FAST':11,'EARLY ACCESS':12,'EARLY BIRD':13,
+                        'SOLD OUT':14,'LAST TICKETS':15,
+                    };
+                    const n = apiEvent?.badge && BADGE_MAP[apiEvent.badge] ? BADGE_MAP[apiEvent.badge]
+                            : apiEvent?.earlyBird ? 13 : null;
+                    return n ? `/images/LOGO TAG/${n}.png` : undefined;
+                })()}
                 showBadge={showBadge}
             />
 

@@ -17,10 +17,27 @@ interface ApiEvent {
   startDate: string;
   venue: { en: string; fr: string };
   coverImage?: string;
+  bannerSquare?: string;
+  bannerLandscape?: string;
   ticketTypes: Array<{ price: number }>;
   badge?: string;
+  earlyBird?: boolean;
   slug: string;
 }
+
+// Maps event badge text → LOGO TAG image number
+const BADGE_IMAGE_MAP: Record<string, number> = {
+  'FINAL RELEASE': 1, 'LIMITED TICKETS': 2, 'BUY 2 GET 1 FREE': 3,
+  'LAST CHANCE': 4, 'FLASH SALE': 5, 'PHASE 4': 6, 'PHASE 3': 7,
+  'PHASE 2': 8, 'PHASE 1': 9, 'EXCLUSIVE': 10, 'SELLING FAST': 11,
+  'EARLY ACCESS': 12, 'EARLY BIRD': 13, 'SOLD OUT': 14, 'LAST TICKETS': 15,
+};
+
+const getBadgeImage = (event: ApiEvent): number | null => {
+  if (event.badge && BADGE_IMAGE_MAP[event.badge]) return BADGE_IMAGE_MAP[event.badge];
+  if (event.earlyBird) return 13; // EARLY BIRD
+  return null;
+};
 
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
@@ -69,7 +86,7 @@ const EventsSection = () => {
   }
   const getDay = (dateStr: string) => { const d = new Date(dateStr); return String(d.getDate()).padStart(2,'0'); }
   const getMonth = (dateStr: string) => { const d = new Date(dateStr); return MONTHS[d.getMonth()]; }
-  const getImageSrc = (ev: ApiEvent) => getImageUrl(ev.coverImage);
+  const getImageSrc = (ev: ApiEvent) => getImageUrl(ev.bannerSquare || ev.bannerLandscape || ev.coverImage);
 
   return (
     <section className="mt-10 sm:mt-8 md:mt-10 pb-8 sm:pb-8 md:pb-10">
@@ -124,15 +141,15 @@ const EventsSection = () => {
               className="w-full max-w-[340px] h-auto event-card relative overflow-visible block cursor-pointer"
             >
               {/* Badge Image at Top Left */}
-              {showBadge && (
+              {showBadge && (() => { const badgeNum = getBadgeImage(event); return badgeNum ? (
               <div className="hidden sm:block absolute -top-[28px] -left-[59px] w-[420px] h-auto z-50 pointer-events-none">
                 <img
-                  src={`/images/LOGO TAG/${(index % 6) + 1}.png`}
+                  src={`/images/LOGO TAG/${badgeNum}.png`}
                   alt="Badge"
                   className="w-full h-auto object-contain scale-110"
                 />
               </div>
-              )}
+              ) : null; })()}
 
               {/* Main Content */}
               <div className="relative z-10 overflow-hidden rounded-tr-2xl rounded-br-2xl rounded-bl-2xl shadow-xl bg-white">

@@ -19,10 +19,26 @@ interface ApiEvent {
   venue: { en: string; fr: string };
   address?: { en: string; fr: string };
   coverImage?: string;
+  bannerSquare?: string;
+  bannerLandscape?: string;
   ticketTypes: Array<{ name: { en: string; fr: string }; price: number; totalSeats: number; availableSeats?: number; sold?: number }>;
   badge?: string;
+  earlyBird?: boolean;
   organizer?: string;
 }
+
+const BADGE_IMAGE_MAP: Record<string, number> = {
+  'FINAL RELEASE': 1, 'LIMITED TICKETS': 2, 'BUY 2 GET 1 FREE': 3,
+  'LAST CHANCE': 4, 'FLASH SALE': 5, 'PHASE 4': 6, 'PHASE 3': 7,
+  'PHASE 2': 8, 'PHASE 1': 9, 'EXCLUSIVE': 10, 'SELLING FAST': 11,
+  'EARLY ACCESS': 12, 'EARLY BIRD': 13, 'SOLD OUT': 14, 'LAST TICKETS': 15,
+};
+
+const getBadgeImage = (ev: ApiEvent): number | null => {
+  if (ev.badge && BADGE_IMAGE_MAP[ev.badge]) return BADGE_IMAGE_MAP[ev.badge];
+  if (ev.earlyBird) return 13;
+  return null;
+};
 
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const PAGE_SIZE = 9;
@@ -49,7 +65,9 @@ export default function EventsGrid() {
     const getTitle = (ev: ApiEvent) => language === 'fr' ? (ev.title?.fr || ev.title?.en) : (ev.title?.en || ev.title?.fr);
     const getVenue = (ev: ApiEvent) => language === 'fr' ? (ev.venue?.fr || ev.venue?.en) : (ev.venue?.en || ev.venue?.fr);
     const getMinPrice = (ev: ApiEvent) => ev.ticketTypes?.length ? Math.min(...ev.ticketTypes.map(t => t.price)) : 0;
-    const getImageSrc = (ev: ApiEvent) => getImageUrl(ev.coverImage);
+    // Banner 1 (Square) → left card image   |  Banner 2 (Landscape) → right-side background
+    const getSquareImage   = (ev: ApiEvent) => getImageUrl(ev.bannerSquare   || ev.coverImage);
+    const getLandscapeImage = (ev: ApiEvent) => getImageUrl(ev.bannerLandscape || ev.coverImage);
     const formatDate = (dateStr: string) => {
         const d = new Date(dateStr);
         const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -112,13 +130,19 @@ export default function EventsGrid() {
                     <p className="py-16 text-center text-gray-500">{t.noEventsFound || 'No events found.'}</p>
                 ) : (
                     events.map((event) => (
-                        <Link key={event.id ?? event._id} href={`/event/${event.id ?? event._id}`} className="w-full block">
+                        <Link key={event.id ?? event._id} href={`/event/${event.id ?? event._id}`} className="w-full block relative overflow-visible">
+                            {/* Dynamic badge */}
+                            {(() => { const n = getBadgeImage(event); return n ? (
+                              <div className="hidden sm:block absolute -top-[20px] -left-[40px] w-[280px] h-auto z-20 pointer-events-none">
+                                <img src={`/images/LOGO TAG/${n}.png`} alt="badge" className="w-full h-auto object-contain" />
+                              </div>
+                            ) : null; })()}
                             <div className="bg-white rounded-xl w-full mx-auto overflow-hidden border border-black cursor-pointer hover:shadow-lg transition-shadow duration-200 p-4">
                                 <div className="flex flex-col sm:flex-row">
                                     {/* Event Image */}
                                     <div className="relative w-full sm:w-[200px] md:w-[240px] lg:w-[270px] h-[180px] sm:h-auto flex-shrink-0">
                                         <Image
-                                            src={getImageSrc(event)}
+                                            src={getSquareImage(event)}
                                             alt={getTitle(event) || 'Event'}
                                             fill
                                             className="object-cover rounded-lg"
@@ -137,7 +161,8 @@ export default function EventsGrid() {
                                         <div
                                             className="relative px-4 h-40 flex flex-col gap-2 overflow-hidden justify-center"
                                             style={{
-                                                backgroundImage: `url(${getImageSrc(event)})`,
+                                                backgroundImage: `url(${getLandscapeImage(event)})`,
+
                                                 backgroundSize: 'cover',
                                                 backgroundPosition: 'center',
                                             }}

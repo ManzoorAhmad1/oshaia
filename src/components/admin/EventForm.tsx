@@ -267,16 +267,10 @@ export default function EventForm({ initialData, mode, onSuccess, onCancel }: Pr
   const sinp = 'w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#c89c6b] focus:border-[#c89c6b] bg-white';
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5 max-w-4xl">
-
-      {/* â”€â”€ Event Banners â”€â”€ */}
-      <SectionCard title="Event Banners" icon={<ImageIcon className="w-4 h-4 text-[#c89c6b]" />}>
-        <div className="space-y-4">
-          <FileUploadField label="Banner 1 (Square)" value={form.bannerSquare} onChange={(url) => setField('bannerSquare', url)} hint="Recommended: 1080Ã—1080 (1:1)" />
-          <FileUploadField label="Banner 2 (Landscape)" value={form.bannerLandscape} onChange={(url) => setField('bannerLandscape', url)} hint="Recommended: 1600Ã—900 (16:9)" />
-          <FileUploadField label="Banner 3 (Background Blur)" value={form.bannerBgBlur} onChange={(url) => setField('bannerBgBlur', url)} hint="Used as blurred hero background" />
-        </div>
-      </SectionCard>
+    <form onSubmit={handleSubmit} className="space-y-5">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-5 items-start">
+        {/* ── LEFT COLUMN (main content) ── */}
+        <div className="xl:col-span-2 space-y-5">
 
       {/* â”€â”€ Basic Information â”€â”€ */}
       <SectionCard title="Basic Information" icon={<span className="text-orange-500 text-base">â„¹</span>}>
@@ -331,12 +325,26 @@ export default function EventForm({ initialData, mode, onSuccess, onCancel }: Pr
               </label>
             ))}
           </div>
-          {/* Category / Status / Early Bird */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
+          {/* Category / Badge / Status / Early Bird */}
+          <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 items-end">
             <label className="block">
               <span className="text-xs font-medium text-gray-600 mb-1 block">Category</span>
               <select value={form.category} onChange={(e) => setField('category', e.target.value)} className={inp}>
                 {CATEGORIES.map((c) => <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>)}
+              </select>
+            </label>
+            <label className="block">
+              <span className="text-xs font-medium text-gray-600 mb-1 block">Event Badge</span>
+              <select value={form.badge} onChange={(e) => setField('badge', e.target.value)} className={inp}>
+                <option value="">— None —</option>
+                {[
+                  'FINAL RELEASE', 'LIMITED TICKETS', 'BUY 2 GET 1 FREE', 'LAST CHANCE',
+                  'FLASH SALE', 'PHASE 4', 'PHASE 3', 'PHASE 2', 'PHASE 1',
+                  'EXCLUSIVE', 'SELLING FAST', 'EARLY ACCESS', 'EARLY BIRD',
+                  'SOLD OUT', 'LAST TICKETS',
+                ].map((b) => (
+                  <option key={b} value={b}>{b}</option>
+                ))}
               </select>
             </label>
             <label className="block">
@@ -349,8 +357,8 @@ export default function EventForm({ initialData, mode, onSuccess, onCancel }: Pr
             </label>
             <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50 border border-gray-200">
               <div>
-                <p className="text-xs font-medium text-gray-700">Early Bird Ribbon</p>
-                <p className="text-[11px] text-gray-400">Adds "Early Bird" badge on card</p>
+                <p className="text-xs font-medium text-gray-700">Early Bird</p>
+                <p className="text-[11px] text-gray-400">Adds ribbon on card</p>
               </div>
               <Toggle checked={form.earlyBird} onChange={(v) => setField('earlyBird', v)} />
             </div>
@@ -523,7 +531,20 @@ export default function EventForm({ initialData, mode, onSuccess, onCancel }: Pr
       </div>
 
       {/* â”€â”€ Homepage Placement â”€â”€ */}
-      <SectionCard title="Homepage Placement" badge="Optional">
+        </div>{/* ── end LEFT COLUMN ── */}
+
+        {/* ── RIGHT COLUMN (sidebar) ── */}
+        <div className="space-y-5">
+          {/* ── Event Banners ── */}
+          <SectionCard title="Event Banners" icon={<ImageIcon className="w-4 h-4 text-[#c89c6b]" />}>
+            <div className="space-y-4">
+              <FileUploadField label="Banner 1 (Square)" value={form.bannerSquare} onChange={(url) => setField('bannerSquare', url)} hint="Recommended: 1080×1080 (1:1)" />
+              <FileUploadField label="Banner 2 (Landscape)" value={form.bannerLandscape} onChange={(url) => setField('bannerLandscape', url)} hint="Recommended: 1600×900 (16:9)" />
+              <FileUploadField label="Banner 3 (Background Blur)" value={form.bannerBgBlur} onChange={(url) => setField('bannerBgBlur', url)} hint="Used as blurred hero background" />
+            </div>
+          </SectionCard>
+
+          <SectionCard title="Homepage Placement" badge="Optional">
         <div className="space-y-5">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
@@ -633,8 +654,12 @@ export default function EventForm({ initialData, mode, onSuccess, onCancel }: Pr
         </div>
       </SectionCard>
 
+        </div>{/* ── end RIGHT COLUMN ── */}
+
+      </div>{/* ── end grid ── */}
+
       {/* ── Actions ── */}
-      <div className="flex items-center gap-3 pb-8">
+      <div className="flex items-center gap-3 pt-2 pb-8">
         <button type="submit" disabled={saving}
           className="flex items-center gap-2 px-6 py-2.5 bg-[#112b38] text-white rounded-lg font-semibold text-sm hover:bg-[#0d2030] transition-colors disabled:opacity-60 border border-[#c89c6b]/30 shadow">
           {saving && <Loader2 className="w-4 h-4 animate-spin" />}
