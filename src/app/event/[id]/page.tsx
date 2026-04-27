@@ -918,6 +918,34 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
                             </div> {/* end tab content */}
 
+                            {/* ── External Booking Link Button ─────────────────────────── */}
+                            {event.bookingLink && (
+                                <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 text-center space-y-4">
+                                    <h3 className="text-lg sm:text-xl font-extrabold uppercase tracking-widest text-[#c89c6b]">
+                                        Select Your Seats
+                                    </h3>
+                                    <div className="w-full h-px bg-gray-100" />
+                                    <p className="text-sm text-gray-500">
+                                        Easily select your seats from our interactive seat map below.
+                                    </p>
+                                    <a
+                                        href={event.bookingLink}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full bg-[#c89c6b] hover:bg-[#b8885a] text-white font-bold text-sm sm:text-base tracking-wide shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 group"
+                                    >
+                                        <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                                            <rect x="3" y="3" width="7" height="7" rx="1" />
+                                            <rect x="14" y="3" width="7" height="7" rx="1" />
+                                            <rect x="3" y="14" width="7" height="7" rx="1" />
+                                            <rect x="14" y="14" width="7" height="7" rx="1" />
+                                        </svg>
+                                        <span className="underline underline-offset-2 decoration-white/60 group-hover:decoration-white">
+                                            Choose Your Seats
+                                        </span>
+                                    </a>
+                                </div>
+                            )}
 
                             {/* Location Map */}
                             {isSectionVisible('location') && (

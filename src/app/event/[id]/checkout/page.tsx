@@ -9,6 +9,7 @@ import {
 import { useRouter } from 'next/navigation';
 import NavSearchHeader from '@/components/event/NavSearchHeader';
 import { useAuth } from '@/context/AuthContext';
+import { useCms } from '@/lib/useCms';
 import api from '@/lib/api';
 import { getImageUrl } from '@/lib/imageUrl';
 import toast from 'react-hot-toast';
@@ -26,6 +27,7 @@ interface ApiEvent {
 export default function CheckoutPage({ params }: { params: { id: string } }) {
     const router = useRouter();
     const { user, isAuthenticated, isLoading: authLoading } = useAuth();
+    const { get: getCms } = useCms('checkout');
     const [event, setEvent] = useState<ApiEvent | null>(null);
     const [selectedTicketIdx, setSelectedTicketIdx] = useState(0);
     const [selectedPayment, setSelectedPayment] = useState<'card' | 'juice' | 'mytblink' | null>(null);
@@ -67,7 +69,12 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
         return d.toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short' });
     };
 
-    const getImageSrc = (ev: ApiEvent) => getImageUrl(ev.coverImage);
+    const getImageSrc = (ev: ApiEvent) => getImageUrl(ev.bannerSquare || ev.bannerLandscape || ev.coverImage);
+    const cmsImage = getCms('banner')?.image || '';
+    const deliveryCms = getCms('delivery');
+    const deliveryText = deliveryCms?.description?.en || 'Once your purchase is complete, you will receive your tickets 24 hours before the event at:';
+    const rulesLinkText = deliveryCms?.buttonText?.en || 'the Rules and Regulations of the venue';
+    const rulesLinkUrl = deliveryCms?.buttonLink || '/terms';
 
     const selectedTicket = event?.ticketTypes?.[selectedTicketIdx];
     const ticketPrice = selectedTicket?.price ?? 0;
@@ -123,13 +130,26 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
 
                         {/* Event Image Card */}
                         <div className="rounded-xl overflow-hidden shadow-md border border-gray-200 bg-white">
-                            <div className="relative w-full h-[200px] sm:h-[230px]">
-                                <img
-                                    src={event ? getImageSrc(event) : '/Cover%20-/59069_upload68daa2739f40c_1759158899-0-en1759158912.jpg.jpeg'}
-                                    alt={event?.title?.en || 'Event'}
-                                    className="w-full h-full object-cover"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                            <div className="relative w-full h-[200px] sm:h-[230px] bg-gray-100">
+                                {(event && getImageSrc(event)) || cmsImage ? (
+                                    <img
+                                        src={(event ? getImageSrc(event) : null) || cmsImage}
+                                        alt={event?.title?.en || 'Event'}
+                                        className="w-full h-full object-cover"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                                        <div className="text-center text-gray-400">
+                                            <svg className="w-12 h-12 mx-auto mb-2 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                            </svg>
+                                            <p className="text-xs">No image</p>
+                                        </div>
+                                    </div>
+                                )}
+                                {(event && getImageSrc(event) || cmsImage) && (
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                                )}
                             </div>
 
                             {/* Event Info */}
@@ -211,7 +231,7 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
                                 <h3 className="font-semibold text-[#112b38] text-sm">Ticket delivery method</h3>
                             </div>
                             <p className="text-xs text-gray-500 leading-relaxed">
-                                Once your purchase is complete, you will receive your tickets 24 hours before the event at:
+                                {deliveryText}
                             </p>
                             <div className="flex flex-col sm:flex-row gap-1 sm:gap-3 text-xs text-gray-600 font-medium">
                                 <span className="flex items-center gap-1">
@@ -226,8 +246,8 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
                                 )}
                             </div>
                             <p className="text-xs pt-1">
-                                <a href="/terms" className="text-[#c89c6b] hover:text-[#112b38] underline transition-colors">
-                                    the Rules and Regulations of the venue
+                                <a href={rulesLinkUrl} className="text-[#c89c6b] hover:text-[#112b38] underline transition-colors">
+                                    {rulesLinkText}
                                 </a>
                                 <span className="text-gray-400"> of event for customers</span>
                             </p>

@@ -249,6 +249,19 @@ const SECTION_DEFAULTS: Record<string, Record<string, Partial<CmsSection>>> = {
     section12: { extra: { titleEn: '12. Contact Us', titleFr: '12. Contactez-nous', contentEn: 'If you have any questions regarding these Terms and Conditions, please contact us at: needhelp@oshaia.com', contentFr: 'Si vous avez des questions concernant ces conditions générales, veuillez nous contacter à : needhelp@oshaia.com' } },
     section13: { extra: { titleEn: '13. Cookie Policy', titleFr: '13. Politique des cookies', contentEn: 'Oshaia uses cookies and similar tracking technologies to enhance your experience on our platform. You may manage your cookie preferences through your browser settings at any time.', contentFr: 'Oshaia utilise des cookies et des technologies de suivi similaires pour améliorer votre expérience sur notre plateforme. Vous pouvez gérer vos préférences de cookies via les paramètres de votre navigateur.' } },
   },
+  checkout: {
+    banner: {
+      image: '',
+    },
+    delivery: {
+      description: {
+        en: 'Once your purchase is complete, you will receive your tickets 24 hours before the event at your registered email and phone number.',
+        fr: 'Une fois votre achat terminé, vous recevrez vos billets 24 heures avant l\'événement à votre adresse e-mail et numéro de téléphone enregistrés.',
+      },
+      buttonText: { en: 'the Rules and Regulations of the venue', fr: 'les Règles et Règlements du lieu' },
+      buttonLink: '/terms',
+    },
+  },
 };
 
 // ── Field visibility config ─────────────────────────────────────────────────
@@ -286,6 +299,10 @@ const SECTION_FIELD_CONFIG: Record<string, Record<string, SectionFieldFlags>> = 
     section1: {}, section2: {}, section3: {}, section4: {}, section5: {},
     section6: {}, section7: {}, section8: {}, section9: {}, section10: {},
     section11: {}, section12: {}, section13: {},
+  },
+  checkout: {
+    banner:   { showImage: true },
+    delivery: { showDescription: true, showButton: true },
   },
 };
 
@@ -369,6 +386,14 @@ const CMS_PAGES = [
       { key: 'sitePlan', label: 'Site Plan' },
       { key: 'songs', label: 'Music Player' },
       { key: 'relatedEvents', label: 'Related Events' },
+    ],
+  },
+  {
+    key: 'checkout',
+    label: 'Checkout Page',
+    sections: [
+      { key: 'banner', label: 'Checkout Banner Image (shown on left panel)' },
+      { key: 'delivery', label: 'Ticket Delivery Method (text + rules link)' },
     ],
   },
 ];
@@ -456,6 +481,7 @@ export default function AdminCmsPage() {
     help: '/help',
     terms: '/terms',
     event: '/event',
+    checkout: '/event',
   };
   const [confirmEmail, setConfirmEmail] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
