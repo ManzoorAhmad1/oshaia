@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import api from '@/lib/api';
-import { Loader2, UserX, UserCheck, Search, Plus, X, Eye, EyeOff, ShieldCheck } from 'lucide-react';
+import { Loader2, UserX, UserCheck, Search, Plus, X, Eye, EyeOff, ShieldCheck, Link2, Copy, Check } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 type StaffRole = 'organizer' | 'moderator' | 'scanner' | 'ticket_runner';
@@ -31,6 +31,16 @@ const ROLE_LABELS: Record<string, string> = {
   admin: 'Main Admin', organizer: 'Organizer',
   moderator: 'Moderator', scanner: 'Scanner',
   ticket_runner: 'Ticket Runner', user: 'User',
+};
+
+// MySQL JSON field can come back as a string — normalize to array
+const toPermArray = (perms: any): string[] => {
+  if (!perms) return [];
+  if (Array.isArray(perms)) return perms;
+  if (typeof perms === 'string') {
+    try { return JSON.parse(perms); } catch { return []; }
+  }
+  return [];
 };
 
 const STAFF_ROLES: { value: StaffRole; label: string; desc: string }[] = [
@@ -91,6 +101,26 @@ export default function AdminUsersPage() {
   const [showPass, setShowPass] = useState(false);
   const [permissions, setPermissions] = useState<string[]>(ROLE_DEFAULT_PERMISSIONS['organizer']);
 
+  // Invite link state
+  const [inviteLink, setInviteLink] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  const getInviteLink = (role: string) => {
+    const base = typeof window !== 'undefined' ? window.location.origin : '';
+    return `${base}/staff-login/${role}`;
+  };
+
+  const copyLink = async (link: string) => {
+    try {
+      await navigator.clipboard.writeText(link);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+      toast.success('Login link copied!');
+    } catch {
+      toast.error('Failed to copy');
+    }
+  };
+
   useEffect(() => {
     api.get('/admin/users')
       .then(({ data }) => setUsers(data.users || []))
@@ -131,6 +161,9 @@ export default function AdminUsersPage() {
       setUsers((prev) => [data.user, ...prev]);
       toast.success(`${ROLE_LABELS[form.role]} account created`);
       setShowModal(false);
+      // Show invite link modal
+      setInviteLink(getInviteLink(form.role));
+      setCopied(false);
       setForm({ name: '', email: '', password: '', role: 'organizer' });
       setPermissions(ROLE_DEFAULT_PERMISSIONS['organizer']);
     } catch (err: any) {
@@ -219,18 +252,21 @@ export default function AdminUsersPage() {
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      {user.permissions && user.permissions.length > 0 ? (
-                        <div className="flex flex-wrap gap-1 max-w-[200px]">
-                          {user.permissions.slice(0, 3).map((p) => (
-                            <span key={p} className="px-1.5 py-0.5 bg-[#c89c6b]/10 text-[#112b38] rounded text-[10px] font-medium">{p}</span>
-                          ))}
-                          {user.permissions.length > 3 && (
-                            <span className="px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded text-[10px]">+{user.permissions.length - 3}</span>
-                          )}
-                        </div>
-                      ) : (
-                        <span className="text-xs text-gray-400 italic">Role defaults</span>
-                      )}
+                      {(() => {
+                        const perms = toPermArray(user.permissions);
+                        return perms.length > 0 ? (
+                          <div className="flex flex-wrap gap-1 max-w-[200px]">
+                            {perms.slice(0, 3).map((p) => (
+                              <span key={p} className="px-1.5 py-0.5 bg-[#c89c6b]/10 text-[#112b38] rounded text-[10px] font-medium">{p}</span>
+                            ))}
+                            {perms.length > 3 && (
+                              <span className="px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded text-[10px]">+{perms.length - 3}</span>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="text-xs text-gray-400 italic">Role defaults</span>
+                        );
+                      })()}
                     </td>
                     <td className="px-4 py-3 text-gray-500">{new Date(user.createdAt).toLocaleDateString()}</td>
                     <td className="px-4 py-3">
@@ -239,6 +275,7 @@ export default function AdminUsersPage() {
                       </span>
                     </td>
                     <td className="px-4 py-3">
+                      <div className="flex items-center gap-1">
                       <button onClick={() => toggleActive(user)}
                         disabled={actionId === user.id || user.role === 'admin'}
                         title={user.role === 'admin' ? 'Cannot deactivate admin' : ''}
@@ -246,11 +283,55 @@ export default function AdminUsersPage() {
                         {actionId === user.id ? <Loader2 className="w-4 h-4 animate-spin" />
                           : user.isActive ? <UserX className="w-4 h-4" /> : <UserCheck className="w-4 h-4" />}
                       </button>
+                      {user.role !== 'admin' && user.role !== 'user' && (
+                        <button
+                          onClick={() => copyLink(getInviteLink(user.role))}
+                          title="Copy login link"
+                          className="p-1.5 rounded-lg text-gray-500 hover:text-[#c89c6b] hover:bg-[#c89c6b]/10 transition-colors">
+                          <Link2 className="w-4 h-4" />
+                        </button>
+                      )}
+                      </div>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* ── Invite Link Modal ───────────────────────────────────────── */}
+      {inviteLink && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 space-y-5">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center flex-shrink-0">
+                <Link2 className="w-5 h-5 text-green-600" />
+              </div>
+              <div>
+                <h2 className="text-base font-bold text-[#112b38]">Account Created!</h2>
+                <p className="text-xs text-gray-500 mt-0.5">Share this login link with your staff member</p>
+              </div>
+            </div>
+            <div className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 flex items-center gap-3">
+              <p className="flex-1 text-sm text-[#112b38] font-mono break-all select-all">{inviteLink}</p>
+              <button
+                onClick={() => copyLink(inviteLink)}
+                className={`flex-shrink-0 p-2 rounded-lg transition-colors ${copied ? 'bg-green-100 text-green-600' : 'bg-[#112b38] text-white hover:bg-[#0d2030]'}`}
+              >
+                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+              </button>
+            </div>
+            <p className="text-xs text-gray-400 leading-relaxed">
+              This link takes the staff member directly to the login page for their role. They can log in with the email and password you just set.
+            </p>
+            <button
+              onClick={() => setInviteLink(null)}
+              className="w-full py-2.5 bg-[#112b38] text-white rounded-xl text-sm font-semibold hover:bg-[#0d2030] transition-colors border border-[#c89c6b]/30"
+            >
+              Done
+            </button>
           </div>
         </div>
       )}

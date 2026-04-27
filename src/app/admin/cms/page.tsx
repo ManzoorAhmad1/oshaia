@@ -249,6 +249,34 @@ const SECTION_DEFAULTS: Record<string, Record<string, Partial<CmsSection>>> = {
     section12: { extra: { titleEn: '12. Contact Us', titleFr: '12. Contactez-nous', contentEn: 'If you have any questions regarding these Terms and Conditions, please contact us at: needhelp@oshaia.com', contentFr: 'Si vous avez des questions concernant ces conditions générales, veuillez nous contacter à : needhelp@oshaia.com' } },
     section13: { extra: { titleEn: '13. Cookie Policy', titleFr: '13. Politique des cookies', contentEn: 'Oshaia uses cookies and similar tracking technologies to enhance your experience on our platform. You may manage your cookie preferences through your browser settings at any time.', contentFr: 'Oshaia utilise des cookies et des technologies de suivi similaires pour améliorer votre expérience sur notre plateforme. Vous pouvez gérer vos préférences de cookies via les paramètres de votre navigateur.' } },
   },
+  'staff-login': {
+    admin: { image: '' },
+    organizer: {
+      image: '',
+      title: { en: 'Organize. Create. Inspire.', fr: 'Organisez. Créez. Inspirez.' },
+      description: { en: 'Manage your events and reach your audience with ease.', fr: 'Gérez vos événements et atteignez votre public facilement.' },
+    },
+    moderator: {
+      image: '',
+      title: { en: 'Review. Approve. Control.', fr: 'Réviser. Approuver. Contrôler.' },
+      description: { en: 'Keep events running smoothly with your moderation tools.', fr: 'Assurez le bon déroulement des événements avec vos outils de modération.' },
+    },
+    scanner: {
+      image: '',
+      title: { en: 'Scan. Verify. Access.', fr: 'Scanner. Vérifier. Accéder.' },
+      description: { en: 'Fast and accurate ticket scanning for seamless entry.', fr: 'Scan de billets rapide et précis pour une entrée fluide.' },
+    },
+    ticket_runner: {
+      image: '',
+      title: { en: 'Deliver. Manage. Distribute.', fr: 'Livrer. Gérer. Distribuer.' },
+      description: { en: 'Ensure every ticket reaches the right hands at the right time.', fr: 'Assurez-vous que chaque billet atteint les bonnes mains au bon moment.' },
+    },
+    default: {
+      image: '',
+      title: { en: 'Welcome to Oshaia', fr: 'Bienvenue sur Oshaia' },
+      description: { en: 'Your trusted platform for events and ticketing.', fr: 'Votre plateforme de confiance pour les événements et la billetterie.' },
+    },
+  },
   checkout: {
     banner: {
       image: '',
@@ -303,6 +331,14 @@ const SECTION_FIELD_CONFIG: Record<string, Record<string, SectionFieldFlags>> = 
   checkout: {
     banner:   { showImage: true },
     delivery: { showDescription: true, showButton: true },
+  },
+  'staff-login': {
+    admin:         { showImage: true },
+    organizer:     { showImage: true, showTitle: true, showDescription: true },
+    moderator:     { showImage: true, showTitle: true, showDescription: true },
+    scanner:       { showImage: true, showTitle: true, showDescription: true },
+    ticket_runner: { showImage: true, showTitle: true, showDescription: true },
+    default:       { showImage: true, showTitle: true, showDescription: true },
   },
 };
 
@@ -396,6 +432,18 @@ const CMS_PAGES = [
       { key: 'delivery', label: 'Ticket Delivery Method (text + rules link)' },
     ],
   },
+  {
+    key: 'staff-login',
+    label: 'Staff Login Pages',
+    sections: [
+      { key: 'admin',         label: 'Main Admin — Left background image' },
+      { key: 'organizer',     label: 'Organizer — Left background image' },
+      { key: 'moderator',     label: 'Moderator — Left background image' },
+      { key: 'scanner',       label: 'Scanner — Left background image' },
+      { key: 'ticket_runner', label: 'Ticket Runner — Left background image' },
+      { key: 'default',       label: 'Default (fallback) — background image' },
+    ],
+  },
 ];
 
 interface CmsSection {
@@ -482,6 +530,7 @@ export default function AdminCmsPage() {
     terms: '/terms',
     event: '/event',
     checkout: '/event',
+    'staff-login': '/staff-login/organizer',
   };
   const [confirmEmail, setConfirmEmail] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
