@@ -88,43 +88,54 @@ export default function StaffLoginPage({ params }: { params: { role: string } })
 
   return (
     <div className="min-h-screen flex">
-      {/* ── LEFT: Background Image ───────────────────────────────── */}
+      {/* ── LEFT PANEL ────────────────────────────────────────────── */}
       <div
         className="hidden md:flex w-[46%] xl:w-[48%] flex-shrink-0 relative overflow-hidden"
-        style={{
-          background: bgImage
-            ? `url(${getImageUrl(bgImage)}) center/cover no-repeat`
-            : 'linear-gradient(135deg, #112b38 0%, #1a4055 50%, #0d1f2b 100%)',
+        style={bgImage ? {
+          backgroundImage: `url(${getImageUrl(bgImage)})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        } : {
+          background: 'linear-gradient(180deg, #1b7fa3 0%, #0f4a62 40%, #0a2f3e 75%, #071e29 100%)',
         }}
       >
-        {/* Dark overlay for readability */}
-        <div className="absolute inset-0 bg-black/50" />
+        {/* Dot-grid texture overlay */}
+        <div
+          className="absolute inset-0 opacity-[0.08]"
+          style={{
+            backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)',
+            backgroundSize: '24px 24px',
+          }}
+        />
+        {/* Bottom gradient fade so text reads well */}
+        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/60 to-transparent" />
 
-        {role === 'admin' ? (
-          /* Admin: logo centered over image */
-          <div className="relative z-10 flex flex-col items-center justify-center w-full px-10 text-center">
-            <img src="/images/Logo/ALL PNG-01.png" alt="Oshaia" className="w-48 object-contain drop-shadow-xl" />
-          </div>
-        ) : (
-          /* Other roles: gradient + CMS text */
-          <div className="relative z-10 flex flex-col justify-end w-full px-10 pb-16">
-            {/* Oshaia logo top-left */}
-            <img src="/images/Logo/ALL PNG-01.png" alt="Oshaia" className="absolute top-10 left-10 w-28 object-contain drop-shadow-lg opacity-90" />
-            {/* CMS-driven tagline */}
-            {leftTitle && (
-              <h2 className="text-3xl font-extrabold text-white leading-tight tracking-tight drop-shadow-lg mb-3">
-                {leftTitle}
-              </h2>
-            )}
-            {leftDesc && (
-              <p className="text-sm text-white/75 leading-relaxed max-w-xs">
-                {leftDesc}
-              </p>
-            )}
-            {/* Decorative line */}
-            <div className="mt-6 w-12 h-1 rounded-full bg-[#c89c6b]" />
-          </div>
-        )}
+        {/* "BY OSHAIA" — top left */}
+        <div className="absolute top-10 left-10 z-10 flex flex-col gap-1">
+          <img
+            src="/images/Logo/ALL PNG-01.png"
+            alt="Oshaia"
+            className="w-24 object-contain brightness-0 invert opacity-90"
+          />
+        </div>
+
+        {/* Center-bottom: huge role name like "district" */}
+        <div className="relative z-10 flex flex-col justify-end w-full h-full px-10 pb-14">
+          <span className="text-[11px] font-bold tracking-[0.25em] text-[#c89c6b] uppercase mb-3">
+            BY OSHAIA
+          </span>
+          <h2
+            className="font-black text-white uppercase leading-none"
+            style={{ fontSize: 'clamp(3rem, 6vw, 4.5rem)', letterSpacing: '-0.02em' }}
+          >
+            {role === 'admin' ? 'Admin' : config.label}
+          </h2>
+          {leftDesc && (
+            <p className="mt-4 text-sm text-white/65 leading-relaxed max-w-[260px]">
+              {leftDesc}
+            </p>
+          )}
+        </div>
       </div>
 
       {/* ── RIGHT: Login Form ────────────────────────────────────── */}

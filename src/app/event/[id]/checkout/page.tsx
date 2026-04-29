@@ -21,6 +21,8 @@ interface ApiEvent {
     startTime?: string;
     venue: { en: string; fr: string };
     coverImage?: string;
+    bannerSquare?: string;
+    bannerLandscape?: string;
     ticketTypes: Array<{ name: { en: string; fr: string } | string; price: number; processingFee?: number; discount?: number; discountType?: 'flat' | 'percent'; totalSeats?: number; availableSeats?: number; quantity?: number; sold?: number; buy1Get1?: boolean }>;
 }
 
