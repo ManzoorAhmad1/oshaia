@@ -12,6 +12,8 @@ import { useLanguage } from '@/context/LanguageContext';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import { useCms } from '@/lib/useCms';
+import { getImageUrl } from '@/lib/imageUrl';
 
 interface Country {
     code: string;
@@ -43,6 +45,8 @@ export default function AccountPage() {
     const { t } = useLanguage();
     const { login, register, isAuthenticated } = useAuth();
     const router = useRouter();
+    const { get: getCms } = useCms('account');
+    const bannerImage = getImageUrl(getCms('banner').image, '/Artboard 1 cover.png');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Redirect if already logged in
@@ -132,11 +136,12 @@ export default function AccountPage() {
                 <div className="w-full max-w-[1100px] mx-auto ">
                     <div className="relative w-full h-[200px] md:h-[300px] overflow-hidden">
                         <Image
-                            src="/Artboard 1 cover.png"
+                            src={bannerImage}
                             alt="Landscape"
                             fill
                             className="object-cover rounded-tl-2xl rounded-tr-2xl"
                             priority
+                            unoptimized
                         />
                     </div>
                 </div>

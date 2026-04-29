@@ -3,73 +3,115 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { LogOut, Menu, X } from 'lucide-react';
+import { LogOut, Menu, X, ChevronRight, Copy, Check } from 'lucide-react';
 
 type Role = 'admin' | 'organizer' | 'moderator' | 'scanner' | 'ticket_runner' | 'user';
 
-const ROLE_LABELS: Record<Role, string> = {
-  admin: 'Main Admin',
-  organizer: 'Organizer',
-  moderator: 'Moderator',
-  scanner: 'Scanner',
-  ticket_runner: 'Ticket Runner',
-  user: 'User',
-};
+// ── Nav definition ────────────────────────────────────────────────────────
+// roles: which roles can see this item (undefined = admin only)
+// special: gold color (Email-Whatsapp)
+// arrow: show chevron right
+// loginLink: show copy-link behaviour instead of navigate
+interface NavItem {
+  href: string;
+  label: string;
+  roles?: Role[];
+  special?: boolean;
+  arrow?: boolean;
+  loginRole?: string; // if set, clicking copies /staff-login/{loginRole}
+}
 
-// Title shown in the white pill badge at the top of the sidebar
-const ROLE_PANEL_TITLES: Record<Role, string> = {
-  admin: 'Admin Panel',
-  organizer: 'Organizer Panel',
-  moderator: 'Content Moderator',
-  scanner: 'Scanner Moderator',
-  ticket_runner: 'Ticket Runner',
-  user: 'User Panel',
-};
+interface NavGroup {
+  items: NavItem[];
+}
 
-const ALL_NAV_ITEMS: { href: string; label: string; exact?: boolean; perms: string[] }[] = [
-  { href: '/admin',          label: 'Dashboard',    exact: true, perms: ['dashboard'] },
-  { href: '/admin/events',   label: 'Events',                    perms: ['events.view','events.create','events.edit','events.delete','events.toggle'] },
-  { href: '/admin/cms',      label: 'CMS / Content',             perms: ['cms'] },
-  { href: '/admin/users',    label: 'Staff',                     perms: ['users'] },
-  { href: '/admin/scanner',  label: 'Scan Ticket',               perms: ['scanner'] },
-  { href: '/admin/tickets',  label: 'Tickets',                   perms: ['tickets'] },
-  { href: '/admin/settings', label: 'Settings',                  perms: ['settings'] },
+const NAV_GROUPS: NavGroup[] = [
+  {
+    items: [
+      { href: '/admin',     label: 'Dashboard',     roles: ['admin','organizer','moderator','scanner','ticket_runner'] },
+      { href: '/admin/cms', label: 'CRM / Content', roles: ['admin'], arrow: true },
+    ],
+  },
+  {
+    items: [
+      { href: '/admin/events',    label: 'Create Events', roles: ['admin','organizer'] },
+      { href: '/admin/orders',    label: 'Orders',        roles: ['admin','organizer'] },
+      { href: '/admin/tickets',   label: 'Tickets',       roles: ['admin','organizer','ticket_runner'] },
+      { href: '/admin/sponsors',  label: 'Sponsors',      roles: ['admin'] },
+    ],
+  },
+  {
+    items: [
+      { href: '/admin/seats',         label: 'Seats Maps',        roles: ['admin'] },
+      { href: '/admin/growth',        label: 'Each Growth Event', roles: ['admin'] },
+      { href: '/admin/users',         label: 'Users',             roles: ['admin','moderator'] },
+      { href: '/admin/insights',      label: 'Insights',          roles: ['admin'] },
+      { href: '/admin/notifications', label: 'Notification',      roles: ['admin'] },
+    ],
+  },
+  {
+    items: [
+      { href: '/admin/archived', label: 'Archived Events', roles: ['admin'] },
+      { href: '/admin/settings', label: 'Settings',        roles: ['admin','organizer','moderator','scanner','ticket_runner'] },
+    ],
+  },
+  {
+    items: [
+      { href: '/admin/scanner',   label: 'SCAN',              roles: ['admin','scanner'] },
+      { href: '/admin/marketing', label: 'Email - Whatsapp',  roles: ['admin'], special: true },
+    ],
+  },
+  {
+    items: [
+      { href: '/staff-login/admin',    label: 'Owner',          roles: ['admin'], loginRole: 'admin' },
+      { href: '/staff-login/admin',    label: 'Admin',          roles: ['admin'], loginRole: 'admin' },
+      { href: '/staff-login/moderator',label: 'Moderator',      roles: ['admin'], loginRole: 'moderator' },
+      { href: '/staff-login/organizer',label: 'Organizer',      roles: ['admin'], loginRole: 'organizer' },
+      { href: '/staff-login/scanner',  label: 'Scan Moderator', roles: ['admin'], loginRole: 'scanner' },
+    ],
+  },
+  {
+    items: [
+      { href: '/admin/sales',    label: 'Sales Report',          roles: ['admin'] },
+      { href: '/admin/revenue',  label: 'Revenue / Finance',     roles: ['admin'] },
+      { href: '/admin/visitors', label: 'Visitors/Buyers Total', roles: ['admin'] },
+      { href: '/admin/analytics',label: 'Analytics',             roles: ['admin'] },
+    ],
+  },
 ];
 
-const ROLE_DEFAULT_PERMISSIONS: Record<Role, string[]> = {
-  admin:         ['dashboard','events.view','events.create','events.edit','events.delete','events.toggle','cms','users','scanner','tickets','settings'],
-  organizer:     ['dashboard','events.view','events.create','events.edit','settings'],
-  moderator:     ['dashboard','events.view','events.toggle','settings'],
-  scanner:       ['dashboard','scanner','settings'],
-  ticket_runner: ['dashboard','tickets','settings'],
-  user:          ['dashboard','settings'],
-};
-
-const getNavItems = (role: Role, userPermissions?: string[] | null) => {
-  if (role === 'admin') return ALL_NAV_ITEMS;
-  const perms = (userPermissions && userPermissions.length > 0)
-    ? userPermissions
-    : ROLE_DEFAULT_PERMISSIONS[role] || ['dashboard', 'settings'];
-  return ALL_NAV_ITEMS.filter((item) => item.perms.some((p) => perms.includes(p)));
-};
-
 export default function AdminSidebar() {
-  const pathname = usePathname();
+  const pathname  = usePathname();
   const { logout, user } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [copiedRole, setCopiedRole] = useState<string | null>(null);
 
   const role = (user?.role || 'user') as Role;
-  const navItems = getNavItems(role, user?.permissions);
 
-  const isActive = (href: string, exact = false) =>
-    exact ? pathname === href : pathname.startsWith(href);
+  const isActive = (href: string) =>
+    href === '/admin' ? pathname === '/admin' : pathname.startsWith(href);
+
+  const handleLoginLink = (loginRole: string) => {
+    const link = `${window.location.origin}/staff-login/${loginRole}`;
+    navigator.clipboard.writeText(link).then(() => {
+      setCopiedRole(loginRole);
+      setTimeout(() => setCopiedRole(null), 2000);
+    });
+  };
+
+  const visibleGroups = NAV_GROUPS.map((g) => ({
+    ...g,
+    items: g.items.filter((item) =>
+      !item.roles || item.roles.includes(role)
+    ),
+  })).filter((g) => g.items.length > 0);
 
   const SidebarContent = () => (
     <div className="flex flex-col h-full bg-[#112b38]">
-      {/* Logo — full white background flush to all edges */}
-      <div className="bg-white w-full  flex items-center justify-start">
+      {/* Logo */}
+      <div className="bg-white w-full flex items-center justify-start">
         <Image
           src="/images/Logo/ALL PNG-01.png"
           alt="Oshaia"
@@ -79,34 +121,63 @@ export default function AdminSidebar() {
         />
       </div>
 
-      {/* Role badge — flat left, rounded right only, sits right below logo */}
+      {/* Role badge */}
       <div className="pl-0 pr-4 pt-3 pb-3">
         <div className="bg-white text-black rounded-r-full pl-4 pr-5 py-2">
           <span className="text-black font-bold text-sm tracking-wide">{user?.name}</span>
         </div>
       </div>
 
-      {/* Nav items — text only, no icons */}
-      <nav className="flex-1 px-4 overflow-y-auto space-y-0.5">
-        {navItems.map(({ href, label, exact }) => {
-          const active = isActive(href, exact);
-          return (
-            <Link
-              key={label}
-              href={href}
-              onClick={() => setMobileOpen(false)}
-              className={`block px-3 py-2.5 text-sm font-medium transition-colors rounded-lg
-                ${active
-                  ? 'text-[#c89c6b] bg-white/5'
-                  : 'text-white/75 hover:text-white hover:bg-white/5'}`}
-            >
-              {label}
-            </Link>
-          );
-        })}
+      {/* Nav groups */}
+      <nav className="flex-1 px-4 overflow-y-auto pb-4">
+        {visibleGroups.map((group, gi) => (
+          <React.Fragment key={gi}>
+            {gi > 0 && <div className="my-2.5 border-t border-white/10" />}
+            <div className="space-y-0.5">
+              {group.items.map((item) => {
+                const active = isActive(item.href);
+                const isCopied = copiedRole === item.loginRole;
+
+                if (item.loginRole) {
+                  // Render as copy-link button
+                  return (
+                    <button
+                      key={item.label}
+                      onClick={() => handleLoginLink(item.loginRole!)}
+                      className={`w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium transition-colors rounded-lg text-left
+                        ${isCopied ? 'text-green-400 bg-white/5' : 'text-white/75 hover:text-white hover:bg-white/5'}`}
+                    >
+                      <span>{item.label}</span>
+                      {isCopied
+                        ? <Check className="w-3.5 h-3.5 flex-shrink-0" />
+                        : <Copy className="w-3.5 h-3.5 flex-shrink-0 opacity-40" />}
+                    </button>
+                  );
+                }
+
+                return (
+                  <Link
+                    key={item.href + item.label}
+                    href={item.href}
+                    onClick={() => setMobileOpen(false)}
+                    className={`flex items-center justify-between px-3 py-2.5 text-sm font-medium transition-colors rounded-lg
+                      ${item.special
+                        ? 'text-[#c89c6b] hover:bg-white/5'
+                        : active
+                          ? 'text-[#c89c6b] bg-white/5'
+                          : 'text-white/75 hover:text-white hover:bg-white/5'}`}
+                  >
+                    <span>{item.label}</span>
+                    {item.arrow && <ChevronRight className="w-3.5 h-3.5 opacity-50 flex-shrink-0" />}
+                  </Link>
+                );
+              })}
+            </div>
+          </React.Fragment>
+        ))}
       </nav>
 
-      {/* Log Out button */}
+      {/* Log Out */}
       <div className="p-4 pt-3">
         <button
           onClick={logout}
@@ -164,3 +235,4 @@ export default function AdminSidebar() {
     </>
   );
 }
+

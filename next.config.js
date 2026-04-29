@@ -64,7 +64,17 @@ const nextConfig = {
         port: '5000',
         pathname: '/**',
       },
-      
+      // Oshaia production backend
+      {
+        protocol: 'https',
+        hostname: 'api.oshaia.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'srv1942.hstgr.io',
+        pathname: '/**',
+      },
     ],
     // Hostinger پر image optimization کے مسائل سے بچنے کے لیے
     unoptimized: false,

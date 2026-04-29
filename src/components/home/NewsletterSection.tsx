@@ -4,23 +4,36 @@ import React, { useState } from "react"
 import toast from "react-hot-toast"
 import { useLanguage } from "@/context/LanguageContext"
 import { useCms } from "@/lib/useCms"
+import api from "@/lib/api"
 
 const NewsletterSection = () => {
     const { t, language } = useLanguage()
     const { text: cmsText } = useCms('home')
     const [email, setEmail] = useState("")
     const [isSubscribed, setIsSubscribed] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
     const title = cmsText('newsletter', 'title', language as 'en' | 'fr') || t.subscribeToNewsletter
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        if (email) {
+        if (!email) return
+        setIsLoading(true)
+        try {
+            await api.post('/subscribers', { email })
             toast.success(t.subscribed || 'Subscribed successfully!')
             setIsSubscribed(true)
             setEmail("")
-            // Reset subscription status after 3 seconds
             setTimeout(() => setIsSubscribed(false), 3000)
+        } catch (err: any) {
+            const msg = err?.response?.data?.message
+            if (msg === 'Already subscribed.') {
+                toast.success(t.subscribed || 'Already subscribed!')
+            } else {
+                toast.error(msg || 'Subscription failed. Please try again.')
+            }
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -46,9 +59,10 @@ const NewsletterSection = () => {
                     </div>
                     <button
                         type="submit"
-                        className="bg-[#c89c6b] hover:bg-[#b8885a] text-white font-bold px-4 sm:px-6 py-1.5 rounded-lg transition-all duration-300 whitespace-nowrap text-sm hover:scale-105 shadow-md hover:shadow-lg"
+                        disabled={isLoading}
+                        className="bg-[#c89c6b] hover:bg-[#b8885a] text-white font-bold px-4 sm:px-6 py-1.5 rounded-lg transition-all duration-300 whitespace-nowrap text-sm hover:scale-105 shadow-md hover:shadow-lg disabled:opacity-60"
                     >
-                        {isSubscribed ? t.subscribed : t.submit}
+                        {isLoading ? '...' : isSubscribed ? t.subscribed : t.submit}
                     </button>
                 </form>
             </div>

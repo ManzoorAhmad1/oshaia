@@ -13,7 +13,9 @@
  * only requires changing that env variable.
  */
 const _rawUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.oshaia.com/api';
-const BACKEND_BASE = (_rawUrl.startsWith('http') ? _rawUrl : `https://${_rawUrl}`).replace('/api', '');
+const _fullUrl = _rawUrl.startsWith('http') ? _rawUrl : `https://${_rawUrl}`;
+// Strip only the trailing /api (not any /api inside the hostname)
+const BACKEND_BASE = _fullUrl.replace(/\/api\/?$/, '');
 
 export function getImageUrl(
   path: string | undefined | null,

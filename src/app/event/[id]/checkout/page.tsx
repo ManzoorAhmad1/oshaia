@@ -96,13 +96,19 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
         if (!selectedPayment || !agreed) return;
         setIsSubmitting(true);
         try {
-            // Order creation would go here when backend orders API is available
-            // For now, confirm the reservation and show success
-            await new Promise(res => setTimeout(res, 1200)); // simulate processing
+            await api.post('/bookings', {
+                eventId: params.id,
+                ticketTypeIndex: selectedTicketIdx,
+                quantity: qty,
+                buyerName: user?.name || '',
+                buyerEmail: user?.email || '',
+                buyerPhone: (user as any)?.phone || null,
+            });
             toast.success('Booking confirmed! Your tickets will be sent to your email.');
             router.push('/profile?tab=tickets');
-        } catch {
-            toast.error('Payment failed. Please try again.');
+        } catch (err: any) {
+            const msg = err?.response?.data?.message || 'Booking failed. Please try again.';
+            toast.error(msg);
         } finally {
             setIsSubmitting(false);
         }

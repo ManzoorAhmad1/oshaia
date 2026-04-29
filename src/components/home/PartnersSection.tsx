@@ -38,10 +38,21 @@ const PartnersSection = () => {
   const { get: getCms } = useCms('home');
   const cmsImages: string[] = getCms('partners').images || [];
   const partnersCms = getCms('partners');
+  // Support CMS images as plain strings OR objects with {url, link}
+  const parsePartners = (imgs: string[]) =>
+    imgs.map((item, i) => {
+      try {
+        const obj = typeof item === 'string' ? JSON.parse(item) : item;
+        if (obj && typeof obj === 'object' && obj.url) {
+          return { id: i + 1, name: `Partner ${i + 1}`, logo: obj.url as string, href: (obj.link as string) || '/event' };
+        }
+      } catch {}
+      return { id: i + 1, name: `Partner ${i + 1}`, logo: item as string, href: '/event' };
+    });
   const partnersTitle = (language === 'fr' ? partnersCms.title?.fr : partnersCms.title?.en) || 'OUR PARTNERS';
   const partners = cmsImages.length > 0
-    ? cmsImages.map((logo, i) => ({ id: i + 1, name: `Partner ${i + 1}`, logo }))
-    : DEFAULT_PARTNERS;
+    ? parsePartners(cmsImages)
+    : DEFAULT_PARTNERS.map(p => ({ ...p, href: '/event' }));
 
   // realIndex of the card that should appear in the visual center
   const [centerRealIndex, setCenterRealIndex] = useState(0)
@@ -97,7 +108,7 @@ const PartnersSection = () => {
               const isCenter = i === centerRealIndex
               return (
                 <SwiperSlide key={partner.id}>
-                  <Link href={`/event/${partner.id}`} className="block h-full w-full">
+                  <Link href={(partner as any).href || '/event'} className="block h-full w-full">
                     <div
                       className="flex items-center justify-center p-3 sm:p-4 md:p-5 bg-white rounded-xl h-full w-full transition-all duration-300"
                       style={{
