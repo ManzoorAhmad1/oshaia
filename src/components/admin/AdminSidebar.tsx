@@ -65,11 +65,11 @@ const NAV_GROUPS: NavGroup[] = [
   },
   {
     items: [
-      { href: '/staff-login/admin',    label: 'Owner',          roles: ['admin'], loginRole: 'admin' },
-      { href: '/staff-login/admin',    label: 'Admin',          roles: ['admin'], loginRole: 'admin' },
-      { href: '/staff-login/moderator',label: 'Moderator',      roles: ['admin'], loginRole: 'moderator' },
-      { href: '/staff-login/organizer',label: 'Organizer',      roles: ['admin'], loginRole: 'organizer' },
-      { href: '/staff-login/scanner',  label: 'Scan Moderator', roles: ['admin'], loginRole: 'scanner' },
+      { href: '/admin/users/admin',    label: 'Owner',          roles: ['admin'], loginRole: 'admin' },
+      { href: '/admin/users/admin',    label: 'Admin',          roles: ['admin'], loginRole: 'admin' },
+      { href: '/admin/users/moderator',label: 'Moderator',      roles: ['admin'], loginRole: 'moderator' },
+      { href: '/admin/users/organizer',label: 'Organizer',      roles: ['admin'], loginRole: 'organizer' },
+      { href: '/admin/users/scanner',  label: 'Scan Moderator', roles: ['admin'], loginRole: 'scanner' },
     ],
   },
   {
@@ -161,7 +161,7 @@ export default function AdminSidebar() {
                       className="flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-white/5 group transition-colors"
                     >
                       <Link
-                        href={`/admin/users?role=${item.loginRole}`}
+                        href={item.href}
                         onClick={() => setMobileOpen(false)}
                         className="flex-1 text-sm font-medium text-white/75 hover:text-white"
                       >
