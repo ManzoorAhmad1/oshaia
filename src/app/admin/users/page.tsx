@@ -94,6 +94,14 @@ export default function AdminUsersPage() {
   const [actionId, setActionId] = useState<string | null>(null);
   const [filterRole, setFilterRole] = useState('all');
 
+  // Read ?role= from URL on mount
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlRole = new URLSearchParams(window.location.search).get('role');
+      if (urlRole) setFilterRole(urlRole);
+    }
+  }, []);
+
   // Create staff modal
   const [showModal, setShowModal] = useState(false);
   const [creating, setCreating] = useState(false);

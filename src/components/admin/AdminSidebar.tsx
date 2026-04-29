@@ -139,19 +139,29 @@ export default function AdminSidebar() {
                 const isCopied = copiedRole === item.loginRole;
 
                 if (item.loginRole) {
-                  // Render as copy-link button
+                  // Render as navigate link + copy button
                   return (
-                    <button
+                    <div
                       key={item.label}
-                      onClick={() => handleLoginLink(item.loginRole!)}
-                      className={`w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium transition-colors rounded-lg text-left
-                        ${isCopied ? 'text-green-400 bg-white/5' : 'text-white/75 hover:text-white hover:bg-white/5'}`}
+                      className="flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-white/5 group transition-colors"
                     >
-                      <span>{item.label}</span>
-                      {isCopied
-                        ? <Check className="w-3.5 h-3.5 flex-shrink-0" />
-                        : <Copy className="w-3.5 h-3.5 flex-shrink-0 opacity-40" />}
-                    </button>
+                      <Link
+                        href={`/admin/users?role=${item.loginRole}`}
+                        onClick={() => setMobileOpen(false)}
+                        className="flex-1 text-sm font-medium text-white/75 hover:text-white"
+                      >
+                        {item.label}
+                      </Link>
+                      <button
+                        onClick={() => handleLoginLink(item.loginRole!)}
+                        title="Copy login link"
+                        className="ml-2 flex-shrink-0"
+                      >
+                        {isCopied
+                          ? <Check className="w-3.5 h-3.5 text-green-400" />
+                          : <Copy className="w-3.5 h-3.5 text-white/40 group-hover:text-white/60" />}
+                      </button>
+                    </div>
                   );
                 }
 
