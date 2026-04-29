@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
@@ -87,6 +87,21 @@ export default function AdminSidebar() {
   const { logout, user } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [copiedRole, setCopiedRole] = useState<string | null>(null);
+  const navRef = useRef<HTMLElement | null>(null);
+
+  const navCallbackRef = useCallback((node: HTMLElement | null) => {
+    navRef.current = node;
+    if (node) {
+      const saved = sessionStorage.getItem('sidebar-scroll');
+      if (saved) node.scrollTop = Number(saved);
+    }
+  }, []);
+
+  const saveScroll = () => {
+    if (navRef.current) {
+      sessionStorage.setItem('sidebar-scroll', String(navRef.current.scrollTop));
+    }
+  };
 
   const role = (user?.role || 'user') as Role;
 
@@ -129,7 +144,7 @@ export default function AdminSidebar() {
       </div>
 
       {/* Nav groups */}
-      <nav className="flex-1 px-4 overflow-y-auto pb-4">
+      <nav ref={navCallbackRef} onScroll={saveScroll} className="flex-1 px-4 overflow-y-auto pb-4">
         {visibleGroups.map((group, gi) => (
           <React.Fragment key={gi}>
             {gi > 0 && <div className="my-2.5 border-t border-white/10" />}
