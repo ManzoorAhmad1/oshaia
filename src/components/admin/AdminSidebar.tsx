@@ -18,6 +18,7 @@ interface NavItem {
   href: string;
   label: string;
   roles?: Role[];
+  permission?: string; // if set, non-admin staff must have this permission
   special?: boolean;
   arrow?: boolean;
   loginRole?: string; // if set, clicking copies /staff-login/{loginRole}
@@ -30,15 +31,15 @@ interface NavGroup {
 const NAV_GROUPS: NavGroup[] = [
   {
     items: [
-      { href: '/admin',     label: 'Dashboard',     roles: ['admin','organizer','moderator','scanner','ticket_runner'] },
+      { href: '/admin',     label: 'Dashboard',     roles: ['admin','organizer','moderator','scanner','ticket_runner'], permission: 'dashboard' },
       { href: '/admin/cms', label: 'CRM / Content', roles: ['admin'], arrow: true },
     ],
   },
   {
     items: [
-      { href: '/admin/events',    label: 'Create Events', roles: ['admin','organizer'] },
-      { href: '/admin/orders',    label: 'Orders',        roles: ['admin','organizer'] },
-      { href: '/admin/tickets',   label: 'Tickets',       roles: ['admin','organizer','ticket_runner'] },
+      { href: '/admin/events',    label: 'Create Events', roles: ['admin','organizer'],               permission: 'events.create' },
+      { href: '/admin/orders',    label: 'Orders',        roles: ['admin','organizer'],               permission: 'events.view' },
+      { href: '/admin/tickets',   label: 'Tickets',       roles: ['admin','organizer','ticket_runner'], permission: 'tickets' },
       { href: '/admin/sponsors',  label: 'Sponsors',      roles: ['admin'] },
     ],
   },
@@ -46,7 +47,7 @@ const NAV_GROUPS: NavGroup[] = [
     items: [
       { href: '/admin/seats',         label: 'Seats Maps',        roles: ['admin'] },
       { href: '/admin/growth',        label: 'Each Growth Event', roles: ['admin'] },
-      { href: '/admin/users',         label: 'Users',             roles: ['admin','moderator'] },
+      { href: '/admin/users',         label: 'Users',             roles: ['admin','moderator'], permission: 'users' },
       { href: '/admin/insights',      label: 'Insights',          roles: ['admin'] },
       { href: '/admin/notifications', label: 'Notification',      roles: ['admin'] },
     ],
@@ -54,12 +55,12 @@ const NAV_GROUPS: NavGroup[] = [
   {
     items: [
       { href: '/admin/archived', label: 'Archived Events', roles: ['admin'] },
-      { href: '/admin/settings', label: 'Settings',        roles: ['admin','organizer','moderator','scanner','ticket_runner'] },
+      { href: '/admin/settings', label: 'Settings',        roles: ['admin','organizer','moderator','scanner','ticket_runner'], permission: 'settings' },
     ],
   },
   {
     items: [
-      { href: '/admin/scanner',   label: 'SCAN',              roles: ['admin','scanner'] },
+      { href: '/admin/scanner',   label: 'SCAN',              roles: ['admin','scanner'], permission: 'scanner' },
       { href: '/admin/marketing', label: 'Email - Whatsapp',  roles: ['admin'], special: true },
     ],
   },
@@ -116,11 +117,26 @@ export default function AdminSidebar() {
     });
   };
 
+  // Parse user permissions (may come as JSON string or array)
+  const userPerms: string[] = (() => {
+    const p = (user as any)?.permissions;
+    if (!p) return [];
+    if (Array.isArray(p)) return p;
+    if (typeof p === 'string') { try { return JSON.parse(p); } catch { return []; } }
+    return [];
+  })();
+
   const visibleGroups = NAV_GROUPS.map((g) => ({
     ...g,
-    items: g.items.filter((item) =>
-      !item.roles || item.roles.includes(role)
-    ),
+    items: g.items.filter((item) => {
+      // Must match role
+      if (item.roles && !item.roles.includes(role)) return false;
+      // Admin bypasses permission check
+      if (role === 'admin') return true;
+      // Staff: if item requires a permission, user must have it
+      if (item.permission && !userPerms.includes(item.permission)) return false;
+      return true;
+    }),
   })).filter((g) => g.items.length > 0);
 
   const SidebarContent = () => (
