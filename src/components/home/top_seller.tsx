@@ -11,6 +11,8 @@ import { getImageUrl } from '@/lib/imageUrl';
 
 interface ApiEvent {
     _id: string;
+    id?: number;
+    slug?: string;
     title: { en: string; fr: string };
     startDate: string;
     venue: { en: string; fr: string };
@@ -101,7 +103,7 @@ export default function EventCard() {
                 const events: ApiEvent[] = res.data.data?.events ?? res.data.events ?? [];
                 if (events.length > 0) {
                     setSlides(events.map(ev => ({
-                        id: ev._id,
+                        id: ev.slug || ev._id,
                         image: getImageUrl(ev.coverImage, ''),
                         title: language === 'fr' ? (ev.title?.fr || ev.title?.en) : (ev.title?.en || ev.title?.fr),
                         date: (() => { const d = new Date(ev.startDate); return `${MONTHS[d.getMonth()].toUpperCase()} ${String(d.getDate()).padStart(2,'0')}`; })(),
@@ -172,7 +174,7 @@ export default function EventCard() {
                 {slides.length > 0 && (
                 <div className="w-full flex flex-col sm:flex-row ">
                     {/* Left Half - Image Slider */}
-                    <Link href={`/event/${slides[index]?.id ?? '#'}`} className="w-full sm:w-1/2 relative h-48 sm:h-[180px] md:h-[200.1px] rounded-tl-lg rounded-lb-lg overflow-hidden block cursor-pointer">
+                    <Link href={slides[index]?.id && slides[index].id !== 'd1' && slides[index].id !== 'd2' && slides[index].id !== 'd3' ? `/event/${slides[index]?.id}` : '#'} className="w-full sm:w-1/2 relative h-48 sm:h-[180px] md:h-[200.1px] rounded-tl-lg rounded-lb-lg overflow-hidden block cursor-pointer">
                         <img
                             src={slides[index]?.image}
                             alt="Event"

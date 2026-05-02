@@ -137,7 +137,7 @@ const EventsSection = () => {
           {events.map((event, index) => (
             <Link
               key={event.id ?? event._id}
-              href={`/event/${event.id ?? event._id}`}
+              href={`/event/${event.slug || (event.id ?? event._id)}`}
               className="w-full max-w-[340px] h-auto event-card relative overflow-visible block cursor-pointer"
             >
               {/* Badge Image at Top Left */}

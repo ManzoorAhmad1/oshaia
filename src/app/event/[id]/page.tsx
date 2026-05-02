@@ -1415,8 +1415,8 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                     const evMonth = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][evDate.getMonth()];
                                     const evMinPrice = ev.ticketTypes?.length ? Math.min(...ev.ticketTypes.map((t: any) => t.price)) : 0;
                                     return (
-                                        <div key={ev.id} className="w-1/3 flex-shrink-0 px-5 sm:px-7 py-8 overflow-visible">
-                                            <Link href={`/event/${ev.id}`} className="w-full max-w-[340px] h-auto event-card relative overflow-visible block cursor-pointer mx-auto">
+                                        <div key={ev.id ?? ev._id} className="w-1/3 flex-shrink-0 px-5 sm:px-7 py-8 overflow-visible">
+                                            <Link href={`/event/${ev.slug || ev.id}`} className="w-full max-w-[340px] h-auto event-card relative overflow-visible block cursor-pointer mx-auto">
                                                 <div className="relative z-10 overflow-hidden rounded-tr-2xl rounded-br-2xl rounded-bl-2xl shadow-xl bg-white">
                                                     <div className="relative w-full h-[340px] overflow-hidden">
                                                         <Image src={evImg} alt={evTitle || 'Event'} fill className="object-cover" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />

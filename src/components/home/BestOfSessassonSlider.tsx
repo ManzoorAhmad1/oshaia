@@ -9,6 +9,7 @@ import { useCms } from '@/lib/useCms'
 
 interface SlideData {
     id: string | number
+    slug?: string
     type: "image" | "video"
     url: string
     alt: string
@@ -48,8 +49,9 @@ const BestOfSessassonSlider = () => {
             .then(res => {
                 const events = res.data.data?.events ?? res.data.events ?? []
                 if (events.length > 0) {
-                    setApiSlides(events.map((ev: { _id: string; title?: { en?: string; fr?: string }; coverImage?: string }) => ({
+                    setApiSlides(events.map((ev: { _id: string; id?: number; slug?: string; title?: { en?: string; fr?: string }; coverImage?: string }) => ({
                         id: ev._id,
+                        slug: ev.slug,
                         type: 'image' as const,
                         url: getImageUrl(ev.coverImage, cmsSlides[0]?.url || ''),
                         alt: language === 'fr' ? (ev.title?.fr || ev.title?.en || '') : (ev.title?.en || ev.title?.fr || ''),
@@ -231,7 +233,7 @@ const BestOfSessassonSlider = () => {
                             </button>
                         </div>
                     ) : (
-                        <Link href={`/event/${currentSlideData.id}`} className="relative w-full h-full block cursor-pointer">
+                        <Link href={`/event/${currentSlideData.slug || currentSlideData.id}`} className="relative w-full h-full block cursor-pointer">
                             <img
                                 src={currentSlideData.url}
                                 alt={currentSlideData.alt}
