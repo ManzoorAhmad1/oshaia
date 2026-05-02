@@ -6,7 +6,7 @@ import api from '@/lib/api';
 import { getImageUrl } from '@/lib/imageUrl';
 import {
   Loader2, Upload, Globe, EyeOff, Plus, Trash2,
-  Link2, Gift, Music, Image as ImageIcon, Calendar,
+  Link2, Gift, Music, Image as ImageIcon, Calendar, Info,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -47,9 +47,18 @@ interface Song {
   spotifyUrl: string;
 }
 
+interface Artist {
+  name: string;
+  role: string;
+  nationality: string;
+  img: string;
+  bio: string;
+}
+
 interface EventFormData {
   title: { en: string; fr: string };
   category: string;
+  ticketCategory: 'standing' | 'seating';
   description: { en: string; fr: string };
   venue: { en: string; fr: string };
   address: { en: string; fr: string };
@@ -85,6 +94,22 @@ interface EventFormData {
   songs: Song[];
   // Site Plan
   sitePlanImage: string;
+  // Per-event content
+  artists: Artist[];
+  whatToExpect: string[];
+  moreInfoContent: { en: string; fr: string };
+  // Per-event section visibility
+  sections: {
+    hero: boolean;
+    tickets: boolean;
+    description: boolean;
+    artists: boolean;
+    moreInfo: boolean;
+    location: boolean;
+    sitePlan: boolean;
+    songs: boolean;
+    relatedEvents: boolean;
+  };
 }
 
 interface Props {
@@ -114,9 +139,14 @@ const defaultSponsorTicket = (): SponsorTicket => ({
   sponsorName: '', ticketName: '', quantity: 1, remarks: '',
 });
 
+const defaultArtist = (): Artist => ({
+  name: '', role: '', nationality: '', img: '', bio: '',
+});
+
 const defaultForm = (): EventFormData => ({
   title: { en: '', fr: '' },
   category: 'concert',
+  ticketCategory: 'seating',
   description: { en: '', fr: '' },
   venue: { en: '', fr: '' },
   address: { en: '', fr: '' },
@@ -132,6 +162,10 @@ const defaultForm = (): EventFormData => ({
   socialLinks: {},
   songs: [],
   sitePlanImage: '',
+  artists: [],
+  whatToExpect: [],
+  moreInfoContent: { en: '', fr: '' },
+  sections: { hero: true, tickets: true, description: true, artists: true, moreInfo: true, location: true, sitePlan: true, songs: true, relatedEvents: true },
 });
 
 // â”€â”€ Toggle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -211,9 +245,14 @@ export default function EventForm({ initialData, mode, onSuccess, onCancel }: Pr
     venue: { en: '', fr: '', ...initialData?.venue },
     address: { en: '', fr: '', ...initialData?.address },
     socialLinks: { ...(initialData?.socialLinks ?? {}) },
+    ticketCategory: (initialData as any)?.ticketCategory ?? 'seating',
     ticketTypes: initialData?.ticketTypes?.length ? initialData.ticketTypes : [defaultTicket()],
     sponsorTickets: (initialData as any)?.sponsorTickets ?? [],
     songs: (initialData as any)?.songs ?? [],
+    artists: (initialData as any)?.artists ?? [],
+    whatToExpect: (initialData as any)?.whatToExpect ?? [],
+    moreInfoContent: { en: '', fr: '', ...((initialData as any)?.moreInfoContent ?? {}) },
+    sections: (initialData as any)?.sections ?? { hero: true, tickets: true, description: true, artists: true, moreInfo: true, location: true, sitePlan: true, songs: true, relatedEvents: true },
     startDate: initialData?.startDate ? new Date(initialData.startDate).toISOString().split('T')[0] : '',
     endDate: initialData?.endDate ? new Date(initialData.endDate).toISOString().split('T')[0] : '',
     scheduledAt: (initialData as any)?.scheduledAt ? new Date((initialData as any).scheduledAt).toISOString().slice(0, 16) : '',
@@ -363,19 +402,63 @@ export default function EventForm({ initialData, mode, onSuccess, onCancel }: Pr
               <Toggle checked={form.earlyBird} onChange={(v) => setField('earlyBird', v)} />
             </div>
           </div>
-          {/* External Booking Link */}
+          {/* ── Ticket Category (Standing / Seating) ── */}
           <div>
-            <span className="text-xs font-medium text-gray-600 mb-1 block">External Ticket URL (optional)</span>
-            <input type="url" placeholder="https://..." value={form.bookingLink} onChange={(e) => setField('bookingLink', e.target.value)} className={inp} />
-            <p className="text-[11px] text-gray-400 mt-1">If set, "Buy/Get" links to this URL.</p>
+            <span className="text-xs font-medium text-gray-600 mb-2 block">Ticket Category *</span>
+            <div className="grid grid-cols-2 gap-3">
+              {(['standing', 'seating'] as const).map((tc) => (
+                <button
+                  key={tc}
+                  type="button"
+                  onClick={() => setField('ticketCategory', tc)}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl border-2 text-left transition-all ${
+                    form.ticketCategory === tc
+                      ? 'border-[#c89c6b] bg-[#c89c6b]/10'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center ${
+                    form.ticketCategory === tc ? 'border-[#c89c6b]' : 'border-gray-300'
+                  }`}>
+                    {form.ticketCategory === tc && <div className="w-2 h-2 rounded-full bg-[#c89c6b]" />}
+                  </div>
+                  <div>
+                    <p className={`text-sm font-bold ${form.ticketCategory === tc ? 'text-[#112b38]' : 'text-gray-600'}`}>
+                      {tc === 'standing' ? '🎤 Standing' : '💺 Seating'}
+                    </p>
+                    <p className="text-[11px] text-gray-400">
+                      {tc === 'standing' ? 'External URL — redirect to partner' : 'Seat selection — buy inside platform'}
+                    </p>
+                  </div>
+                </button>
+              ))}
+            </div>
           </div>
+
+          {/* External Booking Link — Standing only */}
+          {form.ticketCategory === 'standing' && (
+            <div className="border-2 border-[#c89c6b]/40 bg-[#c89c6b]/5 rounded-xl p-4 space-y-2">
+              <p className="text-xs font-bold text-[#112b38] uppercase tracking-wide">🔗 External Ticket URL *</p>
+              <input
+                type="url"
+                placeholder="https://partner-ticketing.com/event-slug"
+                value={form.bookingLink}
+                onChange={(e) => setField('bookingLink', e.target.value)}
+                className={inp}
+              />
+              <p className="text-[11px] text-gray-400">Users will be redirected to this URL when they click "Buy Tickets".</p>
+            </div>
+          )}
         </div>
       </SectionCard>
 
-      {/* â”€â”€ Ticket Types â”€â”€ */}
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      {/* ── Ticket Types — Seating only ── */}
+      <div className={`bg-white rounded-xl border border-gray-200 overflow-hidden ${form.ticketCategory !== 'seating' ? 'opacity-40 pointer-events-none' : ''}`}>
         <div className="flex items-center justify-between px-5 py-3 border-b border-[#c89c6b]/20 bg-[#112b38]">
-          <h3 className="font-semibold text-sm text-white">Ticket Types</h3>
+          <div>
+            <h3 className="font-semibold text-sm text-white">Ticket Types</h3>
+            {form.ticketCategory !== 'seating' && <p className="text-[11px] text-white/50">Only applies to Seating events</p>}
+          </div>
           <button type="button" onClick={() => setForm((p) => ({ ...p, ticketTypes: [...p.ticketTypes, defaultTicket()] }))}
             className="flex items-center gap-1 text-xs font-semibold px-3 py-1.5 bg-[#c89c6b] text-white rounded-lg hover:bg-[#b8895a] transition-colors">
             <Plus className="w-3.5 h-3.5" /> Add
@@ -530,7 +613,105 @@ export default function EventForm({ initialData, mode, onSuccess, onCancel }: Pr
         </div>
       </div>
 
-      {/* â”€â”€ Homepage Placement â”€â”€ */}
+      {/* ── Artist Lineup ── */}
+      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-3 border-b border-[#c89c6b]/20 bg-[#112b38]">
+          <div className="flex items-center gap-2">
+            <span className="text-[#c89c6b] text-base">🎤</span>
+            <h3 className="font-semibold text-sm text-white">Artist Lineup</h3>
+          </div>
+          <button type="button" onClick={() => setForm((p) => ({ ...p, artists: [...p.artists, defaultArtist()] }))}
+            className="flex items-center gap-1 text-xs font-semibold px-3 py-1.5 bg-[#c89c6b] text-white rounded-lg hover:bg-[#b8895a] transition-colors">
+            <Plus className="w-3.5 h-3.5" /> Add Artist
+          </button>
+        </div>
+        <div className="p-5 space-y-4">
+          {form.artists.length === 0 && (
+            <p className="text-xs text-gray-400 text-center py-3">No artists added yet. Artists appear in the Artist Lineup section on the event page.</p>
+          )}
+          {form.artists.map((artist, idx) => (
+            <div key={idx} className="border border-gray-200 rounded-xl p-4 space-y-3 bg-gray-50/50">
+              <div className="flex items-center justify-between">
+                <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">Artist #{idx + 1}</p>
+                <button type="button" onClick={() => setForm((p) => ({ ...p, artists: p.artists.filter((_, i) => i !== idx) }))}
+                  className="text-xs text-red-500 hover:text-red-700 flex items-center gap-1">
+                  <Trash2 className="w-3.5 h-3.5" /> Remove
+                </button>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <span className="text-xs text-gray-500 mb-1 block">Artist Name *</span>
+                  <input value={artist.name} onChange={(e) => { const a = [...form.artists]; a[idx] = { ...a[idx], name: e.target.value }; setForm((p) => ({ ...p, artists: a })); }} className={sinp} placeholder="e.g. DJ Arafura" />
+                </div>
+                <div>
+                  <span className="text-xs text-gray-500 mb-1 block">Role / Title</span>
+                  <input value={artist.role} onChange={(e) => { const a = [...form.artists]; a[idx] = { ...a[idx], role: e.target.value }; setForm((p) => ({ ...p, artists: a })); }} className={sinp} placeholder="e.g. Headliner, DJ, Vocalist" />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <span className="text-xs text-gray-500 mb-1 block">Nationality</span>
+                  <input value={artist.nationality} onChange={(e) => { const a = [...form.artists]; a[idx] = { ...a[idx], nationality: e.target.value }; setForm((p) => ({ ...p, artists: a })); }} className={sinp} placeholder="e.g. South African" />
+                </div>
+                <div>
+                  <span className="text-xs text-gray-500 mb-1 block">Artist Photo</span>
+                  <FileUploadField label="" value={artist.img} onChange={(url) => { const a = [...form.artists]; a[idx] = { ...a[idx], img: url }; setForm((p) => ({ ...p, artists: a })); }} hint="Square photo recommended" />
+                </div>
+              </div>
+              <div>
+                <span className="text-xs text-gray-500 mb-1 block">Short Bio</span>
+                <textarea rows={2} value={artist.bio} onChange={(e) => { const a = [...form.artists]; a[idx] = { ...a[idx], bio: e.target.value }; setForm((p) => ({ ...p, artists: a })); }} className={sinp + ' resize-none'} placeholder="Brief artist biography shown on event page..." />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── What to Expect ── */}
+      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-3 border-b border-[#c89c6b]/20 bg-[#112b38]">
+          <div className="flex items-center gap-2">
+            <span className="text-[#c89c6b] text-base">⭕️</span>
+            <h3 className="font-semibold text-sm text-white">What to Expect</h3>
+          </div>
+          <button type="button" onClick={() => setForm((p) => ({ ...p, whatToExpect: [...p.whatToExpect, ''] }))}
+            className="flex items-center gap-1 text-xs font-semibold px-3 py-1.5 bg-[#c89c6b] text-white rounded-lg hover:bg-[#b8895a] transition-colors">
+            <Plus className="w-3.5 h-3.5" /> Add Point
+          </button>
+        </div>
+        <div className="p-5 space-y-2">
+          {form.whatToExpect.length === 0 && (
+            <p className="text-xs text-gray-400 text-center py-3">No bullet points added. These appear in the Description tab under "What to Expect".</p>
+          )}
+          {form.whatToExpect.map((point, idx) => (
+            <div key={idx} className="flex gap-2 items-center">
+              <span className="text-[#112b38] font-bold flex-shrink-0">▪</span>
+              <input value={point} onChange={(e) => { const w = [...form.whatToExpect]; w[idx] = e.target.value; setForm((p) => ({ ...p, whatToExpect: w })); }} className={sinp} placeholder={`Point #${idx + 1}`} />
+              <button type="button" onClick={() => setForm((p) => ({ ...p, whatToExpect: p.whatToExpect.filter((_, i) => i !== idx) }))} className="text-red-400 hover:text-red-600 flex-shrink-0">
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── More Info Content ── */}
+      <SectionCard title="More Info Content" icon={<Info className="w-4 h-4 text-amber-500" />} badge="More Info tab">
+        <p className="text-xs text-gray-400 mb-3">Content shown in the "More Info" tab — rules, warnings, T&C, special instructions, etc.</p>
+        <div className="space-y-3">
+          <label className="block">
+            <span className="text-xs font-medium text-gray-600 mb-1 block">More Info (EN)</span>
+            <textarea rows={6} value={form.moreInfoContent.en} onChange={(e) => setField('moreInfoContent.en', e.target.value)} className={inp + ' resize-y'} placeholder="Enter rules, warnings, terms and conditions, special notes… (one item per line)" />
+          </label>
+          <label className="block">
+            <span className="text-xs font-medium text-gray-600 mb-1 block">More Info (FR)</span>
+            <textarea rows={4} value={form.moreInfoContent.fr} onChange={(e) => setField('moreInfoContent.fr', e.target.value)} className={inp + ' resize-y'} placeholder="Traduction française…" />
+          </label>
+          <p className="text-[11px] text-gray-400">Each new line will appear as a separate bullet point on the event page.</p>
+        </div>
+      </SectionCard>
+
+      {/* ── Homepage Placement ── */}
         </div>{/* ── end LEFT COLUMN ── */}
 
         {/* ── RIGHT COLUMN (sidebar) ── */}
@@ -651,6 +832,32 @@ export default function EventForm({ initialData, mode, onSuccess, onCancel }: Pr
               </label>
             </div>
           )}
+        </div>
+      </SectionCard>
+
+      {/* ── Page Sections ── */}
+      <SectionCard title="Page Sections" icon={<EyeOff className="w-4 h-4 text-purple-500" />} badge="Per-event">
+        <p className="text-xs text-gray-400 mb-3">Toggle which sections appear on this event's detail page. Overrides global CMS settings.</p>
+        <div className="divide-y divide-gray-100">
+          {([
+            { key: 'hero',          label: 'Hero Banner / Slideshow', emoji: '🖼️' },
+            { key: 'tickets',       label: 'Tickets',                 emoji: '🎟️' },
+            { key: 'description',   label: 'Description',             emoji: '📝' },
+            { key: 'artists',       label: 'Artist Lineup',           emoji: '🎤' },
+            { key: 'moreInfo',      label: 'More Info',               emoji: 'ℹ️' },
+            { key: 'location',      label: 'Location Map',            emoji: '📍' },
+            { key: 'sitePlan',      label: 'Site Plan / Seat Map',    emoji: '🗺️' },
+            { key: 'songs',         label: 'Spotify Songs',           emoji: '🎵' },
+            { key: 'relatedEvents', label: 'Related Events',          emoji: '🗓️' },
+          ] as { key: keyof typeof form.sections; label: string; emoji: string }[]).map(({ key, label, emoji }) => (
+            <div key={key} className="flex items-center justify-between py-2.5">
+              <div className="flex items-center gap-2">
+                <span className="text-base leading-none">{emoji}</span>
+                <span className={`text-sm font-medium ${form.sections[key] ? 'text-gray-700' : 'text-gray-400 line-through'}`}>{label}</span>
+              </div>
+              <Toggle checked={form.sections[key]} onChange={(v) => setField(`sections.${key}`, v)} />
+            </div>
+          ))}
         </div>
       </SectionCard>
 

@@ -332,6 +332,17 @@ const SECTION_FIELD_CONFIG: Record<string, Record<string, SectionFieldFlags>> = 
     banner:   { showImage: true },
     delivery: { showDescription: true, showButton: true },
   },
+  event: {
+    hero:          {},
+    tickets:       {},
+    description:   {},
+    artists:       {},
+    moreInfo:      {},
+    location:      {},
+    sitePlan:      {},
+    songs:         {},
+    relatedEvents: {},
+  },
   'staff-login': {
     admin:         { showImage: true },
     organizer:     { showImage: true, showTitle: true, showDescription: true },

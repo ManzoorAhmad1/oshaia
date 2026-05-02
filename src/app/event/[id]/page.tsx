@@ -83,6 +83,12 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     const { content: cmsEventConfig } = useCms('event');
     const { content: cmsHomeConfig } = useCms('home');
     const isSectionVisible = (key: string) => {
+        // 1. Per-event override (set in admin EventForm) takes highest priority
+        const eventSections = apiEvent?.sections;
+        if (eventSections && typeof eventSections === 'object' && eventSections[key] !== undefined && eventSections[key] !== null) {
+            return Boolean(eventSections[key]);
+        }
+        // 2. Fall back to global CMS config
         const vis = cmsEventConfig[key]?.isVisible;
         return vis === undefined || vis === null || Boolean(vis);
     };
@@ -618,6 +624,37 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                 {/* Tickets Section */}
                                 {isSectionVisible('tickets') ? (
                                     <div ref={ticketsRef} id="tickets-section">
+
+                                        {/* ── STANDING EVENT: external URL button ── */}
+                                        {apiEvent?.ticketCategory === 'standing' ? (
+                                            <div className="bg-white rounded-2xl border border-[#c89c6b]/30 shadow-sm p-6 text-center space-y-4">
+                                                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#c89c6b]/10 text-[#c89c6b] rounded-full text-xs font-bold uppercase tracking-widest">
+                                                    🎤 Standing Event
+                                                </div>
+                                                <h3 className="text-lg sm:text-xl font-extrabold uppercase tracking-widest text-[#112b38]">
+                                                    {t.chooseYourTickets || 'Get Your Tickets'}
+                                                </h3>
+                                                <div className="w-full h-px bg-gray-100" />
+                                                <p className="text-sm text-gray-500">
+                                                    Tickets are sold via our partner platform. Click below to proceed.
+                                                </p>
+                                                {event.bookingLink ? (
+                                                    <a
+                                                        href={event.bookingLink}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full bg-[#c89c6b] hover:bg-[#b8885a] text-white font-bold text-sm sm:text-base tracking-wide shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
+                                                    >
+                                                        <TicketIcon className="w-5 h-5 flex-shrink-0" />
+                                                        Buy Tickets
+                                                    </a>
+                                                ) : (
+                                                    <p className="text-sm text-gray-400 italic">Tickets link coming soon…</p>
+                                                )}
+                                            </div>
+                                        ) : (
+                                        /* ── SEATING EVENT: manual ticket selection ── */
+                                        <>
                                         {/* Collapsible Header */}
                                         <button
                                             onClick={() => setIsTicketsCollapsed(!isTicketsCollapsed)}
@@ -727,6 +764,8 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                 </div>
                                             </div>
                                         )}
+                                        </>
+                                        )} {/* end standing/seating conditional */}
                                     </div>
                                 ) : null} {/* end tickets */}
 
@@ -758,30 +797,23 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                         <Text>{event.description}</Text>
 
                                                         {/* What To Expect */}
-                                                        <div className="mt-6">
-                                                            <h3 className="font-bold text-lg text-[#112b38] mb-3">⭕️ WHAT TO EXPECT</h3>
-                                                            <ul className="space-y-2">
-                                                                {[
-                                                                    'International Artists headlining the event',
-                                                                    'More than 6 local support artists',
-                                                                    'Music Genre: Afro-House / Afro-Tech / Electronic',
-                                                                    'Open-Air garden & beach venue at a 5★ resort',
-                                                                    'Exclusive 2hr headliner set recorded LIVE',
-                                                                    'Signature stage design with giant LED screens',
-                                                                    'New sitting areas & lounges for ALL zones',
-                                                                    'Exclusive Backstage access for VIPs & VVIPs',
-                                                                    'Exclusive Meet & Greet Area for VVIPs',
-                                                                    'Dedicated washrooms per zone',
-                                                                    'Multiple food & beverage corners',
-                                                                    'Fire Breathers, Laser Show & more surprises',
-                                                                ].map((item, i) => (
-                                                                    <li key={i} className="flex items-start gap-2 text-[#112b38] text-sm">
-                                                                        <span className="mt-1 w-3 h-3 rounded-sm bg-[#112b38] flex-shrink-0 inline-block" />
-                                                                        <span>{item}</span>
-                                                                    </li>
-                                                                ))}
-                                                            </ul>
-                                                        </div>
+                                                        {(() => {
+                                                            const items: string[] = apiEvent?.whatToExpect ?? [];
+                                                            if (items.length === 0) return null;
+                                                            return (
+                                                                <div className="mt-6">
+                                                                    <h3 className="font-bold text-lg text-[#112b38] mb-3">⭕️ WHAT TO EXPECT</h3>
+                                                                    <ul className="space-y-2">
+                                                                        {items.map((item: string, i: number) => (
+                                                                            <li key={i} className="flex items-start gap-2 text-[#112b38] text-sm">
+                                                                                <span className="mt-1 w-3 h-3 rounded-sm bg-[#112b38] flex-shrink-0 inline-block" />
+                                                                                <span>{item}</span>
+                                                                            </li>
+                                                                        ))}
+                                                                    </ul>
+                                                                </div>
+                                                            );
+                                                        })()}
 
                                                         {/* Artist Biographies */}
                                                         <div className="mt-6">
@@ -792,7 +824,7 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                                 ) : displayArtists.map((artist: any) => (
                                                                     <div key={artist.name} className="flex gap-4 items-start bg-gray-50 rounded-xl p-4 border border-gray-100">
                                                                         <img
-                                                                            src={artist.img}
+                                                                            src={artist.img ? getImageUrl(artist.img) : `https://ui-avatars.com/api/?name=${encodeURIComponent(artist.name)}&background=112b38&color=c89c6b&size=64`}
                                                                             alt={artist.name}
                                                                             className="w-16 h-16 rounded-full object-cover flex-shrink-0 border-2 border-[#c89c6b]"
                                                                         />
@@ -852,64 +884,83 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
                                             {!isMoreInfoCollapsed && (
                                                 <div className="px-4 sm:px-6 pb-4 sm:pb-6">
-                                                    <div className="space-y-6 text-sm sm:text-base text-[#112b38]">
-
-                                                        {/* Warning */}
-                                                        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-                                                            <h3 className="font-bold text-base mb-3 text-amber-700">⚠ WARNING</h3>
-                                                            <ul className="space-y-2 list-disc list-inside text-gray-700 text-sm">
-                                                                <li>This is a LIMITED capacity event — do not wait to buy your tickets.</li>
-                                                                <li>LIMITED PARKING. We request you to book a taxi, driver, or car-pool to avoid traffic and parking issues.</li>
-                                                                <li>This is an 18+ event. Minors will not be allowed unless accompanied by a parent or responsible party.</li>
-                                                                <li>By attending you accept to be photographed and filmed by our crew.</li>
-                                                                <li>You are not allowed to bring food or drinks inside the venue premises.</li>
-                                                                <li>Tickets once bought are NOT refundable.</li>
-                                                                <li>The event organiser shall not be held liable for cancellation or disruption due to force majeure events.</li>
-                                                            </ul>
-                                                        </div>
-
-                                                        {/* Terms & Conditions */}
-                                                        <div>
-                                                            <h3 className="font-bold text-lg mb-3">{t.ageRestriction} & Terms</h3>
-                                                            <ul className="space-y-2 list-disc list-inside text-gray-700 text-sm">
-                                                                <li>The Event starts at 15:00 and ends at 23:30. Doors open at 15:00 and close at 17:00.</li>
-                                                                <li>This is strictly an 18+ event.</li>
-                                                                <li>Food & drinks from outside will not be permitted.</li>
-                                                                <li>The organiser reserves the right to amend the venue in case of unforeseeable circumstances.</li>
-                                                                <li>Photography and filming is prohibited during the show.</li>
-                                                                <li>No Show: If customer does not attend, 100% Cancellation Fee applies.</li>
-                                                                <li>No cancellation or exchange available once ticket is confirmed and issued.</li>
-                                                                <li>Security checks of bags will be conducted.</li>
-                                                                <li>Failure to present your ticket at the event will entitle the organiser to deny access.</li>
-                                                                <li>You can print your e-ticket or have it ready to scan from your smartphone. Make sure the QR code and booking ref is visible.</li>
-                                                            </ul>
-                                                        </div>
-
-                                                        {/* Lockdown & Cyclone Protocol */}
-                                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                                            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
-                                                                <h3 className="font-bold text-base mb-2 text-blue-800">🔒 Lockdown Protocol</h3>
-                                                                <p className="text-sm text-gray-600 mb-2">If an event coincides with a lockdown or government-imposed restrictions, it may be cancelled or postponed.</p>
-                                                                <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
-                                                                    <li><strong>Postponement:</strong> Tickets remain valid for the rescheduled date.</li>
-                                                                    <li><strong>Cancellation:</strong> A full refund will be provided per cancellation terms.</li>
-                                                                </ul>
+                                                    {(() => {
+                                                        const content = apiEvent?.moreInfoContent;
+                                                        const text = (language === 'fr' ? content?.fr : content?.en) || content?.en || '';
+                                                        if (text.trim()) {
+                                                            // Per-event content: each line → bullet point
+                                                            const lines = text.split('\n').map((l: string) => l.trim()).filter(Boolean);
+                                                            return (
+                                                                <div className="space-y-4 text-sm sm:text-base text-[#112b38]">
+                                                                    <ul className="space-y-2">
+                                                                        {lines.map((line: string, i: number) => (
+                                                                            <li key={i} className="flex items-start gap-2 text-gray-700 text-sm">
+                                                                                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#c89c6b] flex-shrink-0 inline-block" />
+                                                                                <span>{line}</span>
+                                                                            </li>
+                                                                        ))}
+                                                                    </ul>
+                                                                </div>
+                                                            );
+                                                        }
+                                                        // Fallback: default hardcoded content
+                                                        return (
+                                                            <div className="space-y-6 text-sm sm:text-base text-[#112b38]">
+                                                                {/* Warning */}
+                                                                <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                                                                    <h3 className="font-bold text-base mb-3 text-amber-700">⚠ WARNING</h3>
+                                                                    <ul className="space-y-2 list-disc list-inside text-gray-700 text-sm">
+                                                                        <li>This is a LIMITED capacity event — do not wait to buy your tickets.</li>
+                                                                        <li>LIMITED PARKING. We request you to book a taxi, driver, or car-pool to avoid traffic and parking issues.</li>
+                                                                        <li>This is an 18+ event. Minors will not be allowed unless accompanied by a parent or responsible party.</li>
+                                                                        <li>By attending you accept to be photographed and filmed by our crew.</li>
+                                                                        <li>You are not allowed to bring food or drinks inside the venue premises.</li>
+                                                                        <li>Tickets once bought are NOT refundable.</li>
+                                                                        <li>The event organiser shall not be held liable for cancellation or disruption due to force majeure events.</li>
+                                                                    </ul>
+                                                                </div>
+                                                                {/* Terms & Conditions */}
+                                                                <div>
+                                                                    <h3 className="font-bold text-lg mb-3">{t.ageRestriction} & Terms</h3>
+                                                                    <ul className="space-y-2 list-disc list-inside text-gray-700 text-sm">
+                                                                        <li>The Event starts at 15:00 and ends at 23:30. Doors open at 15:00 and close at 17:00.</li>
+                                                                        <li>This is strictly an 18+ event.</li>
+                                                                        <li>Food & drinks from outside will not be permitted.</li>
+                                                                        <li>The organiser reserves the right to amend the venue in case of unforeseeable circumstances.</li>
+                                                                        <li>Photography and filming is prohibited during the show.</li>
+                                                                        <li>No Show: If customer does not attend, 100% Cancellation Fee applies.</li>
+                                                                        <li>No cancellation or exchange available once ticket is confirmed and issued.</li>
+                                                                        <li>Security checks of bags will be conducted.</li>
+                                                                        <li>Failure to present your ticket at the event will entitle the organiser to deny access.</li>
+                                                                        <li>You can print your e-ticket or have it ready to scan from your smartphone. Make sure the QR code and booking ref is visible.</li>
+                                                                    </ul>
+                                                                </div>
+                                                                {/* Lockdown & Cyclone Protocol */}
+                                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                                    <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+                                                                        <h3 className="font-bold text-base mb-2 text-blue-800">🔒 Lockdown Protocol</h3>
+                                                                        <p className="text-sm text-gray-600 mb-2">If an event coincides with a lockdown or government-imposed restrictions, it may be cancelled or postponed.</p>
+                                                                        <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                                                            <li><strong>Postponement:</strong> Tickets remain valid for the rescheduled date.</li>
+                                                                            <li><strong>Cancellation:</strong> A full refund will be provided per cancellation terms.</li>
+                                                                        </ul>
+                                                                    </div>
+                                                                    <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+                                                                        <h3 className="font-bold text-base mb-2 text-blue-800">🌀 Cyclone Protocol</h3>
+                                                                        <p className="text-sm text-gray-600 mb-2">If a booking falls under Cyclone Class 2 or higher, the event may be postponed or cancelled.</p>
+                                                                        <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                                                            <li><strong>Postponement:</strong> Tickets remain valid for the rescheduled date.</li>
+                                                                            <li><strong>Cancellation:</strong> A full refund will be provided per cancellation terms.</li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                                {/* Contact */}
+                                                                <div className="text-sm text-gray-600 border-t border-gray-100 pt-4">
+                                                                    If you have any queries, contact our customer hotline or chat with us via WhatsApp.
+                                                                </div>
                                                             </div>
-                                                            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
-                                                                <h3 className="font-bold text-base mb-2 text-blue-800">🌀 Cyclone Protocol</h3>
-                                                                <p className="text-sm text-gray-600 mb-2">If a booking falls under Cyclone Class 2 or higher, the event may be postponed or cancelled.</p>
-                                                                <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
-                                                                    <li><strong>Postponement:</strong> Tickets remain valid for the rescheduled date.</li>
-                                                                    <li><strong>Cancellation:</strong> A full refund will be provided per cancellation terms.</li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-
-                                                        {/* Contact */}
-                                                        <div className="text-sm text-gray-600 border-t border-gray-100 pt-4">
-                                                            If you have any queries, contact our customer hotline or chat with us via WhatsApp.
-                                                        </div>
-                                                    </div>
+                                                        );
+                                                    })()}
                                                 </div>
                                             )}
                                         </div>
@@ -958,9 +1009,9 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                                                 <div className="text-xs sm:text-sm text-[#112b38]">{t.location}</div>
                                             </div>
                                             <div>
-                                                <Text>Etihad Park</Text>
-                                                <Text>{event.fullAddress}</Text>
-                                                <Text className='flex gap-2 items-center '>{t.viewDirection} <FaGreaterThan /></Text>
+                                                <Text className="font-semibold text-sm text-[#112b38]">{event.location}</Text>
+                                                <Text className="text-xs text-gray-500">{event.fullAddress}</Text>
+                                                <Text className='flex gap-2 items-center text-xs text-[#c89c6b]'>{t.viewDirection} <FaGreaterThan /></Text>
                                             </div>
                                         </div>
                                         <div className="w-full h-[250px] bg-gray-200 rounded-xl overflow-hidden">
@@ -1038,25 +1089,30 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
                                 {/* Total Amount and Book Now Button */}
                                 <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0 mt-4 sm:mt-5">
-                                    <div className="text-center sm:text-left">
-                                        <p className="text-xs sm:text-sm text-[#c89c6b] whitespace-nowrap">{t.totalAmount}</p>
-                                        <p className="text-lg sm:text-xl font-bold text-red-500 whitespace-nowrap">Rs {calculateTotal().toLocaleString()}</p>
-                                    </div>
-                                    <button
-                                        onClick={() => {
-                                            if (event.bookingLink) {
-                                                window.open(event.bookingLink, '_blank', 'noopener,noreferrer');
-                                            } else {
-                                                router.push(`/event/${params.id}/checkout`);
-                                            }
-                                        }}
-                                        disabled={calculateTotal() === 0 && !event.bookingLink}
-                                        className={`w-full sm:w-auto font-semibold px-6 py-2 sm:py-2.5 rounded-lg transition-all duration-300 shadow-md whitespace-nowrap ${(calculateTotal() === 0 && !event.bookingLink) ? 'bg-gray-300 text-gray-400 cursor-not-allowed' : 'bg-[#c89c6b] hover:bg-[#b8885a] text-white hover:scale-105 hover:shadow-lg'}`}
-                                    >
-                                        {event.bookingLink ? (
-                                            <span className="flex items-center gap-1.5"><Link2 className="w-4 h-4" /> Book via Partner</span>
-                                        ) : t.bookNow}
-                                    </button>
+                                    {apiEvent?.ticketCategory === 'standing' ? (
+                                        <a
+                                            href={event.bookingLink || '#'}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className={`w-full flex items-center justify-center gap-2 font-semibold px-6 py-2.5 rounded-lg transition-all duration-300 shadow-md whitespace-nowrap ${event.bookingLink ? 'bg-[#c89c6b] hover:bg-[#b8885a] text-white hover:scale-105' : 'bg-gray-300 text-gray-400 cursor-not-allowed pointer-events-none'}`}
+                                        >
+                                            <TicketIcon className="w-4 h-4" /> Buy Tickets
+                                        </a>
+                                    ) : (
+                                        <>
+                                            <div className="text-center sm:text-left">
+                                                <p className="text-xs sm:text-sm text-[#c89c6b] whitespace-nowrap">{t.totalAmount}</p>
+                                                <p className="text-lg sm:text-xl font-bold text-red-500 whitespace-nowrap">Rs {calculateTotal().toLocaleString()}</p>
+                                            </div>
+                                            <button
+                                                onClick={() => router.push(`/event/${params.id}/checkout`)}
+                                                disabled={calculateTotal() === 0}
+                                                className={`w-full sm:w-auto font-semibold px-6 py-2 sm:py-2.5 rounded-lg transition-all duration-300 shadow-md whitespace-nowrap ${calculateTotal() === 0 ? 'bg-gray-300 text-gray-400 cursor-not-allowed' : 'bg-[#c89c6b] hover:bg-[#b8885a] text-white hover:scale-105 hover:shadow-lg'}`}
+                                            >
+                                                {t.bookNow}
+                                            </button>
+                                        </>
+                                    )}
                                 </div>
 
                                 {/* Action Buttons */}
