@@ -8,7 +8,7 @@ import {
   Loader2, ArrowLeft, Ticket, Users, ScanLine, Tag,
   Search, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight,
   CheckCircle2, XCircle, Clock, Filter, Eye, X, User, Mail, Phone,
-  QrCode, CalendarDays, Hash,
+  QrCode, CalendarDays, Hash, Bell, RefreshCw, Activity,
 } from 'lucide-react';
 
 interface Category {
@@ -198,18 +198,32 @@ export default function TicketDetailPage({ params }: { params: { eventId: string
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState<TicketRow | null>(null);
 
+  // ── Recent activity feed ────────────────────────────────────────────────
+  const [recentActivity, setRecentActivity] = useState<TicketRow[]>([]);
+  const [activityLoading, setActivityLoading] = useState(false);
+  const [lastActivityRefresh, setLastActivityRefresh] = useState<Date | null>(null);
+  const [newActivityCount, setNewActivityCount] = useState(0);
+
   const [search, setSearch] = useState('');
   const [searchInput, setSearchInput] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
 
   // ── Fetch summary ───────────────────────────────────────────────────────
-  useEffect(() => {
+  const fetchSummary = useCallback(() => {
     api.get(`/events/admin/${params.eventId}/tickets-detail`)
       .then(res => setData(res.data))
       .catch(() => setData(null))
       .finally(() => setLoading(false));
   }, [params.eventId]);
+
+  useEffect(() => { fetchSummary(); }, [fetchSummary]);
+
+  // Auto-refresh summary every 30 seconds
+  useEffect(() => {
+    const interval = setInterval(fetchSummary, 30_000);
+    return () => clearInterval(interval);
+  }, [fetchSummary]);
 
   // ── Fetch paginated tickets ─────────────────────────────────────────────
   const fetchTickets = useCallback(() => {
@@ -229,6 +243,40 @@ export default function TicketDetailPage({ params }: { params: { eventId: string
   }, [params.eventId, page, limit, search, statusFilter, categoryFilter]);
 
   useEffect(() => { fetchTickets(); }, [fetchTickets]);
+
+  // ── Fetch recent activity (last sold + scanned tickets) ─────────────────
+  const fetchActivity = useCallback(async (silent = false) => {
+    if (!silent) setActivityLoading(true);
+    try {
+      const [soldRes, scannedRes] = await Promise.all([
+        api.get(`/events/admin/${params.eventId}/tickets-list`, { params: { status: 'valid', limit: 15, page: 1 } }),
+        api.get(`/events/admin/${params.eventId}/tickets-list`, { params: { status: 'used',  limit: 15, page: 1 } }),
+      ]);
+      const sold    = soldRes.data.tickets ?? [];
+      const scanned = scannedRes.data.tickets ?? [];
+      // merge + sort by updatedAt desc, deduplicate
+      const merged = [...sold, ...scanned]
+        .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+        .filter((t, i, arr) => arr.findIndex(x => x.id === t.id) === i)
+        .slice(0, 20);
+      setRecentActivity(prev => {
+        // detect new items
+        const prevIds = new Set(prev.map(t => t.id));
+        const newCount = merged.filter(t => !prevIds.has(t.id)).length;
+        if (silent && newCount > 0) setNewActivityCount(n => n + newCount);
+        return merged;
+      });
+      setLastActivityRefresh(new Date());
+    } catch { /* silent fail */ }
+    finally { setActivityLoading(false); }
+  }, [params.eventId]);
+
+  useEffect(() => { fetchActivity(); }, [fetchActivity]);
+  // Auto-refresh activity every 15 seconds
+  useEffect(() => {
+    const interval = setInterval(() => fetchActivity(true), 15_000);
+    return () => clearInterval(interval);
+  }, [fetchActivity]);
 
   // Reset to page 1 when filters change
   useEffect(() => { setPage(1); }, [search, statusFilter, categoryFilter, limit]);
@@ -362,6 +410,110 @@ export default function TicketDetailPage({ params }: { params: { eventId: string
             </span>
           </div>
         )}
+
+        {/* ── Recent Activity / Notifications ─────────────────────── */}
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <div className="w-5 h-5 rounded bg-[#c89c6b] flex items-center justify-center flex-shrink-0">
+                <Bell className="w-3 h-3 text-white" />
+              </div>
+              <h2 className="text-lg font-bold text-[#112b38]">Recent Activity</h2>
+              {newActivityCount > 0 && (
+                <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-bold">
+                  {newActivityCount > 9 ? '9+' : newActivityCount}
+                </span>
+              )}
+              {lastActivityRefresh && (
+                <span className="text-[11px] text-gray-400">
+                  · Updated {lastActivityRefresh.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                </span>
+              )}
+            </div>
+            <button
+              onClick={() => { setNewActivityCount(0); fetchActivity(); }}
+              disabled={activityLoading}
+              className="flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-[#c89c6b] transition-colors disabled:opacity-50"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${activityLoading ? 'animate-spin' : ''}`} />
+              Refresh
+            </button>
+          </div>
+
+          {activityLoading && recentActivity.length === 0 ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="w-5 h-5 animate-spin text-[#c89c6b]" />
+            </div>
+          ) : recentActivity.length === 0 ? (
+            <div className="bg-white border border-gray-100 rounded-2xl py-10 text-center">
+              <Activity className="w-8 h-8 text-gray-200 mx-auto mb-2" />
+              <p className="text-sm text-gray-400">No ticket activity yet</p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {recentActivity.map((tk) => {
+                const isScanned = tk.status === 'used';
+                const timeAgo = (() => {
+                  const diff = Date.now() - new Date(tk.updatedAt).getTime();
+                  const mins = Math.floor(diff / 60000);
+                  const hrs  = Math.floor(diff / 3600000);
+                  if (mins < 1)  return 'Just now';
+                  if (mins < 60) return `${mins}m ago`;
+                  if (hrs  < 24) return `${hrs}h ago`;
+                  return new Date(tk.updatedAt).toLocaleDateString('en-GB', { day:'2-digit', month:'short' });
+                })();
+                return (
+                  <div
+                    key={tk.id}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl border transition-colors cursor-pointer hover:shadow-sm ${
+                      isScanned
+                        ? 'bg-green-50 border-green-100 hover:border-green-300'
+                        : 'bg-blue-50 border-blue-100 hover:border-blue-300'
+                    }`}
+                    onClick={() => setSelectedTicket(tk)}
+                  >
+                    {/* Icon */}
+                    <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ${
+                      isScanned ? 'bg-green-500' : 'bg-blue-500'
+                    }`}>
+                      {isScanned
+                        ? <ScanLine className="w-4 h-4 text-white" />
+                        : <Ticket className="w-4 h-4 text-white" />}
+                    </div>
+
+                    {/* Details */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm font-bold text-[#112b38] truncate">
+                          {tk.buyer?.name || 'Unknown buyer'}
+                        </p>
+                        <span className={`flex-shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                          isScanned ? 'bg-green-200 text-green-800' : 'bg-blue-200 text-blue-800'
+                        }`}>
+                          {isScanned ? '✓ Scanned In' : '🎟 Ticket Sold'}
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-500 truncate">
+                        {tk.buyer?.email && <span className="mr-2">{tk.buyer.email}</span>}
+                        <span className="text-[#c89c6b] font-semibold">{tk.ticketTypeName || `Type ${tk.ticketTypeIndex + 1}`}</span>
+                        {' · '}
+                        <span className="font-mono text-[11px]">{tk.serialNumber}</span>
+                      </p>
+                    </div>
+
+                    {/* Time */}
+                    <div className="text-right flex-shrink-0">
+                      <p className="text-xs font-semibold text-gray-500">{timeAgo}</p>
+                      <p className="text-[10px] text-gray-400 font-mono">
+                        Rs {Number(tk.price).toLocaleString()}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
 
         {/* ── Individual Tickets List ──────────────────────────────── */}
         <div>
