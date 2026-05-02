@@ -6,7 +6,7 @@ import api from '@/lib/api';
 import { getImageUrl } from '@/lib/imageUrl';
 import {
   Loader2, Upload, Globe, EyeOff, Plus, Trash2,
-  Link2, Gift, Music, Image as ImageIcon, Calendar, Info,
+  Link2, Gift, Music, Image as ImageIcon, Calendar, Info, Lock, Copy, Check as CheckIcon, RefreshCw,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -258,6 +258,57 @@ export default function EventForm({ initialData, mode, onSuccess, onCancel }: Pr
     scheduledAt: (initialData as any)?.scheduledAt ? new Date((initialData as any).scheduledAt).toISOString().slice(0, 16) : '',
   }));
   const [saving, setSaving] = useState(false);
+  const [privateToken, setPrivateToken] = useState<string>((initialData as any)?.privateToken ?? '');
+  const [privateLink, setPrivateLink] = useState<string>('');
+  const [generatingToken, setGeneratingToken] = useState(false);
+  const [copiedLink, setCopiedLink] = useState(false);
+
+  // Derive eventMode: 'public' | 'private' | 'draft'
+  const eventMode: 'public' | 'private' | 'draft' =
+    form.isPublic ? 'public' : privateToken ? 'private' : 'draft';
+
+  const setEventMode = async (mode: 'public' | 'private' | 'draft') => {
+    if (mode === 'public') {
+      setField('isPublic', true);
+    } else if (mode === 'draft') {
+      setField('isPublic', false);
+      setPrivateToken('');
+      setPrivateLink('');
+    } else {
+      // private: need a saved event id to generate token
+      const eventId = (initialData as any)?.id || (initialData as any)?._id;
+      if (!eventId) {
+        // Save first, then generate
+        toast('Save the event first, then switch to Private Link mode.');
+        return;
+      }
+      setGeneratingToken(true);
+      try {
+        const res = await api.post(`/events/${eventId}/private-token`);
+        setPrivateToken(res.data.token);
+        setPrivateLink(res.data.link);
+        setField('isPublic', false);
+        toast.success('Private link generated!');
+      } catch {
+        toast.error('Failed to generate private link');
+      } finally {
+        setGeneratingToken(false);
+      }
+    }
+  };
+
+  const copyPrivateLink = () => {
+    const link = privateLink || buildLink();
+    navigator.clipboard.writeText(link);
+    setCopiedLink(true);
+    setTimeout(() => setCopiedLink(false), 2000);
+  };
+
+  const buildLink = () => {
+    const base = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
+    const slugOrId = (initialData as any)?.slug || (initialData as any)?.id || '';
+    return `${base}/event/${slugOrId}?token=${privateToken}`;
+  };
 
   const setField = (path: string, value: any) => {
     setForm((prev) => {
@@ -364,8 +415,8 @@ export default function EventForm({ initialData, mode, onSuccess, onCancel }: Pr
               </label>
             ))}
           </div>
-          {/* Category / Badge / Status / Early Bird */}
-          <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 items-end">
+          {/* Category / Badge / Early Bird */}
+          <div className="grid grid-cols-2 xl:grid-cols-3 gap-3 items-end">
             <label className="block">
               <span className="text-xs font-medium text-gray-600 mb-1 block">Category</span>
               <select value={form.category} onChange={(e) => setField('category', e.target.value)} className={inp}>
@@ -386,21 +437,89 @@ export default function EventForm({ initialData, mode, onSuccess, onCancel }: Pr
                 ))}
               </select>
             </label>
-            <label className="block">
-              <span className="text-xs font-medium text-gray-600 mb-1 block">Status</span>
-              <button type="button" onClick={() => setField('isPublic', !form.isPublic)}
-                className={`flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${form.isPublic ? 'bg-green-50 border-green-300 text-green-700' : 'bg-[#112b38]/5 border-[#112b38]/20 text-[#112b38]'}`}>
-                {form.isPublic ? <Globe className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
-                {form.isPublic ? 'Published' : 'Draft'}
-              </button>
-            </label>
-            <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50 border border-gray-200">
+            <div className="flex items-center justify-between px-4 py-3 rounded-xl bg-gray-50 border border-gray-200">
               <div>
-                <p className="text-xs font-medium text-gray-700">Early Bird</p>
+                <p className="text-xs font-semibold text-gray-700">Early Bird</p>
                 <p className="text-[11px] text-gray-400">Adds ribbon on card</p>
               </div>
               <Toggle checked={form.earlyBird} onChange={(v) => setField('earlyBird', v)} />
             </div>
+          </div>
+
+          {/* Visibility / Status */}
+          <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+            <p className="text-xs font-semibold text-gray-700 mb-3">Event Visibility</p>
+            {/* Segmented pill control */}
+            <div className="flex gap-2">
+              {([
+                { key: 'public',  label: 'Public',        icon: <Globe className="w-4 h-4" />,   activeBg: 'bg-green-500',  activeText: 'text-white', activeShadow: 'shadow-green-200' },
+                { key: 'private', label: 'Private Link',  icon: <Lock className="w-4 h-4" />,    activeBg: 'bg-amber-500',  activeText: 'text-white', activeShadow: 'shadow-amber-200' },
+                { key: 'draft',   label: 'Draft',         icon: <EyeOff className="w-4 h-4" />, activeBg: 'bg-gray-500',   activeText: 'text-white', activeShadow: 'shadow-gray-200' },
+              ] as const).map(opt => (
+                <button
+                  key={opt.key}
+                  type="button"
+                  disabled={generatingToken}
+                  onClick={() => setEventMode(opt.key)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
+                    eventMode === opt.key
+                      ? `${opt.activeBg} ${opt.activeText} shadow-md ${opt.activeShadow}`
+                      : 'bg-white border border-gray-200 text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                  }`}
+                >
+                  {opt.key === 'private' && generatingToken
+                    ? <Loader2 className="w-4 h-4 animate-spin" />
+                    : opt.icon
+                  }
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Status description */}
+            <p className="mt-2 text-[11px] text-gray-400">
+              {eventMode === 'public' && 'Visible to everyone on the events page.'}
+              {eventMode === 'private' && 'Only people with the secret link can view and buy tickets.'}
+              {eventMode === 'draft' && 'Hidden from the public. Only admins can see this event.'}
+            </p>
+
+            {/* Private link box */}
+            {eventMode === 'private' && privateToken && (
+              <div className="mt-3 flex items-center gap-2 bg-white border border-amber-200 rounded-xl px-3 py-2.5">
+                <Lock className="w-4 h-4 text-amber-500 flex-shrink-0" />
+                <input
+                  readOnly
+                  value={buildLink()}
+                  className="flex-1 text-xs font-mono text-gray-600 bg-transparent focus:outline-none truncate min-w-0"
+                />
+                <button
+                  type="button"
+                  onClick={copyPrivateLink}
+                  title="Copy link"
+                  className={`flex-shrink-0 flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-all ${
+                    copiedLink ? 'bg-green-500 text-white' : 'bg-amber-500 hover:bg-amber-600 text-white'
+                  }`}
+                >
+                  {copiedLink ? <CheckIcon className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                  {copiedLink ? 'Copied!' : 'Copy'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setEventMode('private')}
+                  title="Regenerate link"
+                  className="flex-shrink-0 p-1.5 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-all"
+                >
+                  <RefreshCw className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            )}
+
+            {eventMode === 'private' && !privateToken && (
+              <div className="mt-3 flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2.5">
+                <Lock className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                <p className="text-xs text-amber-700">Save the event first, then switch to <strong>Private Link</strong> to generate the access link.</p>
+              </div>
+            )}
           </div>
           {/* ── Ticket Category (Standing / Seating) ── */}
           <div>

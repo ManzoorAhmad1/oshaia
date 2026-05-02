@@ -7,7 +7,8 @@ import { getImageUrl } from '@/lib/imageUrl';
 import {
   Loader2, ArrowLeft, Ticket, Users, ScanLine, Tag,
   Search, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight,
-  CheckCircle2, XCircle, Clock, Filter,
+  CheckCircle2, XCircle, Clock, Filter, Eye, X, User, Mail, Phone,
+  QrCode, CalendarDays, Hash,
 } from 'lucide-react';
 
 interface Category {
@@ -46,11 +47,127 @@ interface TicketRow {
   price: number;
   status: 'available' | 'valid' | 'used' | 'cancelled';
   scannedAt: string | null;
+  scannedBy: number | null;
   createdAt: string;
+  updatedAt: string;
+  bookingId: number | null;
+  qrCode: string | null;
   buyer?: { id: number; name: string; email: string; phone?: string };
 }
 
 const PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
+
+// ── Ticket Detail Modal ────────────────────────────────────────────────────
+function TicketModal({ ticket, eventTitle, onClose }: {
+  ticket: TicketRow;
+  eventTitle: string;
+  onClose: () => void;
+}) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+      <div
+        className="relative bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden"
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="bg-[#112b38] px-6 py-5 flex items-start justify-between">
+          <div>
+            <p className="text-[#c89c6b] text-xs font-semibold uppercase tracking-widest mb-1">Ticket Details</p>
+            <h2 className="text-white font-extrabold text-lg leading-tight">{eventTitle}</h2>
+          </div>
+          <button onClick={onClose} className="text-white/60 hover:text-white transition-colors mt-1">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="p-6 space-y-5">
+          {/* Serial + Status */}
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <Hash className="w-4 h-4 text-[#c89c6b]" />
+              <span className="font-mono text-sm font-bold text-[#112b38]">{ticket.serialNumber}</span>
+            </div>
+            <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold ${STATUS_STYLES[ticket.status]}`}>
+              {STATUS_ICONS[ticket.status]}
+              {ticket.status.charAt(0).toUpperCase() + ticket.status.slice(1)}
+            </span>
+          </div>
+
+          {/* Ticket type + price */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-gray-50 rounded-2xl p-4">
+              <p className="text-xs text-gray-400 mb-1">Category</p>
+              <p className="font-bold text-[#112b38] text-sm">{ticket.ticketTypeName || `Type ${ticket.ticketTypeIndex + 1}`}</p>
+            </div>
+            <div className="bg-gray-50 rounded-2xl p-4">
+              <p className="text-xs text-gray-400 mb-1">Price</p>
+              <p className="font-bold text-[#c89c6b] text-sm">Rs {Number(ticket.price).toLocaleString()}</p>
+            </div>
+          </div>
+
+          {/* Buyer info */}
+          {ticket.buyer ? (
+            <div className="bg-[#112b38]/5 rounded-2xl p-4 space-y-2">
+              <p className="text-xs font-semibold text-[#112b38] uppercase tracking-wide mb-2">Buyer</p>
+              <div className="flex items-center gap-2 text-sm">
+                <User className="w-4 h-4 text-[#c89c6b] flex-shrink-0" />
+                <span className="font-semibold text-[#112b38]">{ticket.buyer.name}</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <Mail className="w-4 h-4 text-[#c89c6b] flex-shrink-0" />
+                <span className="text-gray-600">{ticket.buyer.email}</span>
+              </div>
+              {ticket.buyer.phone && (
+                <div className="flex items-center gap-2 text-sm">
+                  <Phone className="w-4 h-4 text-[#c89c6b] flex-shrink-0" />
+                  <span className="text-gray-600">{ticket.buyer.phone}</span>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="bg-gray-50 rounded-2xl p-4 text-center">
+              <p className="text-xs text-gray-400">No buyer assigned yet</p>
+            </div>
+          )}
+
+          {/* Dates */}
+          <div className="grid grid-cols-2 gap-3 text-xs">
+            <div className="bg-gray-50 rounded-2xl p-3">
+              <p className="text-gray-400 mb-1">Created</p>
+              <p className="font-semibold text-[#112b38]">
+                {new Date(ticket.createdAt).toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' })}
+              </p>
+            </div>
+            <div className="bg-gray-50 rounded-2xl p-3">
+              <p className="text-gray-400 mb-1">Scanned At</p>
+              <p className={ticket.scannedAt ? 'font-semibold text-green-600' : 'text-gray-300'}>
+                {ticket.scannedAt
+                  ? new Date(ticket.scannedAt).toLocaleString('en-GB', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })
+                  : '—'}
+              </p>
+            </div>
+          </div>
+
+          {/* QR Code */}
+          {ticket.qrCode ? (
+            <div className="flex flex-col items-center gap-2 pt-2">
+              <p className="text-xs text-gray-400 font-semibold uppercase tracking-wide">QR Code</p>
+              <div className="border-4 border-[#112b38] rounded-2xl p-2 bg-white">
+                <img src={ticket.qrCode} alt="QR" className="w-40 h-40" />
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center gap-2 pt-2 text-gray-300">
+              <QrCode className="w-10 h-10" />
+              <p className="text-xs">QR not generated yet (ticket not sold)</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const STATUS_STYLES: Record<string, string> = {
   available: 'bg-gray-50 text-gray-500 border border-gray-200',
@@ -79,6 +196,8 @@ export default function TicketDetailPage({ params }: { params: { eventId: string
   const [limit, setLimit] = useState(25);
   const [customLimit, setCustomLimit] = useState('');
   const [showCustomInput, setShowCustomInput] = useState(false);
+  const [selectedTicket, setSelectedTicket] = useState<TicketRow | null>(null);
+
   const [search, setSearch] = useState('');
   const [searchInput, setSearchInput] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -114,6 +233,13 @@ export default function TicketDetailPage({ params }: { params: { eventId: string
   // Reset to page 1 when filters change
   useEffect(() => { setPage(1); }, [search, statusFilter, categoryFilter, limit]);
 
+  // Close modal on Escape key
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') setSelectedTicket(null); };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full py-32">
@@ -142,6 +268,15 @@ export default function TicketDetailPage({ params }: { params: { eventId: string
 
   return (
     <div className="p-0 lg:p-0">
+
+      {/* ── Ticket View Modal ───────────────────────────────────── */}
+      {selectedTicket && (
+        <TicketModal
+          ticket={selectedTicket}
+          eventTitle={eventTitle}
+          onClose={() => setSelectedTicket(null)}
+        />
+      )}
 
       {/* ── Banner Hero ─────────────────────────────────────────── */}
       <div className="relative w-full h-[220px] sm:h-[260px] overflow-hidden">
@@ -359,6 +494,7 @@ export default function TicketDetailPage({ params }: { params: { eventId: string
                       <th className="px-4 py-3 text-left font-semibold">Status</th>
                       <th className="px-4 py-3 text-left font-semibold">Booked At</th>
                       <th className="px-4 py-3 text-left font-semibold">Scanned At</th>
+                      <th className="px-4 py-3 text-center font-semibold">View</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
@@ -400,6 +536,14 @@ export default function TicketDetailPage({ params }: { params: { eventId: string
                         </td>
                         <td className="px-4 py-3 text-xs text-green-600 whitespace-nowrap">
                           {tk.scannedAt ? new Date(tk.scannedAt).toLocaleString('en-GB', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' }) : <span className="text-gray-300">—</span>}
+                        </td>
+                        <td className="px-4 py-3 text-center">
+                          <button
+                            onClick={() => setSelectedTicket(tk)}
+                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-[#112b38]/5 hover:bg-[#c89c6b] hover:text-white text-[#112b38] transition-colors mx-auto"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
+                          </button>
                         </td>
                       </tr>
                     ))}

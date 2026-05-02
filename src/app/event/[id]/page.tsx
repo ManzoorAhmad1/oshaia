@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
     Calendar, MapPin, Clock, Share2, Heart, Bell,
     ChevronLeft, ChevronRight, User, Shield, CreditCard,
@@ -79,6 +79,9 @@ const slides = [
 export default function EventDetailPage({ params }: EventDetailProps) {
     const { t, language }: any = useLanguage();
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const privateToken = searchParams.get('token');
+    const [accessDenied, setAccessDenied] = useState(false);
     // CMS section visibility config for the event detail page
     const { content: cmsEventConfig } = useCms('event');
     const { content: cmsHomeConfig } = useCms('home');
@@ -131,11 +134,15 @@ export default function EventDetailPage({ params }: EventDetailProps) {
 
     // Fetch real event data from API
     useEffect(() => {
-        api.get(`/events/${params.id}`)
+        const params2: any = {};
+        if (privateToken) params2.token = privateToken;
+        api.get(`/events/${params.id}`, { params: params2 })
             .then(res => setApiEvent(res.data.data?.event ?? res.data.event ?? res.data))
-            .catch(() => { })
+            .catch((err) => {
+                if (err?.response?.status === 403) setAccessDenied(true);
+            })
             .finally(() => setApiLoading(false));
-    }, [params.id]);
+    }, [params.id, privateToken]);
 
     // Reset artist carousel index when displayArtists changes (API data loads)
     // NOTE: displayArtists is computed below from apiEvent — this effect runs after render
@@ -464,7 +471,25 @@ export default function EventDetailPage({ params }: EventDetailProps) {
     return (
         <div className="relative">
 
-            {/* Background — Banner 3 (Background Blur) */}
+            {/* Access Denied — private event without valid token */}
+            {accessDenied ? (
+                <div className="min-h-screen flex flex-col items-center justify-center bg-[#0a1f2b] text-white px-6">
+                    <div className="w-16 h-16 rounded-full bg-[#c89c6b]/20 flex items-center justify-center mb-6">
+                        <span className="text-[#c89c6b] text-4xl">🔒</span>
+                    </div>
+                    <h1 className="text-2xl font-extrabold text-white mb-2">Private Event</h1>
+                    <p className="text-gray-400 text-center max-w-sm mb-8">
+                        This event is only accessible via a private link. Please contact the organizer for access.
+                    </p>
+                    <button
+                        onClick={() => router.push('/')}
+                        className="bg-[#c89c6b] hover:bg-[#b8885a] text-white font-semibold px-6 py-3 rounded-xl transition-colors"
+                    >
+                        Go to Home
+                    </button>
+                </div>
+            ) : (
+            <div className="relative">
             <div
                 className="absolute top-0 left-0 right-0 -z-10 pointer-events-none overflow-hidden"
                 style={{
@@ -1437,6 +1462,8 @@ export default function EventDetailPage({ params }: EventDetailProps) {
             />
 
             <Footer />
+            </div>
+            )}
         </div>
     );
 }
