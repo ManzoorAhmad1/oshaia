@@ -4,20 +4,25 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Menu, X, Search, User } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import AuthModal from '@/components/AuthModal'
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login')
-  const router=useRouter()
+  const router = useRouter()
+  const pathname = usePathname()
+
   const navLinks = [
-    { name: 'HOME', href: '/', active: true },
-    { name: 'EVENTS', href: '/event', active: false },
-    { name: 'ABOUT', href: '/about', active: false },
-    { name: 'HELP CENTER', href: '/help', active: false },
+    { name: 'HOME', href: '/' },
+    { name: 'EVENTS', href: '/event' },
+    { name: 'ABOUT', href: '/about' },
+    { name: 'HELP CENTER', href: '/help' },
   ]
+
+  const isActive = (href: string) =>
+    href === '/' ? pathname === '/' : pathname.startsWith(href)
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur-sm border-border-gray">
@@ -40,7 +45,7 @@ const Header = () => {
               <Link
                 key={link.name}
                 href={link.href}
-                className={`nav-link ${link.active ? 'active' : ''}`}
+                className={`nav-link ${isActive(link.href) ? 'active' : ''}`}
               >
                 {link.name}
               </Link>
@@ -104,7 +109,7 @@ const Header = () => {
                   key={link.name}
                   href={link.href}
                   className={`px-3 py-1.5 hover:bg-white/10 rounded-lg transition-colors text-sm ${
-                    link.active ? 'text-accent-orange' : 'text-white'
+                    isActive(link.href) ? 'text-accent-orange' : 'text-white'
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >

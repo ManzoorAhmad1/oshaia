@@ -26,6 +26,7 @@ import AuthModal from '@/components/AuthModal';
 import { getImageUrl as getImageUrlUtil } from '@/lib/imageUrl';
 import api from '@/lib/api';
 import { useCms } from '@/lib/useCms';
+import AdBanner from '@/components/AdBanner';
 
 interface EventDetailProps {
     params: {
@@ -1460,6 +1461,8 @@ export default function EventDetailPage({ params }: EventDetailProps) {
                 isOpen={isAuthModalOpen}
                 onClose={() => setIsAuthModalOpen(false)}
             />
+
+            <AdBanner position="event-detail" className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto mt-4 mb-2" />
 
             <Footer />
             </div>

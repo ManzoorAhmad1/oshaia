@@ -33,6 +33,7 @@ const NAV_GROUPS: NavGroup[] = [
     items: [
       { href: '/admin',     label: 'Dashboard',     roles: ['admin','organizer','moderator','scanner','ticket_runner'], permission: 'dashboard' },
       { href: '/admin/cms', label: 'CRM / Content', roles: ['admin'], arrow: true },
+      { href: '/admin/ads', label: 'Ads Manager',   roles: ['admin'] },
     ],
   },
   {
