@@ -11,6 +11,7 @@ import { getImageUrl } from '@/lib/imageUrl';
 interface ApiEvent {
   id?: number | string;
   _id?: string;
+  slug?: string;
   title: { en: string; fr: string };
   category: string;
   startDate: string;
@@ -130,7 +131,7 @@ export default function EventsGrid() {
                     <p className="py-16 text-center text-gray-500">{t.noEventsFound || 'No events found.'}</p>
                 ) : (
                     events.map((event) => (
-                        <Link key={event.id ?? event._id} href={`/event/${event.slug || event.id ?? event._id}`} className="w-full block relative overflow-visible">
+                        <Link key={event.id ?? event._id} href={`/event/${event.slug || (event.id ?? event._id)}`} className="w-full block relative overflow-visible">
                             {/* Dynamic badge */}
                             {(() => { const n = getBadgeImage(event); return n ? (
                               <div className="hidden sm:block absolute -top-[20px] -left-[40px] w-[280px] h-auto z-20 pointer-events-none">

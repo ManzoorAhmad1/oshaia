@@ -53,9 +53,14 @@ export default function AdsManagerPage() {
     try {
       const { data } = await api.get('/cms/page/ads');
       const raw = data.content?.list?.extra?.ads;
-      const parsed: Ad[] = raw ? JSON.parse(raw) : [];
+      let parsed: Ad[] = [];
+      if (raw) {
+        try { parsed = JSON.parse(raw); } catch { parsed = []; }
+      }
       setAds(Array.isArray(parsed) ? parsed : []);
-    } catch {
+    } catch (err: any) {
+      const msg = err?.response?.data?.message || err?.message || 'Failed to load ads.';
+      toast.error(msg);
       setAds([]);
     } finally {
       setLoading(false);
@@ -76,8 +81,11 @@ export default function AdsManagerPage() {
       clearCmsCache('ads');
       setDirty(false);
       toast.success('Ads saved successfully!');
-    } catch {
-      toast.error('Failed to save ads.');
+      // Re-fetch from DB to confirm save worked
+      await loadAds();
+    } catch (err: any) {
+      const msg = err?.response?.data?.message || err?.message || 'Failed to save ads.';
+      toast.error(msg);
     } finally {
       setSaving(false);
     }
@@ -91,7 +99,7 @@ export default function AdsManagerPage() {
   // ── Upload image ──────────────────────────────────────────────────────
   const uploadImage = async (file: File): Promise<string> => {
     const formData = new FormData();
-    formData.append('image', file);
+    formData.append('file', file);
     const { data } = await api.post('/upload/single', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
@@ -101,7 +109,6 @@ export default function AdsManagerPage() {
   // ── Add ad ────────────────────────────────────────────────────────────
   const handleAdd = () => {
     if (!newImage) { toast.error('Please upload or enter an image URL.'); return; }
-    if (!newLink)  { toast.error('Please enter a destination link.'); return; }
     const ad: Ad = { id: uid(), image: newImage, link: newLink, position: newPosition, isActive: true, title: newTitle };
     mutate([...ads, ad]);
     setNewImage(''); setNewLink(''); setNewTitle(''); setNewPosition('all');

@@ -24,6 +24,8 @@ interface CacheEntry {
 }
 
 const CACHE_TTL_MS = 30_000; // 30 seconds — user sees updates within 30s of admin saving
+// Ads refresh faster since they can change frequently
+const ADS_CACHE_TTL_MS = 5_000;
 
 const cache: Record<string, CacheEntry> = {};
 
@@ -35,19 +37,20 @@ export function clearAllCmsCache() {
   Object.keys(cache).forEach(k => delete cache[k]);
 }
 
-function isFresh(entry: CacheEntry | undefined): boolean {
+function isFresh(entry: CacheEntry | undefined, pageKey?: string): boolean {
   if (!entry) return false;
-  return Date.now() - entry.fetchedAt < CACHE_TTL_MS;
+  const ttl = pageKey === 'ads' ? ADS_CACHE_TTL_MS : CACHE_TTL_MS;
+  return Date.now() - entry.fetchedAt < ttl;
 }
 
 export function useCms(pageKey: string) {
-  const fresh = isFresh(cache[pageKey]);
+  const fresh = isFresh(cache[pageKey], pageKey);
   const [content, setContent] = useState<PageContent>(cache[pageKey]?.data || {});
   const [loading, setLoading] = useState(!fresh);
 
   useEffect(() => {
     // Skip fetch only if cache is fresh
-    if (isFresh(cache[pageKey])) {
+    if (isFresh(cache[pageKey], pageKey)) {
       setContent(cache[pageKey].data);
       setLoading(false);
       return;

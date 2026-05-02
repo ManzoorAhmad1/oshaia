@@ -24,18 +24,25 @@ interface AdBannerProps {
  *   <AdBanner position="event-detail" />
  */
 export default function AdBanner({ position, className = '' }: AdBannerProps) {
-  const { get } = useCms('ads');
+  const { get, loading } = useCms('ads');
   const [dismissed, setDismissed] = useState<Set<string>>(new Set());
 
-  const raw = get('list').extra?.ads;
+  // Robustly extract ads — handle: extra as object, extra as string, ads as string, ads as array
   let allAds: Ad[] = [];
-  try { allAds = raw ? JSON.parse(raw) : []; } catch {}
+  try {
+    let extra = get('list').extra;
+    if (typeof extra === 'string') extra = JSON.parse(extra);  // in case extra itself is a string
+    const raw = (extra as any)?.ads;
+    if (Array.isArray(raw))           allAds = raw;
+    else if (typeof raw === 'string') allAds = JSON.parse(raw);
+  } catch { allAds = []; }
 
   // Show ads for this position OR "all"
   const visible = allAds.filter(
     ad => ad.isActive && !dismissed.has(ad.id) && (ad.position === position || ad.position === 'all')
   );
 
+  if (loading && allAds.length === 0) return null;
   if (visible.length === 0) return null;
 
   return (
