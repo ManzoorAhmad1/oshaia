@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
-import { Loader2, Ticket, Eye } from 'lucide-react';
+import { Loader2, Ticket, Eye, RefreshCw } from 'lucide-react';
 
 interface EventRow {
   id: number;
@@ -17,6 +17,8 @@ export default function TicketsPage() {
   const router = useRouter();
   const [events, setEvents] = useState<EventRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [generating, setGenerating] = useState(false);
+  const [genMsg, setGenMsg] = useState('');
 
   useEffect(() => {
     api.get('/events/admin/tickets-summary')
@@ -25,14 +27,40 @@ export default function TicketsPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  const handleGenerateAll = async () => {
+    setGenerating(true);
+    setGenMsg('');
+    try {
+      const res = await api.post('/events/admin/generate-all-tickets');
+      setGenMsg(res.data.message || 'Done!');
+    } catch {
+      setGenMsg('Failed to generate tickets.');
+    } finally {
+      setGenerating(false);
+    }
+  };
+
   return (
     <div className="p-6 lg:p-8">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-8">
-        <div className="w-8 h-8 rounded-lg bg-[#c89c6b] flex items-center justify-center flex-shrink-0">
-          <Ticket className="w-4 h-4 text-white" />
+      <div className="flex items-center justify-between gap-3 mb-8">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-[#c89c6b] flex items-center justify-center flex-shrink-0">
+            <Ticket className="w-4 h-4 text-white" />
+          </div>
+          <h1 className="text-2xl font-bold text-[#112b38]">Tickets Management</h1>
         </div>
-        <h1 className="text-2xl font-bold text-[#112b38]">Tickets Management</h1>
+        <div className="flex items-center gap-3">
+          {genMsg && <span className="text-xs text-green-600 font-medium">{genMsg}</span>}
+          <button
+            onClick={handleGenerateAll}
+            disabled={generating}
+            className="flex items-center gap-2 bg-[#112b38] hover:bg-[#1a3f50] text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors disabled:opacity-60"
+          >
+            {generating ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+            Generate All Tickets
+          </button>
+        </div>
       </div>
 
       <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
