@@ -358,6 +358,40 @@ export default function EventForm({ initialData, mode, onSuccess, onCancel }: Pr
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
+
+      {/* ── Ticket Category — TOP of form ── */}
+      <div className="bg-white border-2 border-[#c89c6b]/40 rounded-2xl p-4">
+        <span className="text-xs font-bold text-[#112b38] uppercase tracking-wide mb-3 block">Ticket Category *</span>
+        <div className="grid grid-cols-2 gap-3">
+          {(['standing', 'seating'] as const).map((tc) => (
+            <button
+              key={tc}
+              type="button"
+              onClick={() => setField('ticketCategory', tc)}
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl border-2 text-left transition-all ${
+                form.ticketCategory === tc
+                  ? 'border-[#c89c6b] bg-[#c89c6b]/10'
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
+            >
+              <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center ${
+                form.ticketCategory === tc ? 'border-[#c89c6b]' : 'border-gray-300'
+              }`}>
+                {form.ticketCategory === tc && <div className="w-2 h-2 rounded-full bg-[#c89c6b]" />}
+              </div>
+              <div>
+                <p className={`text-sm font-bold ${form.ticketCategory === tc ? 'text-[#112b38]' : 'text-gray-600'}`}>
+                  {tc === 'standing' ? '🎤 Standing' : '💺 Seating'}
+                </p>
+                <p className="text-[11px] text-gray-400">
+                  {tc === 'standing' ? 'External URL — redirect to partner' : 'Seat selection — buy inside platform'}
+                </p>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-5 items-start">
         {/* ── LEFT COLUMN (main content) ── */}
         <div className="xl:col-span-2 space-y-5">
@@ -521,39 +555,6 @@ export default function EventForm({ initialData, mode, onSuccess, onCancel }: Pr
               </div>
             )}
           </div>
-          {/* ── Ticket Category (Standing / Seating) ── */}
-          <div>
-            <span className="text-xs font-medium text-gray-600 mb-2 block">Ticket Category *</span>
-            <div className="grid grid-cols-2 gap-3">
-              {(['standing', 'seating'] as const).map((tc) => (
-                <button
-                  key={tc}
-                  type="button"
-                  onClick={() => setField('ticketCategory', tc)}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl border-2 text-left transition-all ${
-                    form.ticketCategory === tc
-                      ? 'border-[#c89c6b] bg-[#c89c6b]/10'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center ${
-                    form.ticketCategory === tc ? 'border-[#c89c6b]' : 'border-gray-300'
-                  }`}>
-                    {form.ticketCategory === tc && <div className="w-2 h-2 rounded-full bg-[#c89c6b]" />}
-                  </div>
-                  <div>
-                    <p className={`text-sm font-bold ${form.ticketCategory === tc ? 'text-[#112b38]' : 'text-gray-600'}`}>
-                      {tc === 'standing' ? '🎤 Standing' : '💺 Seating'}
-                    </p>
-                    <p className="text-[11px] text-gray-400">
-                      {tc === 'standing' ? 'External URL — redirect to partner' : 'Seat selection — buy inside platform'}
-                    </p>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-
           {/* External Booking Link — Standing only */}
           {form.ticketCategory === 'standing' && (
             <div className="border-2 border-[#c89c6b]/40 bg-[#c89c6b]/5 rounded-xl p-4 space-y-2">
@@ -571,12 +572,11 @@ export default function EventForm({ initialData, mode, onSuccess, onCancel }: Pr
         </div>
       </SectionCard>
 
-      {/* ── Ticket Types — Seating only ── */}
-      <div className={`bg-white rounded-xl border border-gray-200 overflow-hidden ${form.ticketCategory !== 'seating' ? 'opacity-40 pointer-events-none' : ''}`}>
+      {/* ── Ticket Types — Seating only (hidden completely for Standing) ── */}
+      {form.ticketCategory === 'seating' && (<div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <div className="flex items-center justify-between px-5 py-3 border-b border-[#c89c6b]/20 bg-[#112b38]">
           <div>
             <h3 className="font-semibold text-sm text-white">Ticket Types</h3>
-            {form.ticketCategory !== 'seating' && <p className="text-[11px] text-white/50">Only applies to Seating events</p>}
           </div>
           <button type="button" onClick={() => setForm((p) => ({ ...p, ticketTypes: [...p.ticketTypes, defaultTicket()] }))}
             className="flex items-center gap-1 text-xs font-semibold px-3 py-1.5 bg-[#c89c6b] text-white rounded-lg hover:bg-[#b8895a] transition-colors">
@@ -686,8 +686,9 @@ export default function EventForm({ initialData, mode, onSuccess, onCancel }: Pr
           ))}
         </div>
       </div>
+      )}
 
-      {/* â”€â”€ Sponsor Tickets â”€â”€ */}
+      {/* ── Sponsor Tickets ── */}
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <div className="flex items-center justify-between px-5 py-3 border-b border-[#c89c6b]/20 bg-[#112b38]">
           <div className="flex items-center gap-2">
